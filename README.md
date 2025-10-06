@@ -13,9 +13,8 @@ Each section below dives into a different aspect of the system architecture and 
 - [🛠️ Tools Used](#️-tools-used)  
 - [⚙️ Frontend Architecture](#️-frontend-architecture)  
 - [💾 Backend + APIs](#-backend--apis)  
-- [🎮 Money/Earnings System](#-gamification-system)  
-- [🚀 Deployment, Hosting, and Crons](#-deployment--hosting)  
-- [🧩 Future Improvements](#-future-improvements)
+- [💸 Money/Earnings System](#-moneyearnings-system) 
+- [🔮 Future Improvements](#-future-improvements)
 
 ---
 
@@ -23,9 +22,8 @@ Each section below dives into a different aspect of the system architecture and 
 
 | Category | Tools / Frameworks |
 |-----------|--------------------|
-| **Frontend** | Next.js 15, React, TailwindCSS, Three.js |
-| **Backend** | Node.js, Next.js API Routes |
-| **Animations** | Framer Motion |
+| **Frontend** | Next.js 15, React, TailwindCSS, Framer Motion, Three.js  |
+| **Backend** | Node.js, AWS Lambda, EventBridge |
 | **Design** | Figma, Illustrator |
 | **Deployment** | AWS Amplify |
 
@@ -33,73 +31,48 @@ Each section below dives into a different aspect of the system architecture and 
 
 ## ⚙️ Frontend Architecture
 
-The frontend leverages **Next.js 14 (App Router)** for file-based routing and **server components** for optimized rendering.  
-All UI components are modularized and built with **TypeScript** for type safety.
+The frontend leverages **Next.js 15 (App Router)** for file-based routing and **server components** for optimized rendering.  
+All UI components are modular and formatted for future expansion and scalability.
 
 ### Key Features
 
-- **Responsive Design:** Built with TailwindCSS and utility-first principles.  
-- **Dynamic Routing:** Each “achievement” or “project” lives as a statically generated route.  
-- **Framer Motion Integration:** Smooth page transitions and hover animations enhance immersion.  
-- **State Management:** Lightweight context API to handle UI and game state.
+- **Landing Page Slot Machine:** Interactive SVG animation built in the DOM with Framer Motion
+  - Features an "Inquiry" animation persisted with localStorage for first time visitors
+  - Samples from a statistical mixture model with **triangular-power-law distribution** to simulate realistic payouts
+  - Includes **safeguards** against numeric under/overflow when gambling
+- **Responsive Design:** Created mobile to 4k+ layouts, built with TailwindCSS and utility-first principles
+- **Dynamic Routing:** Each project is a statically generated route, creating an easy "plug and play" template for future projects
+
 
 ---
 
 ## 💾 Backend + APIs
 
-The backend is handled via **Next.js API routes**, integrating seamlessly with **Supabase** for user data, progress tracking, and gamified metrics.
+The backend is handled via **Next.js API routes** (Node.js), calling and caching information from **REST APIs.**
 
 ### Highlights
 
-- **RESTful Endpoints:** For user XP, achievements, and project data.  
-- **Supabase Edge Functions:** Serverless logic for dynamic updates and scoring.  
-- **Caching Layer:** Incremental Static Regeneration (ISR) ensures fast responses.  
-- **Secure Auth:** NextAuth with GitHub and Google providers.
+- **RESTful Endpoints:** Fetches data from Clash Royale and Chess.com APIs **daily,** caching it for up to a week
+  - Allows older, **clean data** to be served in case of error
+- **Monthly Cron Job:** Leverages **Lambda and EventBridge** to update a Spotify playlist with my five most played songs of the month
+  - Displayed on my "About" page
 
 ---
 
-## 🎮 Gamification System
+## 💸 Money/Earnings System
 
-The centerpiece of the portfolio — a **reward-based experience** system that turns exploration into play.
+The centerpiece of the portfolio: a **reward-based earnings** system that incentivises exploration.
 
 ### How It Works
 
-- Each page visit grants **XP** or unlocks **achievements** (stored in Supabase).  
-- The **HUD component** displays live XP and level progress.  
-- Leaderboard and badges encourage continued engagement.  
-- Designed with **modular components**, so new achievements can be added easily.
+- Implemented with a global **React Context Provider** `(MoneyProvider)` that manages **rewards, balances, and quest progression** and persisted via localStorage
+- By interacting with new links and projects (tracked as "quests"), the user increases their earnings 
+- Completing all quests unlocks a **dark mode** state which persists across the site
 
 ---
 
-## 🎨 Design & UI
+## 🔮 Future Improvements
 
-The visual design embraces a **retro-futuristic** theme — playful, yet functional.
-
-- Built with **Figma → Tailwind** workflow.  
-- **Shadcn/UI** components for consistent design language.  
-- **Framer Motion** adds delight through subtle transitions.  
-- All icons from **Lucide React**, ensuring clean vector visuals.
-
----
-
-## 🚀 Deployment & Hosting
-
-The app is continuously deployed via **Vercel**, leveraging:
-
-- Automatic builds on `main` branch commits.  
-- Environment variables managed via **Vercel dashboard**.  
-- Edge Network caching for global performance.  
-- CI/CD integration for preview deployments.
-
----
-
-## 🧩 Future Improvements
-
-- 🧠 Integrate **AI-powered project recommendations**.  
-- 🪄 Add **custom game quests** for interactive storytelling.  
-- 🧭 Improve accessibility with semantic components.  
+- 🧠 Integrate **AI-powered project summaries**.
+- 🪄 Add **rewards or prizes** to spend your earnings.
 - ⚡ Expand dashboard analytics for visitor tracking.
-
----
-
-<p align="center">Made with ❤️ by <b>Aidan Chien</b></p>
