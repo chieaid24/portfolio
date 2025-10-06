@@ -7,6 +7,7 @@ export const quest_totals = {
     // CURR TOTAL: 42
     redtext: 42,
     
+    // OnePerProject: 4
     // CURR TOTAL: 4
     project: 4,
 
@@ -23,19 +24,19 @@ export const quest_totals = {
         generated_with: 'PYTHON + AHK', // appears on Card, what tools did you use?
         ticket_no: "25", //hard coded fall back value that will appear if actual random generation goes wrong,
         fallback_value: "17,230.00", //fallback ticket value that should be in this format (between 15000 and 18000, with comma, rounded to 10s place)
-        skills_used: ['Python', 'OOP'], // red labels that appear on Card
+        skills_used: ['Python', 'OOP'], // orange labels that appear on Card, rendered by components/SkillDisplay (icon with matching name should exist in app/icons/skills)
         image: '/pmi_auto_generator/PMI Card2.png', // Card background image
         page_displays: [['/pmi_auto_generator/pmi_card.png', 'Example 3D model with attached PMI'], ['/pmi_auto_generator/pmi_card.png']], // list range(1-2) of lists range(1-2). Bigger list is each Display which contains its path and its subtitle. Subtitle not req. 
         github_link: 'https://github.com/chieaid24/PMI-Auto-Generator-Desc',
         subtitle: "a machinist's best friend", // tagline that appears below the title on the Page
         summaryMetaData: "PMI Auto Generator speeds up machinist workflows by 30%, automating CAD annotation with Python + AHK." //60-150 character desc. for the SEO (just ask ChatGPT to summarize the project into a few words)
         summary: <> </>, // summary on the landing section of the Page
-        tool_paragraphs: [
+        tool_paragraphs: [ //What Tools?
             <> 
 
             </>,
         ],
-        why_paragraphs: [
+        why_paragraphs: [ // Why this Project?
             <>
 
             </>,
@@ -43,7 +44,7 @@ export const quest_totals = {
 
             </>
         ],
-        what_paragraphs: [
+        what_paragraphs: [ // What is this project?
             <>
 
             </>,
@@ -52,7 +53,7 @@ export const quest_totals = {
             </>,
         ],
 
-        learning_paragraphs: [
+        learning_paragraphs: [ // What did I learn?
             <>
 
             </>,
@@ -95,7 +96,7 @@ export const projects = [
                 The .qif file is the key that my program relies on, as its <RedText rewardId="red:pmi:xml">XML structure</RedText> allows me to parse and insert information without a GUI. This unlocks automation and greater speed capabilities, which I take advantage of through this project. Now, using Python with NumPy and openpyxl, it scrapes the Excel file and formats each entry to scan for diameter annotations. I&apos;ve picked diameter annotations because the shop mostly worked with turned (cylindrical) parts, so diameter annotations made up about one-third of all dimensions.
             </>,
             <>
-                The program then gets all of the dimensions from the model .qif file and cross-references each with the desired diameter dimensions. Lastly, it inserts those annotations onto the model. Then the user can simply open the .qif file and attach the rest of the annotations manually with the help of my <Link href="/projects/mbd-macro"><span className="hover:opacity-80 transition italic ">MBD Macro</span></Link>. This project single-handedly saves around 30% of the total annotation time, and the full process takes only about 60 seconds to complete.
+                The program then gets all of the dimensions from the model .qif file and cross-references each with the desired diameter dimensions. Lastly, it inserts those annotations onto the model. Then the user can simply open the .qif file and attach the rest of the annotations manually with the help of my <Link href="/projects/mbd-macro"><span className="hover:opacity-8 0 transition italic ">MBD Macro</span></Link>. This project single-handedly saves around 30% of the total annotation time, and the full process takes only about 60 seconds to complete.
             </>
         ],
 
@@ -131,7 +132,7 @@ export const projects = [
                 The main component of the site is your “balance,” which is persisted throughout the app and stored in the browser&apos;s local storage. The user can increase their balance by clicking on <RedText rewardId="red:website:red">red words</RedText>, project links, and external links, as well as gambling with the home-page slot machine. All the states for whether or not a link has been clicked are also stored in local storage, and the user&apos;s progress can be tracked in the expanded header. Completing all of the quests allows the user to access a dark-mode toggle that applies throughout the app.
             </>,
             <>
-                On the backend side, I read from the Chess.com REST API and Clash Royale REST API using my Node.js backend, and cache the values weekly to improve performance and reduce calls to the external APIs. These values are displayed with custom widgets on my About page. Additionally, I use an <RedText rewardId="red:website:lambda">AWS Lambda</RedText> plus EventBridge cron job every month to update my “Monthly Top 5” playlist using the Spotify API, which is displayed via the Spotify web embed.
+                On the backend side, I read from the Chess.com REST API and Clash Royale REST API daily using my Node.js backend, and cache the values for a week to create fallback values in case of failure. These values are displayed with custom widgets on my About page. Additionally, I use an <RedText rewardId="red:website:lambda">AWS Lambda</RedText> plus EventBridge cron job every month to update my “Monthly Top 5” playlist using the Spotify API, which is displayed via the Spotify web embed.
             </>,
             <>
                 The slot machine component was created using SVGs and Framer Motion, and is set to show an “inquiry animation” when it hasn&apos;t been pulled yet (state stored in the browser&apos;s local storage). The payout is calculated using a statistical mixture model made up of a triangularly distributed base and a power-law tail distribution. I designed it so that 10% of spins are jackpots (drawn from the tail). The remaining 90% come from the “base” of the model, which has an expected payout of $4.50 to balance things out. This gives the users an incentive to continue trying their chances while being an unrealistic machine, since the user can actually profit.
@@ -228,6 +229,7 @@ export const projects = [
             </>,
         ],
     },
+    
 
 ];
 

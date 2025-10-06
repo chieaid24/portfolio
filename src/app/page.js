@@ -150,7 +150,7 @@ export default function Home() {
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.5, delay: 0 }}
             >
-              <RewardLink href="mailto:aidan.chien@uwaterloo.ca" rewardId="home:cash-out"
+              <RewardLink href="mailto:aidan.chien@uwaterloo.ca?subject=I WANT TO CASH OUT! (by hiring you)" rewardId="home:cash-out"
                 className="group md:hover:scale-110 md:hover:translate-y-[-15px] transition-all duration-300 items-center inline-flex flex-col mobile:select-none">
                 <p>
                   Want to <span className="md:group-hover:animate-new-pulse md:group-hover:gradient-text-red-animated gradient-text-custom font-semibold animated-underline pr-0.5">cash out?</span>

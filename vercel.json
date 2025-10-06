@@ -1,5 +1,5 @@
 {
   "crons": [
-    { "path": "/api/spotify/monthly", "schedule": "0 0 * * *" }
+    { "path": "/api/spotify/monthly", "schedule": "0 0 1 * *" }
   ]
 }

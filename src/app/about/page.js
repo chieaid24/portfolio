@@ -36,19 +36,19 @@ const widgets = [
 export default function AboutPage() {
   return (
     <main className="font-medium font-dm-sans ">
-      <div className="pt-20 bg-background-light text-dark-grey-text ">
+      <div className="pt-20 5xl:pt-25 bg-background-light text-dark-grey-text ">
         <MaxWidthWrapper>
-          <div className="flex justify-start mt-10 sm:mt-8 lg:mt-12">  {/* Outer div that is a flex box so text acts as a single line of text when window shrinks + is centered as well */}
-            <h1 className="text-5xl sm:text-6xl md:text-8xl sm:text-center text-dark-grey-text"> {/* Makes it so when text is shrunk, its paragraph alignment is center */}
+          <div className="flex justify-start mt-10 sm:mt-8 lg:mt-12 lg:ml-[12px]">  {/* Outer div that is a flex box so text acts as a single line of text when window shrinks + is centered as well */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl sm:text-center text-dark-grey-text"> {/* Makes it so when text is shrunk, its paragraph alignment is center */}
               <span className="font-bold font-dm-sans">Who is <span className="inline md:hidden">this </span></span>
               <br className="block sm:hidden" />
-              <span className="font-italiana">AIDAN CHIEN </span>
+              <span className="font-dm-sans font-bold">Aidan Chien</span>
               <span className="font-bold font-dm-sans">?</span>
             </h1>
           </div>
 
           {/* image and blurb section */}
-          <section className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 md:gap-8 items-start mt-10 break-normal">
+          <section className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 md:gap-8 items-start mt-10 break-normal 5xl:mr-15">
             <AboutImage className="" />
             <div className="flex justify-self-start text-left flex-col leading-tight text-[17px] md:text-[21px] lg:text-[28px] text-dark-grey-text h-full gap-y-6 font-medium">
               <p className="">
@@ -67,27 +67,27 @@ export default function AboutPage() {
           </section>
 
           {/* Interest Section */}
-          <section className="grid grid-cols-1 place-items-center 5xl:place-items-start pt-10 pb-10  
+          <section className="grid grid-cols-1 place-items-center 5xl:place-items-start pt-8 pb-10  
                           md:pb-20 
                           lg:flex
                           5xl:grid 5xl:grid-cols-2">
             <div className="ml-3 mr-8 order-2 mt-6
                             md:flex-1 
                             lg:order-1 lg:mt-0">
-              <h2 className="font-bold text-2xl sm:text-4xl leading-tight">You can also find me:</h2>
-              <li className="list-none lg:list-disc lg:marker:text-xl text-[19px] md:text-[21px] lg:text-[28px] font-medium pt-4"> Playing team sports
+              <h2 className="font-semibold text-2xl sm:text-[38px] leading-tight">You can also find me:</h2>
+              <li className="list-none  lg:marker:text-xl text-[19px] md:text-[21px] lg:text-[28px] font-medium pt-4"> Playing team sports
                 <ul className="flex gap-2 pl-8 text-light-grey-text text-[17px] md:text-xl font-normal">
-                  <li>→</li>
+                  <li>-</li>
                   <li>Basketball and volleyball are my main ones right now!</li>
                 </ul>
               </li>
-              <li className="list-none lg:list-disc lg:marker:text-xl text-[19px] md:text-[21px] lg:text-[28px] font-medium"> Rock climbing
+              <li className="list-none lg:marker:text-xl text-[19px] md:text-[21px] lg:text-[28px] font-medium"> Rock climbing
                 <ul className="flex gap-2 pl-8 text-light-grey-text text-[17px] md:text-xl font-normal">
-                  <li>→</li>
+                  <li>-</li>
                   <li>Mostly bouldering but I&apos;ve done a few outdoor top rope climbs!</li>
                 </ul>
               </li>
-              <li className="list-none lg:list-disc lg:marker:text-xl text-[19px] md:text-[21px] lg:text-[28px] font-medium">
+              <li className="list-none  lg:marker:text-xl text-[19px] md:text-[21px] lg:text-[28px] font-medium">
                 <Link
                   href="https://www.youtube.com/@picturingaidanchien"
                   target="_blank"
@@ -95,7 +95,7 @@ export default function AboutPage() {
                   className="hover:opacity-90"
                 >Filmmaking</Link>
                 <ul className="flex gap-2 pl-8 text-light-grey-text text-[17px] md:text-xl font-normal">
-                  <li>→</li>
+                  <li>-</li>
                   <li>My preferred mode of creative expression, and I&apos;m always looking for inspiration for my next project!</li>
                 </ul>
               </li>

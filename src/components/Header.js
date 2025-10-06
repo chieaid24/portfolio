@@ -59,6 +59,8 @@ export default function Header() {
     const lastYRef = useRef(0);
 
     const { balance, ready } = useMoney();
+    const [flashTrigger, setFlashTrigger] = useState(0);
+    const [questClicked, setQuestClicked] = useState(0);
 
     const infoVariants = {
         closed: { opacity: 1, y: 0 },
@@ -186,6 +188,7 @@ export default function Header() {
                                             height={14}
                                             alt="Info"
                                             className="md:ml-1 block w-2 md:w-3 5xl:w-[13px] max-w-none"
+                                            draggable={false}
                                         />
                                     </motion.div>
                                 </motion.div>
@@ -257,13 +260,15 @@ export default function Header() {
                                                          2xl:text-[24px]
                                                          5xl:text-[25px]"
                                     >
-                                        with your money, I would buy...
+                                        with your earnings, I would buy...
                                     </motion.div>
 
                                     <span className="flex items-center justify-end
                                      md:space-x-2">
 
-                                        <DarkModeToggle className="px-3 py-2 md:px-[2.5px] md:py-[2.5px]" />
+                                        <DarkModeToggle className="px-3 py-2 md:px-[2.5px] md:py-[2.5px]" 
+                                                        onFailedToggle={() => setFlashTrigger((t) => t + 1 )}
+                                                        questClicked={questClicked}/>
                                         <motion.button
                                             key="close"
                                             type="button"
@@ -273,7 +278,7 @@ export default function Header() {
                                             animate={{ opacity: 1, rotate: 0, scale: 1 }}
                                             exit={{ opacity: 0, rotate: 90, scale: 0.9 }}
                                             transition={{ duration: 0.18 }}
-                                            className="px-3 py-2 md:px-[2.5px] md:py-[2.5px] rounded-md hover:bg-black/7 transition-colors duration-250 cursor-pointer"
+                                            className="px-3 py-2 md:px-[2px] md:py-[2px] rounded-md hover:bg-black/7 transition-colors duration-250 cursor-pointer"
                                         >
                                             <CloseButton className="h-6 w-6 text-dark-grey-text" />
                                         </motion.button>
@@ -302,7 +307,9 @@ export default function Header() {
                                                 lg:grid-cols-[1fr_4fr]">
                                     <QuestSection className="order-2 pt-4 px-5
                                                              md:pt-2 md:px-20
-                                                             lg:px-0 lg:order-1"/>
+                                                             lg:px-0 lg:order-1"
+                                        triggerFlash={flashTrigger} 
+                                        onQuestClick={() => setQuestClicked((c) => c + 1)}/>
                                     <motion.div
                                         key="with-your-money"
                                         initial={{ opacity: 0 }}
@@ -312,7 +319,7 @@ export default function Header() {
                                         md:text-[22px] md:mb-0 
                                         lg:hidden"
                                     >
-                                        with your money, I would buy:
+                                        with your earnings, I would buy:
                                     </motion.div>
                                     <div className="grid mt-4 
                                                     lg:grid-cols-[7fr_1fr] lg:order-2">

@@ -219,6 +219,14 @@ export function MoneyProvider({ children }) {
 
   const getAllQuestsComplete = useCallback(() => allQuestsComplete, [allQuestsComplete]);
 
+  const completedQuests = useMemo(() => ({
+    redtext: questStats.redtext.done >= questStats.redtext.total,
+    project: questStats.project.done >= questStats.project.total,
+    link: questStats.link.done >= questStats.link.total,
+  }), [questStats]);
+
+  const getCompletedQuests = useCallback(() => completedQuests, [completedQuests]);
+
   const api = useMemo(() => ({
     ...state,
 
@@ -313,6 +321,7 @@ export function MoneyProvider({ children }) {
     getQuestStats,
 
     getAllQuestsComplete,
+    getCompletedQuests,
     underflowTick,
     overflowTick,
     leverPullTick,

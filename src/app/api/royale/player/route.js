@@ -1,10 +1,11 @@
 // app/api/royale/player/route.js
 import badges from '../_data/clanBadges.json'; // server-only import
 
-export const revalidate = 604800;     // cache the route for 1 week
+export const revalidate = 86400;     // cache the route for 1 day (run it every day)
 export const dynamic = 'force-static';          // ensure it's cacheable
 
 const WEEK = 604800;
+const DAY = 86400;
 const BASE = 'https://proxy.royaleapi.dev/v1';
 
 const BADGE_MAP = Object.fromEntries(
@@ -52,7 +53,7 @@ async function j(url) {
     // Data Cache: returns cached JSON immediately, revalidates in background.
     const res = await fetch(url, {
         headers: { Authorization: `Bearer ${requireEnv(TOKEN, 'CLASH_ROYALE_TOKEN')}` },
-        next: { revalidate: WEEK },
+        next: { revalidate: DAY },
     });
     if (!res.ok) throw new Error(`Upstream error ${res.status}: ${url}`);
     return res.json();
