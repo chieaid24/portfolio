@@ -1,4 +1,3 @@
-// src/components/SkillDisplay.jsx
 'use client';
 
 import dynamic from 'next/dynamic';

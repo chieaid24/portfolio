@@ -63,10 +63,8 @@ export default function Home() {
         <section id="hero" className="relative w-full lg:min-h-[92vh]">
           <MaxWidthWrapper>
             <div className="flex flex-col gap-10 pt-10 pb-10">
-              {/* <div className="justify-center flex"> */}
               <div className="flex flex-col gap-10 min-h-[80vh] md:min-h-0">
                 <HeroSlot />
-                {/* </div> */}
                 <h1 className="text-center font-semibold text-4xl
                                 sm:text-5xl
                                 md:text-4xl

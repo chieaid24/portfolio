@@ -1,4 +1,3 @@
-// components/ResponsiveFrame.jsx
 'use client'
 
 export default function ResponsiveFrame({

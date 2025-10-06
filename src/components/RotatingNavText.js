@@ -1,4 +1,3 @@
-// src/components/RotatingNavText.jsx
 "use client";
 
 import {

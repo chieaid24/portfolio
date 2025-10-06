@@ -1,5 +1,4 @@
 'use client'
-// components/WidgetCarousel.jsx
 import { useState } from "react";
 import CarouselArrow from "@/icons/CarouselArrow";
 import CarouselDot from "@/icons/CarouselDot"

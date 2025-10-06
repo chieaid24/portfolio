@@ -4,7 +4,6 @@ import { useMoney } from '@/lib/money-context';
 export default function DevMoneyReset({ className = '' }) {
   const { triggerOverflowFx, ready } = useMoney();
 
-  // Hide in production (Next injects NODE_ENV at build time)
   if (process.env.NODE_ENV === 'production') return null;
 
   return (

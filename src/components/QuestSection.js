@@ -87,7 +87,6 @@ function ProgressBar({
 
 export const flashAnimation = {
   flash: {
-    // color: ["#919191", "#FF7D7D", "#919191"],
     fontVariationSettings: ['"wght" 500', '"wght" 900', '"wght" 500'],
     transition: {
       duration: 1,
@@ -99,7 +98,6 @@ export const flashAnimation = {
   idle: {
     color: "#919191",
     fontVariationSettings: '"wght" 500',
-    // transition: { duration: 1.1 }
   },
 };
 

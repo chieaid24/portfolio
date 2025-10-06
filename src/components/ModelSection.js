@@ -1,4 +1,3 @@
-// components/ModelSection.js
 'use client';
 
 import { useState, useEffect } from "react"

@@ -1,5 +1,4 @@
 'use client'
-// components/SpotifyEmbed.jsx
 
 export default function SpotifyEmbed({
   playlistId,        // e.g. "1oQngKRVkU7oI8hmB4hf7i"

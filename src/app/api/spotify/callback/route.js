@@ -1,5 +1,4 @@
-// app/api/spotify/callback/route.js
-export const runtime = 'nodejs';        // Buffer required
+export const runtime = 'nodejs';        
 export const dynamic = 'force-dynamic';
 
 function requireEnv(v, name) {
@@ -54,7 +53,7 @@ export async function GET(req) {
 
   const isDev = process.env.NODE_ENV !== 'production';
 
-  // Render the refresh token in dev so you can copy it once.
+  // Render the refresh token in dev so can copy it once.
   if (isDev) {
     return new Response(
       `
@@ -72,6 +71,5 @@ Notes:
     );
   }
 
-  // In production, don't leak tokens—just show a success message.
   return new Response('Auth complete. You can close this window.');
 }

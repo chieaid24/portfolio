@@ -14,4 +14,4 @@ const files = [
 
 const buf = await pngToIco(files);
 writeFileSync(resolve(OUT), buf);
-console.log('✅ Wrote', OUT);
+console.log('Done', OUT);

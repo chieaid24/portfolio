@@ -9,7 +9,6 @@ import ScrollProgressBarClient from "@/components/ScrollProgressBarClient";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "./providers.js";
-
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });

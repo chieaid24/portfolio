@@ -1,8 +1,4 @@
-// app/api/spotify/monthly/route.js
-
-// Ensure Node runtime (Buffer is not available on the Edge runtime)
 export const runtime = 'nodejs';
-// This route does real-time work (no ISR/Data Cache)
 export const dynamic = 'force-dynamic';
 
 const {
@@ -107,7 +103,7 @@ async function replaceTracks(accessToken, playlistId, uris) {
         throw new Error(`PUT replace failed: ${res.status} ${t}`);
     }
 
-    // Some Spotify endpoints return a snapshot_id; others may return empty.
+    // Some Spotify endpoints return a snapshot_id, others may return empty.
     let snapshot_id = null;
     try {
         const json = await res.json();
@@ -149,7 +145,6 @@ export async function GET(req) {
         const playlistId = requireEnv(SPOTIFY_PLAYLIST_ID, 'SPOTIFY_PLAYLIST_ID');
         const accessToken = await getAccessToken();
 
-        // Optional: dry run (no write)
         const { searchParams } = new URL(req.url);
         const dryRun = searchParams.get('dry_run') === '1';
 

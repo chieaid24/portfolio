@@ -1,4 +1,3 @@
-// src/components/DevBalanceInput.jsx
 'use client';
 
 import { useState } from 'react';
@@ -13,7 +12,7 @@ export default function DevBalanceInput({ className = '' }) {
     e.preventDefault();
     setErr('');
 
-    // Light client-side validation (the reducer also validates)
+    //client-side validation (the reducer also validates)
     const cleaned = val.replace(/[,$\s]/g, '');
     const n = Number.parseFloat(cleaned);
     if (!Number.isFinite(n) || n <= 0) {

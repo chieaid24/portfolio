@@ -1,8 +1,7 @@
-// app/api/royale/player/route.js
 import badges from '../_data/clanBadges.json'; // server-only import
 
 export const revalidate = 86400;     // cache the route for 1 day (run it every day)
-export const dynamic = 'force-static';          // ensure it's cacheable
+export const dynamic = 'force-static';       
 
 const WEEK = 604800;
 const DAY = 86400;
@@ -14,13 +13,11 @@ const BADGE_MAP = Object.fromEntries(
 
 function clanBadgeSrc(badgeId) {
   const name = BADGE_MAP[badgeId];
-  // Adjust the path to match where you put images (and your size folders, if any)
   return name ? `/royale/badges/${name}.png` : null;
 }
 
-// Prefer env vars so you don't hardcode secrets/tags in git
-const TOKEN = process.env.CLASH_ROYALE_TOKEN;   // Supercell API token (same token you use for the proxy)
-const TAG = process.env.CLASH_ROYALE_TAG || '#9UJLLC08R'; // <-- your player tag
+const TOKEN = process.env.CLASH_ROYALE_TOKEN;   // Supercell API token 
+const TAG = process.env.CLASH_ROYALE_TAG || '#9UJLLC08R';
 
 function requireEnv(v, name) {
     if (!v) throw new Error(`Missing env var: ${name}`);
@@ -50,7 +47,7 @@ function computeResult(battle) {
 }
 
 async function j(url) {
-    // Data Cache: returns cached JSON immediately, revalidates in background.
+    // Data cache returns cached JSON immediately, revalidates in background.
     const res = await fetch(url, {
         headers: { Authorization: `Bearer ${requireEnv(TOKEN, 'CLASH_ROYALE_TOKEN')}` },
         next: { revalidate: DAY },
@@ -62,7 +59,6 @@ async function j(url) {
 export async function GET() {
     try {
         const encoded = encodeTag(requireEnv(TAG, 'CLASH_ROYALE_TAG'));
-        // Fetch whatever you need. Example: player + upcoming chests.
         const [player, battleLog] = await Promise.all([
             j(`${BASE}/players/${encoded}`),
             j(`${BASE}/players/${encoded}/battlelog`),
@@ -70,7 +66,7 @@ export async function GET() {
 
         const results = (Array.isArray(battleLog) ? battleLog : []).map(computeResult);
         const badgeId = clanBadgeSrc(player.clan?.badgeId);
-        // Return trimmed data your UI needs (optional)
+        // Return trimmed data
         const data = {
             player: {
                 name: player.name,
@@ -90,13 +86,13 @@ export async function GET() {
 
         return Response.json(data, {
             headers: {
-                // Edge cache hint (mirrors the 1-week policy)
+                // Edge cache hint 
                 'Cache-Control': 's-maxage=604800, stale-while-revalidate=604800',
             },
         });
     } catch (err) {
         // If the background refresh fails, Next keeps the previous good cache.
-        // This error only surfaces on the first-ever request or if no cache exists yet.
+        // This error only shows on the first-ever request or if no cache exists yet.
         return Response.json({ error: err.message || 'Royale API failed' }, { status: 502 });
     }
 }

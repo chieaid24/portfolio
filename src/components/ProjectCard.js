@@ -87,5 +87,3 @@ export default function ProjectCard({ title, generated_with, ticket_no, fallback
 
     );
 }
-// width={800}
-// height={10} style={{ width: '100%', height: 'auto' }} />

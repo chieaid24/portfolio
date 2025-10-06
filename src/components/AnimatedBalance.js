@@ -1,4 +1,3 @@
-// src/components/AnimatedBalance.jsx
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -186,16 +185,6 @@ export default function AnimatedBalance({
 
         // add jackpot color ! ! ! purple + green gradient? 
         setDeltaColor(delta >= 0 ? "green" : "red");
-        // choose delta color:
-        // if (delta >= 0) {
-        //   if (delta > 40) {
-        //     setDeltaColor("purple");
-        //   } else {
-        //     setDeltaColor("green")
-        //   }
-        // } else {
-        //   setDeltaColor("red")
-        // }
 
         setTrio([prevStr, deltaStr, baseStr]);
         setRtKey(k => k + 1);

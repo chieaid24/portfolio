@@ -11,7 +11,7 @@ const isGLBFile = (filePath) => {
     return filePath && filePath.toLowerCase().endsWith('.glb');
 };
 
-// Helper: is this a YouTube video? (full URL or 11-char ID)
+// is this a YouTube video? (full URL or 11-char ID)
 const isYouTubeVideo = (input) => {
     if (!input) return false;
     const s = String(input).trim();

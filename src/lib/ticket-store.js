@@ -1,11 +1,10 @@
-// src/lib/tickets.js
 const TICKETS_KEY = 'projectTickets_v1';
 
 const safeParse = (s) => { try { return JSON.parse(s) || {}; } catch { return {}; } };
 const save = (obj) => { try { localStorage.setItem(TICKETS_KEY, JSON.stringify(obj)); } catch {} };
 const load = () => safeParse(localStorage.getItem(TICKETS_KEY));
 
-/** ---- generators ---- **/
+//generators
 export const generateTicketNumber = () => {
   const n = Math.floor(Math.random() * 99) + 1; // 1..99
   return n < 10 ? `0${n}` : String(n);
@@ -19,11 +18,11 @@ export const generateTicketValue = () => {
   return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
-/** ---- validators (gentle) ---- **/
+//validators
 const isTicketNo = (s) => typeof s === 'string' && /^\d{2}$/.test(s);
 const isTicketValue = (s) => typeof s === 'string' && /^\d{1,3}(,\d{3})*\.\d{2}$/.test(s);
 
-/** ---- unique number helper ---- **/
+//unique num helper
 const ALL_TICKET_NUMS = Array.from({ length: 99 }, (_, i) => String(i + 1).padStart(2, '0'));
 
 function generateUniqueTicketNumber(usedSet) {
@@ -33,14 +32,6 @@ function generateUniqueTicketNumber(usedSet) {
   return available[idx];
 }
 
-/**
- * Get or create a per-user ticket for a project slug.
- * Stored shape per slug: { number: "07", value: "15,340.00" }
- *
- * @param {string} slug
- * @param {{number?: string, value?: string}} [fallback] optional seed
- * @returns {{number: string, value: string}}
- */
 export function getOrCreateTicket(slug, fallback) {
   if (typeof window === 'undefined') {
     return {
@@ -64,7 +55,7 @@ export function getOrCreateTicket(slug, fallback) {
       .filter(isTicketNo)
   );
 
-  // Prefer a valid, unused fallback number if provided.
+  // perfer valid, unused fallback number if provided.
   let number = (isTicketNo(fallback?.number) && !used.has(fallback.number))
     ? fallback.number
     : generateUniqueTicketNumber(used) || generateTicketNumber(); // fallback if exhausted
@@ -77,7 +68,7 @@ export function getOrCreateTicket(slug, fallback) {
   return ticket;
 }
 
-/** Optional helpers */
+//helper
 export function resetTickets() {
   try { localStorage.removeItem(TICKETS_KEY); } catch {}
 }

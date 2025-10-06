@@ -1,6 +1,5 @@
-// src/lib/payout.js
 
-// -------- RNG plumbing -------------------------------------------------------
+// RNg plumbing
 export function makeCryptoRNG() {
   const hasCrypto =
     typeof globalThis !== "undefined" &&
@@ -31,7 +30,7 @@ export function makeMulberry32(seed) {
   };
 }
 
-// -------- Distributions ------------------------------------------------------
+// distributions
 export function triangularSample(rng, a, m, b) {
   if (!(a <= m && m <= b)) throw new Error("Require a <= m <= b");
   const u = rng.random();
@@ -58,7 +57,7 @@ export function powerTailEV(m, cap, k) {
   return m + (cap - m) / (k + 1);
 }
 
-// -------- Mixture builder ----------------------------------------------------
+// mix builder
 function clamp(x, lo, hi) {
   return Math.min(Math.max(x, lo), hi);
 }
@@ -66,7 +65,7 @@ function toCents(x) {
   return Math.round(x * 100) / 100;
 }
 
-// Solve for mixture weight p so: EV = (1-p)*evBase + p*evTail = targetEV
+// solve for mixture weight p so: EV = (1-p)*evBase + p*evTail = targetEV
 function calibrateP(evTarget, evBase, evTail) {
   const denom = evTail - evBase;
   if (denom <= 0) {
@@ -76,11 +75,10 @@ function calibrateP(evTarget, evBase, evTail) {
   return clamp((evTarget - evBase) / denom, 0, 1);
 }
 
-// Factory: returns { next(), info() }
+// returns { next(), info() }
 export function createPayoutGenerator(cfg) {
   const rng = cfg.rng || makeCryptoRNG();
 
-  // Sanity checks
   if (!(cfg.min < cfg.baseMode && cfg.baseMode <= cfg.baseMax && cfg.baseMax <= cfg.cap)) {
     throw new Error("Require min < baseMode <= baseMax <= cap");
   }
@@ -92,7 +90,7 @@ export function createPayoutGenerator(cfg) {
   const evBase = triangularEV(cfg.min, cfg.baseMode, cfg.baseMax);
   const evTail = powerTailEV(cfg.tailStart, cfg.cap, cfg.tailK);
 
-  // 👇 NEW: allow explicit tailWeight; else calibrate to targetEV
+  // allow explicit tailWeight; else calibrate to targetEV
   const hasTailWeight =
     typeof cfg.tailWeight === "number" && Number.isFinite(cfg.tailWeight);
   const p = hasTailWeight
@@ -119,11 +117,11 @@ export function createPayoutGenerator(cfg) {
     },
 
     info: () => ({
-      p,                    // actual tail probability used
+      p,                    
       evBase,
       evTail,
       evOverall,
-      usedTailWeight: hasTailWeight, // true if you forced p via cfg.tailWeight
+      usedTailWeight: hasTailWeight, 
       targetEV: cfg.targetEV,
       evDriftFromTarget: typeof cfg.targetEV === "number"
         ? evOverall - cfg.targetEV
