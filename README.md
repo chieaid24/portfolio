@@ -74,5 +74,5 @@ The centerpiece of the portfolio: a **reward-based earnings** system that incent
 ## 🔮 Future Improvements
 
 - 🧠 Integrate **AI-powered project summaries**.
-- 🪄 Add **rewards or prizes** to spend your earnings.
+- 🪄 Add **rewards or prizes** for spend your earnings.
 - ⚡ Expand dashboard analytics for visitor tracking.
