@@ -355,7 +355,7 @@ export default function HeroSlot() {
             width={"100"}
             height={"500"}
             viewBox="0 0 100 100"
-            className="absolute lg:relative translate-x-[27px] translate-y-[-5px] lg:translate-x-[-49px] lg:translate-y-[-10px] scale-47 lg:scale-100 5xl:scale-125 5xl:translate-x-[-27px] 5xl:translate-y-[-10px]"
+            className="absolute lg:relative translate-x-[27px] translate-y-[-5px] lg:translate-x-[-49px] lg:translate-y-[-10px] scale-47 lg:scale-100 5xl:scale-125 5xl:translate-x-[-30px] 5xl:translate-y-[-10px]"
 
           > {/**lever ball svg */}
             <defs>

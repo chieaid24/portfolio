@@ -1,4 +1,3 @@
-// components/BottomIntroFade.jsx
 'use client';
 import { useEffect, useState } from 'react';
 

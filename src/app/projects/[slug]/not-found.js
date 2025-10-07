@@ -4,18 +4,17 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 
 export default function NotFound() {
     return (
-        <div className="bg-background-dark font-dm-sans text-dark-grey-text min-h-screen">
-            <Header />
+        <div className="bg-background-light font-dm-sans text-dark-grey-text min-h-screen">
             <MaxWidthWrapper>
-                <div className="pt-20 pb-20 text-center">
-                    <h1 className="text-6xl font-bold mb-4">404</h1>
-                    <h2 className="text-2xl mb-8">Project Not Found</h2>
+                <div className="pt-40 pb-20 text-center">
+                    <h1 className="text-6xl font-bold mb-2">404</h1>
+                    <h2 className="text-2xl mb-8 font-bold">Project Not Found</h2>
                     <p className="text-lg mb-8">
-                        The project you&apos;re looking for doesn&apos;t exist or may have been moved.
+                        Sorry! The project you&apos;re looking for doesn&apos;t exist or may have been moved.
                     </p>
                     <Link 
                         href="/"
-                        className="inline-block bg-custom-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                        className="inline-block bg-custom-red text-white px-6 py-3 rounded-lg hover:bg-custom-red/80 transition-colors"
                     >
                         Back to Home
                     </Link>
