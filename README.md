@@ -40,15 +40,15 @@ All UI components are modular and formatted for future expansion and scalability
   - Features an "Inquiry" animation persisted with localStorage for first time visitors
   - Samples from a statistical mixture model with **triangular-power-law distribution** to simulate realistic payouts
   - Includes **safeguards** against numeric under/overflow when gambling
-- **Responsive Design:** Created mobile to 4k+ layouts, built with TailwindCSS and utility-first principles
-- **Dynamic Routing:** Each project is a statically generated route, creating an easy "plug and play" template for future projects
+- **Responsive Design:** Created mobile to 4k+ layouts, built with TailwindCSS and **utility-first principles**
+- **Dynamic Routing:** Each project page is **built dynamically** from data at build time (static generation), allowing fast, **SEO-friendly** “plug-and-play” templates for projects.
 
 
 ---
 
 ## 💾 Backend + APIs
 
-The backend is handled via **Next.js API routes** (Node.js), calling and caching information from **REST APIs.**
+The backend is handled via **Next.js API routes** (Node.js), calling and caching information from multiple **REST APIs.**
 
 ### Highlights
 
