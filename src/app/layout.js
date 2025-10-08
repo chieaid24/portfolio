@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Portfolio of Aidan Chien, systems engineer specializing in design and development."
+          content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff."
         />
         <meta
           name="keywords"
@@ -49,14 +49,15 @@ export default function RootLayout({ children }) {
         <meta property="og:image" content="https://aidanchien.com/open_graph/opengraph_image_v1.png" />
         <meta property="og:site_name" content="Aidan Chien Portfolio" />
         <meta property="og:title" content="AIDAN CHIEN || Developer & Designer" />
-        <meta property="og:description" content="My portfolio displaying software development, mechanical design, and interactive projects."
-        />
+        <meta property="og:description" content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff." />
+        <meta name="application-name" content="AIDAN CHIEN" />
+        <meta itemprop="name" content="AIDAN CHIEN" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://aidanchien.com/open_graph/opengraph_image_v1.png" />
         <meta name="twitter:title" content="AIDAN CHIEN || Developer & Designer" />
-        <meta name="twitter:description" content="My portfolio displaying software development, mechanical design, and interactive projects." />
+        <meta name="twitter:description" content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff." />
         {/* Canonical */}
         <link rel="canonical" href="https://aidanchien.com" />
         {/** JSON-LD */}

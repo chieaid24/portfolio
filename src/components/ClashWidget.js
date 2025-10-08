@@ -17,15 +17,8 @@ const getCardIcon = (card, index) => {
 
   const evoEligible =
     index < 2 && Number(card?.evolutionLevel ?? 0) >= 1;
-
-  // If your evolved images live in a subfolder:
   const evolvedPath = `/royale/cards/${base}-ev1.png`;
   const normalPath = `/royale/cards/${base}.png`;
-
-  // If instead they’re in the same folder with a suffix,
-  // use this line instead of evolvedPath:
-  // const evolvedPath = `/royale/cards/${base}-evo.png`;
-
   return evoEligible ? evolvedPath : normalPath;
 };
 
