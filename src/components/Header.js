@@ -127,6 +127,7 @@ export default function Header() {
 
     return (
         <header
+            aria-label="Site header with navigation and wallet"
             className={`fixed inset-x-0 top-0 z-50 transition-transform ease-in-out duration-300 pointer-events-none ${showHeader ? "translate-y-0" : "-translate-y-full"} py-5 font-dm-sans`}
         >
             <motion.div

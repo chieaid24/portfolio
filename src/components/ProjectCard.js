@@ -42,11 +42,13 @@ export default function ProjectCard({ title, generated_with, ticket_no, fallback
                             alt={title}
                             fill
                             className="object-cover z-0 transition-transform duration-300 group-hover/pc:scale-101" />
-                        <ul className="absolute w-full pl-20 flex flex-wrap justify-end gap-2 pt-3 pr-3 text-[16px]"> {/**skills used div */}
+                        <div role="group"
+                            aria-label="Skills used in this project" 
+                            className="absolute w-full pl-20 flex flex-wrap justify-end gap-2 pt-3 pr-3 text-[16px]"> {/**skills used div */}
                             {skills_used.map((skill, i) => (
                                 <SkillDisplay fileName={skill} project={i} card={true} key={i}/>
                             ))}
-                        </ul>
+                        </div>
                     </div>
                     <div className="absolute -translate-x-[4.4px] translate-y-[125%] group-hover/pc:translate-y-[121%] w-full flex flex-col items-center transition-transform duration-300 group-hover/pc:duration-300 group-hover/pc:scale-102">
                         <div className="relative">
