@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
         <meta property="og:title" content="AIDAN CHIEN || Developer & Designer" />
         <meta property="og:description" content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff." />
         <meta name="application-name" content="AIDAN CHIEN" />
-        <meta itemprop="name" content="AIDAN CHIEN" />
+        <meta itemProp="name" content="AIDAN CHIEN" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />

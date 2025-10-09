@@ -87,7 +87,7 @@ function ProgressBar({
 
 export const flashAnimation = {
   flash: {
-    fontVariationSettings: ['"wght" 500', '"wght" 900', '"wght" 500'],
+    fontVariationSettings: ['"wght" 700', '"wght" 900', '"wght" 700'],
     transition: {
       duration: 1,
       ease: "easeInOut",
@@ -96,8 +96,8 @@ export const flashAnimation = {
     },
   },
   idle: {
-    color: "#919191",
-    fontVariationSettings: '"wght" 500',
+    color: "#B3B3B3",
+    fontVariationSettings: '"wght" 700',
   },
 };
 
@@ -149,9 +149,9 @@ export default function QuestSection({ className = "", triggerFlash = 0, onQuest
         <p
           className={`mb-[-4px] transition-colors duration-200`}
 
-        >red words found:{" "}
+        >red words found: {" "}
           <motion.span
-            className="font-semibold inline-block "
+            className="inline-block "
             variants={flashAnimation}
             animate={
               !completedQuests.redtext && flash ? "flash" : "idle"
