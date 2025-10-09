@@ -14,7 +14,7 @@ export default function BackToProjects() {
         <div className="flex justify-end">
             <button
                 onClick={handleBackToProjects}
-                className="cursor-pointer group flex items-center gap-3 text-lg md:text-2xl font-semibold text-custom-red md:hover:text-red-700 transition-colors duration-300"
+                className="cursor-pointer group flex items-center gap-3 text-lg md:text-2xl font-semibold text-custom-red md:hover:text-custom-red/70 transition-colors duration-300"
             >
                 Back to Projects
                 <svg
