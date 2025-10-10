@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
         <meta property="og:url" content="https://aidanchien.com" />
         <meta property="og:image" content="https://aidanchien.com/open_graph/opengraph_image_v1.png" />
         <meta property="og:site_name" content="Aidan Chien Portfolio" />
-        <meta property="og:title" content="AIDAN CHIEN || Developer & Designer" />
+        <meta property="og:title" content="Aidan's Portfolio" />
         <meta property="og:description" content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff." />
         <meta name="application-name" content="AIDAN CHIEN" />
         <meta itemProp="name" content="AIDAN CHIEN" />
