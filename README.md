@@ -79,3 +79,25 @@
 # Adding new Hero Rotating Texts
 **(Path: src/app/components/HeroSlot.js)**
 - These are the texts that describe be that scroll down when you pull the Hero Slot Lever
+
+------
+------
+### Things to potentially change:
+- Text color of the title in CommodityDisplay to header-light
+- In WidgetCarousel, the arrow animation when it gets to the end, should not be animated when it ‘hits the wall’ ?
+- Add TLDR section at the bottom of each project
+- Maybe say “AI-Generated TLDR (did the work for you)” then 4-5 bulletpoints
+- Potentially buy things with the money
+-----
+### Balance Value Notes
+- Decimal Places: 2 decimal
+- Minimum money: 0 (send special message ? BROKE etc.)
+- Maximum money: 9999.99k (money-context)
+- Start with -> 10k
+- Each money gain:
+- Red Word: 2.5k each (lib/money-context)
+- Project: 4, 59 - 81k each (lib/ticket-store)
+- Link followed: ~6, 12 - 32k each (lib/money-context
+- Lever Click: - negative 5, gain statistical output (lib/payout-default & lib/payout)
+- K, M, B, T, Q for units for the things you can buy
+
