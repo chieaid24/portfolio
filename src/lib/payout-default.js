@@ -9,10 +9,10 @@ export const defaultMixtureConfig = {
   baseMode: 4.5,
   baseMax: 9,
 
-  tailStart: 10,      // define what counts as “jackpot”
-  tailK: 0.6,         // fatter tail
+  tailStart: 10,      
+  tailK: 0.6,         
 
-  tailWeight: 0.10,   // 10% of draws come from tail
+  tailWeight: 0.10,   
 
   roundToCents: true,
 };
