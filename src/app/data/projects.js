@@ -115,7 +115,7 @@ export const projects = [
         skills_used: ['React', 'Web Development', 'Full Stack Development'],
         image: '/personal_website/website_card.png',
         page_displays: [['/personal_website/website3-image-1_v5.png', "Phone, tablet, and desktop views of the website"]],
-        github_link: 'https://github.com/chieaid24/Personal-Website',
+        github_link: 'https://github.com/chieaid24/Portfolio-Site',
         subtitle: "a portfolio that performs",
         summaryMetaData: "An interactive Next.js portfolio with gamified balance, slot machine, APIs, and creative UI/UX design.",
         summary: <>A plain resume displaying my projects is boring and, frankly, too easy to make. Find out how I built the <RedText rewardId="red:website:very-website">very website</RedText> you&apos;re on <RedText rewardId="red:website:scratch">from scratch!</RedText> </>,
