@@ -1,4 +1,3 @@
-// app/api/spotify/login/route.js
 export const dynamic = 'force-dynamic';
 
 function requireEnv(v, name) {
