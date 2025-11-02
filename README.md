@@ -37,7 +37,7 @@
   - The Icon’s file name is the default displayed text--this can be overridden by passing the displayName prop when using the `<SkillDisplay>` component (look at personal website -> tool_paragraphs -> Next.js)
 - See “Adding a new SkillDisplay Icon” to add a new Skill
 ### Updating quest_totals
-- At top of projects.js with redtext+=?, project++, link++
+- At top of projects.js with redtext+=? (redtext and skilldisplays), project++, link++
   - Update counts in comments
 
 ### Extra: Adding Links to external sites or internal other projects
@@ -51,7 +51,7 @@
 </p>
 
 # Adding a new SkillDisplay Icon
-- Create a file in `src/icons/skills/*.js`
+- Copy and paste an existing file in `src/icons/skills/*.js`
   - The Icon’s file name is the default displayed text
 - Get the SVG from svgrepo or Simple Icons, paste the svg into figma, go into the code mode and take **just** the vector component.
   - Should be just `<svg> <path /> <svg>`
@@ -59,7 +59,6 @@
 - Remove the height & width in the `<svg> `tag, add `{...props}`, leave the `viewBox`
   - This makes it so the icon can still scale correctly, but I pass the value of its size and it takes that value
 - In all of the `fill=` or `strokeColor=` make it equal to `white`
-- 
 ------
 
 <p align="center">
@@ -83,6 +82,7 @@
 ------
 ------
 ### Things to potentially change:
+- Add Tool Tip text when clicking on Dark Mode and nothing happens, can add tool tip like google or notion easily
 - Text color of the title in CommodityDisplay to header-light
 - In WidgetCarousel, the arrow animation when it gets to the end, should not be animated when it ‘hits the wall’ ?
 - Add TLDR section at the bottom of each project
