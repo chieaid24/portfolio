@@ -63,7 +63,7 @@ export default function ProjectCard({ title, generated_with, ticket_no, fallback
                                 <div className="text-dark-grey-text font-black text-[30px] sm:text-[39px] 5xl:text-[46px] my-[-10px] sm:my-[-9px] tracking-tight">
                                     {title}
                                 </div>
-                                <div className="overflow-hidden mt-[0px] sm:mt-[-6px] w-[180px] h-[21px] sm:w-[240px] sm:h-[30px] 5xl:w-[288px] 5xl:h-[36px] opacity-12 dark:opacity-25">
+                                <div className="overflow-hidden mt-[0px] sm:mt-[-3px] w-[180px] h-[21px] sm:w-[240px] sm:h-[30px] 5xl:w-[288px] 5xl:h-[36px] opacity-12 dark:opacity-25">
                                     <img
                                         src="/icons/barcode_hireme.svg"
                                         alt="Hire me barcode"
