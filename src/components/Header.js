@@ -61,6 +61,15 @@ export default function Header() {
     const { balance, ready } = useMoney();
     const [flashTrigger, setFlashTrigger] = useState(0);
     const [questClicked, setQuestClicked] = useState(0);
+    const [showTooltip, setShowTooltip] = useState(false);
+    const tooltipTimerRef = useRef(null);
+
+    // Clear tooltip timer on unmount
+    useEffect(() => {
+        return () => {
+            if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
+        };
+    }, []);
 
     const infoVariants = {
         closed: { opacity: 1, y: 0 },
@@ -264,12 +273,37 @@ export default function Header() {
                                         with your earnings, I would buy...
                                     </motion.div>
 
-                                    <span className="flex items-center justify-end
-                                     md:space-x-2">
+                                    <span className="relative flex items-center justify-end md:space-x-2">
+                                        <DarkModeToggle
+                                            className="px-3 py-2 md:px-[2.5px] md:py-[2.5px]"
+                                            onFailedToggle={() => {
+                                                setFlashTrigger((t) => t + 1);
+                                                setShowTooltip(true);
 
-                                        <DarkModeToggle className="px-3 py-2 md:px-[2.5px] md:py-[2.5px]" 
-                                                        onFailedToggle={() => setFlashTrigger((t) => t + 1 )}
-                                                        questClicked={questClicked}/>
+                                                // Clear existing timer before setting a new one
+                                                if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
+                                                tooltipTimerRef.current = setTimeout(() => {
+                                                    setShowTooltip(false);
+                                                    tooltipTimerRef.current = null;
+                                                }, 1200);
+                                            }}
+                                            questClicked={questClicked}
+                                        />
+
+                                        <AnimatePresence>
+                                            {showTooltip && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -2 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: -2 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="absolute left-1/2 -translate-x-4/5 mt-14 px-2 py-1 text-[10px] rounded-md bg-dark-grey-text text-white z-[9999] shadow-sm whitespace-nowrap font-medium"
+                                                >
+                                                    complete all quests first!
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+
                                         <motion.button
                                             key="close"
                                             type="button"
@@ -309,8 +343,8 @@ export default function Header() {
                                     <QuestSection className="order-2 pt-4 px-5
                                                              md:pt-2 md:px-20
                                                              lg:px-0 lg:order-1"
-                                        triggerFlash={flashTrigger} 
-                                        onQuestClick={() => setQuestClicked((c) => c + 1)}/>
+                                        triggerFlash={flashTrigger}
+                                        onQuestClick={() => setQuestClicked((c) => c + 1)} />
                                     <motion.div
                                         key="with-your-money"
                                         initial={{ opacity: 0 }}
