@@ -285,7 +285,7 @@ export default function Header() {
                                                 tooltipTimerRef.current = setTimeout(() => {
                                                     setShowTooltip(false);
                                                     tooltipTimerRef.current = null;
-                                                }, 1200);
+                                                }, 800);
                                             }}
                                             questClicked={questClicked}
                                         />
@@ -293,11 +293,11 @@ export default function Header() {
                                         <AnimatePresence>
                                             {showTooltip && (
                                                 <motion.div
-                                                    initial={{ opacity: 0, y: -2 }}
+                                                    initial={{ opacity: 0, y: -1 }}
                                                     animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -2 }}
+                                                    exit={{ opacity: 0, y: -1 }}
                                                     transition={{ duration: 0.2 }}
-                                                    className="absolute left-1/2 -translate-x-4/5 mt-14 px-2 py-1 text-[10px] rounded-md bg-dark-grey-text text-white z-[9999] shadow-sm whitespace-nowrap font-medium"
+                                                    className="absolute left-1/2 -translate-x-4/5 mt-14 px-2 py-1 text-[10px] rounded-md bg-dark-grey-text text-white z-[9999] whitespace-nowrap font-medium"
                                                 >
                                                     complete all quests first!
                                                 </motion.div>
