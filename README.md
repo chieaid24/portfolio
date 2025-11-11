@@ -82,11 +82,14 @@
 ------
 ------
 ### Things to potentially change:
-- Add Tool Tip text when clicking on Dark Mode and nothing happens, can add tool tip like google or notion easily
-- Text color of the title in CommodityDisplay to header-light
-- In WidgetCarousel, the arrow animation when it gets to the end, should not be animated when it ‘hits the wall’ ?
+
+- Redesign for a more dynamic look on scroll -> can create a Parallax background with falling 7s, coins, cherries as a background (make it overall darkmode)
+  - Projects "float" moving randomly in the void
+[google_screen_recording_2025-11-11T18-56_58.499Z.webm](https://github.com/user-attachments/assets/28f4eaba-1d7b-4b6d-95d7-31234d940855)
+  - 3D scroll animation? -> https://motion.dev/docs/react-scroll-animations
+
 - Add TLDR section at the bottom of each project
-- Maybe say “AI-Generated TLDR (did the work for you)” then 4-5 bulletpoints
+  - Maybe say “AI-Generated TLDR (did the work for you)” then 4-5 bulletpoints
 - Potentially buy things with the money
 -----
 ### Balance Value Notes
