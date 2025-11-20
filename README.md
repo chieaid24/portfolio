@@ -23,9 +23,9 @@ Each section below dives into a different aspect of the system architecture and 
 | Category | Tools / Frameworks |
 |-----------|--------------------|
 | **Frontend** | Next.js 15, React, TailwindCSS, Framer Motion, Three.js  |
-| **Backend** | Node.js, AWS Lambda, EventBridge |
+| **Backend** | Node.js |
 | **Design** | Figma, Illustrator |
-| **Deployment** | AWS Amplify |
+| **Deployment** | Vercel |
 
 ---
 
@@ -54,7 +54,7 @@ The backend is handled via **Next.js API routes** (Node.js), calling and caching
 
 - **RESTful Endpoints:** Fetches data from Clash Royale and Chess.com APIs **daily,** caching it for up to a week
   - Allows older, **clean data** to be served in case of error
-- **Monthly Cron Job:** Leverages **Lambda and EventBridge** to update a Spotify playlist with my five most played songs of the month
+- **Monthly Cron Job:** Leverages **Vercel Cron** to update a Spotify playlist with my five most played songs of the month
   - Displayed on my "About" page
 
 ---
