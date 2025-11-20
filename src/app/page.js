@@ -9,6 +9,7 @@ import RedText from '@/components/RewardRedText';
 import RewardLink from '@/components/RewardLink';
 import BottomIntroFade from '@/components/BottomIntroFade';
 import { motion } from "framer-motion";
+import ExpandedHeader from '@/components/ExpandedHeader'
 
 
 export default function Home() {
@@ -58,6 +59,7 @@ export default function Home() {
       <main className="pt-[15vh] bg-background-dark font-dm-sans text-dark-grey-text
                     md:pt-[11vh]
                     3xl:pt-[14vh]">
+        <ExpandedHeader />
         <BottomIntroFade />
         {/**hero div */}
         <section id="hero" className="relative w-full lg:min-h-[92vh]">
@@ -88,13 +90,12 @@ export default function Home() {
               <h3 className="font-regular text-light-grey-text italic leading-normal hidden text-center
                               md:text-xl md:block 
                               lg:text-left lg:text-2xl">
-                Welcome to my portfolio site! Try clicking on projects, links, and <RedText rewardId="red:home:words" weight={"semibold"}>red words</RedText> to uncover new details and increase your earnings throughout the site. Scroll down to check out some of my other work—and good luck exploring :)
+                Welcome to my portfolio site! Try clicking on projects, links, and <RedText rewardId="red:home:words" weight={"semibold"}>red words</RedText> to increase your earnings throughout the site. Scroll down to check out some of my other work—and good luck exploring :)
               </h3>
 
             </div>
           </MaxWidthWrapper>
         </section>
-
 
         <section id="projects" className="bg-background-light text-dark-grey-text"> {/**project section */}
           <MaxWidthWrapper>

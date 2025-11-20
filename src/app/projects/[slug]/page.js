@@ -103,7 +103,7 @@ export default async function ProjectPage({ params }) {
                         <section className="mb-20">
                             <h1 className="font-bold mb-10 text-4xl
                                             md:text-5xl">
-                                What Tools?
+                                What tools?
                             </h1>
                             <div className='text-2xl font-regular'>
                                 {renderParagraphs(project.tool_paragraphs)}
@@ -113,7 +113,7 @@ export default async function ProjectPage({ params }) {
                         {/** Why This Project */}
                         <section className="mb-15">
                             <h1 className="font-bold text-4xl md:text-5xl mb-10">
-                                Why This Project?
+                                Why this project?
                             </h1>
                             <div className='text-2xl font-regular'>
                                 {renderParagraphs(project.why_paragraphs)}

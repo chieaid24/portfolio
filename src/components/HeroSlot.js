@@ -267,8 +267,8 @@ export default function HeroSlot() {
           {/* Rotating Text */}
           <RotatingHeroText
             ref={textRef}
-            texts={['AIDAN', 'ENG', 'DES', 'INVE', 'CLIM', 'FILM', 'STU', 'GYM', 'CODE', 'CAD', 'REELS', 'GAME', 'UI/UX', 'WEB', 'AI', 'NYT', 'SLEEP', 'CHESS', 'DEVE']}
-            texts2={['CHIEN', 'INEER', 'IGNER', 'NTOR', 'BER', 'MAKER', 'DENT', 'GOER', 'ADDICT', 'HEAD', 'SNOB', 'NERD', 'FAN', 'DEV', 'FIEND', 'GAMER', 'LOVER', 'NUT', 'LOPER']} // STAN, BUFF, BOY, BUG, ACE, 
+            texts={['AIDAN', 'ENG', 'DES', 'INVE', 'CLIM', 'FILM', 'STU', 'GYM', 'CODE', 'CAD', 'REELS', 'GAME', 'UI/UX', 'WEB', 'AI', 'NYT', 'SLEEP', 'CHESS', 'DEVE', 'CLOUD']}
+            texts2={['CHIEN', 'INEER', 'IGNER', 'NTOR', 'BER', 'MAKER', 'DENT', 'GOER', 'ADDICT', 'HEAD', 'SNOB', 'NERD', 'FAN', 'DEV', 'FIEND', 'GAMER', 'LOVER', 'NUT', 'LOPER', 'DEV']} // STAN, BUFF, BOY, BUG, ACE, 
             mainClassName="overflow-visible px-3 text-5xl lg:text-9xl 5xl:text-[160px] bg-background-light text-dark-grey-text font-italiana py-0.5 sm:py-1 md:py-2 5xl:py-[10px] justify-center rounded-lg"
             staggerFrom="last"
             initial={{ y: '-100%' }}
