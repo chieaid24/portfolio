@@ -41,6 +41,7 @@ export default function CustomStarComponent({
   fade = false,
   speed = 0,
   color = "#ffffff",
+  opacity = 0.4,
 }) {
   const texture = useMemo(() => createStarTexture(), []);
 
@@ -52,7 +53,7 @@ export default function CustomStarComponent({
     const targetColor = new THREE.Color(color);
 
     for (let i = 0; i < count; i++) {
-      // Spherical-shell distribution (like <Stars/>)
+      // Spherical shell distribution (like <Stars/>)
       const r = radius + Math.random() * depth;
 
       const theta = Math.random() * 2 * Math.PI;
@@ -66,7 +67,7 @@ export default function CustomStarComponent({
       positions[i * 3 + 1] = y;
       positions[i * 3 + 2] = z;
 
-      // Random shade between white → targetColor
+      // Random shade between white + targetColor
       const t = Math.random();
       const mixed = new THREE.Color().lerpColors(
         new THREE.Color("white"),
@@ -107,6 +108,7 @@ export default function CustomStarComponent({
         map={texture}
         alphaMap={texture}
         transparent
+        opacity={opacity}
         depthWrite={false}
         vertexColors
         sizeAttenuation={fade}
