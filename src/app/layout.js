@@ -9,10 +9,14 @@ import ScrollProgressBarClient from "@/components/ScrollProgressBarClient";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "./providers.js";
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
-const italiana = Italiana({ subsets: ["latin"], weight: "400", variable: "--font-italiana" });
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-italiana",
+});
 const clashFont = localFont({
   src: [
     { path: "./fonts/Clash_Regular.otf", weight: "400", style: "normal" },
@@ -23,12 +27,15 @@ const clashFont = localFont({
   fallback: ["system-ui", "Segoe UI", "Arial"],
 });
 
-
 export default function RootLayout({ children }) {
   const pathname = usePathname();
 
   return (
-    <html lang="en" className={`${dmSans.variable} text-[16px] bg-background-light`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${dmSans.variable} text-[16px] bg-background-light`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Charset & Viewport */}
         <meta charSet="UTF-8" />
@@ -46,18 +53,33 @@ export default function RootLayout({ children }) {
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="en_US" />
         <meta property="og:url" content="https://aidanchien.com" />
-        <meta property="og:image" content="https://aidanchien.com/open_graph/opengraph_image_v1.png" />
+        <meta
+          property="og:image"
+          content="https://aidanchien.com/open_graph/opengraph_image_v1.png"
+        />
         <meta property="og:site_name" content="Aidan Chien Portfolio" />
         <meta property="og:title" content="Aidan's Portfolio" />
-        <meta property="og:description" content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff." />
+        <meta
+          property="og:description"
+          content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff."
+        />
         <meta name="application-name" content="AIDAN CHIEN" />
         <meta itemProp="name" content="AIDAN CHIEN" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://aidanchien.com/open_graph/opengraph_image_v1.png" />
-        <meta name="twitter:title" content="AIDAN CHIEN || Developer & Designer" />
-        <meta name="twitter:description" content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff." />
+        <meta
+          name="twitter:image"
+          content="https://aidanchien.com/open_graph/opengraph_image_v1.png"
+        />
+        <meta
+          name="twitter:title"
+          content="AIDAN CHIEN || Developer & Designer"
+        />
+        <meta
+          name="twitter:description"
+          content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff."
+        />
         {/* Canonical */}
         <link rel="canonical" href="https://aidanchien.com" />
         {/** JSON-LD */}
@@ -94,8 +116,8 @@ export default function RootLayout({ children }) {
               potentialAction: {
                 "@type": "SearchAction",
                 target: "https://aidanchien.com/search?q={search_term_string}",
-                "query-input": "required name=search_term_string"
-              }
+                "query-input": "required name=search_term_string",
+              },
             }),
           }}
         />
@@ -106,11 +128,10 @@ export default function RootLayout({ children }) {
         <Providers>
           <main key={pathname} className="fade-in-page">
             <ScrollProgressBarClient />
-            <Header />
+            {/* <Header /> */}
             {children}
             <Footer />
           </main>
-
         </Providers>
         <SpeedInsights />
       </body>
