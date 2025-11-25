@@ -22,6 +22,7 @@
     "react": "^19.0.0",
     "react-barcode": "^1.6.1",
     "react-dom": "^19.0.0",
+    "react-use-measure": "^2.1.7",
     "three": "^0.178.0"
   },
   "devDependencies": {
@@ -34,6 +35,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
     "png-to-ico": "^3.0.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.1",
     "tailwindcss": "^4"
   }
 }

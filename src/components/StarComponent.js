@@ -21,7 +21,7 @@ function createStarTexture() {
   );
 
   gradient.addColorStop(0, "white");
-  gradient.addColorStop(0.2, "white");
+  gradient.addColorStop(0.3, "white");
   gradient.addColorStop(1, "transparent");
 
   ctx.fillStyle = gradient;

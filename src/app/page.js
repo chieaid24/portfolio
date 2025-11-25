@@ -10,10 +10,14 @@ import RewardLink from "@/components/RewardLink";
 import BottomIntroFade from "@/components/BottomIntroFade";
 import { motion } from "framer-motion";
 import StarBackground from "@/components/StarBackground";
+import FileDownload from "@/icons/FileDownload";
+import FooterLinkedin from "@/icons/FooterLinkedin";
+import FooterGithub from "@/icons/FooterGithub";
+import FooterEmail from "@/icons/FooterEmail";
+import Experience from "@/components/Experience";
 
 export default function Home() {
   const [randomTickets, setRandomTickets] = useState({});
-
   useEffect(() => {
     const generateTicketNumbers = () => {
       const used = new Set(["69"]);
@@ -51,45 +55,109 @@ export default function Home() {
   return (
     <>
       <>
-        <title>AIDAN CHIEN</title>
+        <title>Aidan Chien</title>
         <meta
           name="description"
           content="Portfolio of Aidan Chien, systems engineer specializing in design and development."
         />
       </>
-      <main
-        className="pt-[15vh] font-dm-sans text-dark-grey-text
-                    md:pt-[11vh]
-                    3xl:pt-[14vh]"
-      >
-        <StarBackground />
-        <BottomIntroFade />
-        {/**hero div */}
-        <section id="hero" className="relative w-full lg:min-h-[92vh]">
-          <MaxWidthWrapper></MaxWidthWrapper>
-        </section>
 
-        <section
-          id="projects"
-          className="bg-background-light text-dark-grey-text"
-        >
-          {" "}
-          {/**project section */}
-          <MaxWidthWrapper>
+      <StarBackground />
+      <main className="">
+        <MaxWidthWrapper>
+          <section id="hero" className="min-h-screen">
+            <div className="flex min-h-[90vh] flex-col items-center justify-center text-red-50 md:min-h-screen">
+              <h1 className="mb-4 text-6xl font-bold">
+                Hi, I'm Aidan,
+                <span className="gradient-text-header"> a cloud engineer</span>
+              </h1>
+              <h2 className="mb-6 text-3xl font-semibold text-red-50">
+                Building practical solutions, one galaxy at a time.
+              </h2>
+              <div className="flex w-100 justify-between">
+                <div className="text-outline-gray flex rounded-xl text-lg font-semibold">
+                  <RewardLink
+                    href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
+                    rewardId="resume"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 hover:border-white/75 hover:text-white/75"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.setProperty(
+                        "--flash-active",
+                        "0.4",
+                      );
+                      e.currentTarget.style.setProperty("--flash-size", "1");
+                    }}
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      e.currentTarget.style.setProperty("--flash-x", `${x}px`);
+                      e.currentTarget.style.setProperty("--flash-y", `${y}px`);
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.setProperty("--flash-active", "0");
+                      e.currentTarget.style.setProperty("--flash-size", "0");
+                      e.currentTarget.style.setProperty("--flash-x", "-100px");
+                      e.currentTarget.style.setProperty("--flash-y", "-100px");
+                    }}
+                  >
+                    <div className="inline-flex items-center gap-2 px-4 py-1">
+                      <span>Resume</span>
+                      <FileDownload className="text-dark-grey-text h-5 w-5" />
+                    </div>
+                  </RewardLink>
+                </div>
+
+                <div className="text-outline-gray flex items-center justify-center gap-x-3 transition-colors duration-600">
+                  <RewardLink
+                    href="https://www.linkedin.com/in/aidanchien/"
+                    target="_blank"
+                    rewardId="linkedin"
+                    className=""
+                  >
+                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
+                  </RewardLink>
+                  <RewardLink
+                    href="https://github.com/chieaid24"
+                    target="_blank"
+                    rewardId="github"
+                    className=""
+                  >
+                    <FooterGithub className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
+                  </RewardLink>
+                  <RewardLink
+                    href="mailto:aidan.chien@uwaterloo.ca"
+                    target="_blank"
+                    rewardId="email"
+                    className=""
+                  >
+                    <FooterEmail className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
+                  </RewardLink>
+                </div>
+              </div>
+            </div>
+            <section className="mb-24">
+              <h2 className="mb-6 text-4xl font-bold tracking-[0.2em] text-white">
+                Experience
+              </h2>
+              <Experience />
+            </section>
+
+            {/**project section */}
             <motion.h2
               key="my-projects"
               initial={{ opacity: 0, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.5, delay: 0 }}
-              className="font-bold pt-8 text-4xl
-                            sm:text-5xl sm:pl-10
-                            md:pt-15
-                            lg:text-6xl lg:pl-0"
+              className="mb-6 text-4xl font-bold tracking-[0.2em] text-white"
             >
-              My Projects
+              Featured Projects
             </motion.h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-22 sm:gap-y-25 lg:gap-y-20 mt-10 mb-32">
+
+            <div className="grid grid-cols-1 md:grid-cols-2">
               {projects.map((project) => (
                 <motion.div
                   key={project.slug}
@@ -112,40 +180,33 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
-          </MaxWidthWrapper>
-          <section
-            className="flex flex-col items-center my-[-10px] pt-10 bg-background-dark text-dark-grey-text font-dm-sans tracking-tighter font-semibold
-                            text-[44px] leading-12
-                            sm:text-7xl sm:leading-[72px]
-                            md:text-[80px] md:leading-[80px]
-                            lg:leading-[96px] lg:text-8xl
-                            5xl:text-[105px] 5xl:leading-[105px] "
-          >
-            {" "}
-            {/**want to cash out? section */}
-            <motion.div
-              key="cash-out"
-              initial={{ opacity: 0, y: 0 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.5, delay: 0 }}
-            >
-              <RewardLink
-                href="mailto:aidan.chien@uwaterloo.ca?subject=I WANT TO CASH OUT! (by hiring you)"
-                rewardId="home:cash-out"
-                className="group md:hover:scale-110 md:hover:translate-y-[-15px] transition-all duration-300 items-center inline-flex flex-col mobile:select-none"
+            <section className="text-dark-grey-text font-dm-sans 5xl:text-[105px] 5xl:leading-[105px] my-[-10px] flex flex-col items-center pt-10 text-[44px] leading-12 font-semibold tracking-tighter sm:text-7xl sm:leading-[72px] md:text-[80px] md:leading-[80px] lg:text-8xl lg:leading-[96px]">
+              {" "}
+              {/**want to cash out? section */}
+              <motion.div
+                key="cash-out"
+                initial={{ opacity: 0, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: 0 }}
               >
-                <p>
-                  Want to{" "}
-                  <span className="md:group-hover:animate-new-pulse md:group-hover:gradient-text-red-animated gradient-text-custom font-semibold animated-underline pr-0.5">
-                    cash out?
-                  </span>
-                </p>
-                <p className="">Let&apos;s connect!</p>
-              </RewardLink>
-            </motion.div>
+                <RewardLink
+                  href="mailto:aidan.chien@uwaterloo.ca?subject=I WANT TO CASH OUT! (by hiring you)"
+                  rewardId="home:cash-out"
+                  className="group mobile:select-none inline-flex flex-col items-center transition-all duration-300 md:hover:translate-y-[-15px] md:hover:scale-110"
+                >
+                  <p>
+                    Want to{" "}
+                    <span className="md:group-hover:animate-new-pulse md:group-hover:gradient-text-red-animated gradient-text-custom animated-underline pr-0.5 font-semibold">
+                      cash out?
+                    </span>
+                  </p>
+                  <p className="">Let&apos;s connect!</p>
+                </RewardLink>
+              </motion.div>
+            </section>
           </section>
-        </section>
+        </MaxWidthWrapper>
       </main>
     </>
   );

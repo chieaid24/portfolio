@@ -10,9 +10,9 @@ function RotatingStars() {
   useFrame((_, delta) => {
     if (!groupRef.current) return;
 
-    const rotationSpeedX = 0.007;
+    const rotationSpeedX = 0.01;
     const rotationSpeedY = -0.01;
-    const rotationSpeedZ = -0.007;
+    const rotationSpeedZ = -0.0;
     groupRef.current.rotation.x += rotationSpeedX * delta;
     groupRef.current.rotation.y += rotationSpeedY * delta;
     groupRef.current.rotation.z += rotationSpeedZ * delta;
@@ -23,13 +23,13 @@ function RotatingStars() {
       <CustomStarComponent
         radius={100}
         depth={300}
-        count={1500}
+        count={800}
         factor={5}
         saturation={0}
         fade={true}
         speed={0}
         color="#ff5e5e"
-        opacity={0.4}
+        opacity={0.5}
       />
     </group>
   );
@@ -38,8 +38,8 @@ function RotatingStars() {
 // exported
 export default function StarBackground() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10">
-      <Canvas camera={{ position: [0, 0, 250], fov: 60 }} dpr={[1, 2]}>
+    <div className="pointer-events-none fixed inset-0 -z-10 h-full">
+      <Canvas camera={{ position: [0, 0, 300], fov: 60 }} dpr={[1, 2]}>
         <color attach="background" args={["#02030a"]} />
         <ambientLight intensity={0.5} />
         <RotatingStars />

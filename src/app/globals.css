@@ -3,21 +3,17 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background-light: #FFF3E5;
-  --background-dark: #FFEDD8;
-  --dark-background-light: #3D3E44;
-  --custom-red: #FF7D7D;
-  --custom-light-red: #FFAEAE;
-  --corner-orange: #FFC88A;
-  --custom-orange: #ffb164;
-  --custom-dark-orange: #FFB867;
-  --light-grey-text: #919191;
-  --card-light-grey: #9C9C9C;
-  --dark-grey-text: #383838;
+  --custom-red: #ff7d7d;
+  --custom-light-red: #ffaeae;
+
+  --main-text: #ffffff;
   --dark-grey-footer: #747474;
-  --header-light: #B3B3B3;
-  --progress-background: #D9D9D9;
-  --sage-green: #9EE9B4;
+  --sage-green: #9ee9b4;
+
+  /* v2 colors */
+  --outline-gray: #929292;
+  /* this highlight color is currently red, but will be changed when user changes the theme */
+  --highlight-color: #ff7d7d;
   color-scheme: light;
 }
 
@@ -26,7 +22,6 @@
 }
 
 @layer base {
-
   body {
     @apply opacity-0;
     animation: fadeIn 0.7s ease-in forwards;
@@ -61,32 +56,18 @@
 
 @theme {
   --color-custom-red: var(--custom-red);
-  --color-custom-light-red: var(--custom-light-red);
-  --color-custom-orange: var(--custom-orange);
-  --color-custom-dark-orange: var(--custom-dark-orange);
-  --color-corner-orange: var(--corner-orange);
-  --color-light-grey-text: var(--light-grey-text);
   --color-dark-grey-text: var(--dark-grey-text);
-  --color-dark-grey-footer: var(--dark-grey-footer);
-  --color-header-light: var(--header-light);
   --color-sage-green: var(--sage-green);
-  --color-progress-background: var(--progress-background);
-  --color-stroke: #414249;
-  --color-white-text: #EFEFEF;
+  --color-white-text: #efefef;
   --color-chess-text-grey: #909090;
-
+  --color-outline-gray: var(--outline-gray);
   --color-background-light: var(--background-light);
   --color-background-dark: var(--background-dark);
-
+  --color-highlight-color: var(--highlight-color);
   --animate-new-pulse: pulse 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 
-  --breakpoint-3xl: 120rem;
-  /* 1920 */
-  --breakpoint-4xl: 135rem;
-  /* 2160 */
   --breakpoint-5xl: 160rem;
   /* 2560 */
-
 }
 
 @layer utilities {
@@ -107,54 +88,6 @@
     font-family: var(--font-clash), sans-serif;
   }
 
-  .text-outline-2 {
-    color: #fff;
-    -webkit-text-stroke: 2px #000;
-  }
-
-  .text-outline-1 {
-    -webkit-text-stroke: 0.25px #000;
-  }
-
-  .text-outline-3 {
-    -webkit-text-stroke: 3px #000;
-  }
-
-
-
-  /* Single hard shadow (offset X/Y, no diffusion) */
-  .text-clash-border-white {
-    text-shadow: var(--ts-x, 0px) var(--ts-y, 2px) 0 var(--ts-color, #000);
-    -webkit-text-stroke: 1px #000;
-  }
-
-  .text-clash-border-small {
-    text-shadow: var(--ts-x, 0px) var(--ts-y, 1px) 0 var(--ts-color, #000);
-    -webkit-text-stroke: 0.5px #000;
-  }
-
-
-
-  /* Quick presets (optional) */
-  .text-shadow-hard-sm {
-    text-shadow: 1px 1px 0 var(--ts-color, #000);
-  }
-
-  .text-shadow-hard-lg {
-    text-shadow: 4px 4px 0 var(--ts-color, #000);
-  }
-
-  /* Reset helper */
-  .text-shadow-none {
-    text-shadow: none;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .desktop\:select-none {
-      user-select: none;
-    }
-  }
-
   @media (hover: none) and (pointer: coarse) {
     .mobile\:select-none {
       user-select: none;
@@ -165,19 +98,18 @@
 
 /* set dark mode colors*/
 @layer theme {
-
   :root,
   :host {
     @variant dark {
-      --color-background-light: #3D3E44;
+      --color-background-light: #3d3e44;
       --color-background-dark: #323339;
-      --color-dark-grey-text: #EFEFEF;
+      --color-dark-grey-text: #efefef;
     }
   }
 }
 
 ::selection {
-  background-color: #7D7DFF;
+  background-color: #7d7dff;
   /* custom red */
   color: white;
   /* text color when selected */
@@ -200,7 +132,6 @@ body {
   font-weight: 700;
 }
 
-
 .gradient-text-custom {
   background: linear-gradient(90deg, var(--custom-red), var(--corner-orange));
   -webkit-background-clip: text;
@@ -213,7 +144,7 @@ body {
 }
 
 .gradient-text-jackpot {
-  background: linear-gradient(90deg, #DC74FF, #E59CFF);
+  background: linear-gradient(90deg, #dc74ff, #e59cff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -223,46 +154,26 @@ body {
 }
 
 .gradient-text-header {
-  background: linear-gradient(90deg,
-      var(--custom-red) 0%,
-      var(--custom-red) 20%,
-      /* solid red to 20% */
-      var(--custom-light-red) 70%,
-      /* blend ends by 45% */
-      var(--custom-light-red) 100%
+  background: linear-gradient(
+    90deg,
+    var(--custom-red) 0%,
+    var(--custom-red) 20%,
+    /* solid red to 20% */ var(--custom-light-red) 70%,
+    /* blend ends by 45% */ var(--custom-light-red) 100%
       /* solid light red after */
-    );
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
-.gradient-text-gold {
-  background: linear-gradient(90deg,
-      #f9c02f 0%,
-      #f0e39d 50%,
-      /* blend ends by 45% */
-      #f9c02f 100%
-      /* solid light red after */
-    );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  /* helps Firefox */
-  -webkit-text-fill-color: transparent;
-  /* WebKit */
-}
-
-
 
 .animated-underline {
   position: relative;
   display: inline-block;
 }
 
-
 .animated-underline::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 98%;
   height: 5px;
@@ -279,6 +190,34 @@ body {
   transform: scaleX(1);
 }
 
+.cursor-follow-btn {
+  position: relative;
+  overflow: hidden;
+  --flash-x: -100px;
+  --flash-y: -100px;
+  --flash-active: 0;
+  --flash-size: 0;
+}
+
+.cursor-follow-btn::before {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #d9d9d9;
+  opacity: 0.5;
+  pointer-events: none;
+  translate: calc(var(--flash-x, -100px) - 35px)
+    calc(var(--flash-y, -100px) - 35px);
+  opacity: var(--flash-active, 0);
+  scale: var(--flash-size, 0);
+  transition:
+    translate 0ms ease-out,
+    scale 80ms ease-in-out,
+    opacity 0ms ease-out;
+}
+
 .custom-bold {
   font-weight: bold;
 }
@@ -287,13 +226,17 @@ body {
 @layer utilities {
   .text-gradient-clash-name {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(90deg,
-        #f9c02f 0%,
-        #f0e39d 50%,
-        #f9c02f 100%);
+    background-image: linear-gradient(
+      90deg,
+      #f9c02f 0%,
+      #f0e39d 50%,
+      #f9c02f 100%
+    );
     -webkit-text-fill-color: transparent;
     /* Safari */
-    filter: drop-shadow(var(--ts-x, 0px) var(--ts-y, 2px) 0 var(--ts-color, #000));
+    filter: drop-shadow(
+      var(--ts-x, 0px) var(--ts-y, 2px) 0 var(--ts-color, #000)
+    );
   }
 
   /* outline ABOVE the fill */
@@ -307,14 +250,17 @@ body {
     -webkit-text-stroke: 0.75px #000;
   }
 
-
   @media (max-width: 639px) {
     .text-gradient-clash-name {
-      background-image: linear-gradient(90deg,
-          #f9c02f 0%,
-          #f0e39d 50%,
-          #f9c02f 100%);
-      filter: drop-shadow(var(--ts-x, 0px) var(--ts-y, 1px) 0 var(--ts-color, #000));
+      background-image: linear-gradient(
+        90deg,
+        #f9c02f 0%,
+        #f0e39d 50%,
+        #f9c02f 100%
+      );
+      filter: drop-shadow(
+        var(--ts-x, 0px) var(--ts-y, 1px) 0 var(--ts-color, #000)
+      );
     }
 
     .text-outline {
@@ -325,18 +271,15 @@ body {
       text-shadow: var(--ts-x, 0px) var(--ts-y, 1px) 0 var(--ts-color, #000);
       -webkit-text-stroke: 0.8px #000;
     }
-
   }
-
-
 
   @keyframes fade-in {
     from {
-      opacity: 0
+      opacity: 0;
     }
 
     to {
-      opacity: 1
+      opacity: 1;
     }
   }
 
@@ -352,11 +295,6 @@ body {
 
   .animate-fade-in-7 {
     animation: fade-in 0.7s ease-out both;
-    /* both = keep final opacity:1 */
-  }
-
-  .animate-fade-in-1 {
-    animation: fade-in 1s ease-out both;
     /* both = keep final opacity:1 */
   }
 }

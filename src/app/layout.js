@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} text-[16px] bg-background-light`}
+      className={`${dmSans.variable} bg-background-light text-[16px]`}
       suppressHydrationWarning
     >
       <head>
@@ -123,12 +123,12 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${dmSans.className} ${italiana.variable} ${clashFont.variable} antialiased min-h-screen overscroll-none`}
+        className={`${dmSans.className} ${italiana.variable} ${clashFont.variable} min-h-screen overscroll-none antialiased`}
       >
         <Providers>
           <main key={pathname} className="fade-in-page">
             <ScrollProgressBarClient />
-            {/* <Header /> */}
+            <Header />
             {children}
             <Footer />
           </main>

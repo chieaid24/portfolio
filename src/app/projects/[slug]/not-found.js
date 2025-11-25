@@ -4,7 +4,7 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 
 export default function NotFound() {
     return (
-        <div className="bg-background-light font-dm-sans text-dark-grey-text min-h-screen">
+        <div className="bg-background-light font-dm-sans text-main-text min-h-screen">
             <MaxWidthWrapper>
                 <div className="pt-40 pb-20 text-center">
                     <h1 className="text-6xl font-bold mb-2">404</h1>
