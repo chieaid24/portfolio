@@ -62,14 +62,19 @@ export const quest_totals = {
 
     */
 
+//slugs of the four currently "featured" projects on the home page
+export const featuredList = [
+  "ai-sleep-analytics",
+  "pmi-auto-generator",
+  "personal-website",
+  "mbd-macro",
+];
+
 // image / second_image can also be 3D models, and will be conditionally rendered as so on the page
 export const projects = [
   {
     slug: "ai-sleep-analytics",
     title: "AI Sleep Analytics",
-    generated_with: "PYTHON + ML",
-    ticket_no: "48",
-    fallback_value: "17,580.00",
     skills_used: ["Machine Learning", "AWS"],
     image: "/ai-sleep-analytics/ai-card-3.png",
     page_displays: [
@@ -82,7 +87,9 @@ export const projects = [
     subtitle: "sleep apnea's worst nightmare",
     summaryMetaData:
       "PMI Auto Generator speeds up machinist workflows by 30%, automating CAD annotation with Python + AHK.",
-    summary: (
+    summary:
+      "An end-to-end AWS-powered ML pipeline that cleans and models two years of CPAP sleep data using Random Forest regression and Prophet forecasting to analyze Sleep Score drivers and predict future sleep metrics.",
+    background: (
       <>
         As someone who&apos;s lived with sleep apnea my whole life, I&apos;ve
         always wondered how my sleep patterns have changed over time. So, I
@@ -144,7 +151,7 @@ export const projects = [
           href="https://github.com/chieaid24/AI-Sleep-Analytics"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:opacity-80 transition italic"
+          className="italic transition hover:opacity-80"
         >
           {" "}
           GitHub
@@ -179,9 +186,6 @@ export const projects = [
   {
     slug: "pmi-auto-generator",
     title: "PMI Auto Generator",
-    generated_with: "PYTHON + AHK",
-    ticket_no: "26",
-    fallback_value: "16,230.00",
     skills_used: ["Python", "OOP"],
     image: "/pmi_auto_generator/pmi_card.png",
     page_displays: [
@@ -271,7 +275,7 @@ export const projects = [
         the .qif file and attach the rest of the annotations manually with the
         help of my{" "}
         <Link href="/projects/mbd-macro">
-          <span className="hover:opacity-80 transition italic">MBD Macro</span>
+          <span className="italic transition hover:opacity-80">MBD Macro</span>
         </Link>
         . This project single-handedly saves around 30% of the total annotation
         time, and the full process takes only about 60 seconds to complete.
@@ -297,9 +301,6 @@ export const projects = [
   {
     slug: "personal-website",
     title: "Personal Website",
-    generated_with: "NEXT + TAILWIND",
-    ticket_no: "73",
-    fallback_value: "17,390.00",
     skills_used: ["React", "Web Development", "Full Stack Development"],
     image: "/personal_website/website_card.png",
     page_displays: [
@@ -397,9 +398,6 @@ export const projects = [
   {
     slug: "3d-tools",
     title: "3D Printed Tools",
-    generated_with: "SOLIDWORKS",
-    ticket_no: "41",
-    fallback_value: "16,180.00",
     skills_used: ["SOLIDWORKS", "3D Printing"],
     image: "/printed_tools/printed_card.png",
     page_displays: [
@@ -489,9 +487,6 @@ export const projects = [
   {
     slug: "mbd-macro",
     title: "MBD Macro",
-    generated_with: "AUTOHOTKEY",
-    ticket_no: "94",
-    fallback_value: "17,270.00",
     skills_used: ["AutoHotKey", "Optimization"],
     image: "/mbd_macro/mbd_card.png",
     page_displays: [
@@ -568,7 +563,7 @@ export const projects = [
           href="https://github.com/chieaid24/MBD-Macro"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:opacity-80 transition italic"
+          className="italic transition hover:opacity-80"
         >
           GitHub
         </Link>

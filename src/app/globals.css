@@ -14,6 +14,8 @@
   --outline-gray: #929292;
   /* this highlight color is currently red, but will be changed when user changes the theme */
   --highlight-color: #ff7d7d;
+  /* background of experience and project pages */
+  --background: #0f0f0f;
   color-scheme: light;
 }
 
@@ -65,7 +67,7 @@
   --color-background-dark: var(--background-dark);
   --color-highlight-color: var(--highlight-color);
   --animate-new-pulse: pulse 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
-
+  --color-background: var(--background);
   --breakpoint-5xl: 160rem;
   /* 2560 */
 }

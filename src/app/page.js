@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProjectCard from "@/components/ProjectCard";
-import { projects } from "@/app/data/projects";
+import { projects, featuredList } from "@/app/data/projects";
 import HeroSlot from "@/components/HeroSlot";
 import RedText from "@/components/RewardRedText";
 import RewardLink from "@/components/RewardLink";
@@ -157,8 +157,10 @@ export default function Home() {
               Featured Projects
             </motion.h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              {projects.map((project) => (
+            <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2">
+              {projects
+                .filter((project) => featuredList.includes(project.slug))
+                .map((project) => (
                 <motion.div
                   key={project.slug}
                   initial={{ opacity: 0, y: 15 }}
@@ -176,6 +178,7 @@ export default function Home() {
                     slug={project.slug}
                     alt={project.title}
                     fallback_value={[10, project.fallback_value]}
+                    summary={project.summary}
                   />
                 </motion.div>
               ))}

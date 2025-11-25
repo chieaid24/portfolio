@@ -71,7 +71,7 @@ export default function Experience() {
   return (
     <section className="text-white">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
-        <div className="rounded-full border border-[#ff7d7d] bg-[#171717] p-1 shadow-[0_0_0_1px_rgba(255,125,125,0.12)]">
+        <div className="bg-background rounded-full border border-[#ff7d7d] p-1 shadow-[0_0_0_1px_rgba(255,125,125,0.12)]">
           <div className="grid grid-cols-2 gap-2">
             {tabs.map((tab) => {
               const isActive = tab.id === activeTab;
@@ -96,7 +96,7 @@ export default function Experience() {
         <motion.div
           animate={{ height, ease: "easeOut" }}
           transition={{ duration: 0.1 }}
-          className="rounded-2xl border border-[#ff7d7d] bg-[#0f0f0f] shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
+          className="bg-background rounded-2xl border border-[#ff7d7d] shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
         >
           <AnimatePresence initial={false}>
             <motion.div
