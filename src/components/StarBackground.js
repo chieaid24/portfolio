@@ -11,7 +11,7 @@ function RotatingStars() {
     if (!groupRef.current) return;
 
     const rotationSpeedX = 0.01;
-    const rotationSpeedY = -0.01;
+    const rotationSpeedY = -0.015;
     const rotationSpeedZ = -0.0;
     groupRef.current.rotation.x += rotationSpeedX * delta;
     groupRef.current.rotation.y += rotationSpeedY * delta;

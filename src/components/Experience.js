@@ -17,7 +17,7 @@ const badgeImagePath = "/company-images/waterloo-logo_v2.png";
 function TimelineItem({ item }) {
   return (
     <div className="relative flex gap-5 md:gap-6">
-      <div className="h-14 w-14 overflow-hidden rounded-full border-1 border-white/20">
+      <div className="h-13 w-13 overflow-hidden rounded-full border-1 border-white/20">
         <Image
           src={item.badge?.src ?? badgeImagePath}
           alt={item.badge?.alt ?? `${item.title} logo`}
@@ -28,12 +28,12 @@ function TimelineItem({ item }) {
       </div>
 
       <div className="flex-1 space-y-2">
-        <div className="space-y-1">
+        <div className="space-y-0">
           <h3 className="text-lg font-semibold text-white md:text-xl">
             {item.title}
           </h3>
           {item.subtitle && (
-            <p className="text-base font-medium text-white/90 md:text-lg">
+            <p className="md:text-md font-medium text-white/90">
               {item.subtitle}
             </p>
           )}
@@ -50,7 +50,7 @@ function TimelineItem({ item }) {
             >
               <BulletIcon className="text-highlight-color h-2 w-2" />
               <div className="space-y-0">
-                <p>{highlight.text}</p>
+                <p className="text-body-text">{highlight.text}</p>
                 {highlight.note && (
                   <p className="text-sm text-gray-400">{highlight.note}</p>
                 )}
@@ -71,7 +71,7 @@ export default function Experience() {
   return (
     <section className="text-white">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
-        <div className="bg-background rounded-full border border-[#ff7d7d] p-1 shadow-[0_0_0_1px_rgba(255,125,125,0.12)]">
+        <div className="bg-background border-highlight-color rounded-full border p-1 shadow-[0_0_0_1px_rgba(255,125,125,0.12)]">
           <div className="grid grid-cols-2 gap-2">
             {tabs.map((tab) => {
               const isActive = tab.id === activeTab;
@@ -82,7 +82,7 @@ export default function Experience() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-200 md:text-base ${
                     isActive
-                      ? "bg-[#ff7d7d] text-white shadow-[0_10px_30px_rgba(255,125,125,0.35)]"
+                      ? "bg-highlight-color text-white shadow-[0_10px_30px_rgba(255,125,125,0.35)]"
                       : "cursor-pointer text-white hover:bg-white/5"
                   }`}
                 >
@@ -96,7 +96,7 @@ export default function Experience() {
         <motion.div
           animate={{ height, ease: "easeOut" }}
           transition={{ duration: 0.1 }}
-          className="bg-background rounded-2xl border border-[#ff7d7d] shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
+          className="bg-background border-highlight-color rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
         >
           <AnimatePresence initial={false}>
             <motion.div
