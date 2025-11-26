@@ -1,7 +1,15 @@
-export default function Next(props) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" {...props}>
-            <path d="M18.665 21.978C16.758 23.255 14.465 24 12 24C5.377 24 0 18.623 0 12C0 5.377 5.377 0 12 0C18.623 0 24 5.377 24 12C24 15.583 22.426 18.801 19.933 21.001L9.219 7.2H7.2V16.796H8.815V9.251L18.665 21.978ZM15.333 13.445L16.933 15.506V7.2H15.333V13.445Z" fill="white" />
-        </svg>
-    )
+export default function Next({ color = "#ffffff", ...props }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      {...props}
+    >
+      <path
+        d="M18.665 21.978C16.758 23.255 14.465 24 12 24C5.377 24 0 18.623 0 12C0 5.377 5.377 0 12 0C18.623 0 24 5.377 24 12C24 15.583 22.426 18.801 19.933 21.001L9.219 7.2H7.2V16.796H8.815V9.251L18.665 21.978ZM15.333 13.445L16.933 15.506V7.2H15.333V13.445Z"
+        fill={color}
+      />
+    </svg>
+  );
 }

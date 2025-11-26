@@ -75,7 +75,7 @@ export default function Home() {
                 Building practical solutions, one galaxy at a time.
               </h2>
               <div className="flex w-100 justify-between">
-                <div className="text-outline-gray flex rounded-xl text-lg font-semibold">
+                <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 hover:scale-105">
                   <RewardLink
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
                     rewardId="resume"
@@ -115,7 +115,7 @@ export default function Home() {
                     href="https://www.linkedin.com/in/aidanchien/"
                     target="_blank"
                     rewardId="linkedin"
-                    className=""
+                    className="hover:translate-y-[-1px]"
                   >
                     <FooterLinkedin className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
                   </RewardLink>
@@ -123,7 +123,7 @@ export default function Home() {
                     href="https://github.com/chieaid24"
                     target="_blank"
                     rewardId="github"
-                    className=""
+                    className="hover:translate-y-[-1px]"
                   >
                     <FooterGithub className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
                   </RewardLink>
@@ -131,7 +131,7 @@ export default function Home() {
                     href="mailto:aidan.chien@uwaterloo.ca"
                     target="_blank"
                     rewardId="email"
-                    className=""
+                    className="hover:translate-y-[-1px]"
                   >
                     <FooterEmail className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
                   </RewardLink>
@@ -161,27 +161,27 @@ export default function Home() {
               {projects
                 .filter((project) => featuredList.includes(project.slug))
                 .map((project) => (
-                <motion.div
-                  key={project.slug}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.5, delay: 0 }}
-                >
-                  <ProjectCard
+                  <motion.div
                     key={project.slug}
-                    title={project.title}
-                    generated_with={project.generated_with}
-                    ticket_no={randomTickets[project.slug] ?? "--"}
-                    skills_used={project.skills_used}
-                    image={project.image}
-                    slug={project.slug}
-                    alt={project.title}
-                    fallback_value={[10, project.fallback_value]}
-                    summary={project.summary}
-                  />
-                </motion.div>
-              ))}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    transition={{ duration: 0.5, delay: 0 }}
+                  >
+                    <ProjectCard
+                      key={project.slug}
+                      title={project.title}
+                      generated_with={project.generated_with}
+                      ticket_no={randomTickets[project.slug] ?? "--"}
+                      skills_used={project.skills_used}
+                      image={project.image}
+                      slug={project.slug}
+                      alt={project.title}
+                      fallback_value={[10, project.fallback_value]}
+                      summary={project.summary}
+                    />
+                  </motion.div>
+                ))}
             </div>
             <section className="text-dark-grey-text font-dm-sans 5xl:text-[105px] 5xl:leading-[105px] my-[-10px] flex flex-col items-center pt-10 text-[44px] leading-12 font-semibold tracking-tighter sm:text-7xl sm:leading-[72px] md:text-[80px] md:leading-[80px] lg:text-8xl lg:leading-[96px]">
               {" "}

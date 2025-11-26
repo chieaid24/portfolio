@@ -5,44 +5,69 @@ import Telescope from "@/icons/Telescope";
 import FooterGithub from "@/icons/FooterGithub";
 import SimpleArrow from "@/icons/SimpleArrow";
 import SkillDisplay from "@/components/SkillDisplay";
+import { useMoney } from "@/lib/money-context";
 
 export default function ProjectCard({ title, skills_used, slug, summary }) {
-  return (
-    <div className="font-dm-sans bg-background h-full rounded-xl border-2 border-white text-white">
-      <RewardProjectLink
-        href={`/projects/${slug}`}
-        className="mobile:select-none flex h-full flex-col justify-between gap-2 p-6"
-        rewardId={`project:${slug}`}
-        ticketValue={1000}
-      >
-        <div className="">
-          <h3>{title}</h3>
-          <span className="flex items-center gap-x-2">
-            <Telescope className="h-4 w-4 text-white" />
-            <span>Discovered Placeholder</span>
-          </span>
-          <div>{summary}</div>
-        </div>
+  const { hasAward } = useMoney();
+  const rewardId = `project:${slug}`;
+  const clicked = hasAward(rewardId);
 
-        <div className="">
-          <div>
-            {skills_used.map((skill) => (
-              <SkillDisplay fileName={skill} project={slug} card={true} />
-            ))}
-          </div>
-          <div className="my-3 h-px w-full bg-white/30"></div>
-          <div className="flex justify-between">
-            <div className="flex items-center gap-x-1">
-              <FooterGithub className="h-5 w-5 text-white" />
-              GitHub
+  return (
+    <div
+      className={`${clicked ? "linear-gray-gradient" : "bg-highlight-color"} rounded-xl p-px`}
+    >
+      <div
+        className={`font-dm-sans bg-background h-full rounded-xl border-0 text-white`}
+      >
+        <RewardProjectLink
+          href={`/projects/${slug}`}
+          className="mobile:select-none flex h-full flex-col justify-between gap-8 px-8 py-6"
+          rewardId={rewardId}
+          ticketValue={1000}
+        >
+          <div className="">
+            <div className="mb-3">
+              <h3 className="text-xl font-semibold">{title}</h3>
+              <span
+                className={`flex items-center gap-x-2 text-sm ${clicked ? "opacity-50" : "opacity-100"}`}
+              >
+                <Telescope className="h-3.5 w-3.5 text-white" />
+                {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span>Explore Project </span>
-              <SimpleArrow className="h-2.5 w-2.5 text-white" />
+            <div className="text-body-text">{summary}</div>
+          </div>
+          <div className="">
+            <div className="flex flex-wrap gap-2">
+              {skills_used.map((skill, i) => {
+                const [fileName, displayName] = skill.includes("/")
+                  ? skill.split("/", 2)
+                  : [skill, undefined];
+                return (
+                  <SkillDisplay
+                    fileName={fileName}
+                    displayName={displayName}
+                    project={slug}
+                    card={true}
+                    key={i}
+                  />
+                );
+              })}
+            </div>
+            <div className="mt-6 mb-6 h-px w-full bg-white/30"></div>
+            <div className="flex justify-between">
+              <div className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black">
+                <FooterGithub className="h-4 w-4" />
+                GitHub
+              </div>
+              <div className="flex items-center gap-2">
+                <span>Explore Project </span>
+                <SimpleArrow className="h-2.5 w-2.5 text-white" />
+              </div>
             </div>
           </div>
-        </div>
-      </RewardProjectLink>
+        </RewardProjectLink>
+      </div>
     </div>
   );
 }

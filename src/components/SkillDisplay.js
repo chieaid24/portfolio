@@ -33,11 +33,11 @@ export default function SkillDisplay({
     [fileName],
   );
   // Define the style on the card
-  const divCard = `inline-flex items-center gap-2 text-white rounded-md 
-                    sm:rounded-lg font-bold py-0.5 sm:py-[3px] text-[11px] sm:text-[14px] 
-                    opacity-90 group-hover/pc:opacity-100 hover:translate-y-[-1px] duration-200 bg-custom-orange px-1.5`;
+  const divCard = `inline-flex items-center gap-2 text-white rounded-full 
+                    font-base py-0.5 text-xs
+                    duration-200 bg-background-highlight px-3 py-1 border-1 border-outline-dark-gray`;
 
-  const iconCard = `h-[15px] w-[15px] sm:h-[20px] sm:w-[20px]`;
+  const iconCard = `md:h-3.5 md:w-3.5`;
 
   const divProject = `inline-flex items-center gap-2 text-white rounded-md 
                       sm:rounded-lg font-bold translate-y-[1px] md:translate-y-[2px] py-[4px] md:py-[3px] text-[16px] 
@@ -47,7 +47,11 @@ export default function SkillDisplay({
 
   const content = (
     <div className={card ? divCard : divProject}>
-      <Icon className={card ? iconCard : iconProject} aria-hidden="true" />
+      <Icon
+        className={card ? iconCard : iconProject}
+        color={card ? undefined : `white`}
+        aria-hidden="true"
+      />
       <div>{displayName || fileName}</div>
     </div>
   );

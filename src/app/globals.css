@@ -12,15 +12,25 @@
 
   /* v2 colors */
   --outline-gray: #929292;
+  /* outline color for the skills on the project cards */
+  --outline-dark-gray: #474747;
   /* this highlight color is currently red, but will be changed when user changes the theme */
   --highlight-color: #ff7d7d;
   /* background of experience and project pages */
   --background: #0f0f0f;
+  /* background of the skill displays on the project pages */
+  --background-highlight: #1d1d1d;
+  /* body color of text (project page text, experience body text, etc) */
+  --body-text: #e0e0e0;
   color-scheme: light;
 }
 
 .dark:root {
   color-scheme: dark;
+}
+
+.linear-gray-gradient {
+  background: linear-gradient(135deg, #949494 0%, #272727 100%);
 }
 
 @layer base {
@@ -68,6 +78,9 @@
   --color-highlight-color: var(--highlight-color);
   --animate-new-pulse: pulse 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
   --color-background: var(--background);
+  --color-background-highlight: var(--background-highlight);
+  --color-body-text: var(--body-text);
+  --color-outline-dark-gray: var(--outline-dark-gray);
   --breakpoint-5xl: 160rem;
   /* 2560 */
 }
@@ -195,8 +208,8 @@ body {
 .cursor-follow-btn {
   position: relative;
   overflow: hidden;
-  --flash-x: -100px;
-  --flash-y: -100px;
+  --flash-x: -50px;
+  --flash-y: -50px;
   --flash-active: 0;
   --flash-size: 0;
 }
@@ -210,13 +223,13 @@ body {
   background: #d9d9d9;
   opacity: 0.5;
   pointer-events: none;
-  translate: calc(var(--flash-x, -100px) - 35px)
-    calc(var(--flash-y, -100px) - 35px);
+  translate: calc(var(--flash-x, -50px) - 38.5px)
+    calc(var(--flash-y, -50px) - 38.5px);
   opacity: var(--flash-active, 0);
   scale: var(--flash-size, 0);
   transition:
-    translate 0ms ease-out,
-    scale 80ms ease-in-out,
+    translate 20ms ease-out,
+    scale 100ms ease-in-out,
     opacity 0ms ease-out;
 }
 
