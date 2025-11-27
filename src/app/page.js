@@ -113,7 +113,7 @@ export default function Home() {
                   </RewardLink>
                 </div>
 
-                <div className="text-outline-gray flex items-center justify-center gap-x-3 transition-colors duration-600">
+                <div className="text-outline-gray flex items-center justify-center gap-x-3 transition-colors">
                   <RewardLink
                     href="https://www.linkedin.com/in/aidanchien/"
                     target="_blank"

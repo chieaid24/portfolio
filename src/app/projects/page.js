@@ -1,6 +1,6 @@
 "use client";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import { projects, featuredList } from "@/app/data/projects";
+import { projects } from "@/app/data/projects";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 
@@ -27,6 +27,7 @@ export default function ProjectPage(props) {
                 slug={project.slug}
                 alt={project.title}
                 summary={project.summary}
+                github={project.github_link}
               />
             </motion.div>
           ))}

@@ -80,7 +80,7 @@ export default function Experience() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-200 md:text-base ${
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-100 md:text-base ${
                     isActive
                       ? "bg-highlight-color text-white shadow-[0_10px_30px_rgba(255,125,125,0.35)]"
                       : "cursor-pointer text-white hover:bg-white/5"
@@ -107,7 +107,7 @@ export default function Experience() {
             >
               <div ref={ref} className="relative px-4 py-8 md:px-8">
                 <div
-                  className="absolute top-0 bottom-0 left-[3.75rem] w-px bg-white/10"
+                  className="absolute top-0 bottom-0 left-[3.6rem] w-px bg-white/10"
                   aria-hidden="true"
                 />
                 <div className="z-10 space-y-8">
