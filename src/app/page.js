@@ -15,6 +15,9 @@ import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
+import ViewAllArrow from "@/icons/ViewAllArrow";
+import SimpleArrow from "@/icons/SimpleArrow";
+import Rocket from "@/icons/Rocket";
 
 export default function Home() {
   const [randomTickets, setRandomTickets] = useState({});
@@ -146,16 +149,28 @@ export default function Home() {
             </section>
 
             {/**project section */}
-            <motion.h2
-              key="my-projects"
-              initial={{ opacity: 0, y: 0 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.5, delay: 0 }}
-              className="mb-6 text-4xl font-bold tracking-[0.2em] text-white"
-            >
-              Featured Projects
-            </motion.h2>
+            <div className="mb-6 flex items-baseline justify-between">
+              <motion.h2
+                key="my-projects"
+                initial={{ opacity: 0, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: 0 }}
+                className="text-4xl font-bold tracking-[0.2em] text-white"
+              >
+                Featured Projects
+              </motion.h2>
+              <RewardLink
+                href="/projects"
+                className="text-body-text group flex items-center gap-1 text-lg font-medium duration-100 hover:text-white"
+                rewardId="projects-page"
+              >
+                <span>View more</span>
+                {/* <SimpleArrow className="h-3 w-3" /> */}
+                {/* <Rocket1 className="h-5 w-5 translate-y-[2px]" /> */}
+                <Rocket className="h-8 w-8 transition-transform duration-100 group-hover:translate-x-[1px] group-hover:-translate-y-[1px]" />
+              </RewardLink>
+            </div>
 
             <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2">
               {projects
@@ -171,14 +186,11 @@ export default function Home() {
                     <ProjectCard
                       key={project.slug}
                       title={project.title}
-                      generated_with={project.generated_with}
-                      ticket_no={randomTickets[project.slug] ?? "--"}
                       skills_used={project.skills_used}
-                      image={project.image}
                       slug={project.slug}
                       alt={project.title}
-                      fallback_value={[10, project.fallback_value]}
                       summary={project.summary}
+                      github={project.github_link}
                     />
                   </motion.div>
                 ))}

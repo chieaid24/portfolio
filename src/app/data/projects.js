@@ -407,97 +407,7 @@ export const projects = [
       </>,
     ],
   },
-  {
-    slug: "3d-tools",
-    title: "3D Printed Tools",
-    skills_used: ["SOLIDWORKS"],
-    image: "/printed_tools/printed_card.png",
-    page_displays: [
-      ["/printed_tools/keyassembly03.glb"],
-      ["/printed_tools/remoteholder.glb"],
-    ],
-    github_link:
-      "https://github.com/chieaid24/Design_Portfolio/tree/main/SOLIDWORKS/BUILD%20PICS",
-    subtitle: "where form meets functional",
-    summaryMetaData:
-      "Custom 3D printed key and remote holders designed in SOLIDWORKS, combining function, ergonomics, and office branding.",
-    summary:
-      "A messy and unorganized workspace is both unprofessional and inefficient Keep reading to find out how I solved problems while creating conversation pieces for the office!",
-    background: (
-      <>
-        A messy and unorganized workspace is both{" "}
-        <RedText rewardId="red:tools:unprofessional">unprofessional</RedText>{" "}
-        and <RedText rewardId="red:tools:inefficient">inefficient</RedText>.
-        Keep reading to find out how I solved problems while creating{" "}
-        <RedText rewardId="red:tools:conversation-pieces">
-          conversation pieces
-        </RedText>{" "}
-        for the office!
-      </>
-    ),
-    tool_paragraphs: [
-      <>
-        I designed everything in{" "}
-        <SkillDisplay fileName="SOLIDWORKS" project="tools" /> and printed with
-        the Markforged software, on FDM carbon-fiber reinforced filaments. I
-        also sanded and spray painted when necessary.
-      </>,
-    ],
-    why_paragraphs: [
-      <>
-        Looking around my office workspace, I felt an urge to make everything as
-        efficient as possible—and that meant it had to be organized. Firstly, I
-        saw that we had a pile of assorted keys that just sat on a desk, and
-        three remotes that were scattered across the conference room table.
-        There was no good way to store or organize these objects, so they had to
-        be strewn around or, at best, lined up in a neat row. Seeing this, I
-        realized something had to change.
-      </>,
-    ],
-    what_paragraphs: [
-      <>
-        Regarding my keyholder, it is composed of four unique parts: a base, a
-        top and bottom half of the structure, and the key holders themselves. In
-        my design process, there were many printer considerations that I had to
-        make, such as by hollowing out the base or splitting the main structure
-        to fit into the printer&apos;s constraints. After designing in
-        SOLIDWORKS, and using Markforged&apos;s proprietary printing software,
-        Eiger, they came out of the printer with both additive and subtractive
-        deformities. I realized that this was part of the printing process
-        however, and was determined to make do with what I had. I used a
-        combination of dry and wet sandpaper to sand the piece down as best I
-        could, and then used a black spray paint to cover up the imperfections.
-        Lastly, I super glued the component parts together to finish the
-        project.
-      </>,
-      <>
-        For the remote holder, I created the ergonomic and accessible design by
-        taking measurements directly from the remotes. The design is made up of
-        a main piece that holds a flat Logitech camera controller and two side
-        pieces that hold identical TV remotes. I added left and right (L and R)
-        indicators for each of the remotes, as well as a company logo to the
-        base pad for extra customization. Building off of my keyholder project,
-        I created a keyed joint attachment system for the sides to the base.
-        This meant that it didn&apos;t require super glue, and could easily be
-        disassembled while maintaining structural stability during use.
-      </>,
-    ],
 
-    learning_paragraphs: [
-      <>
-        In the design process, incorporating{" "}
-        <RedText rewardId="red:tools:ux-considerations">
-          UX considerations
-        </RedText>{" "}
-        and real-life measurements allowed me to create ergonomic yet functional
-        pieces for the workspace. Additionally, I designed for manufacturability
-        by putting into account possible manufacturing failure and ensuring ease
-        of printing. All in all, I was able to quickly and elegantly solve a
-        physical problem in my office, while reinforcing my team&apos;s brand
-        identity.
-      </>,
-    ],
-  },
   {
     slug: "mbd-macro",
     title: "MBD Macro",
@@ -596,6 +506,97 @@ export const projects = [
         error handling). Additionally, improving existing software forced me to
         think creatively, taking advantage of its strengths while finding
         workarounds for its limitations.
+      </>,
+    ],
+  },
+  {
+    slug: "3d-tools",
+    title: "3D Printed Tools",
+    skills_used: ["SOLIDWORKS"],
+    image: "/printed_tools/printed_card.png",
+    page_displays: [
+      ["/printed_tools/keyassembly03.glb"],
+      ["/printed_tools/remoteholder.glb"],
+    ],
+    github_link:
+      "https://github.com/chieaid24/Design_Portfolio/tree/main/SOLIDWORKS/BUILD%20PICS",
+    subtitle: "where form meets functional",
+    summaryMetaData:
+      "Custom 3D printed key and remote holders designed in SOLIDWORKS, combining function, ergonomics, and office branding.",
+    summary:
+      "A messy and unorganized workspace is both unprofessional and inefficient Keep reading to find out how I solved problems while creating conversation pieces for the office!",
+    background: (
+      <>
+        A messy and unorganized workspace is both{" "}
+        <RedText rewardId="red:tools:unprofessional">unprofessional</RedText>{" "}
+        and <RedText rewardId="red:tools:inefficient">inefficient</RedText>.
+        Keep reading to find out how I solved problems while creating{" "}
+        <RedText rewardId="red:tools:conversation-pieces">
+          conversation pieces
+        </RedText>{" "}
+        for the office!
+      </>
+    ),
+    tool_paragraphs: [
+      <>
+        I designed everything in{" "}
+        <SkillDisplay fileName="SOLIDWORKS" project="tools" /> and printed with
+        the Markforged software, on FDM carbon-fiber reinforced filaments. I
+        also sanded and spray painted when necessary.
+      </>,
+    ],
+    why_paragraphs: [
+      <>
+        Looking around my office workspace, I felt an urge to make everything as
+        efficient as possible—and that meant it had to be organized. Firstly, I
+        saw that we had a pile of assorted keys that just sat on a desk, and
+        three remotes that were scattered across the conference room table.
+        There was no good way to store or organize these objects, so they had to
+        be strewn around or, at best, lined up in a neat row. Seeing this, I
+        realized something had to change.
+      </>,
+    ],
+    what_paragraphs: [
+      <>
+        Regarding my keyholder, it is composed of four unique parts: a base, a
+        top and bottom half of the structure, and the key holders themselves. In
+        my design process, there were many printer considerations that I had to
+        make, such as by hollowing out the base or splitting the main structure
+        to fit into the printer&apos;s constraints. After designing in
+        SOLIDWORKS, and using Markforged&apos;s proprietary printing software,
+        Eiger, they came out of the printer with both additive and subtractive
+        deformities. I realized that this was part of the printing process
+        however, and was determined to make do with what I had. I used a
+        combination of dry and wet sandpaper to sand the piece down as best I
+        could, and then used a black spray paint to cover up the imperfections.
+        Lastly, I super glued the component parts together to finish the
+        project.
+      </>,
+      <>
+        For the remote holder, I created the ergonomic and accessible design by
+        taking measurements directly from the remotes. The design is made up of
+        a main piece that holds a flat Logitech camera controller and two side
+        pieces that hold identical TV remotes. I added left and right (L and R)
+        indicators for each of the remotes, as well as a company logo to the
+        base pad for extra customization. Building off of my keyholder project,
+        I created a keyed joint attachment system for the sides to the base.
+        This meant that it didn&apos;t require super glue, and could easily be
+        disassembled while maintaining structural stability during use.
+      </>,
+    ],
+
+    learning_paragraphs: [
+      <>
+        In the design process, incorporating{" "}
+        <RedText rewardId="red:tools:ux-considerations">
+          UX considerations
+        </RedText>{" "}
+        and real-life measurements allowed me to create ergonomic yet functional
+        pieces for the workspace. Additionally, I designed for manufacturability
+        by putting into account possible manufacturing failure and ensuring ease
+        of printing. All in all, I was able to quickly and elegantly solve a
+        physical problem in my office, while reinforcing my team&apos;s brand
+        identity.
       </>,
     ],
   },

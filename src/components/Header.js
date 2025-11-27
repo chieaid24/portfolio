@@ -147,7 +147,7 @@ export default function Header() {
       aria-label="Site header with navigation and wallet"
       className={`pointer-events-none fixed inset-x-0 top-0 z-50 transition-transform duration-300 ease-in-out ${showHeader ? "translate-y-0" : "-translate-y-full"} font-dm-sans py-5`}
     >
-      <motion.div className="bg-background-light/96 pointer-events-auto mx-auto w-5/6 overflow-hidden rounded-xl shadow-[0px_5.47px_13.68px_0px_rgba(0,0,0,0.15)] transition-colors duration-150 md:w-3/4 2xl:w-1/2 2xl:max-w-[60rem]">
+      <motion.div className="bg-background-light/96 border-outline-gray pointer-events-auto mx-auto w-5/6 overflow-hidden rounded-xl border shadow-[0px_5.47px_13.68px_0px_rgba(0,0,0,0.15)] transition-colors duration-150 md:w-3/4 2xl:w-1/2 2xl:max-w-[60rem]">
         {/* Top row */}
         <div className="flex justify-between px-3 md:pr-6 md:pl-4.5 lg:grid lg:grid-cols-[1fr_4fr]">
           <div className="justify-self-start">
@@ -156,7 +156,7 @@ export default function Header() {
               type="button"
               onClick={() => setWalletOpen((v) => !v)}
               aria-expanded={walletOpen}
-              className={`group 5xl:text-[20px] text-dark-grey-text cursor-pointer self-start text-xs font-semibold md:text-[17px] lg:text-lg`}
+              className={`group 5xl:text-[20px] text-outline-gray cursor-pointer self-start text-xs font-semibold md:text-[17px] lg:text-lg`}
             >
               <div className="my-1.5 inline-flex flex-col items-start rounded-md px-1.5 py-1 group-hover:bg-black/7">
                 <div className="gradient-text-header pb-0.5 leading-none">
@@ -211,7 +211,7 @@ export default function Header() {
             </button>
           </div>
 
-          <div className="text-dark-grey-text flex items-center text-sm md:text-lg">
+          <div className="text-outline-gray flex items-center text-sm md:text-lg">
             {/* <DevMoneyReset />  */}
             {/* <OverflowButton />
                          <DevBalanceInput /> */}
@@ -235,10 +235,18 @@ export default function Header() {
                   <RewardLink
                     href="/about"
                     className="hover:text-custom-red after:bg-header-light/80 5xl:after:w-[3px] relative px-2.5 py-3 transition-colors after:absolute after:top-1/2 after:right-0 after:h-5 after:w-[2px] after:-translate-y-1/2 after:content-[''] md:px-5 md:py-1 md:after:h-6 md:after:w-[2.5px]"
-                    rewardId="header:about"
+                    rewardId="about-page"
                     transparent={false}
                   >
                     about
+                  </RewardLink>
+                  <RewardLink
+                    href="/projects"
+                    className="hover:text-custom-red after:bg-header-light/80 5xl:after:w-[3px] relative px-2.5 py-3 transition-colors after:absolute after:top-1/2 after:right-0 after:h-5 after:w-[2px] after:-translate-y-1/2 after:content-[''] md:px-5 md:py-1 md:after:h-6 md:after:w-[2.5px]"
+                    rewardId="projects-page"
+                    transparent={false}
+                  >
+                    projects
                   </RewardLink>
                   <RewardLink
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
