@@ -6,15 +6,22 @@ import FooterGithub from "@/icons/FooterGithub";
 import SimpleArrow from "@/icons/SimpleArrow";
 import SkillDisplay from "@/components/SkillDisplay";
 import { useMoney } from "@/lib/money-context";
+import RewardLink from "./RewardLink";
 
-export default function ProjectCard({ title, skills_used, slug, summary }) {
+export default function ProjectCard({
+  title,
+  skills_used,
+  slug,
+  summary,
+  github,
+}) {
   const { hasAward } = useMoney();
   const rewardId = `project:${slug}`;
   const clicked = hasAward(rewardId);
 
   return (
     <div
-      className={`${clicked ? "linear-gray-gradient" : "bg-highlight-color"} rounded-xl p-px`}
+      className={`${clicked ? "linear-gray-gradient" : "bg-highlight-color"} transition-[box-shadow, transform] rounded-xl p-px duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_30px_rgba(255,255,255,0.1)]`}
     >
       <div
         className={`font-dm-sans bg-background h-full rounded-xl border-0 text-white`}
@@ -56,13 +63,19 @@ export default function ProjectCard({ title, skills_used, slug, summary }) {
             </div>
             <div className="mt-6 mb-6 h-px w-full bg-white/30"></div>
             <div className="flex justify-between">
-              <div className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black">
-                <FooterGithub className="h-4 w-4" />
-                GitHub
+              <div className="duration-200 hover:translate-x-[2px]">
+                <RewardLink
+                  href={github}
+                  className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
+                  rewardId={`${slug}:github`}
+                >
+                  <FooterGithub className="h-4 w-4" />
+                  GitHub
+                </RewardLink>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="text-body-text group flex items-center gap-2 transition-all duration-200 hover:translate-x-[1px]">
                 <span>Explore Project </span>
-                <SimpleArrow className="h-2.5 w-2.5 text-white" />
+                <SimpleArrow className="h-2.5 w-2.5 transition-transform duration-200 group-hover:translate-x-[2px]" />
               </div>
             </div>
           </div>
