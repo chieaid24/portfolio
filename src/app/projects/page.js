@@ -8,7 +8,7 @@ export default function ProjectPage(props) {
   return (
     <div className="mt-40 min-h-screen">
       <MaxWidthWrapper>
-        <h1 className="mb-6 text-4xl font-bold tracking-[0.2em] text-white">
+        <h1 className="mb-8 text-4xl font-bold tracking-[0.2em] text-white">
           My Projects
         </h1>
         <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2">

@@ -46,7 +46,7 @@ function TimelineItem({ item }) {
           {item.highlights.map((highlight) => (
             <div
               key={`${item.id}-${highlight.text}`}
-              className="relative flex items-center gap-x-4 pl-4"
+              className="relative flex shrink-0 items-center gap-x-4 pl-4"
             >
               <BulletIcon className="text-highlight-color h-2 w-2" />
               <div className="space-y-0">
@@ -95,29 +95,22 @@ export default function Experience() {
 
         <motion.div
           animate={{ height, ease: "easeOut" }}
-          transition={{ duration: 0.1 }}
+          transition={{ duration: 0 }}
           className="bg-background border-highlight-color rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
         >
-          <AnimatePresence initial={false}>
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div ref={ref} className="relative px-4 py-8 md:px-8">
-                <div
-                  className="absolute top-0 bottom-0 left-[3.6rem] w-px bg-white/10"
-                  aria-hidden="true"
-                />
-                <div className="z-10 space-y-8">
-                  {items.map((item, index) => (
-                    <TimelineItem key={item.id} item={item} />
-                  ))}
-                </div>
+          <motion.div key={activeTab}>
+            <div ref={ref} className="relative px-4 py-8 md:px-8">
+              <div
+                className="absolute top-0 bottom-0 left-[3.6rem] w-px bg-white/10"
+                aria-hidden="true"
+              />
+              <div className="z-10 space-y-8">
+                {items.map((item, index) => (
+                  <TimelineItem key={item.id} item={item} />
+                ))}
               </div>
-            </motion.div>
-          </AnimatePresence>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
