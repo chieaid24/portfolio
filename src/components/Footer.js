@@ -6,7 +6,7 @@ import FooterEmail from "@/icons/FooterEmail";
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="w-full bg-black pt-6 pb-8 sm:pt-20 sm:pb-10">
+    <footer className="w-full pt-16 pb-8">
       <div className="text-outline-gray font-dm-sans flex flex-col items-center gap-y-2">
         <div className="flex gap-x-3">
           <RewardLink

@@ -89,8 +89,19 @@
   --color-spotify-background: var(--spotify-background);
   --color-dark-body-text: var(--dark-body-text);
 
-  --breakpoint-5xl: 160rem;
-  /* 2560 */
+  --font-alienNew: var(--font-alienNew); /* 2560 */
+  --animate-gradient-hero: gradient 8s linear infinite;
+  @keyframes gradient-hero {
+    0% {
+      backgroundposition: "0% 50%";
+    }
+    "50%" {
+      backgroundposition: "100% 50%";
+    }
+    "100%" {
+      backgroundposition: "0% 50%";
+    }
+  }
 }
 
 @layer utilities {
@@ -124,9 +135,6 @@
   :root,
   :host {
     @variant dark {
-      --color-background-light: #3d3e44;
-      --color-background-dark: #323339;
-      --color-dark-grey-text: #efefef;
     }
   }
 }
@@ -319,5 +327,9 @@ body {
   .animate-fade-in-7 {
     animation: fade-in 0.7s ease-out both;
     /* both = keep final opacity:1 */
+  }
+
+  .animate-gradient {
+    gradient: "gradient 8s linear infinite";
   }
 }

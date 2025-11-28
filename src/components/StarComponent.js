@@ -17,7 +17,7 @@ function createStarTexture() {
     0,
     size / 2,
     size / 2,
-    size / 2
+    size / 2,
   );
 
   gradient.addColorStop(0, "white");
@@ -70,9 +70,9 @@ export default function CustomStarComponent({
       // Random shade between white + targetColor
       const t = Math.random();
       const mixed = new THREE.Color().lerpColors(
-        new THREE.Color("white"),
+        new THREE.Color("#ff9494"),
         targetColor,
-        t
+        t,
       );
 
       colors[i * 3] = mixed.r;

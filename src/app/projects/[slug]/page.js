@@ -42,11 +42,15 @@ const renderParagraphs = (paragraphs) => {
   return paragraphArray.map((paragraph, index) => (
     <div
       key={index}
-      className="mb-6 text-xl leading-loose md:text-2xl md:leading-normal"
+      className="text-body-text mb-6 text-lg leading-relaxed font-normal"
     >
       {paragraph}
     </div>
   ));
+};
+
+const renderTitle = (title) => {
+  return <h2 className="mb-6 text-3xl font-semibold">{title}</h2>;
 };
 
 export default async function ProjectPage({ params }) {
@@ -58,26 +62,24 @@ export default async function ProjectPage({ params }) {
   }
   return (
     <>
-      <div className="bg-background-light font-dm-sans text-main-text text-body-text min-h-screen pt-20">
+      <div className="font-dm-sans text-body-text mt-40 min-h-screen">
         <MaxWidthWrapper>
-          <div className="pt-12 pb-10 md:pt-18 md:pb-15">
-            <div className="mb-18 md:mb-20">
-              <div className="relative flex items-center">
-                <h1 className="text-6xl font-black md:text-7xl">
+          <div className="">
+            <div className="mb-20">
+              <div className="mb-6 flex flex-col gap-1">
+                <h1 className="text-4xl font-bold tracking-[0.2em] text-white">
                   {project.title}
                 </h1>
-                <RewardLink
-                  href={project.github_link}
-                  target="_blank"
-                  className="absolute top-1/2 right-0 w-auto -translate-y-1/2"
-                  rewardId={`${project.slug}:github`}
-                >
-                  <ProjectGithub className="hidden h-[100px] w-[100px] transition duration-200 hover:-translate-y-1 hover:opacity-80 lg:block" />
-                </RewardLink>
+                <h3 className="text-light-grey-text text-2xl italic">
+                  &apos;{project.subtitle}&apos;
+                </h3>
               </div>
-              <h3 className="text-light-grey-text mt-1 text-2xl italic opacity-80 md:text-3xl">
-                &apos;{project.subtitle}&apos;
-              </h3>
+
+              {/**Summary text */}
+              <div className="font-normal">
+                {renderParagraphs(project.summary)}
+              </div>
+
               <RewardLink
                 href={project.github_link}
                 target="_blank"
@@ -85,21 +87,28 @@ export default async function ProjectPage({ params }) {
                 rewardId={`${project.slug}:github`}
               >
                 <div
-                  className={`bg-custom-red mt-4 ml-[1px] inline-flex items-center gap-2 rounded-md px-1.5 py-1.5 font-semibold text-white lg:hidden`}
+                  className={`inline-flex items-center gap-2 rounded-md bg-white px-1.5 py-1.5 font-semibold text-black`}
                 >
-                  <FooterGithub
-                    className={`h-[24px] w-[24px]`}
-                    aria-hidden="true"
-                  />
+                  <FooterGithub className={`h-6 w-6`} aria-hidden="true" />
                   <div>View GitHub</div>
                 </div>
               </RewardLink>
             </div>
-            {/**Summary text */}
-            <div className="font-regular text-2xl">
-              {renderParagraphs(project.summary)}
-            </div>
 
+            {/* Background Section */}
+            <section className="text-md font-base">
+              {renderParagraphs(project.background)}
+            </section>
+
+            {/* Tools Used Section */}
+            <section className="mb-20">
+              {renderTitle("What tools?")}
+              <div className="">
+                {renderParagraphs(project.tool_paragraphs)}
+              </div>
+            </section>
+
+            {/* display 1 */}
             {project.page_displays[0] && (
               <RenderPageDisplay
                 info={project.page_displays[0]}
@@ -107,21 +116,9 @@ export default async function ProjectPage({ params }) {
               />
             )}
 
-            {/* Tools Used Section */}
-            <section className="mb-20">
-              <h1 className="mb-10 text-4xl font-bold md:text-5xl">
-                What tools?
-              </h1>
-              <div className="font-regular text-2xl">
-                {renderParagraphs(project.tool_paragraphs)}
-              </div>
-            </section>
-
             {/** Why This Project */}
             <section className="mb-15">
-              <h1 className="mb-10 text-4xl font-bold md:text-5xl">
-                Why this project?
-              </h1>
+              {renderTitle("Why this project?")}
               <div className="font-regular text-2xl">
                 {renderParagraphs(project.why_paragraphs)}
               </div>
@@ -138,9 +135,7 @@ export default async function ProjectPage({ params }) {
 
             {/**What is it */}
             <section className="mb-20">
-              <h1 className="mb-10 text-4xl font-bold md:text-5xl">
-                What is it?
-              </h1>
+              {renderTitle("What is it?")}
               <div className="font-regular text-2xl">
                 {renderParagraphs(project.what_paragraphs)}
               </div>
@@ -148,9 +143,7 @@ export default async function ProjectPage({ params }) {
 
             {/**what did I learn */}
             <section>
-              <h1 className="mb-10 text-4xl font-bold md:text-5xl">
-                What did I learn?
-              </h1>
+              {renderTitle("What did I learn?")}
               <div className="font-regular text-2xl">
                 {renderParagraphs(project.learning_paragraphs)}
               </div>

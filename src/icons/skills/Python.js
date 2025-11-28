@@ -1,4 +1,4 @@
-export default function Python({ color = "#3776AB", ...props }) {
+export default function Python({ color = "#3f8ed1", ...props }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

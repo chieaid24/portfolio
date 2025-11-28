@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import useMeasure from "react-use-measure";
 import Image from "next/image";
 import BulletIcon from "@/icons/BulletIcon";
@@ -33,9 +33,7 @@ function TimelineItem({ item }) {
             {item.title}
           </h3>
           {item.subtitle && (
-            <p className="md:text-md font-medium text-white/90">
-              {item.subtitle}
-            </p>
+            <p className="text-md font-medium text-white/90">{item.subtitle}</p>
           )}
           {item.period && (
             <p className="text-sm text-gray-400">{item.period}</p>
@@ -71,7 +69,7 @@ export default function Experience() {
   return (
     <section className="text-white">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
-        <div className="bg-background border-highlight-color rounded-full border p-1 shadow-[0_0_0_1px_rgba(255,125,125,0.12)]">
+        <div className="bg-background border-outline-gray rounded-2xl border p-1 shadow-[0_0_0_1px_rgba(255,125,125,0.12)]">
           <div className="grid grid-cols-2 gap-2">
             {tabs.map((tab) => {
               const isActive = tab.id === activeTab;
@@ -80,7 +78,7 @@ export default function Experience() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-100 md:text-base ${
+                  className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors duration-100 md:text-base ${
                     isActive
                       ? "bg-highlight-color text-white shadow-[0_10px_30px_rgba(255,125,125,0.35)]"
                       : "cursor-pointer text-white hover:bg-white/5"
@@ -96,7 +94,7 @@ export default function Experience() {
         <motion.div
           animate={{ height, ease: "easeOut" }}
           transition={{ duration: 0 }}
-          className="bg-background border-highlight-color rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
+          className="bg-background border-outline-gray rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
         >
           <motion.div key={activeTab}>
             <div ref={ref} className="relative px-4 py-8 md:px-8">

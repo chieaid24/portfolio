@@ -17,15 +17,6 @@ const italiana = Italiana({
   weight: "400",
   variable: "--font-italiana",
 });
-const clashFont = localFont({
-  src: [
-    { path: "./fonts/Clash_Regular.otf", weight: "400", style: "normal" },
-    { path: "./fonts/Clash_Bold.otf", weight: "700", style: "normal" },
-  ],
-  variable: "--font-clash",
-  display: "swap",
-  fallback: ["system-ui", "Segoe UI", "Arial"],
-});
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
@@ -123,7 +114,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${dmSans.className} ${italiana.variable} ${clashFont.variable} min-h-screen overscroll-none antialiased`}
+        className={`${dmSans.className} ${italiana.variable} min-h-screen overscroll-none antialiased`}
       >
         <Providers>
           <main key={pathname} className="fade-in-page">

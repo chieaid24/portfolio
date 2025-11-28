@@ -33,6 +33,7 @@
     "@svgr/cli": "^8.1.0",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
+    "baseline-browser-mapping": "^2.8.32",
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
     "png-to-ico": "^3.0.1",
