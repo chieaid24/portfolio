@@ -16,6 +16,9 @@ export const quest_totals = {
   link: 10,
 };
 
+/* Helper Formatting Functions */
+const bullet = "list-disc pl-8";
+
 /*  EMPTY TEMPLATE FOR NEW PROJECT!
 
     {
@@ -121,14 +124,24 @@ export const projects = [
       <>
         After completing my AWS AI Practitioner and Associate ML Engineer
         certifications, I wanted to create a simple machine learning project
-        leveraging AWS services to put my skills into practice. Around the same
-        time, I found out that my CPAP (Continuous Positive Airway Pressure)
-        machine had been tracking and storing my sleep data for the past two
-        years, and I was able to download the bulk of it as a CSV file. So, I
-        decided to use machine learning models to find out (a) what factors
-        contributed to the CPAP company&apos;s proprietary “Sleep Score” metric
-        and (b) what my predicted sleep metrics might look like a week into the
-        future.
+        leveraging AWS services to put my skills into practice.
+      </>,
+      <>
+        {" "}
+        Around the same time, I found out that my CPAP (Continuous Positive
+        Airway Pressure) machine had been tracking and storing my sleep data for
+        the past two years, and I was able to download the bulk of it as a CSV
+        file. So, I decided to use machine learning models to find out
+        <ul className={bullet}>
+          <li>
+            What factors contributed to the CPAP company&apos;s proprietary
+            “Sleep Score” metric
+          </li>
+          <li>
+            What my predicted sleep metrics might look like a week into the
+            future.
+          </li>
+        </ul>
       </>,
     ],
     what_paragraphs: [
@@ -192,7 +205,6 @@ export const projects = [
       "React",
       "Tailwind CSS",
       "JavaScript",
-      "Framer Motion",
       "Three/Three.js",
     ],
     image: "/personal_website/website_card.png",
@@ -332,20 +344,25 @@ export const projects = [
       <>
         Working with CNC machinists at Autonomous Machining opened my eyes to
         the many unexpected challenges that come with producing machined parts,
-        especially precision parts for aerospace and automotive systems. At
-        first, I thought the buyer companies just sent a SOLIDWORKS model, the
-        machinist hit a few buttons, and the machine would cut it out—simple,
-        like a 3D printer. However, I quickly learned that this isn&apos;t the
-        case, and there are very good reasons to why machinists get paid in this
-        economy.
+        especially precision parts for aerospace and automotive systems.{" "}
+      </>,
+      <>
+        At first, I thought the buyer companies just sent a SOLIDWORKS model,
+        the machinist hit a few buttons, and the machine would cut it
+        out—simple, like a 3D printer. However, I quickly learned that this
+        isn&apos;t the case, and there are very good reasons to why machinists
+        get paid in this economy.
       </>,
       <>
         As a machinist, it makes life a lot easier to have a 3D model that
         includes Product and Manufacturing Information (PMI), such as desired
         dimensions, tolerances, and specifications. This allows you to create
         machine paths and quality assurance procedures to the specs of the
-        buyer. But due to old-fashioned &quot;this is the way it&apos;s always
-        been done&quot; practices, many times the machine shop only receives a
+        buyer.{" "}
+      </>,
+      <>
+        But due to old-fashioned &quot;this is the way it&apos;s always been
+        done&quot; practices, many times the machine shop only receives a
         stripped-down (no PMI){" "}
         <RedText rewardId="red:pmi:3dmodel">3D model</RedText> and a{" "}
         <RedText rewardId="red:pmi:2dpdf">2D PDF</RedText> containing the
@@ -562,15 +579,17 @@ export const projects = [
         top and bottom half of the structure, and the key holders themselves. In
         my design process, there were many printer considerations that I had to
         make, such as by hollowing out the base or splitting the main structure
-        to fit into the printer&apos;s constraints. After designing in
-        SOLIDWORKS, and using Markforged&apos;s proprietary printing software,
-        Eiger, they came out of the printer with both additive and subtractive
-        deformities. I realized that this was part of the printing process
-        however, and was determined to make do with what I had. I used a
-        combination of dry and wet sandpaper to sand the piece down as best I
-        could, and then used a black spray paint to cover up the imperfections.
-        Lastly, I super glued the component parts together to finish the
-        project.
+        to fit into the printer&apos;s constraints.{" "}
+      </>,
+      <>
+        After designing in SOLIDWORKS, and using Markforged&apos;s proprietary
+        printing software, Eiger, they came out of the printer with both
+        additive and subtractive deformities. I realized that this was part of
+        the printing process however, and was determined to make do with what I
+        had. I used a combination of dry and wet sandpaper to sand the piece
+        down as best I could, and then used a black spray paint to cover up the
+        imperfections. Lastly, I super glued the component parts together to
+        finish the project.
       </>,
       <>
         For the remote holder, I created the ergonomic and accessible design by
@@ -578,10 +597,13 @@ export const projects = [
         a main piece that holds a flat Logitech camera controller and two side
         pieces that hold identical TV remotes. I added left and right (L and R)
         indicators for each of the remotes, as well as a company logo to the
-        base pad for extra customization. Building off of my keyholder project,
-        I created a keyed joint attachment system for the sides to the base.
-        This meant that it didn&apos;t require super glue, and could easily be
-        disassembled while maintaining structural stability during use.
+        base pad for extra customization.{" "}
+      </>,
+      <>
+        Building off of my keyholder project, I created a keyed joint attachment
+        system for the sides to the base. This meant that it didn&apos;t require
+        super glue, and could easily be disassembled while maintaining
+        structural stability during use.
       </>,
     ],
 

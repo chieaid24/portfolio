@@ -70,11 +70,14 @@ export default function Home() {
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
             <div className="flex min-h-[90vh] flex-col items-center justify-center text-red-50 md:min-h-screen">
-              <h1 className="mb-4 text-6xl font-bold">
-                Hi, I'm Aidan,
-                <span className="gradient-text-header"> a cloud engineer</span>
+              <h1 className="mb-4 text-5xl font-bold">
+                Hi, I'm Aidan,{" "}
+                <span className="gradient-text-header">
+                  {" "}
+                  a software engineer
+                </span>
               </h1>
-              <h2 className="mb-6 text-3xl font-semibold text-red-50">
+              <h2 className="mb-6 text-[27px] leading-[36px] font-semibold text-red-50">
                 Building practical solutions, one galaxy at a time.
               </h2>
               <div className="flex w-100 justify-between">

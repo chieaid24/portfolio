@@ -40,10 +40,10 @@ export default function SkillDisplay({
   const iconCard = `md:h-3.5 md:w-3.5`;
 
   const divProject = `inline-flex items-center gap-2 text-white rounded-md 
-                      sm:rounded-lg font-bold translate-y-[1px] md:translate-y-[2px] py-[4px] md:py-[3px] text-[16px] 
-                      ${claimed ? "bg-custom-red/60" : "bg-custom-red"} px-[5px] md:px-1.5 leading-tight md:leading-normal`;
+                      sm:rounded-lg font-semibold translate-y-[1px] md:translate-y-[2px]  text-lg border
+                      ${claimed ? "border-outline-gray" : "border-highlight-color/90 bg-highlight-color/90"} px-[5px] md:px-1.5 leading-tight md:leading-normal`;
 
-  const iconProject = `h-[18px] w-[18px] md:h-[25px] md:w-[25px]`;
+  const iconProject = `h-4 w-4 `;
 
   const content = (
     <div className={card ? divCard : divProject}>

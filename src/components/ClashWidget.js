@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import ClashRoyale from "@/icons/ClashRoyale";
+import Trophy from "@/icons/ClashTrophy";
 
 const round1 = (n) => Math.round(n * 10) / 10;
 const pct1 = (num, den) => (den ? round1((num / den) * 100) : null);
@@ -76,23 +77,15 @@ export default function ClashWidget() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div className="flex gap-1 text-xl leading-tight font-bold tracking-tighter text-white duration-100 hover:opacity-90">
+          <div className="flex gap-1 text-xl leading-tight font-semibold tracking-tighter text-white duration-100 hover:opacity-90">
             <ClashRoyale className="h-6 w-6 text-white" />
             Merlord
           </div>
         </a>
         <div className="flex flex-col">
           <div className="flex items-center justify-end gap-1">
-            <div className="relative h-4 w-4">
-              <Image
-                src="/about/trophy_1.png"
-                alt="Clash Royale trophy"
-                fill
-                className="object-contain"
-                sizes="(min-width: 640px) 32px, 24px"
-              />
-            </div>
-            <div className="justify-end font-bold tracking-tight text-white">
+            <Trophy className="h-3.5 w-3.5 text-white" />
+            <div className="justify-end font-semibold tracking-tight text-white">
               {player?.trophies ?? "—"}
             </div>
           </div>
@@ -136,7 +129,7 @@ export default function ClashWidget() {
                     alt={card.name || "Card"}
                     width={40}
                     height={40}
-                    className="duration-200 hover:scale-110"
+                    className="duration-200 hover:scale-105"
                   />
                 ) : (
                   <Image

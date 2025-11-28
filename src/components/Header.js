@@ -224,17 +224,17 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.18 }}
-                  className="5xl:text-[19px] flex w-full items-center justify-end font-semibold"
+                  className="flex w-full items-center justify-end gap-x-5 text-lg font-semibold"
                 >
                   <Link
                     href="/"
-                    className="hover:text-custom-red after:bg-header-light/80 5xl:after:w-[3px] relative py-3 pr-2.5 transition-colors after:absolute after:top-1/2 after:right-0 after:h-5 after:w-[2px] after:-translate-y-1/2 after:content-[''] md:py-1 md:pr-5 md:after:h-6 md:after:w-[2.5px]"
+                    className="hover:text-custom-red transition-colors"
                   >
                     home
                   </Link>
                   <RewardLink
                     href="/about"
-                    className="hover:text-custom-red after:bg-header-light/80 5xl:after:w-[3px] relative px-2.5 py-3 transition-colors after:absolute after:top-1/2 after:right-0 after:h-5 after:w-[2px] after:-translate-y-1/2 after:content-[''] md:px-5 md:py-1 md:after:h-6 md:after:w-[2.5px]"
+                    className="hover:text-custom-red transition-colors"
                     rewardId="about-page"
                     transparent={false}
                   >
@@ -242,7 +242,7 @@ export default function Header() {
                   </RewardLink>
                   <RewardLink
                     href="/projects"
-                    className="hover:text-custom-red after:bg-header-light/80 5xl:after:w-[3px] relative px-2.5 py-3 transition-colors after:absolute after:top-1/2 after:right-0 after:h-5 after:w-[2px] after:-translate-y-1/2 after:content-[''] md:px-5 md:py-1 md:after:h-6 md:after:w-[2.5px]"
+                    className="hover:text-custom-red transition-colors"
                     rewardId="projects-page"
                     transparent={false}
                   >
@@ -252,26 +252,9 @@ export default function Header() {
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-custom-red flashlight-btn py-3 pl-2.5 transition-colors md:py-1 md:pl-5"
-                    rewardId="header:resume"
+                    className="hover:text-custom-red transition-colors"
+                    rewardId="resume"
                     transparent={false}
-                    onMouseMove={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      setResumeFlashlight({
-                        x: e.clientX - rect.left,
-                        y: e.clientY - rect.top,
-                        active: true,
-                      });
-                    }}
-                    onMouseLeave={() =>
-                      setResumeFlashlight({ x: -999, y: -999, active: false })
-                    }
-                    style={{
-                      "--flash-x": `${resumeFlashlight.x}px`,
-                      "--flash-y": `${resumeFlashlight.y}px`,
-                      "--flash-opacity": resumeFlashlight.active ? 1 : 0,
-                    }}
-                    data-flashlight
                   >
                     resume
                   </RewardLink>

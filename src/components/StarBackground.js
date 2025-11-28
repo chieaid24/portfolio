@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import CustomStarComponent from "./StarComponent";
+import StarComponent from "./StarComponent";
 
 function RotatingStars() {
   const groupRef = useRef(null);
@@ -20,7 +20,7 @@ function RotatingStars() {
 
   return (
     <group ref={groupRef}>
-      <CustomStarComponent
+      <StarComponent
         radius={100}
         depth={300}
         count={800}
@@ -29,7 +29,7 @@ function RotatingStars() {
         fade={true}
         speed={0}
         color="#ff5e5e"
-        opacity={0.5}
+        opacity={0.55}
       />
     </group>
   );

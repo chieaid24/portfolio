@@ -66,7 +66,7 @@ export default function AboutPage() {
                 <BulletRow>
                   A{" "}
                   <RedText rewardId="red:about:cloud">
-                    software developer
+                    software engineer
                   </RedText>{" "}
                   focused on cloud engineering and infrastructure (AWS)
                 </BulletRow>
@@ -84,11 +84,13 @@ export default function AboutPage() {
               <h1 className="mb-8 text-4xl font-bold tracking-[0.2em] text-white">
                 Interests
               </h1>
-              <BulletRow>
-                When I'm not coding, I also love climbing, filmmaking, video
-                games, and music!
-              </BulletRow>
-              <BulletRow>Check out some of my stats below!</BulletRow>
+              <div className="space-y-1">
+                <BulletRow>
+                  When I'm not coding, I also love climbing, filmmaking, video
+                  games, and music
+                </BulletRow>
+                <BulletRow>Check out some of my stats below!</BulletRow>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-8">
               <div className="bg-outline-gray rounded-xl p-px">
