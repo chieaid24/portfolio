@@ -20,8 +20,13 @@
   --background: #0f0f0f;
   /* background of the skill displays on the project pages */
   --background-highlight: #1d1d1d;
+  /* color of the spotify background - sets the clash and carousel backgrounds */
+  --spotify-background: #745454;
   /* body color of text (project page text, experience body text, etc) */
   --body-text: #e0e0e0;
+  /* darker body text (numbers in the ClashWidget) */
+  --dark-body-text: #bdbdbd;
+
   color-scheme: light;
 }
 
@@ -81,6 +86,9 @@
   --color-background-highlight: var(--background-highlight);
   --color-body-text: var(--body-text);
   --color-outline-dark-gray: var(--outline-dark-gray);
+  --color-spotify-background: var(--spotify-background);
+  --color-dark-body-text: var(--dark-body-text);
+
   --breakpoint-5xl: 160rem;
   /* 2560 */
 }

@@ -195,31 +195,6 @@ export default function Home() {
                   </motion.div>
                 ))}
             </div>
-            <section className="text-dark-grey-text font-dm-sans 5xl:text-[105px] 5xl:leading-[105px] my-[-10px] flex flex-col items-center pt-10 text-[44px] leading-12 font-semibold tracking-tighter sm:text-7xl sm:leading-[72px] md:text-[80px] md:leading-[80px] lg:text-8xl lg:leading-[96px]">
-              {" "}
-              {/**want to cash out? section */}
-              <motion.div
-                key="cash-out"
-                initial={{ opacity: 0, y: 0 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: 0 }}
-              >
-                <RewardLink
-                  href="mailto:aidan.chien@uwaterloo.ca?subject=I WANT TO CASH OUT! (by hiring you)"
-                  rewardId="home:cash-out"
-                  className="group mobile:select-none inline-flex flex-col items-center transition-all duration-300 md:hover:translate-y-[-15px] md:hover:scale-110"
-                >
-                  <p>
-                    Want to{" "}
-                    <span className="md:group-hover:animate-new-pulse md:group-hover:gradient-text-red-animated gradient-text-custom animated-underline pr-0.5 font-semibold">
-                      cash out?
-                    </span>
-                  </p>
-                  <p className="">Let&apos;s connect!</p>
-                </RewardLink>
-              </motion.div>
-            </section>
           </section>
         </MaxWidthWrapper>
       </main>
