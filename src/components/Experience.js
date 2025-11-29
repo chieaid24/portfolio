@@ -41,12 +41,12 @@ function TimelineItem({ item }) {
         </div>
 
         <div className="space-y-1 text-base leading-relaxed text-gray-100">
-          {item.highlights.map((highlight) => (
+          {item.highlights.map((highlight, index) => (
             <div
-              key={`${item.id}-${highlight.text}`}
-              className="relative flex shrink-0 items-center gap-x-4 pl-4"
+              key={`${item.id}-highlight-${index}`}
+              className="relative flex items-center gap-x-4 pl-0"
             >
-              <BulletIcon className="text-highlight-color h-2 w-2" />
+              <BulletIcon className="text-highlight-color h-2 w-2 shrink-0" />
               <div className="space-y-0">
                 <p className="text-body-text">{highlight.text}</p>
                 {highlight.note && (

@@ -147,7 +147,7 @@ export default function Header() {
       aria-label="Site header with navigation and wallet"
       className={`pointer-events-none fixed inset-x-0 top-0 z-50 transition-transform duration-300 ease-in-out ${showHeader ? "translate-y-0" : "-translate-y-full"} font-dm-sans py-5`}
     >
-      <motion.div className="bg-background-light/96 border-outline-gray pointer-events-auto mx-auto w-5/6 overflow-hidden rounded-xl border shadow-[0px_5.47px_13.68px_0px_rgba(0,0,0,0.15)] transition-colors duration-150 md:w-3/4 2xl:w-1/2 2xl:max-w-[60rem]">
+      <motion.div className="border-outline-gray pointer-events-auto mx-auto max-w-[750px] rounded-xl border backdrop-blur-sm transition-colors duration-150">
         {/* Top row */}
         <div className="flex justify-between px-3 md:pr-6 md:pl-4.5 lg:grid lg:grid-cols-[1fr_4fr]">
           <div className="justify-self-start">

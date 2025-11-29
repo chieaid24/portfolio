@@ -1,5 +1,3 @@
-const badgeImagePath = "/company-images/waterloo-logo_v2.png";
-
 export const experiences = {
   work: [
     {
@@ -12,9 +10,32 @@ export const experiences = {
       subtitle: "NeedList.ORG",
       period: "Sep 2025 - Present",
       highlights: [
-        { text: "Placeholder bullet - replace with your impact." },
-        { text: "Another bullet for metrics or accomplishments." },
-        { text: "Keep bullets concise and results-focused." },
+        {
+          text: (
+            <>
+              Directed creation of <strong>Nest.js</strong> API layer,{" "}
+              <strong>GitHub Actions</strong> CI/CD pipeline, and AI-powered
+              Flutter to React translation
+            </>
+          ),
+        },
+        {
+          text: (
+            <>
+              Developed a comprehensive <strong>Jest</strong> test suite for the
+              backend, integrating with <strong>Firebase Emulator</strong>
+            </>
+          ),
+        },
+        {
+          text: (
+            <>
+              Implemented <strong>Agile methodology</strong> and Notion issue
+              tracking to optimize product strategy and maintain complete
+              technical documentation
+            </>
+          ),
+        },
       ],
     },
     {
@@ -27,8 +48,22 @@ export const experiences = {
       subtitle: "FormulaTech Hacks",
       period: "Mar 2025 - Present",
       highlights: [
-        { text: "Add a quick accomplishment or two-line summary." },
-        { text: "Ship something measurable; keep it concise." },
+        {
+          text: (
+            <>
+              Produced 2D assets, event merchandise, and marketing materials
+              that attracted <strong>150+</strong> sign-ups
+            </>
+          ),
+        },
+        {
+          text: (
+            <>
+              Designed responsive event website in <strong>Figma</strong> and{" "}
+              <strong>Illustrator</strong>
+            </>
+          ),
+        },
       ],
     },
     {
@@ -41,8 +76,23 @@ export const experiences = {
       subtitle: "Autonomous Machining",
       period: "Dec 2024 - Apr 2025",
       highlights: [
-        { text: "Add a quick accomplishment or two-line summary." },
-        { text: "Ship something measurable; keep it concise." },
+        {
+          text: (
+            <>
+              Leveraged <strong>Generative AI</strong> and{" "}
+              <strong>Python</strong> scripts to resolve tasks that previously
+              required human input
+            </>
+          ),
+        },
+        {
+          text: (
+            <>
+              Built first-of-its-kind Python application, cutting preparation
+              labor by <strong>30%</strong>
+            </>
+          ),
+        },
       ],
     },
   ],
@@ -58,13 +108,27 @@ export const experiences = {
         "Bachelor of Applied Science (BASc), Systems Design Engineering",
       period: "Sep 2024 - Present",
       highlights: [
-        { text: "Cumulative GPA: 3.97/4.00" },
-        { text: "2x Term Distinction" },
         {
-          text: "Relevant Courses: Human Factors in Design, Digital Computation, Data Structures and Algorithms",
+          text: <>Cumulative GPA: 3.97/4.00</>,
         },
         {
-          text: "Awards: Systems Design Co-op for Good Award - $12,000, President's Scholar of Distinction - $2,000",
+          text: <>2x Term Distinction</>,
+        },
+        {
+          text: (
+            <>
+              Relevant Courses: Human Factors in Design, Digital Computation,{" "}
+              Data Structures and Algorithms
+            </>
+          ),
+        },
+        {
+          text: (
+            <>
+              Awards: Systems Design Co-op for Good Award - $12,000, President's
+              Scholar of Distinction - $2,000
+            </>
+          ),
         },
       ],
     },
@@ -78,14 +142,14 @@ export const experiences = {
       period: "",
       highlights: [
         {
-          text: "AWS Certified Solutions Architect - Associate",
-          note: "Nov 2025",
+          text: <>AWS Certified Solutions Architect - Associate</>,
+          note: <>Nov 2025</>,
         },
         {
-          text: "AWS Certified Machine Learning Engineer - Associate",
-          note: "Oct 2025",
+          text: <>AWS Certified Machine Learning Engineer - Associate</>,
+          note: <>Oct 2025</>,
         },
-        { text: "AWS Certified AI Practitioner", note: "Oct 2025" },
+        { text: <>AWS Certified AI Practitioner</>, note: <>Oct 2025</> },
       ],
     },
   ],
