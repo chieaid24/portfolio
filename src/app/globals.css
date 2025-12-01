@@ -34,6 +34,10 @@
   color-scheme: dark;
 }
 
+.noto-symbol {
+  font-family: var(--font-noto-sans), sans-serif;
+}
+
 .linear-gray-gradient {
   background: linear-gradient(135deg, #949494 0%, #272727 100%);
 }

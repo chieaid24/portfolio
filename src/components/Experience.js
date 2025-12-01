@@ -48,7 +48,9 @@ function TimelineItem({ item }) {
             >
               <BulletIcon className="text-highlight-color h-2 w-2 shrink-0" />
               <div className="space-y-0">
-                <p className="text-body-text">{highlight.text}</p>
+                <p className="text-body-text leading-normal">
+                  {highlight.text}
+                </p>
                 {highlight.note && (
                   <p className="text-sm text-gray-400">{highlight.note}</p>
                 )}
@@ -97,9 +99,9 @@ export default function Experience() {
           className="bg-background border-outline-gray rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
         >
           <motion.div key={activeTab}>
-            <div ref={ref} className="relative px-4 py-8 md:px-8">
+            <div ref={ref} className="relative px-6 py-6">
               <div
-                className="absolute top-0 bottom-0 left-[3.6rem] w-px bg-white/10"
+                className="absolute top-0 bottom-0 left-[3.1rem] w-px bg-white/10"
                 aria-hidden="true"
               />
               <div className="z-10 space-y-8">

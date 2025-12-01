@@ -18,6 +18,8 @@ import Experience from "@/components/Experience";
 import ViewAllArrow from "@/icons/ViewAllArrow";
 import SimpleArrow from "@/icons/SimpleArrow";
 import Rocket from "@/icons/Rocket";
+import ExpandedHeader from "@/components/ExpandedHeader";
+import ChatHeader from "@/components/ChatOutpost";
 
 export default function Home() {
   const [randomTickets, setRandomTickets] = useState({});
@@ -68,6 +70,8 @@ export default function Home() {
       <StarBackground />
       <main className="">
         <MaxWidthWrapper>
+          <ExpandedHeader />
+          {/* <ChatHeader /> */}
           <section id="hero" className="min-h-screen">
             <div className="flex min-h-[90vh] flex-col items-center justify-center text-red-50 md:min-h-screen">
               <h1 className="mb-4 text-5xl font-bold">
@@ -144,7 +148,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <section className="mb-24">
+            <section className="mb-20">
               <h2 className="mb-6 text-4xl font-bold tracking-[0.2em] text-white">
                 Experience
               </h2>

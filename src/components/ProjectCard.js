@@ -68,6 +68,7 @@ export default function ProjectCard({
                   href={github}
                   className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
                   rewardId={`${slug}:github`}
+                  target="_blank"
                 >
                   <FooterGithub className="h-4 w-4" />
                   GitHub

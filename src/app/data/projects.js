@@ -209,7 +209,7 @@ export const projects = [
         "Phone, tablet, and desktop views of the website",
       ],
     ],
-    github_link: "https://github.com/chieaid24/Portfolio-Site",
+    github_link: "https://github.com/chieaid24/Portfolio-Website",
     subtitle: "a portfolio that performs",
     summaryMetaData:
       "An interactive Next.js portfolio with gamified balance, slot machine, APIs, and creative UI/UX design.",
