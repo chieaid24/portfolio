@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,9 +10,15 @@ import AnimatedBalance from "@/components/AnimatedBalance";
 import RewardLink from "@/components/RewardLink";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import CloseButton from "@/icons/CloseButton";
+import ToolTip from "@/components/ToolTip";
 import * as commodityData from "@/app/data/commodities";
 import CommodityDisplay from "@/components/CommodityDisplay";
-
+import Info from "@/icons/Info";
+import Minimize from "@/icons/Minimize";
+import DevMoneyReset from "./DevMoneyReset";
+import ThemeSection from "./ThemeSection";
+import CurrencySymbol from "@/icons/CurrencySymbol";
+import StarflareSection from "./StarflareSection";
 //unify commodity list
 const COMMODITIES = (
   commodityData.default ??
@@ -50,87 +56,22 @@ function sampleDistinct(arr, n) {
 const BALANCE_MULTIPLIER = 1000;
 
 export default function Header() {
-  const [showHeader, setShowHeader] = useState(true);
   const [walletOpen, setWalletOpen] = useState(false);
-  const [holdOpen, setHoldOpen] = useState(false);
-
-  const lastBalanceRef = useRef(null);
-  const holdTimerRef = useRef(null);
-
-  const firstBalanceRender = useRef(true);
-  const lastYRef = useRef(0);
+  const [isAtTop, setIsAtTop] = useState(true);
 
   const { balance, ready } = useMoney();
-  const [flashTrigger, setFlashTrigger] = useState(0);
-  const [questClicked, setQuestClicked] = useState(0);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const tooltipTimerRef = useRef(null);
-  const [resumeFlashlight, setResumeFlashlight] = useState({
-    x: -999,
-    y: -999,
-    active: false,
-  });
-
-  // Clear tooltip timer on unmount
-  useEffect(() => {
-    return () => {
-      if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
-    };
-  }, []);
 
   const infoVariants = {
     closed: { opacity: 1, y: 0 },
     open: { opacity: 0, y: -4 },
   };
 
-  const popHeaderBriefly = (ms = 2000) => {
-    setShowHeader(true);
-    setHoldOpen(true);
-    if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
-    holdTimerRef.current = setTimeout(() => setHoldOpen(false), ms);
-  };
-
-  // clear timer on unmount
   useEffect(() => {
-    return () => {
-      if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
-    };
-  }, []);
-
-  // Scroll show/hide, respecting the hold
-  useEffect(() => {
-    const onScroll = () => {
-      if (holdOpen) return;
-
-      const y = Math.max(0, window.scrollY);
-
-      setShowHeader(y <= lastYRef.current);
-      lastYRef.current = y;
-    };
+    const onScroll = () => setIsAtTop(window.scrollY <= 4);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [holdOpen]);
-
-  // Pop header when balance changes
-  useEffect(() => {
-    if (!ready) return;
-
-    // normalize to 2 decimals to avoid float jitter
-    const current = Number.isFinite(balance)
-      ? +Number(balance).toFixed(2)
-      : null;
-
-    // first ready render: record but don't show
-    if (lastBalanceRef.current === null) {
-      lastBalanceRef.current = current;
-      return;
-    }
-
-    if (current !== lastBalanceRef.current) {
-      popHeaderBriefly(2000);
-      lastBalanceRef.current = current;
-    }
-  }, [balance, ready]);
+  }, []);
 
   const isMdUp = useIsMdUp();
 
@@ -145,21 +86,23 @@ export default function Header() {
   return (
     <header
       aria-label="Site header with navigation and wallet"
-      className={`pointer-events-none fixed inset-x-0 top-0 z-50 transition-transform duration-300 ease-in-out ${showHeader ? "translate-y-0" : "-translate-y-full"} font-dm-sans py-5`}
+      className="font-dm-sans pointer-events-none fixed inset-x-0 top-0 z-50 py-5"
     >
-      <motion.div className="border-outline-gray pointer-events-auto mx-auto max-w-[750px] rounded-xl border backdrop-blur-sm transition-colors duration-150">
+      <motion.div
+        className={`border-outline-gray transition-color pointer-events-auto mx-auto max-w-[750px] rounded-xl border duration-200 ${walletOpen ? "bg-background" : "bg-background/20"} backdrop-blur-lg`}
+      >
         {/* Top row */}
-        <div className="flex justify-between px-3 md:pr-6 md:pl-4.5 lg:grid lg:grid-cols-[1fr_4fr]">
-          <div className="justify-self-start">
+        <div className="grid grid-cols-[1fr_4fr] justify-between pr-6 pl-4.5">
+          <div className="">
             {/* Money pill = toggle */}
             <button
               type="button"
               onClick={() => setWalletOpen((v) => !v)}
               aria-expanded={walletOpen}
-              className={`group 5xl:text-[20px] text-outline-gray cursor-pointer self-start text-xs font-semibold md:text-[17px] lg:text-lg`}
+              className={`group text-outline-gray cursor-pointer self-start text-lg font-semibold`}
             >
-              <div className="my-1.5 inline-flex flex-col items-start rounded-md px-1.5 py-1 group-hover:bg-black/7">
-                <div className="gradient-text-header pb-0.5 leading-none">
+              <div className="my-1.5 inline-flex flex-col items-start rounded-md px-1.5 py-1 group-hover:text-white/65">
+                <div className="text-outline-gray pb-0.5 leading-none transition-colors duration-100 group-hover:text-white/65">
                   your earnings:
                 </div>
                 <motion.div
@@ -168,15 +111,15 @@ export default function Header() {
                   transition={{ layout: { duration: 0 } }}
                   className="flex -translate-y-0.5 items-baseline gap-1 pt-0 leading-none"
                 >
-                  <span className="leading-none">$</span>
+                  <span className="noto-symbol">₳</span>
                   <motion.span
                     className="5xl:text-[27px] text-lg leading-none md:text-[24px]"
-                    transition={{ duration: 1, ease: "easeInOut" }}
+                    transition={{ duration: 0.1 }}
                   >
                     {ready ? (
                       <AnimatedBalance
                         value={balance}
-                        className="relative top-1 inline-block transition-colors duration-250"
+                        className="relative top-1 inline-block transition-colors duration-100"
                       />
                     ) : (
                       "—"
@@ -197,14 +140,7 @@ export default function Header() {
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     style={{ willChange: "transform,opacity" }}
                   >
-                    <Image
-                      src="/icons/info_icon_v1-01.svg"
-                      width={14}
-                      height={14}
-                      alt="Info"
-                      className="5xl:w-[13px] block w-2 max-w-none md:ml-1 md:w-3"
-                      draggable={false}
-                    />
+                    <Info className="text-outline-gray/70 ml-0.5 h-3 w-3 translate-y-[1px] transition-transform duration-100 group-hover:-translate-y-[0px]" />
                   </motion.div>
                 </motion.div>
               </div>
@@ -212,9 +148,9 @@ export default function Header() {
           </div>
 
           <div className="text-outline-gray flex items-center text-sm md:text-lg">
-            {/* <DevMoneyReset />  */}
+            {/* <DevMoneyReset /> */}
             {/* <OverflowButton />
-                         <DevBalanceInput /> */}
+              <DevBalanceInput /> */}
 
             <AnimatePresence initial={false} mode="wait">
               {!walletOpen ? (
@@ -260,67 +196,20 @@ export default function Header() {
                   </RewardLink>
                 </motion.nav>
               ) : (
-                <div className="flex justify-between lg:grid lg:h-full lg:w-full lg:grid-cols-[8fr_1fr]">
-                  <motion.div
-                    key="with-your-money"
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: 1,
-                      transition: { duration: 1, ease: "easeOut" },
-                    }} // 1s in
-                    exit={{
-                      opacity: 0,
-                      transition: { duration: 0.2, ease: "easeIn" },
-                    }} // 0.5s out
-                    className="text-light-grey-text 5xl:text-[25px] hidden translate-y-2 cursor-default self-end justify-self-center font-semibold tracking-wide italic lg:ml-5 lg:block lg:translate-y-0 lg:text-[22px] xl:text-[22px] 2xl:text-[24px]"
-                  >
-                    with your earnings, I would buy...
-                  </motion.div>
-
+                <div className="flex w-full justify-end">
                   <span className="relative flex items-center justify-end md:space-x-2">
-                    <DarkModeToggle
-                      className="px-3 py-2 md:px-[2.5px] md:py-[2.5px]"
-                      onFailedToggle={() => {
-                        setFlashTrigger((t) => t + 1);
-                        setShowTooltip(true);
-
-                        // Clear existing timer before setting a new one
-                        if (tooltipTimerRef.current)
-                          clearTimeout(tooltipTimerRef.current);
-                        tooltipTimerRef.current = setTimeout(() => {
-                          setShowTooltip(false);
-                          tooltipTimerRef.current = null;
-                        }, 800);
-                      }}
-                      questClicked={questClicked}
-                    />
-
-                    <AnimatePresence>
-                      {showTooltip && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -1 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -1 }}
-                          transition={{ duration: 0.2 }}
-                          className="bg-dark-grey-text absolute left-1/2 z-[9999] mt-14 -translate-x-4/5 rounded-md px-2 py-1 text-[10px] font-medium whitespace-nowrap text-white"
-                        >
-                          complete all quests first!
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
                     <motion.button
                       key="close"
                       type="button"
                       onClick={() => setWalletOpen(false)}
                       aria-label="Close"
-                      initial={{ opacity: 0, rotate: -90, scale: 0.9 }}
+                      initial={{ opacity: 0, rotate: -45, scale: 0.9 }}
                       animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                      exit={{ opacity: 0, rotate: 90, scale: 0.9 }}
+                      exit={{ opacity: 0, rotate: 45, scale: 0.9 }}
                       transition={{ duration: 0.18 }}
-                      className="cursor-pointer rounded-md px-3 py-2 transition-colors duration-250 hover:bg-black/7 md:px-[2px] md:py-[2px]"
+                      className="cursor-pointer px-3 py-2 transition-colors duration-100 hover:text-white/75 md:px-[2px] md:py-[2px]"
                     >
-                      <CloseButton className="text-dark-grey-text h-6 w-6" />
+                      <Minimize className="text-dark-grey-text h-4 w-4" />
                     </motion.button>
                   </span>
                 </div>
@@ -347,47 +236,31 @@ export default function Header() {
                 paddingBottom: 18,
               }}
               exit={{ height: 0, opacity: 0, paddingTop: 0, paddingBottom: 0 }}
-              transition={{ duration: 0.28, ease: "easeInOut" }}
-              style={{ overflow: "hidden" }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              style={{ overflow: "visible" }}
               className="px-3 md:pr-6 md:pl-4.5"
             >
-              <div className="animate-fade-in-7">
-                <div className="grid grid-cols-1 gap-2 text-sm lg:grid-cols-[1fr_4fr]">
-                  <QuestSection
-                    className="order-2 px-5 pt-4 md:px-20 md:pt-2 lg:order-1 lg:px-0"
-                    triggerFlash={flashTrigger}
-                    onQuestClick={() => setQuestClicked((c) => c + 1)}
-                  />
-                  <motion.div
-                    key="with-your-money"
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: 1,
-                      transition: { duration: 1, ease: "easeOut" },
-                    }} // 1s in
-                    exit={{
-                      opacity: 0,
-                      transition: { duration: 0.2, ease: "easeIn" },
-                    }} // 0.5s out
-                    className="text-light-grey-text col-start -mb-2 block translate-y-2 self-end justify-self-center text-center text-lg font-semibold tracking-wide italic md:mb-0 md:text-[22px] lg:hidden"
-                  >
-                    with your earnings, I would buy:
-                  </motion.div>
-                  <div className="mt-4 grid lg:order-2 lg:grid-cols-[7fr_1fr]">
-                    <div className="grid grid-cols-2 items-start gap-8 md:grid-cols-3 md:gap-7 lg:ml-5">
-                      {picks.length === 0 ? (
-                        <p className="text-xs text-gray-400">
-                          No commodities available.
-                        </p>
-                      ) : (
-                        picks.map((c) => (
-                          <CommodityDisplay
-                            key={c.id ?? c.what}
-                            commodity={c}
-                            balanceInDollars={dollarBalance}
-                          />
-                        ))
-                      )}
+              <div className="animate-fade-in-7 ml-2 flex w-full flex-col justify-center">
+                <div className="text-center text-[18px] font-bold tracking-[0.2em] text-transparent drop-shadow-[0_0_18px_rgba(255,199,153,0.8)]">
+                  <span className="from-highlight-color bg-gradient-to-r via-[#ffd08a] to-[#ffe7c2] bg-clip-text">
+                    GALACTIC OUTPOST
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-x-4 lg:grid-cols-[2fr_3fr]">
+                  <div className="text-body-text flex flex-col">
+                    <h3 className="font-semibold">Bounties</h3>
+                    <QuestSection className="lg:order-1 lg:px-0" />
+                  </div>
+
+                  <div className="grid grid-cols-[3fr_2fr] gap-x-4">
+                    <div className="text-body-text flex flex-col">
+                      <h3 className="font-semibold">Themes</h3>
+                      <ThemeSection />
+                    </div>
+
+                    <div className="text-body-text flex flex-col">
+                      <h3 className="font-semibold">Starflares</h3>
+                      <StarflareSection />
                     </div>
                   </div>
                 </div>

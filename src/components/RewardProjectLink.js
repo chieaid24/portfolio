@@ -26,7 +26,7 @@ export default function RewardProjectLink({
         router.push(href);
       }}
       data-reward-id={rewardId}
-      className={`cursor-pointer transition-opacity duration-200 ${claimed ? "opacity-90 dark:opacity-100" : "opacity-100"} ${className}`}
+      className={`cursor-pointer transition-opacity duration-200 ${className}`}
     >
       {children}
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { DM_Sans, Italiana } from "next/font/google";
+import { DM_Sans, Italiana, Noto_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
@@ -16,6 +16,10 @@ const italiana = Italiana({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-italiana",
+});
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  variable: "--font-noto-sans",
 });
 
 export default function RootLayout({ children }) {
@@ -114,7 +118,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body
-        className={`${dmSans.className} ${italiana.variable} min-h-screen overscroll-none antialiased`}
+        className={`${dmSans.className} ${italiana.variable} ${notoSans.variable} min-h-screen overscroll-none antialiased`}
       >
         <Providers>
           <main key={pathname} className="fade-in-page">

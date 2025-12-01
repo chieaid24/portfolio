@@ -1,19 +1,22 @@
-import { useMoney } from '@/lib/money-context';
+import { useMoney } from "@/lib/money-context";
 import { motion, useReducedMotion, useAnimationControls } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
-
+// Returns integer percent complete, floored to avoid over-reporting.
+function toPercent(done = 0, total = 0) {
+  if (!total || total <= 0) return 0;
+  return Math.min(100, Math.floor((done / total) * 100));
+}
 
 function ProgressBar({
   done = 0,
   total = 0,
-  color = 'bg-custom-red',
+  color = "bg-highlight-color",
   isHovered = false,
-  flash = false,
 }) {
-  const pct = total ? Math.round((done / total) * 100) : 0;
+  const pct = toPercent(done, total);
   const isComplete = pct >= 100;
-  const fillClass = isComplete ? 'gradient-red-orange' : color;
+  const fillClass = isComplete ? "gradient-red-orange" : color;
 
   const controls = useAnimationControls();
   const prefersReduced = useReducedMotion();
@@ -24,36 +27,29 @@ function ProgressBar({
   useEffect(() => {
     if (prefersReduced) return;
     if (isHovered) {
-      controls.set({ opacity: 1, ['--p']: 0 });
+      controls.set({ opacity: 1, ["--p"]: 0 });
       controls.start({
-        ['--p']: 1,
+        ["--p"]: 1,
         opacity: [0, 1, 0],
-        transition: { duration: 1.1, ease: 'linear', repeat: Infinity },
+        transition: { duration: 1.1, ease: "linear", repeat: Infinity },
       });
     } else {
-      controls.start({
-        ['--p']: 1,
-        opacity: 0,
-        transition: { duration: 0.35, ease: 'easeOut' },
-      }).then(() => {
-        controls.set({ ['--p']: 0, opacity: 0 });
-      });
+      controls
+        .start({
+          ["--p"]: 1,
+          opacity: 0,
+          transition: { duration: 0.35, ease: "easeOut" },
+        })
+        .then(() => {
+          controls.set({ ["--p"]: 0, opacity: 0 });
+        });
     }
   }, [isHovered, controls, prefersReduced]);
 
   return (
-    <motion.div className="w-full lg:w-4/5 5xl:w-6/7 py-1">
+    <motion.div className="w-full py-1">
       {/* Hover target */}
-      <motion.div
-        className="mt-1 h-[8px] 5xl:h-[9px] w-full rounded-full overflow-hidden min-w-0"
-        animate={
-          flash
-            ? { backgroundColor: ["#D9D9D9", "#FFB2B2", "#D9D9D9"] } // grey → white → grey
-            : { backgroundColor: "#D9D9D9" } // Tailwind gray-200 fallback
-        }
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-
-      >
+      <motion.div className="bg-outline-dark-gray mt-1 h-1.5 w-full min-w-0 overflow-hidden rounded-full">
         {/* Fill */}
         <div
           className={`relative h-full ${fillClass} rounded-full transition-[width] duration-700 ease-out motion-reduce:transition-none`}
@@ -69,15 +65,11 @@ function ProgressBar({
             animate={controls}
             // --p animates from 0 -> 1; left uses container width (100%) + fixed SHINE_PX overshoot
             style={{
-              ['--p']: 0,
+              ["--p"]: 0,
               left: `calc(var(--p) * (100%) - ${SHINE_PX}px)`,
               width: `${SHINE_PX}px`,
             }}
-            className="
-              pointer-events-none absolute inset-y-[-2px]
-              rounded-full
-              bg-gradient-to-r from-transparent via-white/80 to-transparent
-            "
+            className="pointer-events-none absolute inset-y-[-2px] rounded-full bg-gradient-to-r from-transparent via-white/80 to-transparent"
           />
         </div>
       </motion.div>
@@ -85,148 +77,71 @@ function ProgressBar({
   );
 }
 
-export const flashAnimation = {
-  flash: {
-    fontVariationSettings: ['"wght" 700', '"wght" 900', '"wght" 700'],
-    transition: {
-      duration: 1,
-      ease: "easeInOut",
-      color: { duration: 0.8 },
-      fontVariationSettings: { duration: 0.8 },
-    },
-  },
-  idle: {
-    color: "#B3B3B3",
-    fontVariationSettings: '"wght" 700',
-  },
-};
-
-export default function QuestSection({ className = "", triggerFlash = 0, onQuestClick }) {
-  const { getQuestStats, getCompletedQuests, getAllQuestsComplete } = useMoney();
+export default function QuestSection({ className = "" }) {
+  const { getQuestStats, getCompletedQuests, getAllQuestsComplete } =
+    useMoney();
   const stats = getQuestStats();
   const completedQuests = getCompletedQuests();
   const allQuestComp = getAllQuestsComplete();
   const [hoveredRow, setHoveredRow] = useState(null);
-  const [flash, setFlash] = useState(false);
-
-  // Track last triggerFlash value
-  const lastTriggerRef = useRef(triggerFlash);
-
-  useEffect(() => {
-    if (triggerFlash !== lastTriggerRef.current) {
-      lastTriggerRef.current = triggerFlash;
-
-      if (triggerFlash > 0) {
-        setFlash(true);
-        const timeout = setTimeout(() => setFlash(false), 500);
-        return () => clearTimeout(timeout);
-      }
-    }
-  }, [triggerFlash]);
-
 
   return (
     <div
-      className={`${className} pt-2 pb-2 5xl:pt-[12px] 5xl:pb-1 leading-none space-y-2 text-[10px] 5xl:text-[12px]  text-light-grey-text md:text-header-light font-medium tracking-wide  cursor-default
-                        lg:ml-2 origin-center`}
-      onClick={!allQuestComp ? (() => onQuestClick?.()) : undefined}>
+      className={`${className} text-body-text font-regular flex h-full cursor-default flex-col justify-between space-y-4 text-xs leading-none`}
+    >
       <motion.div
-        onMouseEnter={() => setHoveredRow('red')}
+        onMouseEnter={() => setHoveredRow("redtext")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="5xl:pt-0.5 5xl:pb-2 5xl:mb-0"
-        animate={
-          !completedQuests.redtext && flash
-            ? {
-              // scale: 1.05,
-              x: [0, -2, 2, -2, 2, -2, 0], // 👈 tiny shake
-            }
-            : { x: 0 }
-        }
-        transition={{
-          x: { duration: 0.4, ease: "easeInOut" },
-        }}
+        className="border-outline-gray rounded-lg border p-2"
       >
-        <p
-          className={`mb-[-4px] transition-colors duration-200`}
-
-        >red words found: {" "}
-          <motion.span
-            className="inline-block "
-            variants={flashAnimation}
-            animate={
-              !completedQuests.redtext && flash ? "flash" : "idle"
-            }
-            layout>
-            {stats.redtext.done}/{stats.redtext.total}
+        <div className={`flex w-full justify-between`}>
+          <span>Highlighted words clicked </span>
+          <motion.span>
+            {toPercent(stats.redtext.done, stats.redtext.total)}%
           </motion.span>
-        </p>
-        <ProgressBar done={stats.redtext.done} total={stats.redtext.total} isHovered={hoveredRow === 'red'}
-          flash={flash && !completedQuests.redtext} />
+        </div>
+        <ProgressBar
+          done={stats.redtext.done}
+          total={stats.redtext.total}
+          isHovered={hoveredRow === "redtext"}
+        />
       </motion.div>
 
       <motion.div
-        onMouseEnter={() => setHoveredRow('projects')}
+        onMouseEnter={() => setHoveredRow("project")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="5xl:pt-0.5 5xl:pb-2 5xl:mb-0"
-        animate={
-          !completedQuests.project && flash
-            ? {
-              // scale: 1.05,
-              x: [0, -2, 2, -2, 2, -2, 0], // 👈 tiny shake
-            }
-            : { x: 0 }
-        }
-        transition={{
-          x: { duration: 0.4, ease: "easeInOut" },
-        }}
+        className="border-outline-gray rounded-lg border p-2"
       >
-        <p className="mb-[-4px]">projects discovered:{" "}
-          <motion.span
-            className="font-semibold inline-block "
-            variants={flashAnimation}
-            animate={
-              !completedQuests.project && flash ? "flash" : "idle"
-            }
-            layout
-          >
-            {stats.project.done}/{stats.project.total}
+        <div className={`flex w-full justify-between`}>
+          <span>Projects discovered</span>
+          <motion.span>
+            {toPercent(stats.project.done, stats.project.total)}%
           </motion.span>
-        </p>
-        <ProgressBar done={stats.project.done} total={stats.project.total} isHovered={hoveredRow === 'projects'}
-          flash={flash && !completedQuests.project} />
+        </div>
+        <ProgressBar
+          done={stats.project.done}
+          total={stats.project.total}
+          isHovered={hoveredRow === "project"}
+        />
       </motion.div>
 
       <motion.div
-        onMouseEnter={() => setHoveredRow('links')}
+        onMouseEnter={() => setHoveredRow("link")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="5xl:pt-0.5 5xl:pb-2 5xl:mb-0"
-        animate={
-          !completedQuests.link && flash
-            ? {
-              // scale: 1.05,
-              x: [0, -2, 2, -2, 2, -2, 0], // 👈 tiny shake
-            }
-            : { x: 0 }
-        }
-        transition={{
-          x: { duration: 0.4, ease: "easeInOut" },
-        }}
+        className="border-outline-gray rounded-lg border p-2"
       >
-        <p className="mb-[-4px]">links followed:{" "}
-          <motion.span
-            className="font-semibold inline-block "
-            variants={flashAnimation}
-            animate={
-              !completedQuests.link && flash ? "flash" : "idle"
-            }
-            layout
-          >
-            {stats.link.done}/{stats.link.total}
-          </motion.span></p>
-        <ProgressBar done={stats.link.done} total={stats.link.total} isHovered={hoveredRow === 'links'}
-          flash={flash && !completedQuests.link} />
+        <div className={`flex w-full justify-between`}>
+          <span>Links followed </span>
+          <motion.span>
+            {toPercent(stats.link.done, stats.link.total)}%
+          </motion.span>
+        </div>
+        <ProgressBar
+          done={stats.link.done}
+          total={stats.link.total}
+          isHovered={hoveredRow === "link"}
+        />
       </motion.div>
-    </div >
+    </div>
   );
 }
-
