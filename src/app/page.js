@@ -70,7 +70,6 @@ export default function Home() {
       <StarBackground />
       <main className="">
         <MaxWidthWrapper>
-          <ExpandedHeader />
           {/* <ChatHeader /> */}
           <section id="hero" className="min-h-screen">
             <div className="flex min-h-[90vh] flex-col items-center justify-center text-red-50 md:min-h-screen">

@@ -111,7 +111,9 @@ export default function Header() {
                   transition={{ layout: { duration: 0 } }}
                   className="flex -translate-y-0.5 items-baseline gap-1 pt-0 leading-none"
                 >
-                  <span className="noto-symbol">₳</span>
+                  <span className="noto-symbol translate-colors duration-100">
+                    ₳
+                  </span>
                   <motion.span
                     className="5xl:text-[27px] text-lg leading-none md:text-[24px]"
                     transition={{ duration: 0.1 }}
@@ -164,13 +166,13 @@ export default function Header() {
                 >
                   <Link
                     href="/"
-                    className="hover:text-custom-red transition-colors"
+                    className="hover:text-highlight-color/80 transition-colors"
                   >
                     home
                   </Link>
                   <RewardLink
                     href="/about"
-                    className="hover:text-custom-red transition-colors"
+                    className="hover:text-highlight-color/80 transition-colors"
                     rewardId="about-page"
                     transparent={false}
                   >
@@ -178,7 +180,7 @@ export default function Header() {
                   </RewardLink>
                   <RewardLink
                     href="/projects"
-                    className="hover:text-custom-red transition-colors"
+                    className="hover:text-highlight-color/80 transition-colors"
                     rewardId="projects-page"
                     transparent={false}
                   >
@@ -188,7 +190,7 @@ export default function Header() {
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-custom-red transition-colors"
+                    className="hover:text-highlight-color/80 transition-colors"
                     rewardId="resume"
                     transparent={false}
                   >
@@ -241,25 +243,27 @@ export default function Header() {
               className="px-3 md:pr-6 md:pl-4.5"
             >
               <div className="animate-fade-in-7 ml-2 flex w-full flex-col justify-center">
-                <div className="text-center text-[18px] font-bold tracking-[0.2em] text-transparent drop-shadow-[0_0_18px_rgba(255,199,153,0.8)]">
-                  <span className="from-highlight-color bg-gradient-to-r via-[#ffd08a] to-[#ffe7c2] bg-clip-text">
+                <div className="mb-8 text-center text-xl font-black tracking-[0.2em] text-transparent drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+                  <span className="from-highlight-color via-highlight-light-color to-highlight-light-color bg-gradient-to-r bg-clip-text">
                     GALACTIC OUTPOST
                   </span>
                 </div>
-                <div className="grid grid-cols-1 gap-x-4 lg:grid-cols-[2fr_3fr]">
-                  <div className="text-body-text flex flex-col">
-                    <h3 className="font-semibold">Bounties</h3>
-                    <QuestSection className="lg:order-1 lg:px-0" />
+                <div className="grid grid-cols-1 gap-x-6 text-sm lg:grid-cols-[2fr_3fr]">
+                  <div className="text-body-text flex flex-col gap-y-2">
+                    <h3 className="font-semibold tracking-[0.2em]">Bounties</h3>
+                    <QuestSection className="" />
                   </div>
 
-                  <div className="grid grid-cols-[3fr_2fr] gap-x-4">
-                    <div className="text-body-text flex flex-col">
-                      <h3 className="font-semibold">Themes</h3>
-                      <ThemeSection />
+                  <div className="grid h-full grid-cols-[3fr_2fr] gap-x-6">
+                    <div className="text-body-text flex flex-col gap-y-2">
+                      <h3 className="font-semibold tracking-[0.2em]">Themes</h3>
+                      <ThemeSection className="h-full" />
                     </div>
 
-                    <div className="text-body-text flex flex-col">
-                      <h3 className="font-semibold">Starflares</h3>
+                    <div className="text-body-text flex flex-col gap-y-2">
+                      <h3 className="font-semibold tracking-[0.2em]">
+                        Starflares
+                      </h3>
                       <StarflareSection />
                     </div>
                   </div>

@@ -71,8 +71,20 @@ The centerpiece of the portfolio: a **reward-based earnings** system that incent
 
 ---
 
+
+## Theme System
+
+- Default theme is `id: "red"` (`#ff7d7d`); other themes live alongside it in `src/lib/money-context.js` and `src/components/ThemeSection.js`.
+- `MoneyProvider` exposes `themeId`, `highlightHex`, `setThemeById`, and `purchaseTheme`, and updates the global CSS variable `--highlight-color` so Tailwind's `highlight-color` references switch instantly.
+- `MoneyProvider` persists `ownedThemes` (always includes `"red"`) alongside the selected theme; purchases subtract `theme.price` from balance and add the theme to `ownedThemes`.
+- `ThemeSection` keeps `selectedId` in sync with the context and calls `purchaseTheme` when a theme is unowned (or `setThemeById` if owned), giving immediate site-wide highlight updates.
+- To add a theme: add `{ id, label, color, price }` to the theme arrays in both `money-context.js` and `ThemeSection.js`; choose a unique `id` and hex color.
+
+---
 ## 🔮 Future Improvements
 
 - 🧠 Integrate **AI project summaries**.
 - 🪄 Add **rewards or prizes** for spending your earnings.
 - ⚡ Expand dashboard analytics for visitor tracking.
+
+

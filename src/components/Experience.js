@@ -71,7 +71,7 @@ export default function Experience() {
   return (
     <section className="text-white">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
-        <div className="bg-background border-outline-gray rounded-2xl border p-1 shadow-[0_0_0_1px_rgba(255,125,125,0.12)]">
+        <div className="bg-background border-outline-gray rounded-2xl border p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
           <div className="grid grid-cols-2 gap-2">
             {tabs.map((tab) => {
               const isActive = tab.id === activeTab;
@@ -82,7 +82,7 @@ export default function Experience() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors duration-100 md:text-base ${
                     isActive
-                      ? "bg-highlight-color text-white shadow-[0_10px_30px_rgba(255,125,125,0.35)]"
+                      ? "bg-highlight-color text-white shadow-[0_5px_30px_rgba(255,255,255,0.2)]"
                       : "cursor-pointer text-white hover:bg-white/5"
                   }`}
                 >

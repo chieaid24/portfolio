@@ -87,15 +87,15 @@ export default function QuestSection({ className = "" }) {
 
   return (
     <div
-      className={`${className} text-body-text font-regular flex h-full cursor-default flex-col justify-between space-y-4 text-xs leading-none`}
+      className={`${className} text-body-text font-regular flex h-full cursor-default flex-col justify-between space-y-3 text-xs leading-none`}
     >
       <motion.div
         onMouseEnter={() => setHoveredRow("redtext")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-gray rounded-lg border p-2"
+        className="border-outline-dark-gray bg-background-secondary rounded-xl border p-2"
       >
         <div className={`flex w-full justify-between`}>
-          <span>Highlighted words clicked </span>
+          <span>Bold words found </span>
           <motion.span>
             {toPercent(stats.redtext.done, stats.redtext.total)}%
           </motion.span>
@@ -110,7 +110,7 @@ export default function QuestSection({ className = "" }) {
       <motion.div
         onMouseEnter={() => setHoveredRow("project")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-gray rounded-lg border p-2"
+        className="border-outline-dark-gray bg-background-secondary rounded-xl border p-2"
       >
         <div className={`flex w-full justify-between`}>
           <span>Projects discovered</span>
@@ -128,7 +128,7 @@ export default function QuestSection({ className = "" }) {
       <motion.div
         onMouseEnter={() => setHoveredRow("link")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-gray rounded-lg border p-2"
+        className="border-outline-dark-gray bg-background-secondary rounded-xl border p-2"
       >
         <div className={`flex w-full justify-between`}>
           <span>Links followed </span>
