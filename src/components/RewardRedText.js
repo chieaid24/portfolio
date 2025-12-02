@@ -1,19 +1,19 @@
-'use client';
-import { useState } from 'react';
-import { useMoney } from '@/lib/money-context';
+"use client";
+import { useState } from "react";
+import { useMoney } from "@/lib/money-context";
 
 export default function RedText({
   rewardId,
-  kind = 'redtext',
+  kind = "redtext",
   children,
-  weight = 'bold',   // 'bold' | 'semibold'
-  className = '',
+  weight = "bold", // 'bold' | 'semibold'
+  className = "",
 }) {
   const { awardOnce, hasAward } = useMoney();
   const claimed = hasAward(rewardId);
   const [popping, setPopping] = useState(false);
 
-  const weightOverride = weight === 'semibold' ? '!font-semibold' : '';
+  const weightOverride = weight === "semibold" ? "!font-semibold" : "";
 
   const handleClick = () => {
     if (claimed) return;
@@ -30,11 +30,7 @@ export default function RedText({
     <>
       <span
         onClick={handleClick}
-        className={`
-          ${claimed ? 'cursor-default text-custom-red/60 dark:opacity-100' : 'cursor-pointer'}
-          custom-bold text-custom-red ${weightOverride} ${popping ? 'pop' : ''} ${className}
-          inline-block
-        `}
+        className={` ${claimed ? "text-highlight-color/60 cursor-default dark:opacity-100" : "cursor-pointer"} custom-bold text-highlight-color ${weightOverride} ${popping ? "pop" : ""} ${className} inline-block`}
         role="button"
         aria-pressed={claimed}
         data-reward-click
@@ -48,9 +44,15 @@ export default function RedText({
           will-change: transform;
         }
         @keyframes redtext-pop {
-          0%   { transform: scale(1); }
-          50%  { transform: scale(0.96); }
-          100% { transform: scale(1); }
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(0.96);
+          }
+          100% {
+            transform: scale(1);
+          }
         }
       `}</style>
     </>

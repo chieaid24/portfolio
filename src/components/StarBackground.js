@@ -3,8 +3,9 @@
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import StarComponent from "./StarComponent";
+import { useMoney } from "@/lib/money-context";
 
-function RotatingStars() {
+function RotatingStars({ highlightHex }) {
   const groupRef = useRef(null);
 
   useFrame((_, delta) => {
@@ -28,7 +29,7 @@ function RotatingStars() {
         saturation={0}
         fade={true}
         speed={0}
-        color="#ff5e5e"
+        color={highlightHex || "#ff5e5e"}
         opacity={0.55}
       />
     </group>
@@ -37,12 +38,14 @@ function RotatingStars() {
 
 // exported
 export default function StarBackground() {
+  const { highlightHex } = useMoney();
+
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 h-full">
       <Canvas camera={{ position: [0, 0, 300], fov: 60 }} dpr={[1, 2]}>
         <color attach="background" args={["#02030a"]} />
         <ambientLight intensity={0.5} />
-        <RotatingStars />
+        <RotatingStars key={highlightHex} highlightHex={highlightHex} />
       </Canvas>
     </div>
   );

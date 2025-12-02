@@ -3,6 +3,18 @@
 import { useMemo } from "react";
 import * as THREE from "three";
 
+export function lightenHexColor(hex, amount = 0.2) {
+  const safeAmt = Math.min(Math.max(amount, 0), 1);
+  try {
+    const base = new THREE.Color(hex);
+    const white = new THREE.Color(0xffffff);
+    const mixed = base.clone().lerp(white, safeAmt);
+    return `#${mixed.getHexString()}`;
+  } catch {
+    return hex;
+  }
+}
+
 function createStarTexture() {
   const size = 128;
   const canvas = document.createElement("canvas");
@@ -70,7 +82,7 @@ export default function CustomStarComponent({
       // Random shade between white + targetColor
       const t = Math.random();
       const mixed = new THREE.Color().lerpColors(
-        new THREE.Color("#ff9494"),
+        new THREE.Color(lightenHexColor(targetColor)),
         targetColor,
         t,
       );

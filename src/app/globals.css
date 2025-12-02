@@ -15,17 +15,24 @@
   /* outline color for the skills on the project cards */
   --outline-dark-gray: #3a3a3a;
   /* this highlight color is currently red, but will be changed when user changes the theme */
-  --highlight-color: #ff7d7d;
+  --highlight-color: #000000;
+  --highlight-light-color: #000000;
   /* background of experience and project pages */
   --background: #0f0f0f;
   /* background of the skill displays on the project pages */
   --background-highlight: #1d1d1d;
+  /* lighter than background, used for slight contrast on background, for bounty, theme, starflare section in header */
+  --background-secondary: #141414;
   /* color of the spotify background - sets the clash and carousel backgrounds */
   --spotify-background: #745454;
   /* body color of text (project page text, experience body text, etc) */
   --body-text: #e0e0e0;
   /* darker body text (numbers in the ClashWidget) */
   --dark-body-text: #bdbdbd;
+  /* smooth highlight updates when theme changes */
+  --highlight-transition:
+    color 180ms ease, background-color 180ms ease, border-color 180ms ease,
+    text-decoration-color 180ms ease, fill 180ms ease, stroke 180ms ease;
 
   color-scheme: light;
 }
@@ -85,8 +92,10 @@
   --color-background-light: var(--background-light);
   --color-background-dark: var(--background-dark);
   --color-highlight-color: var(--highlight-color);
+  --color-highlight-light-color: var(--highlight-light-color);
   --animate-new-pulse: pulse 1.5s cubic-bezier(0.42, 0, 0.58, 1) infinite;
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
   --color-background-highlight: var(--background-highlight);
   --color-body-text: var(--body-text);
   --color-outline-dark-gray: var(--outline-dark-gray);
@@ -116,6 +125,10 @@
 
   .font-italiana {
     font-family: var(--font-italiana), serif;
+  }
+
+  .highlight-transition {
+    transition: var(--highlight-transition);
   }
 
   .font-dm-sans {
@@ -191,10 +204,10 @@ body {
 .gradient-text-header {
   background: linear-gradient(
     90deg,
-    var(--custom-red) 0%,
-    var(--custom-red) 20%,
-    /* solid red to 20% */ var(--custom-light-red) 70%,
-    /* blend ends by 45% */ var(--custom-light-red) 100%
+    var(--highlight-color) 0%,
+    var(--highlight-color) 20%,
+    /* solid red to 20% */ var(--highlight-light-color) 70%,
+    /* blend ends by 45% */ var(--highlight-light-color) 100%
       /* solid light red after */
   );
   -webkit-background-clip: text;
