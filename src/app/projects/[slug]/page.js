@@ -50,7 +50,7 @@ const renderParagraphs = (paragraphs) => {
 };
 
 const renderTitle = (title) => {
-  return <h2 className="mb-6 text-3xl font-semibold">{title}</h2>;
+  return <h2 className="mb-6 text-2xl font-semibold">{title}</h2>;
 };
 
 export default async function ProjectPage({ params }) {
@@ -96,8 +96,9 @@ export default async function ProjectPage({ params }) {
             </div>
 
             {/* Background Section */}
-            <section className="text-md font-base">
-              {renderParagraphs(project.background)}
+            <section className="text-md font-base mb-20">
+              {renderTitle("Background")}
+              <div>{renderParagraphs(project.background)}</div>
             </section>
 
             {/* Tools Used Section */}
