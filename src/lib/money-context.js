@@ -15,6 +15,7 @@ import { quest_totals } from "@/app/data/projects.js";
 
 const STORAGE_KEY = "moneyState_v1";
 const THEME_STORAGE_KEY = "themeSelection_v1";
+const STARFLARE_STORAGE_KEY = "localStarflareClickCount_v1";
 const MoneyContext = createContext(null);
 const MAX_BAL = 9999.99;
 const INIT_BAL = 10.0;
@@ -248,6 +249,7 @@ export function MoneyProvider({ children }) {
     getThemeLightHex(DEFAULT_THEME_ID),
   );
   const [ownedThemes, setOwnedThemes] = useState([DEFAULT_THEME_ID]);
+  const [starflareClickCount, setStarflareClickCount] = useState(0);
 
   const stateRef = useRef(state);
   useEffect(() => {
@@ -322,6 +324,26 @@ export function MoneyProvider({ children }) {
       );
     } catch {}
   }, [themeId, ownedThemes]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STARFLARE_STORAGE_KEY);
+      const parsed = Number.parseInt(raw, 10);
+      if (Number.isFinite(parsed) && parsed >= 0) {
+        setStarflareClickCount(parsed);
+      } else {
+        setStarflareClickCount(0);
+      }
+    } catch {
+      setStarflareClickCount(0);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STARFLARE_STORAGE_KEY, String(starflareClickCount));
+    } catch {}
+  }, [starflareClickCount]);
 
   // ---- derived quest stats (outside api useMemo) ----
   const questCounts = useMemo(() => {
@@ -458,6 +480,12 @@ export function MoneyProvider({ children }) {
       hasAward: (id) => !!state.awarded[id],
 
       reset: () => dispatch({ type: "RESET" }),
+      localClickCount: () => starflareClickCount,
+      incLocalClickCount: () =>
+        setStarflareClickCount((prev) => {
+          const safePrev = Number.isFinite(prev) && prev >= 0 ? prev : 0;
+          return safePrev + 1;
+        }),
 
       awardLever: (spendAmt) => {
         const gen = getPayoutGen();
@@ -512,6 +540,18 @@ export function MoneyProvider({ children }) {
       ready,
       setThemeById,
       purchaseTheme,
+
+      // Spend balance specifically for a starflare purchase
+      buyStarflare: (amount) => {
+        const amt = normalize2(toAmount(amount));
+        if (!Number.isFinite(amt) || amt <= 0) return false;
+        if (normalize2(state.balance) < amt) {
+          setUnderflowTick((t) => t + 1);
+          return false;
+        }
+        dispatch({ type: "SPEND", amount: amt });
+        return true;
+      },
     }),
     [
       state,
@@ -519,6 +559,7 @@ export function MoneyProvider({ children }) {
       highlightHex,
       highlightLightHex,
       ownedThemes,
+      starflareClickCount,
       ready,
       overflowTick,
       underflowTick,
