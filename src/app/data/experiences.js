@@ -125,8 +125,8 @@ export const experiences = {
         {
           text: (
             <>
-              Awards: Systems Design Co-op for Good Award - $12,000, President's
-              Scholar of Distinction - $2,000
+              Awards: Systems Design Co-op for Good Award - $12,000,
+              President&apos;s Scholar of Distinction - $2,000
             </>
           ),
         },

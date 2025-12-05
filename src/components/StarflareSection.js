@@ -107,7 +107,7 @@ export default function StarflareSection({ cost = 50 }) {
       channel?.unbind("updated", handleUpdate);
       pusherClient.unsubscribe("global-counter");
     };
-  }, []);
+  }, [spawnSparkle]);
 
   // increment global counter
   function incrementGlobal() {
@@ -201,7 +201,7 @@ export default function StarflareSection({ cost = 50 }) {
       </motion.div>
 
       <p className="mt-4 text-sm font-semibold text-white">
-        you've sent {starflareClickCount} flare
+        you&apos;ve sent {starflareClickCount} flare
         {starflareClickCount === 1 ? "" : "s"}
       </p>
 

@@ -67,7 +67,7 @@ export default function Home() {
           <section id="hero" className="min-h-screen">
             <div className="flex min-h-[90vh] flex-col items-center justify-center text-red-50 md:min-h-screen">
               <h1 className="mb-4 text-5xl font-bold">
-                Hi, I'm Aidan,{" "}
+                Hi, I&apos;m Aidan,{" "}
                 <span className="gradient-text-header">
                   {" "}
                   a software engineer

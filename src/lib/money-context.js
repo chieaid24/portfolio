@@ -564,6 +564,7 @@ export function MoneyProvider({ children }) {
       overflowTick,
       underflowTick,
       leverPullTick,
+      getCompletedQuests,
       getAllQuestsComplete,
       getQuestStats,
       setThemeById,

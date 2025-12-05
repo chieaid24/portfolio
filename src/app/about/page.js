@@ -87,8 +87,8 @@ export default function AboutPage() {
               </h1>
               <div className="space-y-1">
                 <BulletRow>
-                  When I'm not coding, I also love climbing, filmmaking, video
-                  games, and music
+                  When I&apos;m not coding, I also love climbing, filmmaking,
+                  video games, and music
                 </BulletRow>
                 <BulletRow>Check out some of my stats below!</BulletRow>
               </div>
