@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "postbuild": "next-sitemap"
   },
   "dependencies": {
@@ -18,14 +18,14 @@
     "framer-motion": "^12.23.6",
     "mongodb": "^7.0.0",
     "motion": "^12.23.24",
-    "next": "^16.0.5",
+    "next": "^16.0.7",
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.4.6",
     "pusher": "^5.2.0",
     "pusher-js": "^8.4.0",
-    "react": "^19.0.0",
+    "react": "^19.2.1",
     "react-barcode": "^1.6.1",
-    "react-dom": "^19.0.0",
+    "react-dom": "^19.2.1",
     "react-use-measure": "^2.1.7",
     "three": "^0.178.0"
   },
