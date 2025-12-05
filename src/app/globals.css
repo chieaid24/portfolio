@@ -37,6 +37,29 @@
   color-scheme: light;
 }
 
+/* WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  margin-top: 8px; /* gutter at top */
+  margin-bottom: 8px; /* optional gutter at bottom */
+  background: var(--background); /* dark track */
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-outline-gray); /* dark thumb */
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #717171;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline-gray) var(--background);
+}
+
 .dark:root {
   color-scheme: dark;
 }

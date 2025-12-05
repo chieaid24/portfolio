@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import ScrollArrowUp from "@/icons/ScrollArrowUp";
+import ScrollArrowDown from "@/icons/ScrollArrowDown";
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -15,6 +17,8 @@ function useIsDesktop() {
 
 export default function ScrollProgressBar() {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [thumbHeight, setThumbHeight] = useState(48);
+  const [trackHeight, setTrackHeight] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const isDesktop = useIsDesktop();
 
@@ -22,15 +26,38 @@ export default function ScrollProgressBar() {
   useEffect(() => {
     if (!isDesktop) return;
     const handleScroll = () => {
-      const totalHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
+      const { scrollHeight, clientHeight } = document.documentElement;
+      const totalScrollable = scrollHeight - clientHeight;
       const currentScroll = window.scrollY;
-      setIsVisible(currentScroll > 0);
+      setIsVisible(totalScrollable > 0);
 
-      const trackHeight = window.innerHeight - 64 - 16; // h-16 + 16px bottom pad
+      // Mirror rendered spacing: outer py-1, flex gap-2 between arrow/track, 8px track padding each side, 8px arrow icons
+      const arrowSize = 8;
+      const outerPadding = 8; // py-1 => 4px top + 4px bottom
+      const gapSize = 8;
+      const gapsTotal = gapSize * 2;
+      const trackPadding = 8;
+      const usableTrack =
+        window.innerHeight -
+        outerPadding -
+        gapsTotal -
+        arrowSize * 2 -
+        trackPadding * 2;
+      const clampedTrack = Math.max(0, usableTrack);
+      setTrackHeight(clampedTrack);
+
+      const visibleRatio =
+        totalScrollable > 0 ? clientHeight / scrollHeight : 1;
+      const computedThumbHeight = Math.max(
+        32,
+        Math.min(clampedTrack, clampedTrack * visibleRatio),
+      );
+      setThumbHeight(computedThumbHeight);
+
+      const maxTravel = Math.max(0, clampedTrack - computedThumbHeight);
       const progress =
-        totalHeight > 0 ? (currentScroll / totalHeight) * trackHeight : 0;
-      setScrollProgress(Math.min(trackHeight, Math.max(0, progress)));
+        totalScrollable > 0 ? (currentScroll / totalScrollable) * maxTravel : 0;
+      setScrollProgress(Math.min(maxTravel, Math.max(0, progress)));
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -63,16 +90,26 @@ export default function ScrollProgressBar() {
 
   return (
     <div
-      className={`fixed right-[2px] w-3 h-full bg-gray-400/15 z-[100] pointer-events-none transition-opacity duration-400 ${
-        isVisible ? "opacity-100" : "opacity-0"
-      }`}
+      className={`pointer-events-none fixed top-0 right-[2px] z-[100] h-full w-1.5 py-1 transition-opacity duration-400 ${isVisible ? "opacity-100" : "opacity-0"} text-outline-gray`}
     >
-      <div
-        className={`w-full h-16 bg-custom-red transition-all duration-150 ease-out shadow-sm rounded-full ${
-          isVisible ? "translate-y-0 duration-300" : "-translate-y-30 duration-300"
-        }`}
-        style={{ transform: `translateY(${scrollProgress}px)` }}
-      />
+      <div className="flex h-full flex-col items-center gap-2">
+        <ScrollArrowUp className="h-1.5 w-1.5" />
+        <div className="relative w-full flex-1">
+          <div className="absolute inset-0 mx-auto w-full rounded-full" />
+          <div
+            className="bg-outline-gray absolute right-[10px] left-0 mx-auto w-full rounded-full shadow-sm transition-transform duration-100"
+            style={{
+              height: `${thumbHeight}px`,
+              transform: `translateY(${scrollProgress}px)`,
+            }}
+          />
+          <div
+            className="pointer-events-none absolute inset-0 mx-auto w-full"
+            style={{ height: trackHeight }}
+          />
+        </div>
+        <ScrollArrowDown className="h-1.5 w-1.5" />
+      </div>
     </div>
   );
 }

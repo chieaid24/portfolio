@@ -89,7 +89,7 @@ export default function Header() {
       className="font-dm-sans pointer-events-none fixed inset-x-0 top-0 z-50 py-5"
     >
       <motion.div
-        className={`border-outline-gray transition-color pointer-events-auto mx-auto max-w-[750px] rounded-xl border duration-200 ${walletOpen ? "bg-background" : "bg-background/20"} backdrop-blur-lg`}
+        className={`border-outline-dark-gray transition-color pointer-events-auto mx-auto max-w-[750px] rounded-xl border duration-200 ${walletOpen ? "bg-background" : "bg-background/20"} backdrop-blur-lg`}
       >
         {/* Top row */}
         <div className="grid grid-cols-[1fr_4fr] justify-between pr-6 pl-4.5">
@@ -166,13 +166,13 @@ export default function Header() {
                 >
                   <Link
                     href="/"
-                    className="hover:text-highlight-color/80 transition-colors"
+                    className="hover:text-highlight-color/80 transition-colors duration-100"
                   >
                     home
                   </Link>
                   <RewardLink
                     href="/about"
-                    className="hover:text-highlight-color/80 transition-colors"
+                    className="hover:text-highlight-color/80 transition-colors duration-100"
                     rewardId="about-page"
                     transparent={false}
                   >
@@ -180,7 +180,7 @@ export default function Header() {
                   </RewardLink>
                   <RewardLink
                     href="/projects"
-                    className="hover:text-highlight-color/80 transition-colors"
+                    className="hover:text-highlight-color/80 transition-colors duration-100"
                     rewardId="projects-page"
                     transparent={false}
                   >
@@ -190,7 +190,7 @@ export default function Header() {
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-highlight-color/80 transition-colors"
+                    className="hover:text-highlight-color/80 transition-colors duration-100"
                     rewardId="resume"
                     transparent={false}
                   >

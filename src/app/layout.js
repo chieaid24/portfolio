@@ -2,10 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { DM_Sans, Italiana, Noto_Sans } from "next/font/google";
-import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
-import ScrollProgressBarClient from "@/components/ScrollProgressBarClient";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "./providers.js";
@@ -37,11 +35,11 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff."
+          content="Aidan Chien is a software engineer who bridges system design and cloud computing to create practical solutions."
         />
         <meta
           name="keywords"
-          content="Aidan Chien, systems engineer, portfolio, web development, design, coding"
+          content="Aidan Chien, systems engineer, software engineer, portfolio, web development, design, coding, cloud computing, cloud engineering"
         />
         <meta name="author" content="Aidan Chien" />
         {/* Open Graph */}
@@ -56,10 +54,10 @@ export default function RootLayout({ children }) {
         <meta property="og:title" content="Aidan's Portfolio" />
         <meta
           property="og:description"
-          content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff."
+          content="Aidan Chien is a software engineer who bridges system design and cloud computing to create practical solutions."
         />
-        <meta name="application-name" content="AIDAN CHIEN" />
-        <meta itemProp="name" content="AIDAN CHIEN" />
+        <meta name="application-name" content="Aidan Chien" />
+        <meta itemProp="name" content="Aidan Chien" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -67,13 +65,10 @@ export default function RootLayout({ children }) {
           name="twitter:image"
           content="https://aidanchien.com/open_graph/opengraph_image_v1.png"
         />
-        <meta
-          name="twitter:title"
-          content="AIDAN CHIEN || Developer & Designer"
-        />
+        <meta name="twitter:title" content="Aidan's Portfolio" />
         <meta
           name="twitter:description"
-          content="Explore the portfolio of Aidan Chien, a systems engineer bridging design, development, and innovation to build cool stuff."
+          content="Aidan Chien is a software engineer who bridges system design and cloud computing to create practical solutions."
         />
         {/* Canonical */}
         <link rel="canonical" href="https://aidanchien.com" />
@@ -122,7 +117,6 @@ export default function RootLayout({ children }) {
       >
         <Providers>
           <main key={pathname} className="fade-in-page">
-            <ScrollProgressBarClient />
             <Header />
             {children}
             <Footer />

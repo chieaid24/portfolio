@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import RewardLink from "@/components/RewardLink";
-import { getProjectBySlug, projects } from "@/app/data/projects";
+import { getProjectBySlug } from "@/app/data/projects";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import BackToProjects from "@/components/BackToProjects";
-import ProjectGithub from "@/icons/ProjectGithub";
 import RenderPageDisplay from "@/components/RenderPageDisplay";
 import FooterGithub from "@/icons/FooterGithub";
 
@@ -22,10 +21,10 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `AIDAN CHIEN || ${project.title}`,
+    title: `${project.title} | Aidan Chien`,
     description: project.summaryMetaData,
     alternates: {
-      canonical: `https://aidanchien.com/${slug}`,
+      canonical: `https://aidanchien.com/projects/${slug}`,
     },
   };
 }
