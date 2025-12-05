@@ -8,8 +8,9 @@ import ImageStack from "@/components/ImageStack";
 import HorizontalSlideshow from "@/components/HorizontalSlideshow";
 
 export const metadata = {
-  title: "AIDAN CHIEN || About",
-  description: "Who is Aidan Chien?",
+  title: "About Me | Aidan Chien",
+  description:
+    "About Aidan Chien - software engineer specializing in cloud computing, AWS-integrated AI solutions, and intelligent applications. Learn more about my work and background.",
   alternates: {
     canonical: "https://aidanchien.com/about",
   },
@@ -45,9 +46,9 @@ function BulletRow({ children }) {
 export default function AboutPage() {
   return (
     <main className="font-dm-sans font-medium">
-      <div className="text-body-text mt-40 min-h-[90vh]">
+      <div className="text-body-text min-h-[90vh]">
         <MaxWidthWrapper>
-          <div className="mb-6 grid grid-cols-2">
+          <div className="mt-40 mb-6 grid grid-cols-2">
             <div className="">
               <h1 className="mb-8 text-4xl font-bold tracking-[0.2em] text-white">
                 About Me

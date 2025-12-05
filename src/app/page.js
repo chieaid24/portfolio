@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
-import HeroSlot from "@/components/HeroSlot";
-import RedText from "@/components/RewardRedText";
 import RewardLink from "@/components/RewardLink";
-import BottomIntroFade from "@/components/BottomIntroFade";
 import { motion } from "framer-motion";
 import StarBackground from "@/components/StarBackground";
 import FileDownload from "@/icons/FileDownload";
@@ -15,11 +12,7 @@ import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
-import ViewAllArrow from "@/icons/ViewAllArrow";
-import SimpleArrow from "@/icons/SimpleArrow";
 import Rocket from "@/icons/Rocket";
-import ExpandedHeader from "@/components/ExpandedHeader";
-import ChatHeader from "@/components/ChatOutpost";
 
 export default function Home() {
   const [randomTickets, setRandomTickets] = useState({});

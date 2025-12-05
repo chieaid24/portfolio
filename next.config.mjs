@@ -1,3 +1,25 @@
+const svgrLoader = {
+  loader: '@svgr/webpack',
+  options: {
+    icon: true,
+    svgo: true,
+    svgoConfig: {
+      plugins: [
+        { name: 'removeDimensions', active: true },
+        { name: 'removeViewBox', active: false },
+      ],
+    },
+    replaceAttrValues: { '#000': 'currentColor', '#111': 'currentColor', '#fff': 'currentColor' },
+  },
+};
+
+const svgRule = {
+  test: /\.svg$/i,
+  issuer: /\.[jt]sx?$/,
+  resourceQuery: { not: [/url/] }, // `?url` keeps raw file import
+  use: [svgrLoader],
+};
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack(config, options) {
@@ -8,27 +30,16 @@ const nextConfig = {
     fileLoaderRule.exclude = /\.svg$/i;
 
     // Add a new rule for SVGs to use @svgr/webpack
-    config.module.rules.push({
-      test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
-      resourceQuery: { not: [/url/] }, // `?url` keeps raw file import
-      use: [{
-        loader: '@svgr/webpack',
-        options: {
-          icon: true,
-          svgo: true,
-          svgoConfig: {
-            plugins: [
-              { name: 'removeDimensions', active: true },
-              { name: 'removeViewBox', active: false },
-            ],
-          },
-          replaceAttrValues: { '#000': 'currentColor', '#111': 'currentColor', '#fff': 'currentColor' },
-        },
-      }],
-    });
+    config.module.rules.push(svgRule);
 
     return config;
+  },
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: [svgrLoader],
+      },
+    },
   },
   images: {
     remotePatterns: [
