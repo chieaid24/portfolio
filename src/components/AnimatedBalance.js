@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import RotatingNavText from "@/components/RotatingNavText";
-import { useMoney } from '@/lib/money-context';
+import { useMoney } from "@/lib/money-context";
 
 export default function AnimatedBalance({
   value,
@@ -12,17 +12,21 @@ export default function AnimatedBalance({
   className = "",
   snapDelayMs = 10,
 }) {
-
   const { overflowTick, underflowTick, leverPullTick } = useMoney();
   const lastLeverPullTickRef = useRef(0);
   const lastCallWasLeverPullRef = useRef(false);
   const lastOverTickRef = useRef(0);
   const lastUnderTickRef = useRef(0);
   const prev = useRef(Number(value));
+  const format = (n) => {
+    return Number(n).toFixed(2);
+    // return Number(n).toFixed(0); // whole-number display
+  };
+
   const [trio, setTrio] = useState([
-    Number(value).toFixed(2),
-    Number(value).toFixed(2),
-    Number(value).toFixed(2),
+    format(value),
+    format(value),
+    format(value),
   ]);
   const [leverAward, setLeverAward] = useState(false);
 
@@ -31,7 +35,10 @@ export default function AnimatedBalance({
   const rtRef = useRef(null);
   const timers = useRef([]);
 
-  const clearTimers = () => { timers.current.forEach(clearTimeout); timers.current = []; };
+  const clearTimers = () => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+  };
 
   // if there is an exception, call a specific function that calls this instead of actually updating balance, keeps it cleaner as balance
   // is always a number
@@ -64,20 +71,23 @@ export default function AnimatedBalance({
     lastOverTickRef.current = overflowTick;
     setLeverAward(false);
 
-
-    const prevStr = prev.current.toFixed(2);
+    const prevStr = format(prev.current);
 
     // Create settings for overflow animation
     setDeltaColor("red");
     setTrio([prevStr, "OVERFLOW", prevStr]);
-    setRtKey(k => k + 1);
+    setRtKey((k) => k + 1);
 
-    timers.current.push(setTimeout(() => {
-      rtRef.current?.jumpTo(1);
-      timers.current.push(setTimeout(() => {
-        rtRef.current?.jumpTo(2);
-      }, rotateMs + holdMs));
-    }, snapDelayMs));
+    timers.current.push(
+      setTimeout(() => {
+        rtRef.current?.jumpTo(1);
+        timers.current.push(
+          setTimeout(() => {
+            rtRef.current?.jumpTo(2);
+          }, rotateMs + holdMs),
+        );
+      }, snapDelayMs),
+    );
 
     // do NOT update prev here (balance didn't change)
     return () => clearTimers();
@@ -85,28 +95,32 @@ export default function AnimatedBalance({
 
   //when the underflow increases, it calls this function, which creates the custom animation, saying that it has underflowed
   useEffect(() => {
-    if (underflowTick === 0 || underflowTick === lastUnderTickRef.current) return;
+    if (underflowTick === 0 || underflowTick === lastUnderTickRef.current)
+      return;
     lastUnderTickRef.current = underflowTick;
     setLeverAward(false);
 
-    const prevStr = prev.current.toFixed(2);
+    const prevStr = format(prev.current);
 
     // Create settings for overflow animation
     setDeltaColor("red");
     setTrio([prevStr, "BROKE", prevStr]);
-    setRtKey(k => k + 1);
+    setRtKey((k) => k + 1);
 
-    timers.current.push(setTimeout(() => {
-      rtRef.current?.jumpTo(1);
-      timers.current.push(setTimeout(() => {
-        rtRef.current?.jumpTo(2);
-      }, rotateMs + holdMs));
-    }, snapDelayMs));
+    timers.current.push(
+      setTimeout(() => {
+        rtRef.current?.jumpTo(1);
+        timers.current.push(
+          setTimeout(() => {
+            rtRef.current?.jumpTo(2);
+          }, rotateMs + holdMs),
+        );
+      }, snapDelayMs),
+    );
 
     // do NOT update prev here (balance didn't change)
     return () => clearTimers();
   }, [underflowTick, holdMs, rotateMs, snapDelayMs]);
-
 
   // change the timer of the pull, and also make it so there is no black snapping, ie change the trio
   // also change the possible colors
@@ -121,7 +135,11 @@ export default function AnimatedBalance({
 
   useEffect(() => {
     // special case such that the lever has been pulled, and it is the second pull (award case)
-    if (leverPullTick !== 0 && leverPullTick !== lastLeverPullTickRef.current && lastCallWasLeverPullRef.current) {
+    if (
+      leverPullTick !== 0 &&
+      leverPullTick !== lastLeverPullTickRef.current &&
+      lastCallWasLeverPullRef.current
+    ) {
       // this is in the lever pull situation, both spend and award
       lastLeverPullTickRef.current = leverPullTick;
       setLeverAward(true);
@@ -131,28 +149,34 @@ export default function AnimatedBalance({
       const next = Number(value);
       const prevVal = prev.current;
 
-      if (Number.isFinite(next) && Number.isFinite(prevVal) && next !== prevVal) {
+      if (
+        Number.isFinite(next) &&
+        Number.isFinite(prevVal) &&
+        next !== prevVal
+      ) {
         const delta = +(next - prevVal).toFixed(2);
         const deltaStr = `${delta >= 0 ? "+" : "-"}${Math.abs(delta).toFixed(2)}`;
-        const baseStr = next.toFixed(2);
-
+        const baseStr = format(next);
 
         //alawys green since it is adding
         if (delta > 40) {
-          setDeltaColor("jackpot")
+          setDeltaColor("jackpot");
         } else {
           setDeltaColor("green");
         }
-        setTrio(['-5.00', deltaStr, baseStr]);
-        setRtKey(k => k + 1);
+        setTrio(["-5.00", deltaStr, baseStr]);
+        setRtKey((k) => k + 1);
 
-        timers.current.push(setTimeout(() => {
-          rtRef.current?.jumpTo(1);
-          timers.current.push(setTimeout(() => {
-            rtRef.current?.jumpTo(2);
-          }, rotateMs + 400));
-        }, snapDelayMs));
-
+        timers.current.push(
+          setTimeout(() => {
+            rtRef.current?.jumpTo(1);
+            timers.current.push(
+              setTimeout(() => {
+                rtRef.current?.jumpTo(2);
+              }, rotateMs + 400),
+            );
+          }, snapDelayMs),
+        );
       }
 
       prev.current = next; // only for real balance changes
@@ -160,13 +184,13 @@ export default function AnimatedBalance({
       //end
       lastCallWasLeverPullRef.current = false;
       return () => clearTimers();
-
-
-    }
-    else {
+    } else {
       // if the lever has been pulled, set the lastcallref to be true. Else, default should be false.
       // the 'spend' logic in leverpull should still have the same default logic
-      if (leverPullTick !== 0 && leverPullTick !== lastLeverPullTickRef.current) {
+      if (
+        leverPullTick !== 0 &&
+        leverPullTick !== lastLeverPullTickRef.current
+      ) {
         lastLeverPullTickRef.current = leverPullTick;
         lastCallWasLeverPullRef.current = true;
       } else {
@@ -177,26 +201,34 @@ export default function AnimatedBalance({
       const next = Number(value);
       const prevVal = prev.current;
 
-      if (Number.isFinite(next) && Number.isFinite(prevVal) && next !== prevVal) {
+      if (
+        Number.isFinite(next) &&
+        Number.isFinite(prevVal) &&
+        next !== prevVal
+      ) {
         const delta = +(next - prevVal).toFixed(2);
         const deltaStr = `${delta >= 0 ? "+" : "-"}${Math.abs(delta).toFixed(2)}`;
-        const baseStr = next.toFixed(2);
-        const prevStr = prevVal.toFixed(2);
+        const baseStr = format(next);
+        const prevStr = format(prevVal);
 
-        // add jackpot color ! ! ! purple + green gradient? 
+        // add jackpot color ! ! ! purple + green gradient?
         setDeltaColor(delta >= 0 ? "green" : "red");
 
         setTrio([prevStr, deltaStr, baseStr]);
-        setRtKey(k => k + 1);
+        setRtKey((k) => k + 1);
 
-        timers.current.push(setTimeout(() => {
-          rtRef.current?.jumpTo(1);
-          timers.current.push(setTimeout(() => {
-            rtRef.current?.jumpTo(2);
-          }, rotateMs + holdMs));
-        }, snapDelayMs));
+        timers.current.push(
+          setTimeout(() => {
+            rtRef.current?.jumpTo(1);
+            timers.current.push(
+              setTimeout(() => {
+                rtRef.current?.jumpTo(2);
+              }, rotateMs + holdMs),
+            );
+          }, snapDelayMs),
+        );
       } else {
-        const b = Number.isFinite(next) ? next.toFixed(2) : "—";
+        const b = Number.isFinite(next) ? format(next) : "—";
         setTrio([b, b, b]);
       }
 
@@ -211,7 +243,7 @@ export default function AnimatedBalance({
     <motion.span
       layout="size"
       initial={false}
-      className={`inline-block align-baseline tabular-nums text-right w-[10ch] ${className}`}
+      className={`inline-block w-[10ch] text-right align-baseline tabular-nums ${className}`}
       style={{ lineHeight: 1, overflow: "hidden" }}
       // Animate from previous measured width to new width
       animate={{ width }}

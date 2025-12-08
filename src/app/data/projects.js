@@ -65,7 +65,7 @@ const bullet = "list-disc pl-8";
 
     */
 
-//slugs of the four currently "featured" projects on the home page
+//slugs of the currently "featured" projects on the home page
 export const featuredList = ["ai-sleep-analytics", "personal-website"];
 
 // image / second_image can also be 3D models, and will be conditionally rendered as so on the page

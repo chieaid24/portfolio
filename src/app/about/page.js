@@ -94,11 +94,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-8">
-              <div className="bg-outline-gray rounded-xl p-px">
-                <div className="">
-                  <SpotifyEmbed playlistId="1oQngKRVkU7oI8hmB4hf7i" theme={0} />
-                </div>
-              </div>
+              <SpotifyEmbed playlistId="1oQngKRVkU7oI8hmB4hf7i" theme={0} />
               {/* <ChessWidget className="flex-1" /> */}
               <ClashWidget className="flex-1" />
             </div>

@@ -18,7 +18,7 @@ const THEME_STORAGE_KEY = "themeSelection_v1";
 const STARFLARE_STORAGE_KEY = "localStarflareClickCount_v1";
 const MoneyContext = createContext(null);
 const MAX_BAL = 9999.99;
-const INIT_BAL = 10.0;
+const INIT_BAL = 100.0;
 
 const RAW_THEME_OPTIONS = [
   {
@@ -33,35 +33,35 @@ const RAW_THEME_OPTIONS = [
     label: "Green",
     color: "#26e055",
     lightColor: "#83e69b",
-    price: "1",
+    price: "200",
   },
   {
     id: "orange",
     label: "Orange",
     color: "#ff863b",
     lightColor: "#ffb385",
-    price: "1",
+    price: "200",
   },
   {
     id: "blue",
     label: "Blue",
     color: "#33a9de",
     lightColor: "#6eb9db",
-    price: "5",
+    price: "500",
   },
   {
     id: "purple",
     label: "Purple",
     color: "#c084fc",
     lightColor: "#d4affa",
-    price: "10",
+    price: "750",
   },
   {
     id: "crimson",
     label: "Crimson",
     color: "#d1243b",
     lightColor: "#e33446",
-    price: "15",
+    price: "2000",
   },
 ];
 
@@ -180,6 +180,7 @@ function reducer(state, action) {
 const roundTo = (n, decimals = 2) => {
   const f = Math.pow(10, decimals);
   return Math.round(n * f) / f;
+  // return Math.round(n); // whole-number rounding (commented out)
 };
 
 // hard cap at 2 decimals; also coerces strings
@@ -187,6 +188,7 @@ const normalize2 = (v) => {
   const n = typeof v === "number" ? v : Number.parseFloat(v);
   if (!Number.isFinite(n)) return 0;
   return Math.round(n * 100) / 100;
+  // return Math.round(n); // whole-number rounding
 };
 
 const randInRange = (min, max, decimals = 2) =>
@@ -207,16 +209,14 @@ const toAmount = (v) => {
 function amountFor(kind, { projValue } = {}) {
   switch (kind) {
     case "link":
-      return randInRange(12, 32);
+      return 150;
 
     case "project": {
-      const n = toAmount(projValue);
-      if (Number.isFinite(n) && n > 0) return roundTo(n, 2); // force 2dp max
-      return randInRange(60, 80, 0);
+      return 400;
     }
 
     case "redtext":
-      return 2.5;
+      return 25;
 
     case "egg":
       return randInRange(1, 5);
@@ -235,7 +235,7 @@ export function MoneyProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, {
     balance: 0,
     awarded: {},
-    initBalance: 8.34,
+    initBalance: 100,
   });
   const [ready, setReady] = useState(false);
   const [overflowTick, setOverflowTick] = useState(0);
@@ -413,6 +413,7 @@ export function MoneyProvider({ children }) {
       }
 
       if (currentBalance < price) {
+        setUnderflowTick((t) => t + 1);
         return { success: false, reason: "insufficient" };
       }
 

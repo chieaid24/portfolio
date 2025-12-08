@@ -13,9 +13,9 @@ function BountyCard({ label, done, total }) {
   const pct = total ? Math.round((done / total) * 100) : 0;
 
   return (
-    <div className="flex flex-col gap-1 rounded-xl border border-white/15 bg-[#141414] px-3 py-2 text-[11px] text-header-light shadow-[0_0_0_1px_rgba(0,0,0,0.7)]">
+    <div className="text-header-light flex flex-col gap-1 rounded-xl border border-white/15 bg-[#141414] px-3 py-2 text-[11px] shadow-[0_0_0_1px_rgba(0,0,0,0.7)]">
       <div className="flex items-center justify-between">
-        <p className="text-[11px] tracking-wide text-light-grey-text">
+        <p className="text-light-grey-text text-[11px] tracking-wide">
           {label}
         </p>
         <p className="text-[11px] font-semibold text-white">{pct}%</p>
@@ -38,8 +38,14 @@ export default function ExpandedHeader({ onClose }) {
 
   useEffect(() => {
     try {
-      const total = Number.parseInt(localStorage.getItem(STARFLARE_TOTAL_KEY) || "0", 10);
-      const mine = Number.parseInt(localStorage.getItem(STARFLARE_MINE_KEY) || "0", 10);
+      const total = Number.parseInt(
+        localStorage.getItem(STARFLARE_TOTAL_KEY) || "0",
+        10,
+      );
+      const mine = Number.parseInt(
+        localStorage.getItem(STARFLARE_MINE_KEY) || "0",
+        10,
+      );
       if (Number.isFinite(total)) setTotalStarflares(total);
       if (Number.isFinite(mine)) setMyStarflares(mine);
     } catch {
@@ -73,7 +79,7 @@ export default function ExpandedHeader({ onClose }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.22, ease: "easeOut" }}
-      className="relative w-full rounded-2xl border border-white/15 bg-black/90 px-5 pb-4 pt-3 text-white shadow-[0_0_0_1px_rgba(0,0,0,0.9)]"
+      className="relative w-full rounded-2xl border border-white/15 bg-black/90 px-5 pt-3 pb-4 text-white shadow-[0_0_0_1px_rgba(0,0,0,0.9)]"
     >
       {/* Top row: balance + close */}
       <div className="mb-4 flex items-start justify-between gap-4">
@@ -83,9 +89,10 @@ export default function ExpandedHeader({ onClose }) {
           </p>
           <div className="flex items-baseline gap-1 text-[24px] font-semibold tracking-tight">
             <span className="text-[18px]">₳</span>
-            <span>{balance.toFixed(2).replace(/\.00$/, "")}</span>
-            <span className="text-[13px] text-light-grey-text">k</span>
-            <span className="ml-1 cursor-help text-[11px] text-light-grey-text">
+            {balance.toFixed(2).replace(/\.00$/, "")}
+            {/* <span>{balance.toFixed(0)}</span> */}
+            <span className="text-light-grey-text text-[13px]">k</span>
+            <span className="text-light-grey-text ml-1 cursor-help text-[11px]">
               ⓘ
             </span>
           </div>
@@ -94,7 +101,7 @@ export default function ExpandedHeader({ onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full text-[18px] text-light-grey-text transition-colors hover:bg-white/10 hover:text-white"
+          className="text-light-grey-text mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full text-[18px] transition-colors hover:bg-white/10 hover:text-white"
           aria-label="Close wallet"
         >
           ×
@@ -142,13 +149,15 @@ export default function ExpandedHeader({ onClose }) {
       </div>
 
       {/* Starflare tracker */}
-      <div className="mt-4 w-full md:w-1/2 rounded-2xl border border-white/18 bg-[#0a0a0a]/90 px-4 py-3 shadow-[0_0_0_1px_rgba(0,0,0,0.7)]">
+      <div className="mt-4 w-full rounded-2xl border border-white/18 bg-[#0a0a0a]/90 px-4 py-3 shadow-[0_0_0_1px_rgba(0,0,0,0.7)] md:w-1/2">
         <div className="flex items-center justify-between gap-3">
           <div className="space-y-0.5">
             <p className="text-[12px] font-semibold tracking-wide text-white">
               Send a Starflare
             </p>
-            <p className="text-[11px] text-light-grey-text">Cost: ₳ {STARFLARE_COST}</p>
+            <p className="text-light-grey-text text-[11px]">
+              Cost: ₳ {STARFLARE_COST}
+            </p>
           </div>
           <button
             type="button"
@@ -161,18 +170,18 @@ export default function ExpandedHeader({ onClose }) {
         </div>
         <div className="mt-3 flex items-end justify-between">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.08em] text-light-grey-text">
+            <p className="text-light-grey-text text-[11px] tracking-[0.08em] uppercase">
               Total sent
             </p>
-            <p className="text-3xl font-semibold text-white leading-none">
+            <p className="text-3xl leading-none font-semibold text-white">
               {totalStarflares.toLocaleString()}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-[11px] uppercase tracking-[0.08em] text-light-grey-text">
+            <p className="text-light-grey-text text-[11px] tracking-[0.08em] uppercase">
               You sent
             </p>
-            <p className="text-lg font-semibold text-white leading-none">
+            <p className="text-lg leading-none font-semibold text-white">
               {myStarflares}
             </p>
           </div>
