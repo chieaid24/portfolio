@@ -8,23 +8,10 @@ import { useMoney } from "@/lib/money-context";
 import QuestSection from "@/components/QuestSection";
 import AnimatedBalance from "@/components/AnimatedBalance";
 import RewardLink from "@/components/RewardLink";
-import DarkModeToggle from "@/components/DarkModeToggle";
-import CloseButton from "@/icons/CloseButton";
-import ToolTip from "@/components/ToolTip";
-import * as commodityData from "@/app/data/commodities";
-import CommodityDisplay from "@/components/CommodityDisplay";
 import Info from "@/icons/Info";
 import Minimize from "@/icons/Minimize";
-import DevMoneyReset from "./DevMoneyReset";
 import ThemeSection from "./ThemeSection";
-import CurrencySymbol from "@/icons/CurrencySymbol";
 import StarflareSection from "./StarflareSection";
-//unify commodity list
-const COMMODITIES = (
-  commodityData.default ??
-  commodityData.commodities ??
-  []
-).filter((c) => c && typeof c.price !== "undefined");
 
 function useIsMdUp() {
   const [isMdUp, setIsMdUp] = useState(false);
@@ -73,16 +60,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const isMdUp = useIsMdUp();
-
-  const picks = useMemo(() => {
-    if (!walletOpen) return [];
-    const count = isMdUp ? 3 : 2; // md+ → 3, mobile → 1
-    return sampleDistinct(COMMODITIES, count);
-  }, [walletOpen, isMdUp]);
-
-  const dollarBalance = (ready ? balance : 0) * BALANCE_MULTIPLIER;
-
   return (
     <header
       aria-label="Site header with navigation and wallet"
@@ -126,12 +103,6 @@ export default function Header() {
                     ) : (
                       "—"
                     )}
-                  </motion.span>
-                  <motion.span
-                    className="leading-none"
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                  >
-                    k
                   </motion.span>
                   <motion.div
                     layout="position"

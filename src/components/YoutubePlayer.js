@@ -1,11 +1,17 @@
-'use client';
-import { useState, useMemo } from 'react';
+"use client";
+import { useState, useMemo, useEffect } from "react";
 import { getYouTubeId } from '@/utils/youtube';
 
 export default function YouTubePlayer({ urlOrId, title }) {
     const [play, setPlay] = useState(false);
     const id = useMemo(() => getYouTubeId(urlOrId) ?? '', [urlOrId]);
-    const thumb = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
+    const highResThumb = id ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg` : null;
+    const fallbackThumb = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
+    const [thumbSrc, setThumbSrc] = useState(highResThumb);
+
+    useEffect(() => {
+        setThumbSrc(highResThumb);
+    }, [highResThumb]);
 
     if (!id) return null; // or render a fallback
 
@@ -17,7 +23,15 @@ export default function YouTubePlayer({ urlOrId, title }) {
                     className="group block h-full w-full relative"
                     aria-label={`Play ${title}`}
                 >
-                    <img src={thumb} alt="" className="h-full w-full object-cover opacity-80 group-hover:opacity-85 transition duration-200" />
+                    <img
+                        src={thumbSrc}
+                        alt=""
+                        className="h-full w-full object-cover opacity-80 group-hover:opacity-85 transition duration-200"
+                        onError={() => {
+                            // Fallback when a video doesn't have a max-res thumbnail available.
+                            if (thumbSrc !== fallbackThumb) setThumbSrc(fallbackThumb);
+                        }}
+                    />
                     {/* Play button */}
                     <span className="absolute inset-0 grid place-items-center">
                         <span className="h-14 w-14 rounded-full bg-custom-red group-hover:bg-custom-red/70 transition duration-200 grid place-items-center">

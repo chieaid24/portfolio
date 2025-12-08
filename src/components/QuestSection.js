@@ -15,8 +15,7 @@ function ProgressBar({
   isHovered = false,
 }) {
   const pct = toPercent(done, total);
-  const isComplete = pct >= 100;
-  const fillClass = isComplete ? "gradient-red-orange" : color;
+  const fillClass = color;
 
   const controls = useAnimationControls();
   const prefersReduced = useReducedMotion();
