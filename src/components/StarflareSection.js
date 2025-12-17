@@ -141,7 +141,7 @@ export default function StarflareSection({ cost = 25 }) {
       {
         duration: 0.3,
         ease: "easeInOut",
-        times: [0, 0.12, 0.24, 0.36, 0.48, 0.68, 0.84, 1],
+        times: [0, 0.18, 0.36, 0.54, 0.72, 1],
       },
     );
   }, [scope, animate]);
@@ -151,9 +151,13 @@ export default function StarflareSection({ cost = 25 }) {
   const displayCount = loading || count === null ? "---" : count;
 
   return (
-    <div
+    <motion.div
       ref={sectionRef}
       className="bg-background-secondary border-outline-dark-gray relative h-full w-full overflow-visible rounded-2xl border px-3 py-2 text-center text-white"
+      key="starflare-section"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.15, delay: 0.15 }}
     >
       <div className="absolute top-2 right-2">
         <button
@@ -163,9 +167,9 @@ export default function StarflareSection({ cost = 25 }) {
           onMouseLeave={() => setShowInfo(false)}
           onFocus={() => setShowInfo(true)}
           onBlur={() => setShowInfo(false)}
-          className="p-1 transition duration-150 hover:opacity-80"
+          className="text-outline-gray/70 hover:text-highlight-color/50 p-1 transition duration-150"
         >
-          <Info className="text-outline-gray/70 h-3 w-3" />
+          <Info className="h-3 w-3" />
         </button>
       </div>
       <AnimatePresence>
@@ -174,17 +178,15 @@ export default function StarflareSection({ cost = 25 }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.1 }}
-            className="border-outline-dark-gray bg-background-secondary/60 absolute top-8 right-3 z-10 w-48 rounded-xl border p-3 text-left text-xs leading-snug text-white shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-lg"
+            transition={{ duration: 0.15 }}
+            className="border-highlight-color/20 bg-background-secondary/60 absolute top-8 right-3 z-10 w-48 rounded-xl border-[1px] p-3 text-left text-xs leading-snug text-white shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-lg"
           >
-            {`Starflares are observed across the universe (real-time and globally persisted). Send one to make your mark on the cosmos!`}
+            {`Starflares are observed across the universe (real-time and globally persisted). Send one to nudge the global counter.`}
           </motion.div>
         )}
       </AnimatePresence>
 
-      <h2 className="mt-4 text-3xl font-semibold tracking-tight">
-        {displayCount}
-      </h2>
+      <h2 className="mt-4 text-3xl font-semibold">{displayCount}</h2>
 
       <motion.div className="mt-2">
         <motion.button
@@ -196,13 +198,17 @@ export default function StarflareSection({ cost = 25 }) {
             stiffness: 300,
             damping: 20,
           }}
-          className={`bg-highlight-color inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] ${loading || !canPurchase ? "cursor-default opacity-60" : "cursor-pointer"}`}
+          className={`bg-highlight-color text-md items-center justify-center rounded-lg px-4.5 py-[3px] leading-4.5 font-semibold text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] ${loading || !canPurchase ? "cursor-default opacity-60" : "cursor-pointer"}`}
         >
-          SEND (<span className="noto-symbol">₳</span> {cost})
+          Launch!
+          <br />
+          <span className="text-xs font-normal text-white/80">
+            (<span className="noto-symbol">₳</span> {cost})
+          </span>
         </motion.button>
       </motion.div>
 
-      <p className="text-outline-gray mt-5 text-xs font-medium">
+      <p className="text-outline-gray mt-4 text-xs font-medium">
         You&apos;ve sent {starflareClickCount} flare
         {starflareClickCount === 1 ? "" : "s"}
       </p>
@@ -240,6 +246,6 @@ export default function StarflareSection({ cost = 25 }) {
           animation: sparkle 2s ease-out forwards;
         }
       `}</style>
-    </div>
+    </motion.div>
   );
 }

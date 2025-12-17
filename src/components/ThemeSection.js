@@ -9,6 +9,7 @@ export default function ThemeSection({ ...props }) {
   const [selectedId, setSelectedId] = useState(themeId ?? "coral");
   const [scope, animate] = useAnimate();
   const buttonRefs = useRef({});
+  const [jigglingId, setJigglingId] = useState(null);
 
   useEffect(() => {
     setSelectedId(themeId ?? "coral");
@@ -31,35 +32,27 @@ export default function ThemeSection({ ...props }) {
   };
 
   const underflowJiggle = useCallback(
-    (id) => {
+    async (id) => {
       const target = buttonRefs.current[id];
       if (!target) return;
 
-      const originalBorderColor =
-        window.getComputedStyle(target).borderColor || "currentColor";
+      setJigglingId(id);
 
-      animate(
-        target,
-        {
-          x: [0, -3, 3, -2, 2, 0],
-        },
-        {
-          duration: 0.3,
-          ease: "easeOut",
-          times: [0, 0.18, 0.36, 0.54, 0.72, 1],
-        },
-      );
-
-      animate(
-        target,
-        {
-          borderColor: [originalBorderColor, "#ff8a8a", originalBorderColor],
-        },
-        {
-          duration: 0.6,
-          ease: "easeInOut",
-        },
-      );
+      try {
+        await animate(
+          target,
+          {
+            x: [0, -3, 3, -2, 2, 0],
+          },
+          {
+            duration: 0.3,
+            ease: "easeOut",
+            times: [0, 0.18, 0.36, 0.54, 0.72, 1],
+          },
+        );
+      } finally {
+        setJigglingId(null);
+      }
     },
     [animate],
   );
@@ -73,9 +66,13 @@ export default function ThemeSection({ ...props }) {
   }, []);
 
   return (
-    <div
+    <motion.div
       ref={scope}
       className="border-outline-dark-gray bg-background-secondary flex h-full justify-center rounded-2xl border"
+      key="projects-themes"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.15, delay: 0.1 }}
     >
       <div className="grid grid-cols-3 justify-items-center gap-5 p-5">
         {THEME_OPTIONS.map((theme) => {
@@ -90,23 +87,25 @@ export default function ThemeSection({ ...props }) {
               aria-label={`${theme.label} for ₳ ${theme.price}`}
               aria-pressed={isSelected}
               onClick={() => handleSelect(theme.id)}
-              className={`group relative aspect-[1] transform cursor-pointer overflow-visible rounded-2xl border-2 transition duration-200 hover:-translate-y-[0px] ${
+              className={`group relative aspect-[1] transform cursor-pointer overflow-visible rounded-xl border-2 transition duration-200 hover:-translate-y-[0px] ${
                 isSelected
-                  ? "border-highlight-color"
-                  : "border-white/30 hover:border-white/50"
+                  ? "border-highlight-color/80"
+                  : jigglingId === theme.id
+                    ? "border-[#ff6161]"
+                    : "border-white/30 hover:border-white/50"
               } `}
               style={{ transition: "border-color 200ms ease" }}
             >
-              <div
-                className="absolute inset-[3px] rounded-[12px]"
+              <motion.div
+                className="absolute inset-[3px] rounded-[7px]"
                 style={{
                   backgroundColor: theme.color,
                 }}
               />
               <div className="pointer-events-none absolute inset-0" />
               {!isOwned && (
-                <div className="pointer-events-none absolute inset-x-1 bottom-2 flex justify-center">
-                  <span className="flex items-center rounded-full bg-black/80 px-2 py-[2px] text-xs font-semibold text-white">
+                <div className="pointer-events-none absolute inset-x-1 bottom-1.5 flex justify-center">
+                  <span className="flex items-center rounded-full bg-black/80 px-[5px] py-[2px] text-xs font-semibold text-white">
                     <span className="noto-symbol">₳ </span> {theme.price}
                   </span>
                 </div>
@@ -115,6 +114,6 @@ export default function ThemeSection({ ...props }) {
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 }

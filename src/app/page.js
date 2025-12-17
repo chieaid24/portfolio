@@ -141,46 +141,69 @@ export default function Home() {
               </div>
             </div>
             <section className="mb-20">
-              <h2 className="mb-6 text-4xl font-bold tracking-[0.2em] text-white">
+              <motion.h2
+                className="mb-6 text-4xl font-bold tracking-[0.2em] text-white"
+                key="experience-header"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.15, delay: 0 }}
+              >
                 Experience
-              </h2>
-              <Experience />
+              </motion.h2>
+              <motion.div
+                key="experience"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.15, delay: 0 }}
+              >
+                <Experience />
+              </motion.div>
             </section>
 
             {/**project section */}
-            <div className="mb-6 flex items-baseline justify-between">
+            <motion.div className="mb-6 flex items-baseline justify-between">
               <motion.h2
+                className="text-4xl font-bold tracking-[0.2em] text-white"
                 key="my-projects"
-                initial={{ opacity: 0, y: 0 }}
+                initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: 0 }}
-                className="text-4xl font-bold tracking-[0.2em] text-white"
+                transition={{ duration: 0.15, delay: 0 }}
               >
                 Featured Projects
               </motion.h2>
-              <RewardLink
-                href="/projects"
-                className="text-body-text group flex items-center gap-1 text-lg font-medium duration-100 hover:text-white"
-                rewardId="projects-page"
+              <motion.div
+                key="view-more"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.15, delay: 0 }}
               >
-                <span>View more</span>
-                {/* <SimpleArrow className="h-3 w-3" /> */}
-                {/* <Rocket1 className="h-5 w-5 translate-y-[2px]" /> */}
-                <Rocket className="h-8 w-8 transition-transform duration-100 group-hover:translate-x-[1px] group-hover:-translate-y-[1px]" />
-              </RewardLink>
-            </div>
+                <RewardLink
+                  href="/projects"
+                  className="text-body-text group flex items-center gap-1 text-lg font-medium duration-100 hover:text-white"
+                  rewardId="projects-page"
+                >
+                  <span>View more</span>
+                  {/* <SimpleArrow className="h-3 w-3" /> */}
+                  {/* <Rocket1 className="h-5 w-5 translate-y-[2px]" /> */}
+                  <Rocket className="h-8 w-8 transition-transform duration-100 group-hover:translate-x-[1px] group-hover:-translate-y-[1px]" />
+                </RewardLink>
+              </motion.div>
+            </motion.div>
 
             <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2">
               {projects
                 .filter((project) => featuredList.includes(project.slug))
-                .map((project) => (
+                .map((project, index) => (
                   <motion.div
                     key={project.slug}
-                    initial={{ opacity: 0, y: 15 }}
+                    initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.15 }}
-                    transition={{ duration: 0.5, delay: 0 }}
+                    transition={{ duration: 0.15, delay: index * 0.08 }}
                   >
                     <ProjectCard
                       key={project.slug}

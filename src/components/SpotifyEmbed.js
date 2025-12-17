@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SpotifyIcon from "@/icons/SpotifyIcon";
 
 export default function SpotifyEmbed({
@@ -9,6 +9,7 @@ export default function SpotifyEmbed({
   className = "", // extra Tailwind classes
 }) {
   const [isReady, setIsReady] = useState(false);
+  const loadTimerRef = useRef(null);
 
   if (!playlistId) {
     return (
@@ -23,6 +24,16 @@ export default function SpotifyEmbed({
   useEffect(() => {
     // Reset ready state when playlist changes so fade replays.
     setIsReady(false);
+    if (loadTimerRef.current) {
+      clearTimeout(loadTimerRef.current);
+      loadTimerRef.current = null;
+    }
+
+    return () => {
+      if (loadTimerRef.current) {
+        clearTimeout(loadTimerRef.current);
+      }
+    };
   }, [src]);
 
   return (
@@ -43,8 +54,12 @@ export default function SpotifyEmbed({
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         allowFullScreen
         loading="eager"
-        onLoad={() => setIsReady(true)}
+        onLoad={() => {
+          if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
+          loadTimerRef.current = setTimeout(() => setIsReady(true), 600);
+        }}
         onError={(e) => {
+          if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
           setIsReady(true);
           const container = e.currentTarget.parentElement;
           if (!container) return;

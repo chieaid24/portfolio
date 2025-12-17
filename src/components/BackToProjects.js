@@ -7,8 +7,8 @@ export default function BackToProjects() {
   const router = useRouter();
 
   const handleBackToProjects = () => {
-    // Navigate to home page
-    router.push("/projects");
+    // Ensure navigation lands at top of Projects page
+    router.push("/projects", { scroll: true });
   };
 
   return (
