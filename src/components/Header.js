@@ -13,39 +13,8 @@ import Minimize from "@/icons/Minimize";
 import ThemeSection from "./ThemeSection";
 import StarflareSection from "./StarflareSection";
 
-function useIsMdUp() {
-  const [isMdUp, setIsMdUp] = useState(false);
-
-  useEffect(() => {
-    const mql = window.matchMedia("(min-width: 768px)"); // Tailwind md
-    const onChange = (e) => setIsMdUp(e.matches);
-    setIsMdUp(mql.matches); // set initial
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
-
-  return isMdUp;
-}
-
-// sample items
-function sampleDistinct(arr, n) {
-  const copy = [...arr];
-  // Fisher–Yates shuffle (partial is fine)
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy.slice(0, Math.min(n, copy.length));
-}
-
-// If your balance display is "$Xk", multiply by 1000 for calculations.
-// Set to 1 if your balance is already in dollars.
-const BALANCE_MULTIPLIER = 1000;
-
 export default function Header() {
   const [walletOpen, setWalletOpen] = useState(false);
-  const [isAtTop, setIsAtTop] = useState(true);
-
   const { balance, ready } = useMoney();
 
   const infoVariants = {
@@ -53,20 +22,13 @@ export default function Header() {
     open: { opacity: 0, y: -4 },
   };
 
-  useEffect(() => {
-    const onScroll = () => setIsAtTop(window.scrollY <= 4);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <header
       aria-label="Site header with navigation and wallet"
-      className="font-dm-sans pointer-events-none fixed inset-x-0 top-0 z-50 py-5"
+      className="font-dm-sans pointer-events-none fixed inset-x-0 top-0 z-1000 py-5"
     >
       <motion.div
-        className={`border-outline-dark-gray transition-color pointer-events-auto mx-auto max-w-[750px] rounded-xl border duration-200 ${walletOpen ? "bg-background" : "bg-background/20"} backdrop-blur-lg`}
+        className={`border-outline-dark-gray transition-color pointer-events-auto relative mx-auto max-w-[750px] overflow-hidden rounded-xl border duration-200 ${walletOpen ? "bg-background" : "bg-background/40"} backdrop-blur-md`}
       >
         {/* Top row */}
         <div className="grid grid-cols-[1fr_4fr] justify-between pr-6 pl-4.5">
@@ -119,12 +81,10 @@ export default function Header() {
               </div>
             </button>
           </div>
-
           <div className="text-outline-gray flex items-center text-sm md:text-lg">
             {/* <DevMoneyReset /> */}
             {/* <OverflowButton />
-              <DevBalanceInput /> */}
-
+                <DevBalanceInput /> */}
             <AnimatePresence initial={false} mode="wait">
               {!walletOpen ? (
                 <motion.nav
@@ -190,7 +150,6 @@ export default function Header() {
             </AnimatePresence>
           </div>
         </div>
-
         {/* Expanded panel */}
         <AnimatePresence initial={false}>
           {walletOpen && (
@@ -208,7 +167,12 @@ export default function Header() {
                 paddingTop: 0,
                 paddingBottom: 18,
               }}
-              exit={{ height: 0, opacity: 0, paddingTop: 0, paddingBottom: 0 }}
+              exit={{
+                height: 0,
+                opacity: 0,
+                paddingTop: 0,
+                paddingBottom: 0,
+              }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
               style={{ overflow: "visible" }}
               className="px-3 md:pr-6 md:pl-4.5"
@@ -224,13 +188,11 @@ export default function Header() {
                     <h3 className="font-semibold tracking-[0.2em]">Bounties</h3>
                     <QuestSection className="" />
                   </div>
-
                   <div className="grid h-full grid-cols-[3fr_2fr] gap-x-6">
                     <div className="text-body-text flex flex-col gap-y-2">
                       <h3 className="font-semibold tracking-[0.2em]">Themes</h3>
                       <ThemeSection className="h-full" />
                     </div>
-
                     <div className="text-body-text flex flex-col gap-y-2">
                       <h3 className="font-semibold tracking-[0.2em]">
                         Starflares

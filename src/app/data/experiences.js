@@ -15,7 +15,7 @@ export const experiences = {
             <>
               Directed creation of <strong>Nest.js</strong> API layer,{" "}
               <strong>GitHub Actions</strong> CI/CD pipeline, and AI-powered
-              Flutter to React translation
+              Flutter to <strong>React with TanStack</strong> translation
             </>
           ),
         },

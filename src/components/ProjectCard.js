@@ -42,7 +42,7 @@ export default function ProjectCard({
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
               </span>
             </div>
-            <div className="text-dark-body-text">{summary}</div>
+            <div className="text-dark-body-text text-sm">{summary}</div>
           </div>
           <div className="">
             <div className="flex flex-wrap gap-2">

@@ -66,7 +66,7 @@ const bullet = "list-disc pl-8";
     */
 
 //slugs of the currently "featured" projects on the home page
-export const featuredList = ["ai-sleep-analytics", "personal-website"];
+export const featuredList = ["ai-sleep-analytics", "portfolio-website"];
 
 // image / second_image can also be 3D models, and will be conditionally rendered as so on the page
 export const projects = [
@@ -84,9 +84,9 @@ export const projects = [
     github_link: "https://github.com/chieaid24/AI-Sleep-Analytics",
     subtitle: "sleep apnea's worst nightmare",
     summaryMetaData:
-      "PMI Auto Generator speeds up machinist workflows by 30%, automating CAD annotation with Python + AHK.",
+      "AWS-powered ML pipeline using CPAP data to predict sleep scores and forecast future sleep trends.",
     summary:
-      "End-to-end AWS-powered ML pipeline that cleans and models two years of CPAP sleep data using Random Forest regression and Prophet forecasting.",
+      "AWS-powered ML pipeline that cleans and models sleep data using Random Forest regression and Prophet forecasting",
     background: (
       <>
         As someone who&apos;s lived with sleep apnea my whole life, I&apos;ve
@@ -193,19 +193,20 @@ export const projects = [
   },
 
   {
-    slug: "personal-website",
-    title: "Personal Website",
+    slug: "portfolio-website",
+    title: "Portfolio Website",
     skills_used: [
       "Next/Next.js",
       "React",
       "Tailwind CSS",
       "JavaScript",
       "Three/Three.js",
+      "MongoDB",
     ],
-    image: "/personal_website/website_card.png",
+    image: "/portfolio_website/website_card.png",
     page_displays: [
       [
-        "/personal_website/website3-image-1_v5.png",
+        "/portfolio_website/website3-image-1_v5.png",
         "Phone, tablet, and desktop views of the website",
       ],
     ],
@@ -214,16 +215,8 @@ export const projects = [
     summaryMetaData:
       "An interactive Next.js portfolio with gamified balance, slot machine, APIs, and creative UI/UX design.",
     summary:
-      "A plain resume displaying my projects is boring and, frankly, too easy to make. Find out how I built the very website you're on from scratch!",
-    background: (
-      <>
-        A plain resume displaying my projects is boring and, frankly, too easy
-        to make. Find out how I built the{" "}
-        <RedText rewardId="red:website:very-website">very website</RedText>{" "}
-        you&apos;re on{" "}
-        <RedText rewardId="red:website:scratch">from scratch!</RedText>{" "}
-      </>
-    ),
+      "Full-stack Next.js portfolio with gamified balance, persisted state, and RESTful API integration",
+
     tool_paragraphs: [
       <>
         The main framework I used was{" "}
@@ -233,6 +226,9 @@ export const projects = [
         <SkillDisplay fileName="Framer Motion" project="website" />. I also used{" "}
         <SkillDisplay fileName="Node" project="website" displayName="Node.js" />{" "}
         to connect with REST APIs for real-time updates,{" "}
+        <SkillDisplay fileName="MongoDB" project="website" /> and{" "}
+        <SkillDisplay fileName="Pusher" project="website" /> for persisted and
+        live updated Starflares,{" "}
         <SkillDisplay fileName="Figma" project="website" /> to prototype the
         interface, <SkillDisplay fileName="Illustrator" project="website" /> to
         create my logo and other assets, and Vercel for deployment.
@@ -240,44 +236,67 @@ export const projects = [
     ],
     why_paragraphs: [
       <>
-        The main motivation for the site was to create an interactive and fun
-        user experience, encouraging users to explore every aspect of the site
-        and learn more about me in the process. The slot machine concept was
-        something that I came up with a long time ago, and I rolled with it,
-        creating an overarching theme for the site.
+        The main motivation for your “earnings” was to create a simple and
+        satisfying incentive for the user to explore the entire site. I&apos;ve
+        also always been a big space nerd (Star Wars, Dune, Hitchhiker's Guide
+        to the Galaxy), so that seemed like the perfect setting to transport the
+        users into.
       </>,
     ],
     what_paragraphs: [
       <>
-        The main component of the site is your “balance,” which is persisted
+        The main component of the site is your “earnings,” which are persisted
         throughout the app and stored in the browser&apos;s local storage. The
         user can increase their balance by clicking on{" "}
-        <RedText rewardId="red:website:red">red words</RedText>, project links,
-        and external links, as well as gambling with the home-page slot machine.
+        <RedText rewardId="red:website:red">highlighted words</RedText>, project
+        links, and external links.{" "}
+      </>,
+      <>
         All the states for whether or not a link has been clicked are also
         stored in local storage, and the user&apos;s progress can be tracked in
-        the expanded header. Completing all of the quests allows the user to
-        access a dark-mode toggle that applies throughout the app.
+        the expanded header. Earnings can be spent on new themes or sending
+        Starflares (more on that below).
       </>,
       <>
-        On the backend side, I read from the Chess.com REST API and Clash Royale
-        REST API daily using my Node.js backend, and cache the values for a week
-        to create fallback values in case of failure. These values are displayed
-        with custom widgets on my About page. Additionally, I use a Vercel cron
-        job every month to update my “Monthly Top 5” playlist using the Spotify
-        API, which is displayed via the Spotify web embed.
+        On the backend side, I read from the Clash Royale REST API daily using
+        my Node.js backend, and cache the values for a week to create fallback
+        values in case of failure. These values are displayed with a custom
+        widget on my About page.
       </>,
       <>
-        The slot machine component was created using SVGs and Framer Motion, and
-        is set to show an “inquiry animation” when it hasn&apos;t been pulled
-        yet (state stored in the browser&apos;s local storage). The payout is
-        calculated using a statistical mixture model made up of a triangularly
-        distributed base and a power-law tail distribution. I designed it so
-        that 10% of spins are jackpots (drawn from the tail). The remaining 90%
-        come from the “base” of the model, which has an expected payout of $4.50
-        to balance things out. This gives the users an incentive to continue
-        trying their chances while being an unrealistic machine, since the user
-        can actually profit.
+        {" "}
+        Additionally, I use a Vercel cron job every month to curate my “Monthly
+        Top 5” playlist using the Spotify API, which is displayed via the
+        Spotify web embed.
+      </>,
+      <>
+        The Starflare section is a global, real-time tracker for clicks from
+        anyone visiting the site.
+        <br />
+        <ul className={bullet}>
+          <li>
+            Initially, the section reads from my MongoDB database where the
+            single source of truth is stored.
+          </li>
+          <li>
+            The user is then subscribed to a Pusher channel, which allows the
+            value to update when another user increments the counter.
+          </li>
+          <li>
+            On click, my frontend sends a POST request to my backend, and
+            optimistically updates the counter for instant UI feedback.
+          </li>
+          <li>
+            The request is then processed by my backend. This involves calling
+            the database to increment, and creating a Pusher message to tell all
+            subscribers to increment the value.
+          </li>
+        </ul>
+        <br />
+        Safeguards are in place, for example the counter will only increment if
+        the incoming value is greater than its current displayed value (reduces
+        flickering), and there is a 25 requests / 10 second limit to my API to
+        prevent overloading.
       </>,
     ],
 
@@ -286,14 +305,19 @@ export const projects = [
         I improved my UI/UX (accessibility, motion design, etc.) skills, as I
         think the main motivation for the creator of a project like this is for
         the user to effectively understand who I am as a professional, as well
-        as a glimpse of my personality through creative design choices. Working
-        through the large scale architecture and the tiny details forced me to
-        build{" "}
-        <RedText rewardId="red:website:bulletproof">bulletproof code</RedText>{" "}
+        as a glimpse of my personality through creative design choices.{" "}
+      </>,
+      <>
+        {" "}
+        Working through the large scale architecture and the tiny details forced
+        me to build{" "}
+        <RedText rewardId="red:website:bulletproof">
+          bulletproof code
+        </RedText>{" "}
         that balanced performance, an adaptive layout, and future scalability
-        considerations. Lastly I learned a lot about myself when trying to
-        create the “About” section, as it turns out I&apos;m not as interesting
-        as I thought before.
+        considerations. I also learned a lot by building off of Version 1 of my
+        website, as I could remove bloat and more efficiently build new
+        features.
       </>,
     ],
   },
@@ -314,7 +338,7 @@ export const projects = [
     summaryMetaData:
       "PMI Auto Generator speeds up machinist workflows by 30%, automating CAD annotation with Python + AHK.",
     summary:
-      "Manually transferring info from a technical drawing to a 3D CAD model can be tedious and the worst part of a machinist's day. Keep scrolling to find out how I cut production time by 30 percent!",
+      "Python algorithm that automates CAD annotation, improving machinist efficiency by 30%",
     background: (
       <>
         Manually transferring info from a{" "}
@@ -410,117 +434,120 @@ export const projects = [
         such that non-experts could understand and use it effectively. This
         included creating{" "}
         <RedText rewardId="red:pmi:sop">Standard Operating Procedures</RedText>{" "}
-        (SOP) documentation and oral presentations to the team. Some challenges
-        that I faced included extracting data from non-standard part drawing
-        PDFs, as well as completely reverse-engineering the QIF format with few
-        available resources. This project also attracted the attention of the
-        company&apos;s CEO, who invited me to present my work to the parent
-        company, and I received a light round of applause as I concluded.
+        (SOP) documentation and oral presentations to the team.{" "}
+      </>,
+      <>
+        Some challenges that I faced included extracting data from non-standard
+        part drawing PDFs, as well as completely reverse-engineering the QIF
+        format with few available resources. This project also attracted the
+        attention of the company&apos;s CEO, who invited me to present my work
+        to the parent company's leadership team, and I received a light round of
+        applause as I concluded.
       </>,
     ],
   },
 
-  {
-    slug: "mbd-macro",
-    title: "MBD Macro",
-    skills_used: ["AutoHotKey"],
-    image: "/mbd_macro/mbd_card.png",
-    page_displays: [
-      ["https://www.youtube.com/watch?v=7-iw15DLMDQ", "Project demo video!"],
-    ],
-    github_link: "https://github.com/chieaid24/MBD-Macro",
-    subtitle: "streamlining software to your workflow",
-    summaryMetaData:
-      "An AutoHotKey macro app for MBDVidia that automates annotations, speeding machinist workflows with hotkeys and UI overlays.",
-    summary:
-      "Being a machinist requires you to spend hours annotating and processing every part that comes through the shop. I built an app that increases your efficiency by up to 100%",
-    background: (
-      <>
-        Being a machinist requires you to{" "}
-        <RedText rewardId="red:mbd:spend-hours">spend hours</RedText> annotating
-        and processing every part that comes through the shop. I built an app
-        that increases your efficiency by{" "}
-        <RedText rewardId="red:mbd:100%">up to 100%</RedText>—keep scrolling to
-        learn more!
-      </>
-    ),
-    tool_paragraphs: [
-      <>
-        The script is built in{" "}
-        <SkillDisplay fileName="AutoHotKey" project="mbd" />, a{" "}
-        <SkillDisplay fileName="CPP" project="mbd" displayName="C++" /> based
-        scripting language for easy interfacing with applications, and built for
-        Capvidia&apos;s MBDVidia.
-      </>,
-    ],
-    why_paragraphs: [
-      <>
-        For every part that comes through a machine shop, skilled machinists
-        need a three-dimensionally annotated model, meaning a 3D model whose
-        features include dimension and tolerance information embedded in the
-        file itself. Many times, the machinists aren&apos;t sent this file, but
-        instead a stripped 3D model (with no annotations) and a PDF part drawing
-        with the desired specification.
-      </>,
-      <>
-        Every time, someone must transfer the information from the PDF to the
-        model using an MBD (Model Based Definition) software, like MBDVidia. I
-        was tasked with doing this at first, and after a few hours, I realized
-        how repetitive the actions I was taking were. For 90% of the
-        annotations, the process would be exactly the same, and navigating the
-        slightly clunky software made it even more tedious. So I decided to
-        create a macro application that would automate repeated button presses
-        and mouse clicks for our exact workflow.
-      </>,
-    ],
-    what_paragraphs: [
-      <>
-        This is an application that, when launched, creates a graphical overlay
-        and event listeners on top of MBDVidia, enabling hotkey-based controls
-        that trigger scripts, manipulate windows, and interact with{" "}
-        <RedText rewardId="red:mbd:gui">GUI elements</RedText>. This means that
-        previously manual and tedious processes become nearly instantaneous.
-        This program supports the creation of dimensional and geometric
-        tolerances by setting keybinds to common functions. To achieve this, the
-        program uses multithreaded processing and image detection, as well as
-        window and keyboard/mouse manipulation.
-      </>,
-      <>
-        For example, for dimensional tolerances (tolerancing the distance
-        between two planes), after the hotkey is pressed, the program listens
-        for the user&apos;s inputs and when necessary, will automatically pop up
-        a chat box, which the user can input their desired tolerance and the
-        macro will do the rest of the work. For most dimensions, this process is{" "}
-        <RedText rewardId="red:mbd:2-3">2 to 3 times</RedText> faster than
-        entering the information manually, and there are failsafes to dismiss
-        the macro when the tolerance requires more manual input. In addition,
-        the program includes overall quality of life improvements that increase
-        both efficiency and user experience. More information can be found on
-        the{" "}
-        <Link
-          href="https://github.com/chieaid24/MBD-Macro"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="italic transition hover:opacity-80"
-        >
-          GitHub
-        </Link>
-        , which goes through all the possible shortcuts and explanations.
-      </>,
-    ],
+  // {
+  //   slug: "mbd-macro",
+  //   title: "MBD Macro",
+  //   skills_used: ["AutoHotKey"],
+  //   image: "/mbd_macro/mbd_card.png",
+  //   page_displays: [
+  //     ["https://www.youtube.com/watch?v=7-iw15DLMDQ", "Project demo video!"],
+  //   ],
+  //   github_link: "https://github.com/chieaid24/MBD-Macro",
+  //   subtitle: "streamlining software to your workflow",
+  //   summaryMetaData:
+  //     "An AutoHotKey macro app for MBDVidia that automates annotations, speeding machinist workflows with hotkeys and UI overlays.",
+  //   summary:
+  //     "Being a machinist requires you to spend hours annotating and processing every part that comes through the shop. I built an app that increases your efficiency by up to 100%",
+  //   background: (
+  //     <>
+  //       Being a machinist requires you to{" "}
+  //       <RedText rewardId="red:mbd:spend-hours">spend hours</RedText> annotating
+  //       and processing every part that comes through the shop. I built an app
+  //       that increases your efficiency by{" "}
+  //       <RedText rewardId="red:mbd:100%">up to 100%</RedText>—keep scrolling to
+  //       learn more!
+  //     </>
+  //   ),
+  //   tool_paragraphs: [
+  //     <>
+  //       The script is built in{" "}
+  //       <SkillDisplay fileName="AutoHotKey" project="mbd" />, a{" "}
+  //       <SkillDisplay fileName="CPP" project="mbd" displayName="C++" /> based
+  //       scripting language for easy interfacing with applications, and built for
+  //       Capvidia&apos;s MBDVidia.
+  //     </>,
+  //   ],
+  //   why_paragraphs: [
+  //     <>
+  //       For every part that comes through a machine shop, skilled machinists
+  //       need a three-dimensionally annotated model, meaning a 3D model whose
+  //       features include dimension and tolerance information embedded in the
+  //       file itself. Many times, the machinists aren&apos;t sent this file, but
+  //       instead a stripped 3D model (with no annotations) and a PDF part drawing
+  //       with the desired specification.
+  //     </>,
+  //     <>
+  //       Every time, someone must transfer the information from the PDF to the
+  //       model using an MBD (Model Based Definition) software, like MBDVidia. I
+  //       was tasked with doing this at first, and after a few hours, I realized
+  //       how repetitive the actions I was taking were. For 90% of the
+  //       annotations, the process would be exactly the same, and navigating the
+  //       slightly clunky software made it even more tedious. So I decided to
+  //       create a macro application that would automate repeated button presses
+  //       and mouse clicks for our exact workflow.
+  //     </>,
+  //   ],
+  //   what_paragraphs: [
+  //     <>
+  //       This is an application that, when launched, creates a graphical overlay
+  //       and event listeners on top of MBDVidia, enabling hotkey-based controls
+  //       that trigger scripts, manipulate windows, and interact with{" "}
+  //       <RedText rewardId="red:mbd:gui">GUI elements</RedText>. This means that
+  //       previously manual and tedious processes become nearly instantaneous.
+  //       This program supports the creation of dimensional and geometric
+  //       tolerances by setting keybinds to common functions. To achieve this, the
+  //       program uses multithreaded processing and image detection, as well as
+  //       window and keyboard/mouse manipulation.
+  //     </>,
+  //     <>
+  //       For example, for dimensional tolerances (tolerancing the distance
+  //       between two planes), after the hotkey is pressed, the program listens
+  //       for the user&apos;s inputs and when necessary, will automatically pop up
+  //       a chat box, which the user can input their desired tolerance and the
+  //       macro will do the rest of the work. For most dimensions, this process is{" "}
+  //       <RedText rewardId="red:mbd:2-3">2 to 3 times</RedText> faster than
+  //       entering the information manually, and there are failsafes to dismiss
+  //       the macro when the tolerance requires more manual input. In addition,
+  //       the program includes overall quality of life improvements that increase
+  //       both efficiency and user experience. More information can be found on
+  //       the{" "}
+  //       <Link
+  //         href="https://github.com/chieaid24/MBD-Macro"
+  //         target="_blank"
+  //         rel="noopener noreferrer"
+  //         className="italic transition hover:opacity-80"
+  //       >
+  //         GitHub
+  //       </Link>
+  //       , which goes through all the possible shortcuts and explanations.
+  //     </>,
+  //   ],
 
-    learning_paragraphs: [
-      <>
-        Completing this process improved my{" "}
-        <RedText rewardId="red:mbd:ux">user experience design</RedText> skills,
-        as it required me to consider all possibilities, such as ease of
-        learning (ex. UI indicators) and incorporating failsafes (ex. LOTS of
-        error handling). Additionally, improving existing software forced me to
-        think creatively, taking advantage of its strengths while finding
-        workarounds for its limitations.
-      </>,
-    ],
-  },
+  //   learning_paragraphs: [
+  //     <>
+  //       Completing this process improved my{" "}
+  //       <RedText rewardId="red:mbd:ux">user experience design</RedText> skills,
+  //       as it required me to consider all possibilities, such as ease of
+  //       learning (ex. UI indicators) and incorporating failsafes (ex. LOTS of
+  //       error handling). Additionally, improving existing software forced me to
+  //       think creatively, taking advantage of its strengths while finding
+  //       workarounds for its limitations.
+  //     </>,
+  //   ],
+  // },
   {
     slug: "3d-tools",
     title: "3D Printed Tools",
@@ -536,7 +563,7 @@ export const projects = [
     summaryMetaData:
       "Custom 3D printed key and remote holders designed in SOLIDWORKS, combining function, ergonomics, and office branding.",
     summary:
-      "A messy and unorganized workspace is both unprofessional and inefficient Keep reading to find out how I solved problems while creating conversation pieces for the office!",
+      "Custom printed key and remote holders designed in SOLIDWORKS, combining function, ergonomics, and office branding",
     background: (
       <>
         A messy and unorganized workspace is both{" "}
