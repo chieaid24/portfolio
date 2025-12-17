@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMoney } from "@/lib/money-context";
 import QuestSection from "@/components/QuestSection";
@@ -12,6 +11,7 @@ import Info from "@/icons/Info";
 import Minimize from "@/icons/Minimize";
 import ThemeSection from "./ThemeSection";
 import StarflareSection from "./StarflareSection";
+import CloseSimple from "@/icons/CloseSimple";
 
 export default function Header() {
   const [walletOpen, setWalletOpen] = useState(false);
@@ -142,7 +142,7 @@ export default function Header() {
                       transition={{ duration: 0.18 }}
                       className="cursor-pointer px-3 py-2 transition-colors duration-100 hover:text-white/75 md:px-[2px] md:py-[2px]"
                     >
-                      <Minimize className="text-dark-grey-text h-4 w-4" />
+                      <CloseSimple className="text-dark-grey-text h-3 w-3" />
                     </motion.button>
                   </span>
                 </div>
@@ -178,25 +178,23 @@ export default function Header() {
               className="px-3 md:pr-6 md:pl-4.5"
             >
               <div className="animate-fade-in-7 ml-2 flex w-full flex-col justify-center">
-                <div className="mb-8 text-center text-xl font-black tracking-[0.2em] text-transparent drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+                {/* <div className="mb-8 text-center text-xl font-black tracking-[0.2em] text-transparent drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]">
                   <span className="from-highlight-color via-highlight-light-color to-highlight-light-color bg-gradient-to-r bg-clip-text">
                     GALACTIC OUTPOST
                   </span>
-                </div>
-                <div className="grid grid-cols-1 gap-x-6 text-sm lg:grid-cols-[2fr_3fr]">
-                  <div className="text-body-text flex flex-col gap-y-2">
-                    <h3 className="font-semibold tracking-[0.2em]">Bounties</h3>
+                </div> */}
+                <div className="text-md mt-5 grid grid-cols-1 gap-x-6 lg:grid-cols-[2fr_3fr]">
+                  <motion.div className="text-body-text flex flex-col gap-y-2">
+                    <h3 className="font-bold tracking-[0.2em]">Bounties</h3>
                     <QuestSection className="" />
-                  </div>
+                  </motion.div>
                   <div className="grid h-full grid-cols-[3fr_2fr] gap-x-6">
                     <div className="text-body-text flex flex-col gap-y-2">
-                      <h3 className="font-semibold tracking-[0.2em]">Themes</h3>
+                      <h3 className="font-bold tracking-[0.2em]">Themes</h3>
                       <ThemeSection className="h-full" />
                     </div>
                     <div className="text-body-text flex flex-col gap-y-2">
-                      <h3 className="font-semibold tracking-[0.2em]">
-                        Starflares
-                      </h3>
+                      <h3 className="font-bold tracking-[0.2em]">Starflares</h3>
                       <StarflareSection />
                     </div>
                   </div>
@@ -209,3 +207,8 @@ export default function Header() {
     </header>
   );
 }
+
+// key="my-projects"
+// initial={{ opacity: 0, y: 10 }}
+// animate={{ opacity: 1, y: 0 }}
+// transition={{ duration: 0.15, delay: 0 }}

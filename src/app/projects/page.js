@@ -16,17 +16,22 @@ export default function ProjectPage(props) {
       </>
       <div className="bg-background min-h-screen pt-40">
         <MaxWidthWrapper>
-          <motion.h1 className="mb-8 text-4xl font-bold tracking-[0.2em] text-white">
+          <motion.h1
+            className="mb-8 text-4xl font-bold tracking-[0.2em] text-white"
+            key="my-projects"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.15, delay: 0 }}
+          >
             My Projects
           </motion.h1>
           <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2">
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <motion.div
                 key={project.slug}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.5, delay: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.15, delay: 0.1 + index * 0.08 }}
               >
                 <ProjectCard
                   key={project.slug}

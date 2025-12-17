@@ -9,6 +9,7 @@ import ImageStack from "@/components/ImageStack";
 import HorizontalSlideshow from "@/components/HorizontalSlideshow";
 import Experience from "@/components/Experience";
 import StarBackground from "@/components/StarBackground";
+import { motion } from "framer-motion";
 
 function BulletRow({ children }) {
   return (
@@ -79,11 +80,32 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-8">
-                <SpotifyEmbed playlistId="1oQngKRVkU7oI8hmB4hf7i" theme={0} />
+                <motion.div
+                  key="spotify"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.15, delay: 0 }}
+                >
+                  <SpotifyEmbed playlistId="1oQngKRVkU7oI8hmB4hf7i" theme={0} />
+                </motion.div>
                 {/* <ChessWidget className="flex-1" /> */}
-                <ClashWidget className="flex-1" />
+                <motion.div
+                  key="clash"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.15, delay: 0.1 }}
+                >
+                  <ClashWidget className="flex-1" />
+                </motion.div>
               </div>
-              <HorizontalSlideshow />
+              <motion.div
+                key="slideshow"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.15, delay: 0.2 }}
+              >
+                <HorizontalSlideshow />
+              </motion.div>
             </div>
           </div>
         </MaxWidthWrapper>
