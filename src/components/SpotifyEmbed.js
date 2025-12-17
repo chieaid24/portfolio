@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import SpotifyIcon from "@/icons/SpotifyIcon";
 
 export default function SpotifyEmbed({
   playlistId, // e.g. "1oQngKRVkU7oI8hmB4hf7i"
@@ -26,9 +27,14 @@ export default function SpotifyEmbed({
 
   return (
     <div className="border-outline-gray relative overflow-hidden rounded-xl border-1">
-      {!isReady && (
-        <div className="absolute inset-0 animate-pulse rounded-xl bg-white/5" />
-      )}
+      <div
+        className={`absolute inset-0 flex items-center justify-center rounded-xl bg-white/5 transition-opacity duration-500 ${isReady ? "pointer-events-none opacity-0" : "opacity-100"}`}
+        aria-hidden={isReady}
+      >
+        <div className="flex flex-col items-center justify-center gap-2">
+          <SpotifyIcon className="h-8 w-8 animate-pulse text-white/80" />
+        </div>
+      </div>
       <iframe
         title="Spotify playlist"
         className={`w-full transition-opacity duration-600 ease-out ${className}`}

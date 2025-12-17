@@ -30,7 +30,7 @@ export async function generateMetadata({ params }) {
 }
 
 // Template function to render paragraphs
-const renderParagraphs = (paragraphs) => {
+const renderParagraphs = (paragraphs, isSummary) => {
   if (!paragraphs || paragraphs.length === 0) {
     return null;
   }
@@ -44,6 +44,7 @@ const renderParagraphs = (paragraphs) => {
       className="text-body-text mb-6 text-lg leading-relaxed font-normal"
     >
       {paragraph}
+      {isSummary ? "." : ""}
     </div>
   ));
 };
@@ -61,10 +62,10 @@ export default async function ProjectPage({ params }) {
   }
   return (
     <>
-      <div className="font-dm-sans text-body-text mt-40 min-h-screen">
+      <div className="font-dm-sans text-body-text bg-background min-h-screen pt-40">
         <MaxWidthWrapper>
           <div className="">
-            <div className="mb-20">
+            <div className="mb-12">
               <div className="mb-6 flex flex-col gap-1">
                 <h1 className="text-4xl font-bold tracking-[0.2em] text-white">
                   {project.title}
@@ -75,9 +76,9 @@ export default async function ProjectPage({ params }) {
               </div>
 
               {/**Summary text */}
-              <div className="font-normal">
-                {renderParagraphs(project.summary)}
-              </div>
+              <span className="flex font-normal">
+                {renderParagraphs(project.summary, true)}
+              </span>
 
               <RewardLink
                 href={project.github_link}
@@ -95,18 +96,22 @@ export default async function ProjectPage({ params }) {
             </div>
 
             {/* Background Section */}
-            <section className="text-md font-base mb-20">
-              {renderTitle("Background")}
-              <div>{renderParagraphs(project.background)}</div>
-            </section>
+            {project.background && (
+              <section className="text-md font-base mb-12">
+                {renderTitle("Background")}
+                <div>{renderParagraphs(project.background)}</div>
+              </section>
+            )}
 
             {/* Tools Used Section */}
-            <section className="mb-20">
-              {renderTitle("What tools?")}
-              <div className="">
-                {renderParagraphs(project.tool_paragraphs)}
-              </div>
-            </section>
+            {project.tool_paragraphs && (
+              <section className="mb-12">
+                {renderTitle("What tools?")}
+                <div className="">
+                  {renderParagraphs(project.tool_paragraphs)}
+                </div>
+              </section>
+            )}
 
             {/* display 1 */}
             {project.page_displays[0] && (
@@ -117,12 +122,14 @@ export default async function ProjectPage({ params }) {
             )}
 
             {/** Why This Project */}
-            <section className="mb-15">
-              {renderTitle("Why this project?")}
-              <div className="font-regular text-2xl">
-                {renderParagraphs(project.why_paragraphs)}
-              </div>
-            </section>
+            {project.why_paragraphs && (
+              <section className="mb-12">
+                {renderTitle("Why this project?")}
+                <div className="font-regular text-2xl">
+                  {renderParagraphs(project.why_paragraphs)}
+                </div>
+              </section>
+            )}
 
             {/**optional second image - conditionally render 3D model or regular image */}
 
@@ -134,22 +141,26 @@ export default async function ProjectPage({ params }) {
             )}
 
             {/**What is it */}
-            <section className="mb-20">
-              {renderTitle("What is it?")}
-              <div className="font-regular text-2xl">
-                {renderParagraphs(project.what_paragraphs)}
-              </div>
-            </section>
+            {project.what_paragraphs && (
+              <section className="mb-12">
+                {renderTitle("What is it?")}
+                <div className="font-regular text-2xl">
+                  {renderParagraphs(project.what_paragraphs)}
+                </div>
+              </section>
+            )}
 
             {/**what did I learn */}
-            <section>
-              {renderTitle("What did I learn?")}
-              <div className="font-regular text-2xl">
-                {renderParagraphs(project.learning_paragraphs)}
-              </div>
-            </section>
+            {project.learning_paragraphs && (
+              <section>
+                {renderTitle("What did I learn?")}
+                <div className="font-regular text-2xl">
+                  {renderParagraphs(project.learning_paragraphs)}
+                </div>
+              </section>
+            )}
             {/* Back to Projects Button */}
-            <div className="mt-10 md:mt-20">
+            <div className="mt-10 md:mt-12">
               <BackToProjects />
             </div>
           </div>

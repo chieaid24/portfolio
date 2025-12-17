@@ -14,11 +14,11 @@ export default function ProjectPage(props) {
           content="Projects of Aidan Chien - software engineer specializing in cloud computing, AWS-integrated AI solutions, and intelligent applications. Learn more about my work and background."
         />
       </>
-      <div className="mt-40 min-h-screen">
+      <div className="bg-background min-h-screen pt-40">
         <MaxWidthWrapper>
-          <h1 className="mb-8 text-4xl font-bold tracking-[0.2em] text-white">
+          <motion.h1 className="mb-8 text-4xl font-bold tracking-[0.2em] text-white">
             My Projects
-          </h1>
+          </motion.h1>
           <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2">
             {projects.map((project) => (
               <motion.div

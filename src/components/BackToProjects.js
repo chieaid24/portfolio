@@ -18,7 +18,7 @@ export default function BackToProjects() {
         className="group text-outline-gray group flex cursor-pointer items-center gap-3 text-lg font-semibold transition-transform duration-100 hover:translate-x-[1px]"
       >
         All Projects
-        <SimpleArrow className="h-3 w-3 translate-y-[1px] transition-transform group-hover:translate-x-[1px]" />
+        <SimpleArrow className="h-3 w-3 translate-y-[1px] transition-transform group-hover:translate-x-[2px]" />
       </button>
     </div>
   );
