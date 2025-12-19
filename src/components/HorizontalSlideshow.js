@@ -43,7 +43,7 @@ export default function Carousel() {
   ];
 
   return (
-    <div className="border-outline-gray w-full rounded-xl border bg-[#1f1f1f] p-5">
+    <div className="border-outline-gray w-full rounded-xl border bg-[#1f1f1f] p-3 md:p-5">
       <div className="overflow-hidden rounded-xl">
         <motion.div
           ref={carouselRef}
@@ -58,9 +58,9 @@ export default function Carousel() {
             {images.map((item, i) => (
               <figure
                 key={i}
-                className="flex h-[220px] min-w-[350px] flex-col items-center gap-3"
+                className="flex h-[160px] min-w-[250px] flex-col items-center gap-3 md:h-[220px] md:min-w-[350px]"
               >
-                <motion.div className="h-[250px] w-full overflow-hidden rounded-xl shadow-lg">
+                <motion.div className="h-[220px] w-full overflow-hidden rounded-xl shadow-lg">
                   <Image
                     src={item.src}
                     alt={item.caption || `Slide ${i + 1}`}
@@ -72,7 +72,7 @@ export default function Carousel() {
                     width="350"
                   />
                 </motion.div>
-                <figcaption className="font-base text-body-text flex items-center gap-2 text-center text-sm">
+                <figcaption className="font-base text-body-text flex items-center gap-2 text-center text-xs sm:text-sm">
                   <BulletIcon className="text-highlight-color h-2 w-2" />
                   {item.caption}
                 </figcaption>

@@ -16,6 +16,7 @@ export default function StarflareSection({ cost = 25 }) {
   const [scope, animate] = useAnimate();
   const [canPurchase, setCanPurchase] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [toggleShowInfo, setToggleShowInfo] = useState(false);
 
   const sectionRef = useRef(null);
   const [sparkles, setSparkles] = useState([]);
@@ -153,7 +154,7 @@ export default function StarflareSection({ cost = 25 }) {
   return (
     <motion.div
       ref={sectionRef}
-      className="bg-background-secondary border-outline-dark-gray relative h-full w-full overflow-visible rounded-2xl border px-3 py-2 text-center text-white"
+      className="bg-background-secondary border-outline-dark-gray relative h-full w-full overflow-visible rounded-2xl border px-3 py-3 text-center text-white"
       key="starflare-section"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -167,13 +168,14 @@ export default function StarflareSection({ cost = 25 }) {
           onMouseLeave={() => setShowInfo(false)}
           onFocus={() => setShowInfo(true)}
           onBlur={() => setShowInfo(false)}
-          className="text-outline-gray/70 hover:text-highlight-color/50 p-1 transition duration-150"
+          className={`${showInfo || toggleShowInfo ? "text-highlight-color/50" : "text-outline-gray/70"} hover:text-highlight-color/50 p-1 transition duration-150`}
+          onClick={() => setToggleShowInfo(!toggleShowInfo)}
         >
           <Info className="h-3 w-3" />
         </button>
       </div>
       <AnimatePresence>
-        {showInfo && (
+        {(showInfo || toggleShowInfo) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -186,9 +188,9 @@ export default function StarflareSection({ cost = 25 }) {
         )}
       </AnimatePresence>
 
-      <h2 className="mt-4 text-3xl font-semibold">{displayCount}</h2>
+      <h2 className="mt-3 text-3xl font-semibold">{displayCount}</h2>
 
-      <motion.div className="mt-2">
+      <motion.div className="mt-3">
         <motion.button
           ref={scope}
           type="button"
@@ -198,7 +200,7 @@ export default function StarflareSection({ cost = 25 }) {
             stiffness: 300,
             damping: 20,
           }}
-          className={`bg-highlight-color text-md items-center justify-center rounded-lg px-4.5 py-[3px] leading-4.5 font-semibold text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] ${loading || !canPurchase ? "cursor-default opacity-60" : "cursor-pointer"}`}
+          className={`bg-highlight-color text-md cursor-pointer items-center justify-center rounded-lg px-4.5 py-[3px] leading-4 font-semibold text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] ${loading || !canPurchase ? "opacity-60" : "opacity-100"}`}
         >
           Launch!
           <br />
@@ -208,7 +210,7 @@ export default function StarflareSection({ cost = 25 }) {
         </motion.button>
       </motion.div>
 
-      <p className="text-outline-gray mt-4 text-xs font-medium">
+      <p className="text-outline-gray mt-3 text-[9px] font-medium sm:text-xs">
         You&apos;ve sent {starflareClickCount} flare
         {starflareClickCount === 1 ? "" : "s"}
       </p>

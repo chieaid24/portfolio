@@ -65,18 +65,21 @@ export default function Home() {
         <MaxWidthWrapper>
           {/* <ChatHeader /> */}
           <section id="hero" className="min-h-screen">
-            <div className="flex min-h-[90vh] flex-col items-center justify-center text-red-50 md:min-h-screen">
-              <h1 className="mb-4 text-5xl font-bold">
+            <div className="flex min-h-screen flex-col items-center justify-center text-red-50">
+              <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-4 lg:text-5xl">
                 Hi, I&apos;m Aidan,{" "}
                 <span className="gradient-text-header">
                   {" "}
-                  a software engineer
+                  a <br className="sm:hidden" />
+                  <span style={{ whiteSpace: "nowrap" }}>
+                    software engineer
+                  </span>
                 </span>
               </h1>
-              <h2 className="mb-6 text-[27px] leading-[36px] font-semibold text-red-50">
+              <h2 className="mb-8 text-center text-lg font-semibold text-red-50 sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[27px]">
                 Building practical solutions, one galaxy at a time.
               </h2>
-              <div className="flex w-100 justify-between">
+              <div className="flex w-80 justify-between md:w-100">
                 <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 hover:scale-105">
                   <RewardLink
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
@@ -105,14 +108,14 @@ export default function Home() {
                       e.currentTarget.style.setProperty("--flash-y", "-100px");
                     }}
                   >
-                    <div className="inline-flex items-center gap-2 px-4 py-1">
+                    <div className="inline-flex items-center gap-2 px-2 py-1 md:px-4 md:py-1">
                       <span>Resume</span>
                       <FileDownload className="text-dark-grey-text h-5 w-5" />
                     </div>
                   </RewardLink>
                 </div>
 
-                <div className="text-outline-gray flex items-center justify-center gap-x-3 transition-colors">
+                <div className="text-outline-gray flex items-center justify-center gap-x-4 transition-colors lg:gap-x-3">
                   <RewardLink
                     href="https://www.linkedin.com/in/aidanchien/"
                     target="_blank"
@@ -142,7 +145,7 @@ export default function Home() {
             </div>
             <section className="mb-20">
               <motion.h2
-                className="mb-6 text-4xl font-bold tracking-[0.2em] text-white"
+                className="mb-6 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:text-4xl"
                 key="experience-header"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -163,9 +166,9 @@ export default function Home() {
             </section>
 
             {/**project section */}
-            <motion.div className="mb-6 flex items-baseline justify-between">
+            <motion.div className="mb-6 items-baseline justify-between sm:flex">
               <motion.h2
-                className="text-4xl font-bold tracking-[0.2em] text-white"
+                className="mb-2 text-2xl font-bold tracking-[0.2em] text-white sm:mb-0 sm:text-3xl md:text-4xl"
                 key="my-projects"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -183,13 +186,11 @@ export default function Home() {
               >
                 <RewardLink
                   href="/projects"
-                  className="text-body-text group flex items-center gap-1 text-lg font-medium duration-100 hover:text-white"
+                  className="text-body-text group flex items-center gap-1 font-medium duration-100 hover:text-white sm:text-lg"
                   rewardId="projects-page"
                 >
                   <span>View more</span>
-                  {/* <SimpleArrow className="h-3 w-3" /> */}
-                  {/* <Rocket1 className="h-5 w-5 translate-y-[2px]" /> */}
-                  <Rocket className="h-8 w-8 transition-transform duration-100 group-hover:translate-x-[1px] group-hover:-translate-y-[1px]" />
+                  <Rocket className="h-7 w-7 transition-transform duration-100 group-hover:translate-x-[1px] group-hover:-translate-y-[1px] sm:h-8 sm:w-8" />
                 </RewardLink>
               </motion.div>
             </motion.div>

@@ -38,7 +38,7 @@ function CardRotate({ children, onSendToBack, sensitivity }) {
 
 export default function Stack({
   sensitivity = 150,
-  cardDimensions = { width: 275, height: 275 },
+  cardDimensions,
   animationConfig = { stiffness: 260, damping: 20 },
 }) {
   const [cards, setCards] = useState([
@@ -64,6 +64,14 @@ export default function Stack({
     },
   ]);
 
+  const cardSizeClasses = "w-[200px] h-[200px] md:w-[250px] md:h-[250px]";
+  const sizeStyle = cardDimensions
+    ? { width: cardDimensions.width, height: cardDimensions.height }
+    : undefined;
+  const imageSizes = cardDimensions?.width
+    ? `${cardDimensions.width}px`
+    : "(min-width: 768px) 250px, 200px";
+
   const sendToBack = (id) => {
     setCards((prev) => {
       const newCards = [...prev];
@@ -76,11 +84,10 @@ export default function Stack({
 
   return (
     <div
-      className="relative"
+      className={`relative ${cardSizeClasses}`}
       style={{
-        width: cardDimensions.width,
-        height: cardDimensions.height,
         perspective: 600,
+        ...sizeStyle,
       }}
     >
       {cards.map((card, index) => {
@@ -91,7 +98,7 @@ export default function Stack({
             sensitivity={sensitivity}
           >
             <motion.div
-              className="border-outline-gray overflow-hidden rounded-2xl border-1"
+              className={`border-outline-gray relative overflow-hidden rounded-2xl border-1 ${cardSizeClasses}`}
               animate={{
                 rotateZ: (() => {
                   let base = 0;
@@ -109,17 +116,14 @@ export default function Stack({
                 damping: animationConfig.damping,
                 // duration: 0.1,
               }}
-              style={{
-                width: cardDimensions.width,
-                height: cardDimensions.height,
-              }}
+              style={sizeStyle}
             >
               <Image
                 src={card.img}
                 alt={`card-${card.id}`}
-                className="pointer-events-none h-full w-full object-cover select-none"
-                width="500"
-                height="500"
+                className="pointer-events-none object-cover select-none"
+                fill
+                sizes={imageSizes}
               />
             </motion.div>
           </CardRotate>
