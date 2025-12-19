@@ -21,7 +21,7 @@ export default function ProjectCard({
 
   return (
     <div
-      className={`${clicked ? "linear-gray-gradient" : "linear-gray-gradient"} transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_25px_rgba(255,255,255,0.15)]`}
+      className={`${clicked ? "linear-gray-gradient" : "linear-gray-gradient"} transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_25px_rgba(255,255,255,0.10)]`}
     >
       <div
         className={`font-dm-sans bg-background h-full rounded-xl border-0 text-white`}

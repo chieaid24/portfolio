@@ -56,7 +56,7 @@ export default function SpotifyEmbed({
         loading="eager"
         onLoad={() => {
           if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
-          loadTimerRef.current = setTimeout(() => setIsReady(true), 600);
+          loadTimerRef.current = setTimeout(() => setIsReady(true), 700);
         }}
         onError={(e) => {
           if (loadTimerRef.current) clearTimeout(loadTimerRef.current);

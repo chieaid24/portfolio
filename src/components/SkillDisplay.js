@@ -37,7 +37,7 @@ export default function SkillDisplay({
                     font-base py-0.5 text-xs
                     duration-200 bg-background-highlight px-2.5 py-1 border-1 border-outline-dark-gray`;
 
-  const iconCard = `md:h-3.5 md:w-3.5`;
+  const iconCard = `h-3.5 w-3.5`;
 
   const divProject = `inline-flex items-center gap-2 text-white rounded-md 
                       sm:rounded-lg font-semibold translate-y-[1px] md:translate-y-[2px]  text-lg border

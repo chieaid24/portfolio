@@ -8,7 +8,6 @@ import QuestSection from "@/components/QuestSection";
 import AnimatedBalance from "@/components/AnimatedBalance";
 import RewardLink from "@/components/RewardLink";
 import Info from "@/icons/Info";
-import Minimize from "@/icons/Minimize";
 import ThemeSection from "./ThemeSection";
 import StarflareSection from "./StarflareSection";
 import CloseSimple from "@/icons/CloseSimple";
@@ -25,23 +24,27 @@ export default function Header() {
   return (
     <header
       aria-label="Site header with navigation and wallet"
-      className="font-dm-sans pointer-events-none fixed inset-x-0 top-0 z-1000 py-5"
+      className="font-dm-sans pointer-events-none fixed inset-x-0 top-0 z-1000 px-2 py-5 sm:px-5 md:px-0"
     >
       <motion.div
-        className={`border-outline-dark-gray transition-color pointer-events-auto relative mx-auto max-w-[750px] overflow-hidden rounded-xl border duration-200 ${walletOpen ? "bg-background" : "bg-background/40"} backdrop-blur-md`}
+        className={`border-outline-dark-gray transition-color pointer-events-auto relative mx-auto max-w-full overflow-hidden rounded-xl border duration-200 sm:max-w-[75vw] lg:max-w-[750px] ${walletOpen ? "bg-background" : "bg-background/40"} backdrop-blur-md`}
       >
         {/* Top row */}
-        <div className="grid grid-cols-[1fr_4fr] justify-between pr-6 pl-4.5">
+        <div className="flex justify-between px-4 lg:grid lg:grid-cols-[1fr_4fr] lg:px-5">
           <div className="">
             {/* Money pill = toggle */}
             <button
               type="button"
               onClick={() => setWalletOpen((v) => !v)}
               aria-expanded={walletOpen}
-              className={`group text-outline-gray cursor-pointer self-start text-lg font-semibold`}
+              className={`group ${walletOpen ? "text-body-text" : "text-outline-gray"} cursor-pointer self-start text-lg font-semibold`}
             >
-              <div className="my-1.5 inline-flex flex-col items-start rounded-md px-1.5 py-1 group-hover:text-white/65">
-                <div className="text-outline-gray pb-0.5 leading-none transition-colors duration-100 group-hover:text-white/65">
+              <div
+                className={`group-hover:text-body-text my-1.5 inline-flex flex-col items-start rounded-md py-1 text-left text-sm md:text-base`}
+              >
+                <div
+                  className={`group-hover:text-body-text pb-0.5 leading-none transition-colors duration-100`}
+                >
                   your earnings:
                 </div>
                 <motion.div
@@ -75,7 +78,7 @@ export default function Header() {
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     style={{ willChange: "transform,opacity" }}
                   >
-                    <Info className="text-outline-gray/70 ml-0.5 h-3 w-3 translate-y-[1px] transition-transform duration-100 group-hover:-translate-y-[0px]" />
+                    <Info className="text-outline-gray/70 h-2.5 w-2.5 translate-y-[1px] transition-transform duration-100 group-hover:-translate-y-[0px] sm:ml-0.5 sm:h-3 sm:w-3 sm:p-0" />
                   </motion.div>
                 </motion.div>
               </div>
@@ -93,7 +96,7 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.18 }}
-                  className="flex w-full items-center justify-end gap-x-5 text-lg font-semibold"
+                  className="flex w-full items-center justify-end gap-x-2 font-semibold sm:gap-x-4 md:gap-x-5"
                 >
                   <Link
                     href="/"
@@ -165,7 +168,7 @@ export default function Header() {
                 height: "auto",
                 opacity: 1,
                 paddingTop: 0,
-                paddingBottom: 18,
+                paddingBottom: 16,
               }}
               exit={{
                 height: 0,
@@ -175,20 +178,15 @@ export default function Header() {
               }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
               style={{ overflow: "visible" }}
-              className="px-3 md:pr-6 md:pl-4.5"
+              className="px-4 lg:px-5"
             >
-              <div className="animate-fade-in-7 ml-2 flex w-full flex-col justify-center">
-                {/* <div className="mb-8 text-center text-xl font-black tracking-[0.2em] text-transparent drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]">
-                  <span className="from-highlight-color via-highlight-light-color to-highlight-light-color bg-gradient-to-r bg-clip-text">
-                    GALACTIC OUTPOST
-                  </span>
-                </div> */}
-                <div className="text-md mt-5 grid grid-cols-1 gap-x-6 lg:grid-cols-[2fr_3fr]">
+              <div className="animate-fade-in-7 flex w-full flex-col justify-center">
+                <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-4 text-base sm:mt-5 md:gap-y-0 lg:grid-cols-[2fr_3fr]">
                   <motion.div className="text-body-text flex flex-col gap-y-2">
                     <h3 className="font-bold tracking-[0.2em]">Bounties</h3>
                     <QuestSection className="" />
                   </motion.div>
-                  <div className="grid h-full grid-cols-[3fr_2fr] gap-x-6">
+                  <div className="grid h-full grid-cols-[3fr_2fr] gap-x-5 sm:gap-x-6">
                     <div className="text-body-text flex flex-col gap-y-2">
                       <h3 className="font-bold tracking-[0.2em]">Themes</h3>
                       <ThemeSection className="h-full" />
@@ -207,8 +205,3 @@ export default function Header() {
     </header>
   );
 }
-
-// key="my-projects"
-// initial={{ opacity: 0, y: 10 }}
-// animate={{ opacity: 1, y: 0 }}
-// transition={{ duration: 0.15, delay: 0 }}

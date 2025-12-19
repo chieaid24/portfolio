@@ -77,40 +77,39 @@ export default function ClashWidget() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div className="flex gap-1 text-xl leading-tight font-semibold tracking-tighter text-white duration-100 hover:opacity-90">
+          <div className="flex items-center gap-1 text-xl leading-tight font-semibold tracking-tighter text-white duration-100 hover:opacity-90 sm:text-2xl md:text-xl">
             <ClashRoyale className="h-6 w-6 text-white" />
             Merlord
           </div>
         </a>
         <div className="flex flex-col">
-          <div className="flex items-center justify-end gap-1">
-            <Trophy className="h-3.5 w-3.5 text-white" />
+          <div className="flex items-center justify-end gap-1 text-base sm:text-lg md:text-base">
+            <Trophy className="h-3.5 w-3.5 text-white sm:-translate-y-[1px] md:translate-y-0" />
             <div className="justify-end font-semibold tracking-tight text-white">
               {player?.trophies ?? "—"}
             </div>
           </div>
         </div>
       </div>
-      {/* <hr className="border-light-grey-text mx-7 my-1 border-t sm:my-2" /> */}
-      <div className="font-base text-body-text grid grid-cols-2 gap-3 text-xs">
-        <div className="flex flex-col justify-between py-2">
-          <div className="flex justify-between">
+      <div className="font-base text-body-text grid grid-cols-2 gap-3 text-[10px] sm:text-sm md:text-xs md:leading-none lg:leading-normal">
+        <div className="flex flex-col flex-wrap justify-between py-2 md:gap-[5px] lg:gap-0">
+          <div className="flex items-center justify-between gap-x-1">
             <h1>Career wins</h1>
             <div className="text-dark-body-text">{player?.wins ?? "0"}</div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between gap-x-1">
             <h1>Career win percentage</h1>
             <div className="text-dark-body-text">
               {careerWinPercent != null ? `${careerWinPercent}%` : "0%"}
             </div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between gap-x-1">
             <h1>Recent wins</h1>
             <div className="text-dark-body-text">
               {summary.w != null ? `${summary.w}` : "—"}
             </div>
           </div>
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between gap-x-1">
             <h1>Recent win percentage</h1>
             <div className="text-dark-body-text">
               {summary.winRate != null ? `${summary.winRate}%` : "—"}
@@ -120,7 +119,7 @@ export default function ClashWidget() {
 
         {/* Current deck */}
         <div className="ml-auto flex">
-          <div className="grid grid-cols-4 grid-rows-2 gap-x-1 rounded-xl bg-black/10 py-1">
+          <div className="grid grid-cols-4 grid-rows-2 gap-x-1 rounded-xl bg-black/10 py-1 sm:gap-x-3 md:gap-x-1">
             {deck.slice(0, 8).map((card, i) => (
               <div key={card.id ?? i} className="items-center justify-center">
                 {getCardIcon(card, i) ? (

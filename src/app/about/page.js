@@ -7,13 +7,11 @@ import ClashWidget from "@/components/ClashWidget";
 import BulletIcon from "@/icons/BulletIcon";
 import ImageStack from "@/components/ImageStack";
 import HorizontalSlideshow from "@/components/HorizontalSlideshow";
-import Experience from "@/components/Experience";
-import StarBackground from "@/components/StarBackground";
 import { motion } from "framer-motion";
 
 function BulletRow({ children }) {
   return (
-    <div className="flex items-center gap-x-4">
+    <div className="flex items-center gap-x-4 text-sm sm:text-base">
       <BulletIcon className="text-highlight-color h-2 w-2 shrink-0" />
       <p>{children}</p>
     </div>
@@ -34,9 +32,9 @@ export default function AboutPage() {
       <main className="font-dm-sans bg-background font-medium">
         <MaxWidthWrapper>
           <div className="text-body-text min-h-[90vh]">
-            <div className="mb-6 grid grid-cols-2 pt-40">
-              <div className="">
-                <h1 className="bg-background mb-8 text-4xl font-bold tracking-[0.2em] text-white">
+            <div className="mb-6 grid grid-cols-1 pt-35 md:grid-cols-2 md:pt-40">
+              <div className="order-2 md:order-1">
+                <h1 className="bg-background mb-4 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:mb-8 md:text-4xl">
                   About Me
                 </h1>
                 {/* blurb section*/}
@@ -62,13 +60,13 @@ export default function AboutPage() {
                   </BulletRow>
                 </div>
               </div>
-              <div className="flex justify-end">
+              <div className="order-1 mb-8 flex justify-start md:order-2 md:mb-0 md:justify-end">
                 <ImageStack />
               </div>
             </div>
-            <div className="flex flex-col space-y-8">
+            <div className="flex flex-col space-y-6 md:space-y-8">
               <div className="mb-8">
-                <h1 className="mb-8 text-4xl font-bold tracking-[0.2em] text-white">
+                <h1 className="mb-4 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:mb-8 md:text-4xl">
                   Interests
                 </h1>
                 <div className="space-y-1">
@@ -79,7 +77,7 @@ export default function AboutPage() {
                   <BulletRow>Check out some of my stats below!</BulletRow>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
                 <motion.div
                   key="spotify"
                   initial={{ opacity: 0, y: 10 }}
