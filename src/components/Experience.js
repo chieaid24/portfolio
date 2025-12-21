@@ -69,7 +69,10 @@ function TimelineItem({ item }) {
 
 export default function Experience() {
   const [activeTab, setActiveTab] = useState("work");
-  const items = experiences[activeTab] ?? [];
+  const tabItems = tabs.map((tab) => ({
+    ...tab,
+    items: experiences[tab.id] ?? [],
+  }));
   let [ref, { height }] = useMeasure();
 
   return (
@@ -98,23 +101,39 @@ export default function Experience() {
         </div>
 
         <motion.div
-          animate={{ height, ease: "easeOut" }}
+          animate={{ height }}
           transition={{ duration: 0 }}
-          className="bg-background border-outline-gray rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
+          className="bg-background border-outline-gray relative rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
         >
-          <motion.div key={activeTab}>
-            <div ref={ref} className="relative px-3 py-5 sm:px-6 sm:py-6">
+          {tabItems.map((tab) => {
+            const isActive = tab.id === activeTab;
+            return (
               <div
-                className="absolute top-0 bottom-0 left-[2rem] w-px bg-white/10 sm:left-[3.1rem]"
-                aria-hidden="true"
-              />
-              <div className="z-10 space-y-8">
-                {items.map((item, index) => (
-                  <TimelineItem key={item.id} item={item} />
-                ))}
+                key={tab.id}
+                aria-hidden={!isActive}
+                className={`transition-opacity duration-0 ${
+                  isActive
+                    ? "relative opacity-100"
+                    : "pointer-events-none absolute inset-0 opacity-0"
+                }`}
+              >
+                <div
+                  ref={isActive ? ref : undefined}
+                  className="relative px-3 py-5 sm:px-6 sm:py-6"
+                >
+                  <div
+                    className="absolute top-0 bottom-0 left-[2rem] w-px bg-white/10 sm:left-[3.1rem]"
+                    aria-hidden="true"
+                  />
+                  <div className="z-10 space-y-8">
+                    {tab.items.map((item) => (
+                      <TimelineItem key={item.id} item={item} />
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>
