@@ -74,7 +74,7 @@ export default function ThemeSection({ ...props }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.15, delay: 0.1 }}
     >
-      <div className="grid grid-cols-3 justify-items-center gap-4 p-4 sm:gap-3 sm:p-4 md:gap-5 lg:gap-5 lg:p-5">
+      <div className="mx-auto my-auto grid grid-cols-3 gap-2.5 p-2.5 sm:gap-5 sm:p-5 md:gap-5 lg:gap-5 lg:p-5">
         {THEME_OPTIONS.map((theme) => {
           const isSelected = selectedId === theme.id;
           const isOwned = ownedThemes?.includes?.(theme.id);
@@ -87,7 +87,7 @@ export default function ThemeSection({ ...props }) {
               aria-label={`${theme.label} for ₳ ${theme.price}`}
               aria-pressed={isSelected}
               onClick={() => handleSelect(theme.id)}
-              className={`group relative aspect-[1] transform cursor-pointer overflow-visible rounded-xl border-2 transition duration-200 ${
+              className={`group relative aspect-square w-12 transform cursor-pointer overflow-hidden rounded-xl border-2 transition duration-200 sm:w-14 lg:w-[51px] ${
                 isSelected
                   ? "border-highlight-color/80"
                   : jigglingId === theme.id

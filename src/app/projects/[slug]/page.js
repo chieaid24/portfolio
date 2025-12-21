@@ -62,7 +62,7 @@ export default async function ProjectPage({ params }) {
   }
   return (
     <>
-      <div className="font-dm-sans text-body-text bg-background min-h-screen pt-40">
+      <div className="font-dm-sans text-body-text bg-background min-h-screen pt-35 md:pt-40">
         <MaxWidthWrapper>
           <div className="">
             <div className="mb-12">

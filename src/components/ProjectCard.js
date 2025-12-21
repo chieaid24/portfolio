@@ -21,7 +21,7 @@ export default function ProjectCard({
 
   return (
     <div
-      className={`${clicked ? "" : "linear-gray-gradient"} transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_25px_rgba(255,255,255,0.15)]`}
+      className={`transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_25px_rgba(255,255,255,0.15)]`}
     >
       <div
         className={`font-dm-sans bg-background border-outline-gray h-full rounded-xl border-1 text-white`}
@@ -61,7 +61,7 @@ export default function ProjectCard({
                 );
               })}
             </div>
-            <div className="mt-6 mb-6 h-px w-full bg-white/30"></div>
+            <div className="my-5 h-px w-full bg-white/30 sm:my-6"></div>
             <div className="flex justify-between">
               <div className="duration-100 hover:translate-x-[2px]">
                 <RewardLink

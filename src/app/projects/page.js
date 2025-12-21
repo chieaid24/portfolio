@@ -14,10 +14,10 @@ export default function ProjectPage(props) {
           content="Projects of Aidan Chien - software engineer specializing in cloud computing, AWS-integrated AI solutions, and intelligent applications. Learn more about my work and background."
         />
       </>
-      <div className="bg-background min-h-screen pt-40">
+      <div className="bg-background min-h-[90vh]">
         <MaxWidthWrapper>
           <motion.h1
-            className="mb-8 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:text-4xl"
+            className="mb-8 pt-35 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:pt-40 md:text-4xl"
             key="my-projects"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
