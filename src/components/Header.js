@@ -40,7 +40,7 @@ export default function Header() {
               className={`group ${walletOpen ? "text-body-text" : "text-outline-gray"} cursor-pointer self-start text-lg font-semibold`}
             >
               <div
-                className={`group-hover:text-body-text my-1.5 inline-flex flex-col items-start rounded-md py-1 text-left text-sm md:text-base`}
+                className={`group-hover:text-body-text my-1.5 inline-flex flex-col items-start rounded-md py-1 text-left text-xs md:text-base`}
               >
                 <div
                   className={`group-hover:text-body-text pb-0.5 leading-none transition-colors duration-100`}
@@ -57,7 +57,7 @@ export default function Header() {
                     ₳
                   </span>
                   <motion.span
-                    className="5xl:text-[27px] text-lg leading-none md:text-[24px]"
+                    className="text-base leading-none md:text-2xl"
                     transition={{ duration: 0.1 }}
                   >
                     {ready ? (
