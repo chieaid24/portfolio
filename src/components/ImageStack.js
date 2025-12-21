@@ -98,7 +98,7 @@ export default function Stack({
             sensitivity={sensitivity}
           >
             <motion.div
-              className={`border-outline-gray relative overflow-hidden rounded-2xl border-1 ${cardSizeClasses}`}
+              className={`border-outline-gray relative overflow-hidden rounded-2xl border-0 ${cardSizeClasses}`}
               animate={{
                 rotateZ: (() => {
                   let base = 0;

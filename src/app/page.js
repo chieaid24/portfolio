@@ -65,7 +65,7 @@ export default function Home() {
         <MaxWidthWrapper>
           {/* <ChatHeader /> */}
           <section id="hero" className="min-h-screen">
-            <div className="flex min-h-screen flex-col items-center justify-center text-red-50">
+            <div className="flex min-h-screen flex-col items-center justify-center text-white">
               <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-4 lg:text-5xl">
                 Hi, I&apos;m Aidan,{" "}
                 <span className="gradient-text-header">
@@ -76,7 +76,7 @@ export default function Home() {
                   </span>
                 </span>
               </h1>
-              <h2 className="mb-8 text-center text-lg font-semibold text-red-50 sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[27px]">
+              <h2 className="mb-8 text-center text-lg font-semibold text-white sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[27px]">
                 Building practical solutions, one galaxy at a time.
               </h2>
               <div className="flex w-80 justify-between md:w-100">

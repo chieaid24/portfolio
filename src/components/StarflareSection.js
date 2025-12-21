@@ -166,10 +166,10 @@ export default function StarflareSection({ cost = 25 }) {
           aria-label="Starflare info"
           onMouseEnter={() => setShowInfo(true)}
           onMouseLeave={() => setShowInfo(false)}
-          onFocus={() => setShowInfo(true)}
-          onBlur={() => setShowInfo(false)}
+          onBlur={() => {
+            setShowInfo(false);
+          }}
           className={`${showInfo || toggleShowInfo ? "text-highlight-color/50" : "text-outline-gray/70"} hover:text-highlight-color/50 p-1 transition duration-150`}
-          onClick={() => setToggleShowInfo(!toggleShowInfo)}
         >
           <Info className="h-3 w-3" />
         </button>

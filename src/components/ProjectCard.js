@@ -21,22 +21,22 @@ export default function ProjectCard({
 
   return (
     <div
-      className={`${clicked ? "linear-gray-gradient" : "linear-gray-gradient"} transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_25px_rgba(255,255,255,0.10)]`}
+      className={`${clicked ? "" : "linear-gray-gradient"} transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_25px_rgba(255,255,255,0.15)]`}
     >
       <div
-        className={`font-dm-sans bg-background h-full rounded-xl border-0 text-white`}
+        className={`font-dm-sans bg-background border-outline-gray h-full rounded-xl border-1 text-white`}
       >
         <RewardProjectLink
           href={`/projects/${slug}`}
-          className="mobile:select-none flex h-full flex-col justify-between gap-8 px-8 py-6"
+          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-8 sm:px-8 sm:py-6"
           rewardId={rewardId}
           ticketValue={1000}
         >
           <div className="">
             <div className="mb-3">
-              <h3 className="text-2xl font-semibold">{title}</h3>
+              <h3 className="text-xl font-semibold sm:text-2xl">{title}</h3>
               <span
-                className={`flex items-center gap-x-2 text-sm ${clicked ? "opacity-50" : "opacity-100"} text-white`}
+                className={`flex items-center gap-x-2 text-sm font-light ${clicked ? "text-gray-400" : "text-white"}`}
               >
                 <Telescope className="h-3.5 w-3.5" />
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
