@@ -24,6 +24,8 @@ function TimelineItem({ item }) {
           width={60}
           height={60}
           className="h-full w-full"
+          sizes="(max-width: 640px) 40px, 52px"
+          quality={75}
         />
       </div>
 

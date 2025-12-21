@@ -186,8 +186,10 @@ export default function Home() {
               >
                 <RewardLink
                   href="/projects"
+                  scroll
                   className="text-body-text group flex items-center gap-1 font-medium duration-100 hover:text-white sm:text-lg"
                   rewardId="projects-page"
+                  viewMoreProjects={true}
                 >
                   <span>View more</span>
                   <Rocket className="h-7 w-7 transition-transform duration-100 group-hover:translate-x-[1px] group-hover:-translate-y-[1px] sm:h-8 sm:w-8" />

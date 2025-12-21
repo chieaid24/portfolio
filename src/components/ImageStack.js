@@ -64,13 +64,13 @@ export default function Stack({
     },
   ]);
 
-  const cardSizeClasses = "w-[200px] h-[200px] md:w-[250px] md:h-[250px]";
+  const cardSizeClasses = "w-[175px] h-[175px] md:w-[250px] md:h-[250px]";
   const sizeStyle = cardDimensions
     ? { width: cardDimensions.width, height: cardDimensions.height }
     : undefined;
   const imageSizes = cardDimensions?.width
     ? `${cardDimensions.width}px`
-    : "(min-width: 768px) 250px, 200px";
+    : "(min-width: 768px) 250px, 175px";
 
   const sendToBack = (id) => {
     setCards((prev) => {
