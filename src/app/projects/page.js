@@ -17,7 +17,7 @@ export default function ProjectPage(props) {
       <div className="bg-background min-h-screen pt-40">
         <MaxWidthWrapper>
           <motion.h1
-            className="mb-8 text-4xl font-bold tracking-[0.2em] text-white"
+            className="mb-8 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:text-4xl"
             key="my-projects"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

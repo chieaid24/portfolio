@@ -52,7 +52,9 @@ function TimelineItem({ item }) {
                   {highlight.text}
                 </p>
                 {highlight.note && (
-                  <p className="text-sm text-gray-400">{highlight.note}</p>
+                  <p className="text-xs text-gray-400 sm:text-sm">
+                    {highlight.note}
+                  </p>
                 )}
               </div>
             </div>

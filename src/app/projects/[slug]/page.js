@@ -41,7 +41,7 @@ const renderParagraphs = (paragraphs, isSummary) => {
   return paragraphArray.map((paragraph, index) => (
     <div
       key={index}
-      className="text-body-text mb-6 text-lg leading-relaxed font-normal"
+      className="text-body-text text-md mb-6 leading-loose font-normal sm:text-lg sm:leading-relaxed"
     >
       {paragraph}
       {isSummary ? "." : ""}
@@ -50,7 +50,7 @@ const renderParagraphs = (paragraphs, isSummary) => {
 };
 
 const renderTitle = (title) => {
-  return <h2 className="mb-6 text-2xl font-semibold">{title}</h2>;
+  return <h2 className="mb-6 text-xl font-semibold sm:text-2xl">{title}</h2>;
 };
 
 export default async function ProjectPage({ params }) {
@@ -67,10 +67,10 @@ export default async function ProjectPage({ params }) {
           <div className="">
             <div className="mb-12">
               <div className="mb-6 flex flex-col gap-1">
-                <h1 className="text-4xl font-bold tracking-[0.2em] text-white">
+                <h1 className="text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:text-4xl">
                   {project.title}
                 </h1>
-                <h3 className="text-light-grey-text text-2xl italic">
+                <h3 className="text-light-grey-text text-lg italic sm:text-2xl">
                   &apos;{project.subtitle}&apos;
                 </h3>
               </div>
@@ -125,7 +125,7 @@ export default async function ProjectPage({ params }) {
             {project.why_paragraphs && (
               <section className="mb-12">
                 {renderTitle("Why this project?")}
-                <div className="font-regular text-2xl">
+                <div className="font-regular">
                   {renderParagraphs(project.why_paragraphs)}
                 </div>
               </section>
@@ -144,7 +144,7 @@ export default async function ProjectPage({ params }) {
             {project.what_paragraphs && (
               <section className="mb-12">
                 {renderTitle("What is it?")}
-                <div className="font-regular text-2xl">
+                <div className="font-regular">
                   {renderParagraphs(project.what_paragraphs)}
                 </div>
               </section>
@@ -154,7 +154,7 @@ export default async function ProjectPage({ params }) {
             {project.learning_paragraphs && (
               <section>
                 {renderTitle("What did I learn?")}
-                <div className="font-regular text-2xl">
+                <div className="font-regular">
                   {renderParagraphs(project.learning_paragraphs)}
                 </div>
               </section>
