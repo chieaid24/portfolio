@@ -54,6 +54,7 @@ export default function ModelViewer({
   modelPath = "/models/keyassembly03.glb",
 }) {
   const [modelHovered, setModelHovered] = useState(false);
+
   const isMobile = useIsMobile();
   const showDescription = isMobile || modelHovered;
 
@@ -68,9 +69,13 @@ export default function ModelViewer({
     <div className="relative h-full w-full">
       {/* Model viewer - full width/height */}
       <div
-        className="border-outline-gray relative h-[500px] w-full overflow-hidden rounded-lg border bg-gray-200 shadow-md"
-        onMouseEnter={() => setModelHovered(true)}
-        onMouseLeave={() => setModelHovered(false)}
+        className={`border-outline-gray relative h-[500px] w-full overflow-hidden rounded-lg border bg-gray-200 shadow-md`}
+        onPointerEnter={(e) => {
+          setModelHovered(true);
+        }}
+        onPointerLeave={() => {
+          setModelHovered(false);
+        }}
       >
         <Canvas camera={{ position: [3.5, 3.5, 3.5], fov: 35 }}>
           <Suspense fallback={null}>

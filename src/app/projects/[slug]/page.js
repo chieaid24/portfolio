@@ -71,7 +71,7 @@ export default async function ProjectPage({ params }) {
                   {project.title}
                 </h1>
                 <h3 className="text-light-grey-text text-lg italic sm:text-2xl">
-                  &apos;{project.subtitle}&apos;
+                  "{project.subtitle}"
                 </h3>
               </div>
 

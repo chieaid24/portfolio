@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useMoney } from "@/lib/money-context";
 import { useRouter } from "next/navigation";
 
@@ -14,17 +13,20 @@ export default function RewardProjectLink({
   ...rest
 }) {
   const { awardOnce, hasAward } = useMoney();
-  const claimed = hasAward(rewardId);
   const router = useRouter();
+
+  const handleClick = (e) => {
+    onClick?.(e);
+    router.push(href);
+    requestAnimationFrame(() => {
+      awardOnce(rewardId, kind, ticketValue);
+    });
+  };
 
   return (
     <div
       {...rest}
-      onClick={(e) => {
-        awardOnce(rewardId, kind, ticketValue);
-        onClick?.(e);
-        router.push(href);
-      }}
+      onClick={handleClick}
       data-reward-id={rewardId}
       className={`cursor-pointer transition-opacity duration-200 ${className}`}
     >

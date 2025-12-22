@@ -79,7 +79,7 @@ export default function Experience() {
     <section className="text-white">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <div className="bg-background border-outline-gray rounded-2xl border p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1">
             {tabs.map((tab) => {
               const isActive = tab.id === activeTab;
               return (
@@ -90,7 +90,7 @@ export default function Experience() {
                   className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors duration-200 sm:text-base ${
                     isActive
                       ? "bg-highlight-color text-white shadow-[0_5px_30px_rgba(255,255,255,0.2)]"
-                      : "cursor-pointer text-white hover:bg-white/5"
+                      : "cursor-pointer text-white md:hover:bg-white/5"
                   }`}
                 >
                   {tab.label}
@@ -122,7 +122,7 @@ export default function Experience() {
                   className="relative px-3 py-5 sm:px-6 sm:py-6"
                 >
                   <div
-                    className="absolute top-0 bottom-0 left-[2rem] w-px bg-white/10 sm:left-[3.1rem]"
+                    className="absolute top-6 bottom-30 left-[2rem] w-px bg-white/10 sm:left-[3.1rem]"
                     aria-hidden="true"
                   />
                   <div className="z-10 space-y-8">

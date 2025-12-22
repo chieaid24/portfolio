@@ -84,7 +84,7 @@ export default function Stack({
 
   return (
     <div
-      className={`relative ${cardSizeClasses}`}
+      className={`relative ${cardSizeClasses} z-10`}
       style={{
         perspective: 600,
         ...sizeStyle,
@@ -98,7 +98,7 @@ export default function Stack({
             sensitivity={sensitivity}
           >
             <motion.div
-              className={`border-outline-gray relative overflow-hidden rounded-2xl border-0 ${cardSizeClasses}`}
+              className={`border-outline-gray relative overflow-hidden rounded-2xl border-1 ${cardSizeClasses}`}
               animate={{
                 rotateZ: (() => {
                   let base = 0;

@@ -34,9 +34,9 @@ const RotatingNavText = forwardRef((props, ref) => {
     mainClassName,
     splitLevelClassName,
     elementLevelClassName,
-    disableFirstAnimation = false,
+    disableFirstAnimation = true,
     deltaColor = "green", // "green" | "red"
-    leverAward, 
+    leverAward,
     ...rest
   } = props;
 
@@ -94,7 +94,7 @@ const RotatingNavText = forwardRef((props, ref) => {
       }
       return Math.abs(staggerFrom - index) * staggerDuration;
     },
-    [staggerFrom, staggerDuration]
+    [staggerFrom, staggerDuration],
   );
 
   const handleIndexChange = useCallback(
@@ -102,13 +102,15 @@ const RotatingNavText = forwardRef((props, ref) => {
       setCurrentTextIndex(newIndex);
       onNext?.(newIndex);
     },
-    [onNext]
+    [onNext],
   );
 
   const next = useCallback(() => {
     const nextIndex =
       currentTextIndex === texts.length - 1
-        ? (loop ? 0 : currentTextIndex)
+        ? loop
+          ? 0
+          : currentTextIndex
         : currentTextIndex + 1;
     if (nextIndex !== currentTextIndex) handleIndexChange(nextIndex);
   }, [currentTextIndex, texts.length, loop, handleIndexChange]);
@@ -116,7 +118,9 @@ const RotatingNavText = forwardRef((props, ref) => {
   const previous = useCallback(() => {
     const prevIndex =
       currentTextIndex === 0
-        ? (loop ? texts.length - 1 : currentTextIndex)
+        ? loop
+          ? texts.length - 1
+          : currentTextIndex
         : currentTextIndex - 1;
     if (prevIndex !== currentTextIndex) handleIndexChange(prevIndex);
   }, [currentTextIndex, texts.length, loop, handleIndexChange]);
@@ -126,7 +130,7 @@ const RotatingNavText = forwardRef((props, ref) => {
       const i = Math.max(0, Math.min(index, texts.length - 1));
       if (i !== currentTextIndex) handleIndexChange(i);
     },
-    [texts.length, currentTextIndex, handleIndexChange]
+    [texts.length, currentTextIndex, handleIndexChange],
   );
 
   const reset = useCallback(() => {
@@ -162,7 +166,7 @@ const RotatingNavText = forwardRef((props, ref) => {
           return "gradient-text-jackpot";
         default:
           return "text-sage-green";
-      }      
+      }
     }
     //if first index and it is leveraward (meaning that it is rewarding due to lever pull), make index 1 red (match the last text)
     else if (idx === 0 && leverAward) {
@@ -175,18 +179,26 @@ const RotatingNavText = forwardRef((props, ref) => {
 
   return (
     <motion.span
-      className={cn("flex flex-wrap whitespace-pre-wrap relative", mainClassName)}
+      className={cn(
+        "relative flex flex-wrap whitespace-pre-wrap",
+        mainClassName,
+      )}
       {...rest}
       layout
       transition={transition}
     >
       <span className="sr-only">{texts[currentTextIndex]}</span>
 
-      <AnimatePresence mode={animatePresenceMode} initial={animatePresenceInitial}>
+      <AnimatePresence
+        mode={animatePresenceMode}
+        initial={animatePresenceInitial}
+      >
         <motion.span
           key={k}
           className={cn(
-            splitBy === "lines" ? "flex flex-col w-full" : "flex flex-wrap whitespace-pre-wrap relative"
+            splitBy === "lines"
+              ? "flex w-full flex-col"
+              : "relative flex flex-wrap whitespace-pre-wrap",
           )}
           layout
           aria-hidden="true"
@@ -197,12 +209,17 @@ const RotatingNavText = forwardRef((props, ref) => {
               .reduce((sum, w) => sum + w.characters.length, 0);
 
             return (
-              <span key={wordIndex} className={cn("inline-flex", splitLevelClassName)}>
+              <span
+                key={wordIndex}
+                className={cn("inline-flex", splitLevelClassName)}
+              >
                 {wordObj.characters.map((char, charIndex) => (
                   <motion.span
                     key={charIndex}
                     initial={
-                      !didFirstMount.current && disableFirstAnimation ? false : initial
+                      !didFirstMount.current && disableFirstAnimation
+                        ? false
+                        : initial
                     }
                     animate={animate}
                     exit={exit}
@@ -210,15 +227,21 @@ const RotatingNavText = forwardRef((props, ref) => {
                       ...transition,
                       delay: getStaggerDelay(
                         prevCharsCount + charIndex,
-                        array.reduce((s, w) => s + w.characters.length, 0)
+                        array.reduce((s, w) => s + w.characters.length, 0),
                       ),
                     }}
-                    className={cn("inline-block", elementLevelClassName, colorForIndex(k))}
+                    className={cn(
+                      "inline-block",
+                      elementLevelClassName,
+                      colorForIndex(k),
+                    )}
                   >
                     {char}
                   </motion.span>
                 ))}
-                {wordObj.needsSpace && <span className="whitespace-pre"> </span>}
+                {wordObj.needsSpace && (
+                  <span className="whitespace-pre"> </span>
+                )}
               </span>
             );
           })}

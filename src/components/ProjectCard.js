@@ -21,7 +21,7 @@ export default function ProjectCard({
 
   return (
     <div
-      className={`transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 hover:-translate-y-[2px] hover:shadow-[0_8px_25px_rgba(255,255,255,0.15)]`}
+      className={`transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 md:hover:-translate-y-[2px] md:hover:shadow-[0_8px_25px_rgba(255,255,255,0.15)]`}
     >
       <div
         className={`font-dm-sans bg-background border-outline-gray h-full rounded-xl border-1 text-white`}
@@ -63,7 +63,7 @@ export default function ProjectCard({
             </div>
             <div className="my-5 h-px w-full bg-white/30 sm:my-6"></div>
             <div className="flex justify-between">
-              <div className="duration-100 hover:translate-x-[2px]">
+              <div className="duration-100 md:hover:translate-x-[2px]">
                 <RewardLink
                   href={github}
                   className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
@@ -74,9 +74,9 @@ export default function ProjectCard({
                   GitHub
                 </RewardLink>
               </div>
-              <div className="text-body-text group flex items-center gap-2 transition-all duration-100 hover:translate-x-[1px]">
+              <div className="text-body-text group flex items-center gap-2 transition-all duration-100 md:hover:translate-x-[1px]">
                 <span>Explore Project </span>
-                <SimpleArrow className="h-2.5 w-2.5 translate-y-[1px] transition-transform group-hover:translate-x-[2px]" />
+                <SimpleArrow className="h-2.5 w-2.5 translate-y-[1px] transition-transform md:group-hover:translate-x-[2px]" />
               </div>
             </div>
           </div>

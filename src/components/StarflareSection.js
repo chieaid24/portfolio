@@ -190,7 +190,7 @@ export default function StarflareSection({ cost = 25 }) {
 
       <h2 className="mt-3 text-3xl font-semibold">{displayCount}</h2>
 
-      <motion.div className="mt-3">
+      <motion.div className="mt-1 sm:mt-3">
         <motion.button
           ref={scope}
           type="button"
