@@ -128,7 +128,7 @@ export default function ClashWidget() {
                     alt={card.name || "Card"}
                     width={40}
                     height={40}
-                    className="duration-200 hover:scale-105"
+                    className="duration-200 md:hover:scale-105"
                   />
                 ) : (
                   <Image

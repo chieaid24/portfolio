@@ -80,13 +80,13 @@ export default function Home() {
                 Building practical solutions, one galaxy at a time.
               </h2>
               <div className="flex w-80 justify-between md:w-100">
-                <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 hover:scale-105">
+                <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
                   <RewardLink
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
                     rewardId="resume"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 hover:border-white/75 hover:text-white/75"
+                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-white/75 md:hover:text-white/75"
                     onMouseEnter={(e) => {
                       e.currentTarget.style.setProperty(
                         "--flash-active",
@@ -120,7 +120,7 @@ export default function Home() {
                     href="https://www.linkedin.com/in/aidanchien/"
                     target="_blank"
                     rewardId="linkedin"
-                    className="hover:translate-y-[-1px]"
+                    className="md:hover:translate-y-[-1px]"
                   >
                     <FooterLinkedin className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
                   </RewardLink>
@@ -128,7 +128,7 @@ export default function Home() {
                     href="https://github.com/chieaid24"
                     target="_blank"
                     rewardId="github"
-                    className="hover:translate-y-[-1px]"
+                    className="md:hover:translate-y-[-1px]"
                   >
                     <FooterGithub className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
                   </RewardLink>
@@ -136,9 +136,9 @@ export default function Home() {
                     href="mailto:aidan.chien@uwaterloo.ca"
                     target="_blank"
                     rewardId="email"
-                    className="hover:translate-y-[-1px]"
+                    className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterEmail className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
+                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-white/75" />
                   </RewardLink>
                 </div>
               </div>
@@ -187,12 +187,12 @@ export default function Home() {
                 <RewardLink
                   href="/projects"
                   scroll
-                  className="text-body-text group flex items-center gap-1 font-medium duration-100 hover:text-white sm:text-lg"
+                  className="text-body-text group flex items-center gap-1 font-medium duration-100 sm:text-lg md:hover:text-white"
                   rewardId="projects-page"
                   viewMoreProjects={true}
                 >
                   <span>View more</span>
-                  <Rocket className="h-7 w-7 transition-transform duration-100 group-hover:translate-x-[1px] group-hover:-translate-y-[1px] sm:h-8 sm:w-8" />
+                  <Rocket className="h-7 w-7 transition-transform duration-100 sm:h-8 sm:w-8 md:group-hover:translate-x-[1px] md:group-hover:-translate-y-[1px]" />
                 </RewardLink>
               </motion.div>
             </motion.div>

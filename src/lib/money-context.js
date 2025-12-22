@@ -146,6 +146,11 @@ function reducer(state, action) {
         awarded: { ...state.awarded, [id]: kind },
       };
     }
+    case "MARK_AWARDED": {
+      const { id, kind } = action;
+      if (state.awarded[id] != null) return state;
+      return { ...state, awarded: { ...state.awarded, [id]: kind } };
+    }
     case "AWARDINF": {
       const amt = normalize2(toAmount(action.amount));
       if (!Number.isFinite(amt) || amt <= 0) return state;
@@ -211,9 +216,8 @@ function amountFor(kind, { projValue } = {}) {
     case "link":
       return 150;
 
-    case "project": {
+    case "project":
       return 400;
-    }
 
     case "redtext":
       return 25;
@@ -250,6 +254,7 @@ export function MoneyProvider({ children }) {
   );
   const [ownedThemes, setOwnedThemes] = useState([DEFAULT_THEME_ID]);
   const [starflareClickCount, setStarflareClickCount] = useState(0);
+  const pendingAwardsRef = useRef(new Set());
 
   const stateRef = useRef(state);
   useEffect(() => {
@@ -446,9 +451,10 @@ export function MoneyProvider({ children }) {
        * @returns {boolean} true if paid (first time), false otherwise
        */
       awardOnce: (id, kind, projValue) => {
-        if (state.awarded[id] != null) return false;
+        if (state.awarded[id] != null || pendingAwardsRef.current.has(id))
+          return false;
 
-        const allowed = new Set(["redtext", "project", "link", "egg"]);
+        const allowed = new Set(["redtext", "project", "link"]);
         if (!allowed.has(kind)) {
           return false;
         }
@@ -462,7 +468,24 @@ export function MoneyProvider({ children }) {
           setOverflowTick((t) => t + 1);
         }
 
-        dispatch({ type: "AWARD", id, amount, kind });
+        pendingAwardsRef.current.add(id);
+        // if a red word, add to balance and update awarded map immediately.
+        // If a link (redirects to another page, wait 200ms before updating the awarded tab)
+        if (kind === "redtext") {
+          dispatch({ type: "AWARD", id, amount, kind });
+        } else {
+          // Add balance immediately
+          window.setTimeout(() => {
+            dispatch({ type: "AWARDINF", amount });
+          }, 200);
+
+          // Mark awarded after a small delay to avoid pre-navigation UI shifts
+          window.setTimeout(() => {
+            pendingAwardsRef.current.delete(id);
+            dispatch({ type: "MARK_AWARDED", id, kind });
+          }, 500);
+        }
+
         return true;
       },
 

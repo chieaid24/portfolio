@@ -40,10 +40,10 @@ export default function Header() {
               className={`group ${walletOpen ? "text-body-text" : "text-outline-gray"} cursor-pointer self-start text-lg font-semibold`}
             >
               <div
-                className={`group-hover:text-body-text my-1.5 inline-flex flex-col items-start rounded-md py-1 text-left text-xs md:text-base`}
+                className={`md:group-hover:text-body-text my-1.5 inline-flex flex-col items-start rounded-md py-1 text-left text-xs md:text-base`}
               >
                 <div
-                  className={`group-hover:text-body-text pb-0.5 leading-none transition-colors duration-100`}
+                  className={`pb-0.5 leading-none transition-colors duration-100`}
                 >
                   your earnings:
                 </div>
@@ -78,7 +78,7 @@ export default function Header() {
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     style={{ willChange: "transform,opacity" }}
                   >
-                    <Info className="text-outline-gray/70 h-2.5 w-2.5 translate-y-[1px] transition-transform duration-100 group-hover:-translate-y-[0px] sm:ml-0.5 sm:h-3 sm:w-3 sm:p-0" />
+                    <Info className="text-outline-gray/70 h-2.5 w-2.5 translate-y-[1px] transition-transform duration-100 sm:ml-0.5 sm:h-3 sm:w-3 sm:p-0 md:group-hover:-translate-y-[0px]" />
                   </motion.div>
                 </motion.div>
               </div>
@@ -96,25 +96,26 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.18 }}
-                  className="flex w-full items-center justify-end gap-x-2 font-semibold sm:gap-x-4 md:gap-x-5"
+                  className="flex w-full items-center justify-end gap-x-3 font-semibold sm:gap-x-4 md:gap-x-5"
                 >
                   <Link
                     href="/"
-                    className="hover:text-highlight-color/80 transition-colors duration-100"
+                    className="md:hover:text-highlight-color/80 transition-colors duration-100"
                   >
                     home
                   </Link>
                   <RewardLink
                     href="/about"
-                    className="hover:text-highlight-color/80 transition-colors duration-100"
+                    className="md:hover:text-highlight-color/80 transition-colors duration-100"
                     rewardId="about-page"
                     transparent={false}
+                    scroll
                   >
                     about
                   </RewardLink>
                   <RewardLink
                     href="/projects"
-                    className="hover:text-highlight-color/80 transition-colors duration-100"
+                    className="md:hover:text-highlight-color/80 transition-colors duration-100"
                     rewardId="projects-page"
                     transparent={false}
                   >
@@ -124,7 +125,7 @@ export default function Header() {
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-highlight-color/80 transition-colors duration-100"
+                    className="md:hover:text-highlight-color/80 transition-colors duration-100"
                     rewardId="resume"
                     transparent={false}
                   >
@@ -143,7 +144,7 @@ export default function Header() {
                       animate={{ opacity: 1, rotate: 0, scale: 1 }}
                       exit={{ opacity: 0, rotate: 45, scale: 0.9 }}
                       transition={{ duration: 0.18 }}
-                      className="cursor-pointer px-3 py-2 transition-colors duration-100 hover:text-white/75 md:px-[2px] md:py-[2px]"
+                      className="cursor-pointer px-3 py-2 transition-colors duration-100 md:px-[2px] md:py-[2px] md:hover:text-white/75"
                     >
                       <CloseSimple className="text-dark-grey-text h-3 w-3" />
                     </motion.button>
