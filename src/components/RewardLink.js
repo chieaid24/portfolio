@@ -20,6 +20,7 @@ export default function RewardLink({
     <Link
       {...rest}
       onClick={(e) => {
+        e.stopPropagation();
         awardOnce(rewardId, kind);
         onClick?.(e);
       }}

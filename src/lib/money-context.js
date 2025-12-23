@@ -478,12 +478,12 @@ export function MoneyProvider({ children }) {
           window.setTimeout(() => {
             dispatch({ type: "AWARDINF", amount });
           }, 300);
-
+          const awardedDelay = kind === "project" ? 800 : 300;
           // Mark awarded after a small delay to avoid pre-navigation UI shifts
           window.setTimeout(() => {
             pendingAwardsRef.current.delete(id);
             dispatch({ type: "MARK_AWARDED", id, kind });
-          }, 800);
+          }, awardedDelay);
         }
 
         return true;
