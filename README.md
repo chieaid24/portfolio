@@ -1,6 +1,7 @@
 <h1 align="center"> 💫 Aidan's Portfolio Site </h1>
 
-<img width="2090" height="1006" alt="website_card" src="https://github.com/user-attachments/assets/43aaa055-6ea6-4506-b93a-c5daa8f6085c" />
+<img width="1861" height="930" alt="website-card-v2" src="https://github.com/user-attachments/assets/0a79abf5-3c6c-4373-84f2-45654f056b7b" />
+
 
 <h2>Overview</h2>
 
