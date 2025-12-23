@@ -37,6 +37,10 @@
   color-scheme: light;
 }
 
+html {
+  background: #0f0f0f;
+}
+
 /* WebKit (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
   width: 6px;
@@ -86,18 +90,6 @@
     right: 0;
     height: 100vh;
     z-index: -1;
-  }
-
-  body::before {
-    top: -100vh;
-    background-color: var(--background-light);
-    /* top */
-  }
-
-  body::after {
-    bottom: -100vh;
-    background-color: var(--background-light);
-    /* bottom */
   }
 }
 
