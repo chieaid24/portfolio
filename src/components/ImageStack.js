@@ -44,15 +44,15 @@ export default function Stack({
   const [cards, setCards] = useState([
     {
       id: 1,
-      img: "/about/stack_images/about_image_4_v1.jpeg",
+      img: "/about/stack_images/about_image_4_v1.JPEG",
     },
     {
       id: 2,
-      img: "/about/stack_images/about_image_3_v1.jpg",
+      img: "/about/stack_images/about_image_3_v1.JPG",
     },
     {
       id: 3,
-      img: "/about/stack_images/about_image_5_v1.jpeg",
+      img: "/about/stack_images/about_image_5_v1.JPEG",
     },
     {
       id: 4,
