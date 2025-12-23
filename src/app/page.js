@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
@@ -15,41 +14,6 @@ import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 
 export default function Home() {
-  const [randomTickets, setRandomTickets] = useState({});
-  useEffect(() => {
-    const generateTicketNumbers = () => {
-      const used = new Set(["69"]);
-      const ticketMap = {};
-
-      projects.forEach((project) => {
-        let ticket;
-        do {
-          const num = Math.floor(Math.random() * 99) + 1;
-          ticket = num < 10 ? `0${num}` : num.toString();
-        } while (used.has(ticket));
-        used.add(ticket);
-        ticketMap[project.slug] = ticket;
-      });
-
-      setRandomTickets(ticketMap);
-    };
-
-    generateTicketNumbers();
-
-    const hash = window.location.hash;
-    if (hash === "#projects") {
-      setTimeout(() => {
-        const section = document.getElementById("projects");
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth", block: "start" });
-          setTimeout(() => {
-            history.replaceState(null, "", window.location.pathname);
-          }, 1000);
-        }
-      }, 100);
-    }
-  }, []);
-
   return (
     <>
       <>
@@ -189,7 +153,6 @@ export default function Home() {
                   scroll
                   className="text-body-text group flex items-center gap-1 font-medium duration-100 sm:text-lg md:hover:text-white"
                   rewardId="projects-page"
-                  viewMoreProjects={true}
                 >
                   <span>View more</span>
                   <Rocket className="h-7 w-7 transition-transform duration-100 sm:h-8 sm:w-8 md:group-hover:translate-x-[1px] md:group-hover:-translate-y-[1px]" />

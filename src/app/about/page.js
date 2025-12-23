@@ -8,6 +8,7 @@ import BulletIcon from "@/icons/BulletIcon";
 import ImageStack from "@/components/ImageStack";
 import HorizontalSlideshow from "@/components/HorizontalSlideshow";
 import { motion } from "framer-motion";
+import { experiences } from "@/app/data/experiences";
 
 function BulletRow({ children }) {
   return (
@@ -19,6 +20,14 @@ function BulletRow({ children }) {
 }
 
 export default function AboutPage() {
+  // states "Currently <Job Title>" if Job is working until the "present"
+  // states "Previously <Job Title" if Job does not include "present"
+  const currentOrPrev = () => {
+    return experiences.work[0].period.toLowerCase().includes("present")
+      ? "Currently"
+      : "Previously";
+  };
+
   return (
     <>
       <>
@@ -56,7 +65,8 @@ export default function AboutPage() {
                     focused on cloud engineering and infrastructure (AWS)
                   </BulletRow>
                   <BulletRow>
-                    Currently a Full Stack Technical Lead at NeedList.ORG
+                    {currentOrPrev()} a {experiences.work[0].title} at{" "}
+                    {experiences.work[0].subtitle}
                   </BulletRow>
                 </div>
               </div>

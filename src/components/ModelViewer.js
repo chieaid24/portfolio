@@ -130,7 +130,9 @@ export default function ModelViewer({
               ? "opacity-100 duration-200"
               : "opacity-0 duration-200"
           }`}
-        ></p>
+        >
+          psst... rotate me!
+        </p>
       </div>
     </div>
   );

@@ -205,10 +205,7 @@ export const projects = [
     ],
     image: "/portfolio_website/website_card.png",
     page_displays: [
-      [
-        "/portfolio_website/website3-image-1_v5.png",
-        "Phone, tablet, and desktop views of the website",
-      ],
+      ["/portfolio_website/website-image-2.png", "System architecture diagram"],
     ],
     github_link: "https://github.com/chieaid24/Portfolio-Website",
     subtitle: "a portfolio that performs",
