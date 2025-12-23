@@ -188,7 +188,9 @@ export default function StarflareSection({ cost = 25 }) {
         )}
       </AnimatePresence>
 
-      <h2 className="mt-3 text-3xl font-semibold">{displayCount}</h2>
+      <h2 className="text-body-text mt-3 text-3xl font-semibold">
+        {displayCount}
+      </h2>
 
       <motion.div className="mt-1 sm:mt-3">
         <motion.button
