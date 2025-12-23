@@ -3,15 +3,15 @@ import RedText from "@/components/RewardRedText";
 import SkillDisplay from "@/components/SkillDisplay";
 
 export const quest_totals = {
-  // Home: 3 | About: 5 | PMI: 9 | Website: 11 | 3D Tools: 5 | MBDMacro: 7 | AI Sleep: 10
-  // CURR TOTAL: 50
-  redtext: 50,
+  // About: 3 | AI Sleep: 10 | Website: 11 | PMI: 9 | 3D Tools: 5
+  // CURR TOTAL:
+  redtext: 38,
 
-  // OnePerProject: 5
-  // CURR TOTAL: 5
-  project: 5,
+  // OnePerProject: 4
+  // CURR TOTAL: 4
+  project: 4,
 
-  // Header: 2 | Home: 1 | Footer: 2 | OnePerProject: 5
+  // Header: [about, projects, resume] | Footer: [linkedin, github, email] | OnePerProject: 4
   // CURR TOTAL: 10
   link: 10,
 };
