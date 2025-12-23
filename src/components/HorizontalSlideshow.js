@@ -21,11 +21,11 @@ export default function Carousel() {
       caption: "Climbing in Red Rock",
     },
     {
-      src: "/about/carousel_images/about_slides_5.JPEG",
+      src: "/about/carousel_images/about_slides_5.jpeg",
       caption: "Sensoji Temple in Tokyo",
     },
     {
-      src: "/about/carousel_images/about_slides_6.JPEG",
+      src: "/about/carousel_images/about_slides_6.jpeg",
       caption: "Jeju City, South Korea",
     },
     {
