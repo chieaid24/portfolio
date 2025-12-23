@@ -477,13 +477,13 @@ export function MoneyProvider({ children }) {
           // Add balance immediately
           window.setTimeout(() => {
             dispatch({ type: "AWARDINF", amount });
-          }, 200);
+          }, 300);
 
           // Mark awarded after a small delay to avoid pre-navigation UI shifts
           window.setTimeout(() => {
             pendingAwardsRef.current.delete(id);
             dispatch({ type: "MARK_AWARDED", id, kind });
-          }, 500);
+          }, 800);
         }
 
         return true;
