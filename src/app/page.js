@@ -29,7 +29,12 @@ export default function Home() {
         <MaxWidthWrapper>
           {/* <ChatHeader /> */}
           <section id="hero" className="min-h-screen">
-            <div className="flex min-h-screen flex-col items-center justify-center text-white">
+            <motion.div
+              className="flex min-h-screen flex-col items-center justify-center text-white"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
               <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-4 lg:text-5xl">
                 Hi, I&apos;m Aidan,{" "}
                 <span className="gradient-text-header">
@@ -105,7 +110,7 @@ export default function Home() {
                   </RewardLink>
                 </div>
               </div>
-            </div>
+            </motion.div>
             <section className="mb-20">
               <motion.h2
                 className="mb-6 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:text-4xl"
