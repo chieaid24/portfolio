@@ -19,6 +19,10 @@ It’s an interactive personal portfolio, and this README serves to highlight so
 | **Deployment** | Vercel                                                          |
 
 ---
+## System Overview
+<img width="1166" height="583" alt="website-image-2" src="https://github.com/user-attachments/assets/71a927ca-9f95-4b92-a19e-dd1556dfaace" />
+
+
 
 ## Frontend Architecture
 
@@ -57,4 +61,4 @@ The backend is handled via **Next.js API routes** (Node.js), calling and caching
 ## Future Extensions
 
 - AI chatbot using my projects / resume as a RAG database
-- Skills grid showcasing langauges and frameworks
+- Skills grid showcasing languages and frameworks
