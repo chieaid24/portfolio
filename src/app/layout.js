@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { DM_Sans, Italiana, Noto_Sans } from "next/font/google";
 import Script from "next/script";
@@ -22,6 +23,7 @@ const notoSans = Noto_Sans({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
+  useEffect(() => window.scrollTo(0, 0), [pathname]);
 
   return (
     <html

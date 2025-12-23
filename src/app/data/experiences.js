@@ -6,7 +6,7 @@ export const experiences = {
         src: "/company-images/needlist-logo.png",
         alt: "NeedList.ORG logo",
       },
-      title: "Full Stack Technical Lead",
+      title: "Software Engineer",
       subtitle: "NeedList.ORG",
       period: "Sep 2025 - Present",
       highlights: [
@@ -31,8 +31,7 @@ export const experiences = {
           text: (
             <>
               Implemented <strong>Agile methodology</strong> and Notion issue
-              tracking to optimize product strategy and maintain complete
-              technical documentation
+              tracking
             </>
           ),
         },
@@ -51,8 +50,8 @@ export const experiences = {
         {
           text: (
             <>
-              Produced 2D assets, event merchandise, and marketing materials
-              that attracted <strong>150+</strong> sign-ups
+              Produced 2D assets, merchandise, and marketing materials that
+              attracted <strong>180+</strong> sign-ups
             </>
           ),
         },
@@ -79,9 +78,9 @@ export const experiences = {
         {
           text: (
             <>
-              Leveraged <strong>Generative AI</strong> and{" "}
-              <strong>Python</strong> scripts to resolve tasks that previously
-              required human input
+              Leveraged <strong>Gen AI</strong> and <strong>Python</strong>{" "}
+              scripts to streamline workflows and reduce reliance on manual
+              human intervention
             </>
           ),
         },
@@ -89,7 +88,7 @@ export const experiences = {
           text: (
             <>
               Built first-of-its-kind Python application, cutting preparation
-              labor by <strong>30%</strong>
+              labor by <strong>30%</strong> per machined part
             </>
           ),
         },
@@ -109,7 +108,7 @@ export const experiences = {
       period: "Sep 2024 - Present",
       highlights: [
         {
-          text: <>Cumulative GPA: 3.97/4.00</>,
+          text: <>Cumulative GPA: 92.13%</>,
         },
         {
           text: <>2x Term Distinction</>,

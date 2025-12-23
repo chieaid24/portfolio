@@ -8,9 +8,6 @@ export default function BackToProjects() {
 
   const handleBackToProjects = () => {
     router.push("/projects");
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    });
   };
 
   return (
