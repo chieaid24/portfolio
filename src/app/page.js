@@ -78,7 +78,6 @@ export default function Home() {
                     </div>
                   </RewardLink>
                 </div>
-
                 <div className="text-outline-gray flex items-center justify-center gap-x-4 transition-colors lg:gap-x-3">
                   <RewardLink
                     href="https://www.linkedin.com/in/aidanchien/"
@@ -128,7 +127,6 @@ export default function Home() {
                 <Experience />
               </motion.div>
             </section>
-
             {/**project section */}
             <motion.div className="mb-6 items-baseline justify-between sm:flex">
               <motion.h2
@@ -159,7 +157,6 @@ export default function Home() {
                 </RewardLink>
               </motion.div>
             </motion.div>
-
             <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2">
               {projects
                 .filter((project) => featuredList.includes(project.slug))

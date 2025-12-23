@@ -41,7 +41,7 @@ export default function StarBackground() {
   const { highlightHex } = useMoney();
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 h-full">
+    <div className="pointer-events-none fixed inset-0 -z-10 h-full bg-[#02030a]">
       <Canvas camera={{ position: [0, 0, 300], fov: 60 }} dpr={[1, 2]}>
         <color attach="background" args={["#02030a"]} />
         <ambientLight intensity={0.5} />
