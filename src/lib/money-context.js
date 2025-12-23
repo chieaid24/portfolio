@@ -13,9 +13,9 @@ import { createPayoutGenerator } from "@/lib/payout.js";
 import { defaultMixtureConfig } from "@/lib/payout-default.js";
 import { quest_totals } from "@/app/data/projects.js";
 
-const STORAGE_KEY = "moneyState_v1";
-const THEME_STORAGE_KEY = "themeSelection_v1";
-const STARFLARE_STORAGE_KEY = "localStarflareClickCount_v1";
+const STORAGE_KEY = "moneyState_v2";
+const THEME_STORAGE_KEY = "themeSelection_v2";
+const STARFLARE_STORAGE_KEY = "localStarflareClickCount_v2";
 const MoneyContext = createContext(null);
 const MAX_BAL = 9999.99;
 const INIT_BAL = 100.0;
