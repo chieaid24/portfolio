@@ -26,7 +26,7 @@ export default function SkillDisplay({
         {
           ssr: false,
           loading: () => (
-            <span className="inline-block h-6 w-6 animate-pulse rounded" />
+            <span className="inline-block h-3.5 w-3.5 rounded-md" />
           ),
         },
       ),

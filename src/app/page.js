@@ -171,7 +171,7 @@ export default function Home() {
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.15 }}
-                    transition={{ duration: 0.15, delay: index * 0.08 }}
+                    transition={{ duration: 0.15, delay: index * 0.15 }}
                   >
                     <ProjectCard
                       key={project.slug}
