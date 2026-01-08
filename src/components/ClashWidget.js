@@ -12,16 +12,40 @@ function formatCardAssetName(name) {
   return String(name).trim().toLowerCase().replace(/\s+/g, "-");
 }
 
-const getCardIcon = (card, index) => {
-  const name = card?.name ?? "";
-  const base = formatCardAssetName(name);
-  if (!base) return null;
+function DeckCardImage({ card, index, className }) {
+  const base = formatCardAssetName(card?.name ?? "");
+  const normalSrc = base ? `/royale/cards/${base}.png` : null;
+  const evolvedSrc = base ? `/royale/cards/${base}-ev1.png` : null;
 
   const evoEligible = index < 2 && Number(card?.evolutionLevel ?? 0) >= 1;
-  const evolvedPath = `/royale/cards/${base}-ev1.png`;
-  const normalPath = `/royale/cards/${base}.png`;
-  return evoEligible ? evolvedPath : normalPath;
-};
+  const [src, setSrc] = useState(evoEligible ? evolvedSrc : normalSrc);
+
+  if (!src) {
+    return (
+      <Image
+        src="/royale/cards/card-legendary-unknown.png"
+        alt="Card"
+        width={40}
+        height={40}
+        className={className}
+      />
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={card?.name || "Card"}
+      width={40}
+      height={40}
+      className={className}
+      onError={() => {
+        if (src === evolvedSrc && normalSrc) setSrc(normalSrc);
+        else setSrc("/royale/cards/card-legendary-unknown.png");
+      }}
+    />
+  );
+}
 
 export default function ClashWidget() {
   const [data, setData] = useState(null);
@@ -122,23 +146,11 @@ export default function ClashWidget() {
           <div className="grid grid-cols-4 grid-rows-2 gap-x-1 rounded-xl bg-black/10 py-1 sm:gap-x-3 md:gap-x-1">
             {deck.slice(0, 8).map((card, i) => (
               <div key={card.id ?? i} className="items-center justify-center">
-                {getCardIcon(card, i) ? (
-                  <Image
-                    src={getCardIcon(card, i)}
-                    alt={card.name || "Card"}
-                    width={40}
-                    height={40}
-                    className="duration-200 md:hover:scale-105"
-                  />
-                ) : (
-                  <Image
-                    src="/royale/cards/card-legendary-unknown.png"
-                    alt="Card"
-                    width={40}
-                    height={40}
-                    className=""
-                  />
-                )}
+                <DeckCardImage
+                  card={card}
+                  index={i}
+                  className="duration-200 md:hover:scale-105"
+                />
               </div>
             ))}
           </div>

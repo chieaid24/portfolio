@@ -92,7 +92,7 @@ export default function AboutPage() {
                   key="spotify"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15, delay: 0 }}
+                  transition={{ duration: 0.15, delay: 0.25 }}
                 >
                   <SpotifyEmbed playlistId="1oQngKRVkU7oI8hmB4hf7i" theme={0} />
                 </motion.div>
@@ -101,7 +101,7 @@ export default function AboutPage() {
                   key="clash"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15, delay: 0.1 }}
+                  transition={{ duration: 0.15, delay: 0.4 }}
                 >
                   <ClashWidget className="flex-1" />
                 </motion.div>
@@ -110,7 +110,7 @@ export default function AboutPage() {
                 key="slideshow"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.15, delay: 0.2 }}
+                transition={{ duration: 0.15, delay: 0.55 }}
               >
                 <HorizontalSlideshow />
               </motion.div>

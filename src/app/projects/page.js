@@ -21,7 +21,7 @@ export default function ProjectPage(props) {
             key="my-projects"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.15, delay: 0 }}
+            transition={{ duration: 0.15, delay: 0.1 }}
           >
             My Projects
           </motion.h1>
@@ -31,7 +31,7 @@ export default function ProjectPage(props) {
                 key={project.slug}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.15, delay: 0.1 + index * 0.08 }}
+                transition={{ duration: 0.15, delay: 0.25 + index * 0.15 }}
               >
                 <ProjectCard
                   key={project.slug}

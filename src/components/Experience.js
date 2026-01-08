@@ -122,7 +122,7 @@ export default function Experience() {
                   className="relative px-3 py-5 sm:px-6 sm:py-6"
                 >
                   <div
-                    className="absolute top-6 bottom-30 left-[2rem] w-px bg-white/10 sm:left-[3.1rem]"
+                    className="absolute top-6 bottom-0 left-[2rem] w-px bg-white/10 sm:left-[3.1rem]"
                     aria-hidden="true"
                   />
                   <div className="z-10 space-y-8">

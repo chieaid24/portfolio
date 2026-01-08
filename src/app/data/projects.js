@@ -11,7 +11,7 @@ export const quest_totals = {
   // CURR TOTAL: 4
   project: 4,
 
-  // Header: [about, projects, resume] | Footer: [linkedin, github, email] | OnePerProject: 4
+  // Header: 3[about, projects, resume] | Footer: 3[linkedin, github, email] | OnePerProject: 4
   // CURR TOTAL: 10
   link: 10,
 };
