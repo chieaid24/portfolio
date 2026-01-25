@@ -8,7 +8,7 @@ export const experiences = {
       },
       title: "Software Engineer",
       subtitle: "NeedList.ORG",
-      period: "Sep 2025 - Present",
+      period: "Sep 2025 - Jan 2026",
       highlights: [
         {
           text: (
@@ -45,7 +45,7 @@ export const experiences = {
       },
       title: "UI/UX Designer",
       subtitle: "FormulaTech Hacks",
-      period: "Mar 2025 - Present",
+      period: "Mar 2025 - Jan 2026",
       highlights: [
         {
           text: (
