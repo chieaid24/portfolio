@@ -98,22 +98,50 @@ async function sp(url, accessToken, init = {}) {
 }
 
 // Get top tracks for last ~4 weeks (Spotify's "short_term"), limit 5
+// Filters out tracks containing "white noise" and fetches additional tracks to maintain count
 async function getTopTracks5(accessToken) {
   console.log(
     "[getTopTracks5] Fetching top 5 tracks for short_term (last 4 weeks)",
   );
+
+  // Fetch extra tracks to account for potential filtering
   const data = await sp(
-    "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5",
+    "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10",
     accessToken,
   );
-  const tracks = (data.items || []).map((t) => ({ id: t.id, uri: t.uri }));
-  console.log(`[getTopTracks5] Retrieved ${tracks.length} top tracks`);
+
+  const allTracks = data.items || [];
+  console.log(
+    `[getTopTracks5] Retrieved ${allTracks.length} total tracks from API`,
+  );
+
+  // Filter out tracks containing "white noise" (case-insensitive)
+  const tracks = [];
+  for (const item of allTracks) {
+    const trackTitle = (item.name || "").toLowerCase();
+    const containsWhiteNoise =
+      trackTitle.includes("white") && trackTitle.includes("noise");
+
+    if (containsWhiteNoise) {
+      console.log(
+        `[getTopTracks5] Filtering out: "${item.name}" (contains "white noise")`,
+      );
+    } else {
+      tracks.push({ id: item.id, uri: item.uri, name: item.name });
+      if (tracks.length === 5) break; // Stop once we have 5 valid tracks
+    }
+  }
+
+  console.log(
+    `[getTopTracks5] After filtering, ${tracks.length} valid tracks remain`,
+  );
   if (tracks.length > 0) {
     console.debug(
       "[getTopTracks5] Track URIs:",
       tracks.map((t) => t.uri),
     );
   }
+
   return tracks;
 }
 
