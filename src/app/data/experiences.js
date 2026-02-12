@@ -105,7 +105,7 @@ export const experiences = {
       title: "University of Waterloo",
       subtitle:
         "Bachelor of Applied Science (BASc), Systems Design Engineering",
-      period: "Sep 2024 - Present",
+      // period: "Sep 2024 - Present",
       highlights: [
         {
           text: <>Cumulative GPA: 92.13%</>,
@@ -113,14 +113,7 @@ export const experiences = {
         {
           text: <>2x Term Distinction</>,
         },
-        {
-          text: (
-            <>
-              Relevant Courses: Human Factors in Design, Digital Computation,{" "}
-              Data Structures and Algorithms
-            </>
-          ),
-        },
+
         {
           text: (
             <>

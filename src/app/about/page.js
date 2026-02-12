@@ -28,6 +28,11 @@ export default function AboutPage() {
       : "Previously";
   };
 
+  const aOrAn = (title) => {
+    const vowels = ["a", "i", "o", "e", "u"];
+    return vowels.includes(title[0].toLowerCase()) ? "an" : "a";
+  };
+
   return (
     <>
       <>
@@ -65,7 +70,8 @@ export default function AboutPage() {
                     focused on cloud engineering and infrastructure (AWS)
                   </BulletRow>
                   <BulletRow>
-                    {currentOrPrev()} a {experiences.work[0].title} at{" "}
+                    {currentOrPrev()} {aOrAn(experiences.work[0].title)}{" "}
+                    {experiences.work[0].title} at{" "}
                     {experiences.work[0].subtitle}
                   </BulletRow>
                 </div>
