@@ -1,6 +1,5 @@
 {
   "crons": [
-    { "path": "/api/spotify/monthly", "schedule": "0 0 1 * *" },
     { "path": "/api/counter/increment", "schedule": "0 0 * * 0" }
   ]
 }
