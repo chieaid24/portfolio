@@ -71,7 +71,7 @@ export const experiences = {
         src: "/company-images/autonomous-logo_v2.png",
         alt: "Autonomous Machining logo",
       },
-      title: "Research & Software Development Engineer",
+      title: "R&D Software Engineer",
       subtitle: "Autonomous Machining",
       period: "Dec 2024 - Apr 2025",
       highlights: [
