@@ -10,6 +10,8 @@ import RewardLink from "@/components/RewardLink";
 import Info from "@/icons/Info";
 import ThemeSection from "./ThemeSection";
 import StarflareSection from "./StarflareSection";
+import StarflareInfo from "./StarflareInfo";
+import BountyInfo from "./BountyInfo";
 import CloseSimple from "@/icons/CloseSimple";
 
 export default function Header() {
@@ -37,10 +39,10 @@ export default function Header() {
               type="button"
               onClick={() => setWalletOpen((v) => !v)}
               aria-expanded={walletOpen}
-              className={`group ${walletOpen ? "text-body-text" : "text-outline-gray"} cursor-pointer self-start text-lg font-semibold`}
+              className={`group ${walletOpen ? "text-body-text/80" : "text-outline-gray"} cursor-pointer self-start text-lg font-semibold`}
             >
               <div
-                className={`md:group-hover:text-body-text my-1.5 inline-flex flex-col items-start rounded-md py-1 text-left text-xs md:text-base`}
+                className={`md:group-hover:text-body-text/80 my-1.5 inline-flex flex-col items-start rounded-md py-1 text-left text-xs md:text-base`}
               >
                 <div
                   className={`pb-0.5 leading-none transition-colors duration-100`}
@@ -169,7 +171,7 @@ export default function Header() {
                 height: "auto",
                 opacity: 1,
                 paddingTop: 0,
-                paddingBottom: 16,
+                paddingBottom: 20,
               }}
               exit={{
                 height: 0,
@@ -184,7 +186,10 @@ export default function Header() {
               <div className="animate-fade-in-7 flex w-full flex-col justify-center">
                 <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-4 text-base sm:mt-5 lg:grid-cols-[2fr_3fr] lg:gap-y-0">
                   <motion.div className="flex flex-col gap-y-2 text-white">
-                    <h3 className="font-bold tracking-[0.2em]">Bounties</h3>
+                    <div className="flex items-end gap-0">
+                      <h3 className="font-bold tracking-[0.2em]">Bounties</h3>
+                      <BountyInfo />
+                    </div>
                     <QuestSection className="" />
                   </motion.div>
                   <div className="grid h-full grid-cols-[3fr_2fr] gap-x-5 sm:gap-x-6">
@@ -193,7 +198,12 @@ export default function Header() {
                       <ThemeSection className="h-full" />
                     </div>
                     <div className="text-body-text flex flex-col gap-y-2">
-                      <h3 className="font-bold tracking-[0.2em]">Starflares</h3>
+                      <div className="flex items-end gap-0">
+                        <h3 className="font-bold tracking-[0.2em]">
+                          Starflares
+                        </h3>
+                        <StarflareInfo />
+                      </div>
                       <StarflareSection />
                     </div>
                   </div>
