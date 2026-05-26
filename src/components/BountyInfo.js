@@ -1,0 +1,42 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Info from "@/icons/Info.js";
+
+export default function BountyInfo() {
+  const [showInfo, setShowInfo] = useState(false);
+  const [toggleShowInfo, setToggleShowInfo] = useState(false);
+
+  return (
+    <div className="relative inline-flex">
+      <button
+        type="button"
+        aria-label="Bounty info"
+        onMouseEnter={() => setShowInfo(true)}
+        onMouseLeave={() => setShowInfo(false)}
+        onClick={() => setToggleShowInfo((v) => !v)}
+        onBlur={() => {
+          setShowInfo(false);
+          setToggleShowInfo(false);
+        }}
+        className={`${showInfo || toggleShowInfo ? "text-highlight-color/50" : "text-outline-gray/70"} hover:text-highlight-color/50 p-1 transition duration-150 translate-y-[-1px]`}
+      >
+        <Info className="h-3.5 w-3.5" />
+      </button>
+      <AnimatePresence>
+        {(showInfo || toggleShowInfo) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="border-highlight-color/20 bg-background-secondary/60 absolute top-full -left-2 z-20 mt-1 w-48 max-w-[9rem] rounded-xl border-[1px] p-3 text-left text-xs leading-snug text-white shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-lg"
+          >
+            {`Explore the site to earn galactic credits. Spend them on Themes or Starflares.`}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}

@@ -217,17 +217,13 @@ body {
 }
 
 .gradient-text-header {
-  background: linear-gradient(
-    90deg,
-    var(--highlight-color) 0%,
-    var(--highlight-color) 20%,
-    /* solid red to 20% */ var(--highlight-light-color) 70%,
-    /* blend ends by 45% */ var(--highlight-light-color) 100%
-      /* solid light red after */
-  );
+  /* background: var(--highlight-light-color);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent; */
+  color: var(--highlight-color);
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.3);
 }
 
 .animated-underline {

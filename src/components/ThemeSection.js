@@ -5,7 +5,8 @@ import { useMoney, THEME_OPTIONS } from "@/lib/money-context";
 import { motion, useAnimate } from "framer-motion";
 
 export default function ThemeSection({ ...props }) {
-  const { themeId, setThemeById, purchaseTheme, ownedThemes } = useMoney();
+  const { themeId, setThemeById, purchaseTheme, ownedThemes, balance } =
+    useMoney();
   const [selectedId, setSelectedId] = useState(themeId ?? "coral");
   const [scope, animate] = useAnimate();
   const buttonRefs = useRef({});
@@ -78,6 +79,8 @@ export default function ThemeSection({ ...props }) {
         {THEME_OPTIONS.map((theme) => {
           const isSelected = selectedId === theme.id;
           const isOwned = ownedThemes?.includes?.(theme.id);
+          const canAfford = Number(theme.price) <= (balance ?? 0);
+          const isLocked = !isOwned && !canAfford;
 
           return (
             <motion.button
@@ -87,17 +90,21 @@ export default function ThemeSection({ ...props }) {
               aria-label={`${theme.label} for ₳ ${theme.price}`}
               aria-pressed={isSelected}
               onClick={() => handleSelect(theme.id)}
-              className={`group relative aspect-square w-12 transform cursor-pointer overflow-hidden rounded-xl border-2 transition duration-200 sm:w-14 lg:w-[51px] ${
+              className={`group relative aspect-square w-12 transform overflow-hidden rounded-xl border-2 transition duration-200 sm:w-14 lg:w-[51px] ${
+                isLocked ? "cursor-default" : "cursor-pointer"
+              } ${
                 isSelected
                   ? "border-highlight-color/80"
                   : jigglingId === theme.id
                     ? "border-[#ff6161]"
-                    : "border-white/30 hover:border-white/50"
+                    : isLocked
+                      ? "border-white/30"
+                      : "border-white/30 hover:border-white/50"
               } `}
               style={{ transition: "border-color 200ms ease" }}
             >
               <motion.div
-                className="absolute inset-[3px] rounded-[8px] sm:rounded-[8px]"
+                className={`absolute inset-[3px] rounded-[8px] transition-opacity duration-200 ${isLocked ? "opacity-40" : "opacity-100"}`}
                 style={{
                   backgroundColor: theme.color,
                 }}
@@ -105,7 +112,15 @@ export default function ThemeSection({ ...props }) {
               <div className="pointer-events-none absolute inset-0" />
               {!isOwned && (
                 <div className="pointer-events-none absolute inset-x-1 bottom-1.5 flex justify-center">
-                  <span className="flex items-center rounded-full bg-black/80 px-[5px] py-[2px] text-xs font-semibold text-white">
+                  <span
+                    className={`flex items-center rounded-full bg-black/80 px-[5px] py-[2px] text-xs font-semibold transition duration-200 ${
+                      jigglingId === theme.id
+                        ? "text-[#ff6161] opacity-60"
+                        : isLocked
+                          ? "text-white opacity-60"
+                          : "text-white opacity-100"
+                    }`}
+                  >
                     <span className="noto-symbol">₳ </span> {theme.price}
                   </span>
                 </div>

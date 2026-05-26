@@ -27,7 +27,6 @@ export default function Home() {
       <StarBackground />
       <main className="">
         <MaxWidthWrapper>
-          {/* <ChatHeader /> */}
           <section id="hero" className="min-h-screen">
             <motion.div
               className="flex min-h-screen flex-col items-center justify-center text-white"
@@ -36,17 +35,17 @@ export default function Home() {
               transition={{ duration: 1 }}
             >
               <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-4 lg:text-5xl">
-                Hi, I&apos;m Aidan,{" "}
+                Greetings earthling, {" "} 
                 <span className="gradient-text-header">
                   {" "}
-                  a <br className="sm:hidden" />
+                  I'm <br className="sm:hidden" />
                   <span style={{ whiteSpace: "nowrap" }}>
-                    software engineer
+                    Aidan
                   </span>
                 </span>
               </h1>
               <h2 className="mb-8 text-center text-lg font-semibold text-white sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[27px]">
-                Building practical solutions, one galaxy at a time.
+                Mapping the codespace, one galaxy at a time.
               </h2>
               <div className="flex w-80 justify-between md:w-100">
                 <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">

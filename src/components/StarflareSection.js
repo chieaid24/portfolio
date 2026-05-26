@@ -3,9 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useMoney } from "@/lib/money-context.js";
 import { pusherClient } from "@/lib/pusher-client";
-import { motion, useAnimate, AnimatePresence } from "framer-motion";
+import { motion, useAnimate } from "framer-motion";
 import SparkleIcon from "@/icons/SparkleIcon.js";
-import Info from "@/icons/Info.js";
 
 export default function StarflareSection({ cost = 25 }) {
   const { localClickCount, incLocalClickCount, buyStarflare, balance } =
@@ -15,8 +14,6 @@ export default function StarflareSection({ cost = 25 }) {
   const rateLimiterRef = useRef([]);
   const [scope, animate] = useAnimate();
   const [canPurchase, setCanPurchase] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
-  const [toggleShowInfo, setToggleShowInfo] = useState(false);
 
   const sectionRef = useRef(null);
   const [sparkles, setSparkles] = useState([]);
@@ -160,34 +157,6 @@ export default function StarflareSection({ cost = 25 }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.15, delay: 0.15 }}
     >
-      <div className="absolute top-2 right-2">
-        <button
-          type="button"
-          aria-label="Starflare info"
-          onMouseEnter={() => setShowInfo(true)}
-          onMouseLeave={() => setShowInfo(false)}
-          onBlur={() => {
-            setShowInfo(false);
-          }}
-          className={`${showInfo || toggleShowInfo ? "text-highlight-color/50" : "text-outline-gray/70"} hover:text-highlight-color/50 p-1 transition duration-150`}
-        >
-          <Info className="h-3 w-3" />
-        </button>
-      </div>
-      <AnimatePresence>
-        {(showInfo || toggleShowInfo) && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="border-highlight-color/20 bg-background-secondary/60 absolute top-8 right-3 z-10 w-48 rounded-xl border-[1px] p-3 text-left text-xs leading-snug text-white shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-lg"
-          >
-            {`Starflares are observed across the universe (real-time and globally persisted). Send one to nudge the global counter.`}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <h2 className="text-body-text mt-3 text-3xl font-semibold">
         {displayCount}
       </h2>
