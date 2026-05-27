@@ -35,7 +35,7 @@ export default function Home() {
               transition={{ duration: 1 }}
             >
               <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-4 lg:text-5xl">
-                Greetings earthling, {" "} 
+                Greetings Earthling, {" "} 
                 <span className="gradient-text-header">
                   {" "}
                   I'm <br className="sm:hidden" />
@@ -45,7 +45,7 @@ export default function Home() {
                 </span>
               </h1>
               <h2 className="mb-8 text-center text-lg font-semibold text-white sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[27px]">
-                Mapping the codespace, one galaxy at a time.
+                Building practical solutions, one galaxy at a time.
               </h2>
               <div className="flex w-80 justify-between md:w-100">
                 <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
