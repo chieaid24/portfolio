@@ -1,5 +1,26 @@
+import RedText from "@/components/RewardRedText";
+
 export const experiences = {
   work: [
+    {
+      id: "revvity",
+      badge: {
+        src: "/company-images/revvity-logo_v2.png",
+        alt: "Revvity logo",
+      },
+      title: "AI DevOps Engineer",
+      subtitle: "Revvity",
+      period: "May 2026 - Present",
+      highlights: [
+        {
+          text: (
+            <>
+              Something something <RedText rewardId="exp:revvity:red">red text</RedText>
+            </>
+          ),
+        },
+      ],
+    },
     {
       id: "needlistorg",
       badge: {

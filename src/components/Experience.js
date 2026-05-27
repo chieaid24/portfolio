@@ -17,7 +17,7 @@ const badgeImagePath = "/company-images/waterloo-logo_v2.png";
 function TimelineItem({ item }) {
   return (
     <div className="relative flex gap-3 sm:gap-6">
-      <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-outline-gray sm:h-13 sm:w-13">
+      <div className="h-10 w-10 overflow-hidden rounded-full border-[2px] border-outline-gray sm:h-13 sm:w-13">
         <Image
           src={item.badge?.src ?? badgeImagePath}
           alt={item.badge?.alt ?? `${item.title} logo`}
@@ -122,7 +122,7 @@ export default function Experience() {
                   className="relative px-3 py-5 sm:px-6 sm:py-6"
                 >
                   <div
-                    className="absolute top-0 bottom-0 left-[2rem] w-px bg-outline-gray sm:left-[3.1rem]"
+                    className="absolute top-0 bottom-0.5 left-[2rem] w-[1px] bg-outline-gray sm:left-[3.1rem]"
                     aria-hidden="true"
                   />
                   <div className="z-10 space-y-8">
