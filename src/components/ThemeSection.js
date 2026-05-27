@@ -2,7 +2,12 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useMoney, THEME_OPTIONS } from "@/lib/money-context";
-import { motion, useAnimate } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useAnimate,
+  useReducedMotion,
+} from "framer-motion";
 
 export default function ThemeSection({ ...props }) {
   const { themeId, setThemeById, purchaseTheme, ownedThemes, balance } =
@@ -10,7 +15,11 @@ export default function ThemeSection({ ...props }) {
   const [selectedId, setSelectedId] = useState(themeId ?? "coral");
   const [scope, animate] = useAnimate();
   const buttonRefs = useRef({});
+  const innerRefs = useRef({});
+  const haloNonce = useRef(0);
   const [jigglingId, setJigglingId] = useState(null);
+  const [halo, setHalo] = useState(null); // { id, scale, nonce }
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     setSelectedId(themeId ?? "coral");
@@ -21,12 +30,14 @@ export default function ThemeSection({ ...props }) {
     if (isOwned) {
       setSelectedId(id);
       setThemeById?.(id);
+      releaseHalo(id, 1.4);
       return;
     }
 
     const result = purchaseTheme?.(id);
     if (result?.success) {
       setSelectedId(id);
+      purchasePop(id);
     } else {
       underflowJiggle(id);
     }
@@ -58,6 +69,35 @@ export default function ThemeSection({ ...props }) {
     [animate],
   );
 
+  // Release an expanding halo ring from a swatch. A plain color change uses a
+  // small halo; a purchase uses a wider one. The nonce restarts it every time.
+  const releaseHalo = useCallback(
+    (id, scale) => {
+      if (shouldReduceMotion) return;
+      haloNonce.current += 1;
+      setHalo({ id, scale, nonce: haloNonce.current });
+    },
+    [shouldReduceMotion],
+  );
+
+  // Successful purchase: the fill dips inward and settles flush at scale 1 (no
+  // overshoot past its frame), alongside a wide halo ring.
+  const purchasePop = useCallback(
+    (id) => {
+      if (shouldReduceMotion) return;
+      const target = innerRefs.current[id];
+      if (target) {
+        animate(
+          target,
+          { scale: [0.92, 1] },
+          { type: "spring", bounce: 0, duration: 0.7 },
+        );
+      }
+      releaseHalo(id, 1.55);
+    },
+    [animate, shouldReduceMotion, releaseHalo],
+  );
+
   const setButtonRef = useCallback((id, node) => {
     if (node) {
       buttonRefs.current[id] = node;
@@ -83,49 +123,80 @@ export default function ThemeSection({ ...props }) {
           const isLocked = !isOwned && !canAfford;
 
           return (
-            <motion.button
-              ref={(node) => setButtonRef(theme.id, node)}
+            <div
               key={theme.id}
-              type="button"
-              aria-label={`${theme.label} for ₳ ${theme.price}`}
-              aria-pressed={isSelected}
-              onClick={() => handleSelect(theme.id)}
-              className={`group relative aspect-square w-12 transform overflow-hidden rounded-xl border-2 transition duration-200 sm:w-14 lg:w-[51px] ${
-                isLocked ? "cursor-default" : "cursor-pointer"
-              } ${
-                isSelected
-                  ? "border-highlight-color/80"
-                  : jigglingId === theme.id
-                    ? "border-[#ff6161]"
-                    : isLocked
-                      ? "border-white/30"
-                      : "border-white/30 hover:border-white/50"
-              } `}
-              style={{ transition: "border-color 200ms ease" }}
+              className="relative h-12 w-12 sm:h-14 sm:w-14 lg:h-[51px] lg:w-[51px]"
             >
-              <motion.div
-                className={`absolute inset-[3px] rounded-[8px] transition-opacity duration-200 ${isLocked ? "opacity-40" : "opacity-100"}`}
-                style={{
-                  backgroundColor: theme.color,
-                }}
-              />
-              <div className="pointer-events-none absolute inset-0" />
-              {!isOwned && (
-                <div className="pointer-events-none absolute inset-x-1 bottom-1.5 flex justify-center">
-                  <span
-                    className={`flex items-center rounded-full bg-black/80 px-[5px] py-[2px] text-xs font-semibold transition duration-200 ${
-                      jigglingId === theme.id
-                        ? "text-[#ff6161] opacity-60"
-                        : isLocked
-                          ? "text-white opacity-60"
-                          : "text-white opacity-100"
-                    }`}
-                  >
-                    <span className="noto-symbol">₳ </span> {theme.price}
-                  </span>
-                </div>
+              <motion.button
+                ref={(node) => setButtonRef(theme.id, node)}
+                type="button"
+                aria-label={`${theme.label} for ₳ ${theme.price}`}
+                aria-pressed={isSelected}
+                onClick={() => handleSelect(theme.id)}
+                className={`group relative h-full w-full transform overflow-hidden rounded-xl border-2 transition duration-200 ${
+                  isLocked ? "cursor-default" : "cursor-pointer"
+                } ${
+                  isSelected
+                    ? "border-highlight-color/80"
+                    : jigglingId === theme.id
+                      ? "border-[#ff6161]"
+                      : isLocked
+                        ? "border-white/30"
+                        : "border-white/30 hover:border-white/50"
+                } `}
+                style={{ transition: "border-color 200ms ease" }}
+              >
+                <motion.div
+                  ref={(node) => {
+                    if (node) innerRefs.current[theme.id] = node;
+                    else delete innerRefs.current[theme.id];
+                  }}
+                  className={`absolute inset-[3px] rounded-[7px] transition-opacity duration-200 ${isLocked ? "opacity-40" : "opacity-100"}`}
+                  style={{
+                    backgroundColor: theme.color,
+                  }}
+                />
+                <div className="pointer-events-none absolute inset-0" />
+                <AnimatePresence initial={false}>
+                  {!isOwned && (
+                    <motion.div
+                      key="price"
+                      className="pointer-events-none absolute inset-x-1 bottom-1.5 flex justify-center"
+                      exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -4 }}
+                      transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+                    >
+                      <span
+                        className={`flex items-center rounded-full bg-black/80 px-[5px] py-[2px] text-xs font-semibold transition duration-200 ${
+                          jigglingId === theme.id
+                            ? "text-[#ff6161] opacity-60"
+                            : isLocked
+                              ? "text-white opacity-60"
+                              : "text-white opacity-100"
+                        }`}
+                      >
+                        <span className="noto-symbol">₳ </span> {theme.price}
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+              {halo?.id === theme.id && (
+                <motion.span
+                  key={halo.nonce}
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 rounded-xl border-2"
+                  style={{ borderColor: theme.color }}
+                  initial={{ scale: 1, opacity: 0.5 }}
+                  animate={{ scale: halo.scale, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+                  onAnimationComplete={() =>
+                    setHalo((cur) =>
+                      cur && cur.nonce === halo.nonce ? null : cur,
+                    )
+                  }
+                />
               )}
-            </motion.button>
+            </div>
           );
         })}
       </div>
