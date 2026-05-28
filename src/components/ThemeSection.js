@@ -139,7 +139,7 @@ export default function ThemeSection({ ...props }) {
                   isSelected
                     ? "border-highlight-color/80"
                     : jigglingId === theme.id
-                      ? "border-[#ff6161]"
+                      ? "border-[#ff6161]/70"
                       : isLocked
                         ? "border-white/30"
                         : "border-white/30 hover:border-white/50"
