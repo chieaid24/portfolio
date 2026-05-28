@@ -1,5 +1,6 @@
 import RedText from "@/components/RewardRedText";
 
+// <RedText rewardId="exp:">red text</RedText>
 export const experiences = {
   work: [
     {
@@ -15,7 +16,9 @@ export const experiences = {
         {
           text: (
             <>
-              Something something <RedText rewardId="exp:revvity:red">red text</RedText>
+              Navigated LLM application delivery on AWS, provisioning infrastructure with Terraform, and monitoring 
+              AI systems with Datadog and 
+              CloudWatch.
             </>
           ),
         },
@@ -34,53 +37,8 @@ export const experiences = {
         {
           text: (
             <>
-              Directed creation of <strong>Nest.js</strong> API layer,{" "}
-              <strong>GitHub Actions</strong> CI/CD pipeline, and AI-powered
-              Flutter to <strong>React with TanStack</strong> translation
-            </>
-          ),
-        },
-        {
-          text: (
-            <>
-              Developed a comprehensive <strong>Jest</strong> test suite for the
-              backend, integrating with <strong>Firebase Emulator</strong>
-            </>
-          ),
-        },
-        {
-          text: (
-            <>
-              Implemented <strong>Agile methodology</strong> and Notion issue
-              tracking
-            </>
-          ),
-        },
-      ],
-    },
-    {
-      id: "formulatechhacks",
-      badge: {
-        src: "/company-images/formulatech-logo_v1.png",
-        alt: "FormulaTech Hacks logo",
-      },
-      title: "UI/UX Designer",
-      subtitle: "FormulaTech Hacks",
-      period: "Mar 2025 - Jan 2026",
-      highlights: [
-        {
-          text: (
-            <>
-              Produced 2D assets, merchandise, and marketing materials that
-              attracted <strong>180+</strong> sign-ups
-            </>
-          ),
-        },
-        {
-          text: (
-            <>
-              Designed responsive event website in <strong>Figma</strong> and{" "}
-              <strong>Illustrator</strong>
+              Captained a squadron of 7 engineers, designing a <strong>Nest.js</strong> API layer,{" "}
+              <strong>GitHub Actions</strong> CI/CD pipeline, and TanStack React frontend.
             </>
           ),
         },
@@ -99,17 +57,7 @@ export const experiences = {
         {
           text: (
             <>
-              Leveraged <strong>Gen AI</strong> and <strong>Python</strong>{" "}
-              scripts to streamline workflows and reduce reliance on manual
-              human intervention
-            </>
-          ),
-        },
-        {
-          text: (
-            <>
-              Built first-of-its-kind Python application, cutting preparation
-              labor by <strong>30%</strong> per machined part
+              Pioneered tools and automations for aerospace machining workflows, harnessing Python, Bash, and Gemini API. 
             </>
           ),
         },
