@@ -31,9 +31,9 @@ export default function StarflareInfo() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="border-highlight-color/20 bg-background-secondary/60 absolute top-full -right-2 z-20 mt-1 w-48 rounded-xl border-[1px] p-3 text-left text-xs leading-snug text-white shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-lg"
+            className="border-highlight-color/20 bg-background-secondary/60 absolute top-full -right-2 z-20 mt-1 w-48 max-w-[10rem] rounded-xl border-[1px] p-3 text-left text-xs leading-snug text-white shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-lg"
           >
-            {`Starflares are observed across the universe (real-time and globally persisted). Send one to nudge the global counter.`}
+            Real-time and globally persisted. Click to leave your mark on the universe.
           </motion.div>
         )}
       </AnimatePresence>
