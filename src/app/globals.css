@@ -265,12 +265,14 @@ body {
   height: 70px;
   border-radius: 50%;
   background: #d9d9d9;
-  opacity: 0.5;
   pointer-events: none;
   translate: calc(var(--flash-x, -50px) - 38.5px)
     calc(var(--flash-y, -50px) - 38.5px);
   opacity: var(--flash-active, 0);
   scale: var(--flash-size, 0);
+  /* Promote to its own compositor layer so translate/scale/opacity updates
+     stay off the main thread (no repaint of the button box on each move). */
+  will-change: transform, opacity;
   transition:
     translate 20ms ease-out,
     scale 100ms ease-in-out,
