@@ -1,6 +1,6 @@
 "use client";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 function CardRotate({ children, onSendToBack, sensitivity }) {
@@ -64,6 +64,20 @@ export default function Stack({
     },
   ]);
 
+  // All cards are visible at once (stacked), so wait for every image to load
+  // before revealing the stack to avoid a staggered "pop in" on production.
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [forceShow, setForceShow] = useState(false);
+  const allLoaded = loadedCount >= cards.length || forceShow;
+
+  const handleImageDone = () => setLoadedCount((c) => c + 1);
+
+  // Safety net: never keep the stack hidden if an image load event is missed.
+  useEffect(() => {
+    const timer = setTimeout(() => setForceShow(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const cardSizeClasses = "w-[175px] h-[175px] md:w-[250px] md:h-[250px]";
   const sizeStyle = cardDimensions
     ? { width: cardDimensions.width, height: cardDimensions.height }
@@ -83,12 +97,15 @@ export default function Stack({
   };
 
   return (
-    <div
+    <motion.div
       className={`relative ${cardSizeClasses} z-10`}
       style={{
         perspective: 600,
         ...sizeStyle,
       }}
+      initial={{ opacity: 0, y: 0 }}
+      animate={{ opacity: allLoaded ? 1 : 0, y: allLoaded ? 0 : 5 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       {cards.map((card, index) => {
         return (
@@ -124,11 +141,13 @@ export default function Stack({
                 className="pointer-events-none object-cover select-none"
                 fill
                 sizes={imageSizes}
+                onLoad={handleImageDone}
+                onError={handleImageDone}
               />
             </motion.div>
           </CardRotate>
         );
       })}
-    </div>
+    </motion.div>
   );
 }
