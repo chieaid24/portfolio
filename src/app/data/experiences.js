@@ -1,5 +1,30 @@
+import Link from "next/link";
+import RedText from "@/components/RewardRedText";
+
+// <RedText rewardId="exp:">red text</RedText>
 export const experiences = {
   work: [
+    {
+      id: "revvity",
+      badge: {
+        src: "/company-images/revvity-logo_v2.png",
+        alt: "Revvity logo",
+      },
+      title: "AI DevOps Engineer",
+      subtitle: "Revvity",
+      period: "May 2026 - Present",
+      highlights: [
+        {
+          text: (
+            <>
+              Navigated LLM application delivery on <span className="whitespace-nowrap"><RedText rewardId="exp:revvity:aws">AWS</RedText>,</span> provisioning <RedText rewardId="exp:revvity:terraform">Terraform</RedText> infrastructure and monitoring 
+              performance with <RedText rewardId="exp:revvity:datadog">Datadog</RedText> and 
+              CloudWatch.
+            </>
+          ),
+        },
+      ],
+    },
     {
       id: "needlistorg",
       badge: {
@@ -13,53 +38,8 @@ export const experiences = {
         {
           text: (
             <>
-              Directed creation of <strong>Nest.js</strong> API layer,{" "}
-              <strong>GitHub Actions</strong> CI/CD pipeline, and AI-powered
-              Flutter to <strong>React with TanStack</strong> translation
-            </>
-          ),
-        },
-        {
-          text: (
-            <>
-              Developed a comprehensive <strong>Jest</strong> test suite for the
-              backend, integrating with <strong>Firebase Emulator</strong>
-            </>
-          ),
-        },
-        {
-          text: (
-            <>
-              Implemented <strong>Agile methodology</strong> and Notion issue
-              tracking
-            </>
-          ),
-        },
-      ],
-    },
-    {
-      id: "formulatechhacks",
-      badge: {
-        src: "/company-images/formulatech-logo_v1.png",
-        alt: "FormulaTech Hacks logo",
-      },
-      title: "UI/UX Designer",
-      subtitle: "FormulaTech Hacks",
-      period: "Mar 2025 - Jan 2026",
-      highlights: [
-        {
-          text: (
-            <>
-              Produced 2D assets, merchandise, and marketing materials that
-              attracted <strong>180+</strong> sign-ups
-            </>
-          ),
-        },
-        {
-          text: (
-            <>
-              Designed responsive event website in <strong>Figma</strong> and{" "}
-              <strong>Illustrator</strong>
+              Captained a squadron of <span className="whitespace-nowrap"><RedText rewardId="exp:needlist:7engineers">7 engineers</RedText>,</span> designing a <strong>Nest.js</strong> API layer,{" "}
+              <strong>GitHub Actions</strong> <RedText rewardId="exp:needlist:cicd">CI/CD</RedText> pipeline, and TanStack React frontend.
             </>
           ),
         },
@@ -78,17 +58,7 @@ export const experiences = {
         {
           text: (
             <>
-              Leveraged <strong>Gen AI</strong> and <strong>Python</strong>{" "}
-              scripts to streamline workflows and reduce reliance on manual
-              human intervention
-            </>
-          ),
-        },
-        {
-          text: (
-            <>
-              Built first-of-its-kind Python application, cutting preparation
-              labor by <strong>30%</strong> per machined part
+              Pioneered tools and automations for aerospace machinists, harnessing <span className="whitespace-nowrap"><RedText rewardId="exp:autonomous:python">Python</RedText>,</span> <span className="whitespace-nowrap"><RedText rewardId="exp:autonomous:bash">Bash</RedText>,</span> and <span className="whitespace-nowrap"><RedText rewardId="exp:autonomous:gemini">Gemini API</RedText>.</span> 
             </>
           ),
         },
@@ -105,24 +75,14 @@ export const experiences = {
       title: "University of Waterloo",
       subtitle:
         "Bachelor of Applied Science (BASc), Systems Design Engineering",
-      // period: "Sep 2024 - Present",
       highlights: [
         {
-          text: <>Cumulative GPA: 92.13%</>,
+          text: <>Minors in AI and Psychology</>,
         },
         {
-          text: <>2x Term Distinction</>,
+          text: <>GPA: 3.95</>,
         },
 
-        {
-          text: (
-            <>
-              Awards: Systems Design Co-op for Good Award - $12,000,
-              President&apos;s Scholar of Distinction - $2,000, President&apos;s
-              Research Award - $1,500
-            </>
-          ),
-        },
       ],
     },
     {
@@ -131,18 +91,48 @@ export const experiences = {
         src: "/company-images/aws_logo.png",
         alt: "AWS logo",
       },
-      title: "Cloud Certifications - Amazon Web Services (AWS)",
+      title: "Cloud Certifications",
       period: "",
       highlights: [
         {
-          text: <>AWS Certified Solutions Architect - Associate</>,
+          text: (
+            <Link
+              href="https://www.credly.com/badges/3be83cd6-7c03-48d3-b7c1-fa4d232c6ee1/public_url"
+              target="_blank"
+              rel="noopener noreferrer"
+              className=""
+            >
+              AWS Certified Solutions Architect
+            </Link>
+          ),
           note: <>Nov 2025</>,
         },
         {
-          text: <>AWS Certified Machine Learning Engineer - Associate</>,
+          text: (
+            <Link
+              href="https://www.credly.com/badges/4f6a5c7f-537a-464d-8854-b4439e25d73d/public_url"
+              target="_blank"
+              rel="noopener noreferrer"
+              className=""
+            >
+              AWS Certified Machine Learning Engineer
+            </Link>
+          ),
           note: <>Oct 2025</>,
         },
-        { text: <>AWS Certified AI Practitioner</>, note: <>Oct 2025</> },
+        {
+          text: (
+            <Link
+              href="https://www.credly.com/badges/8d221e73-7452-4613-8894-6cd85aea8808/public_url"
+              target="_blank"
+              rel="noopener noreferrer"
+              className=""
+            >
+              AWS Certified AI Practitioner
+            </Link>
+          ),
+          note: <>Oct 2025</>,
+        },
       ],
     },
   ],
