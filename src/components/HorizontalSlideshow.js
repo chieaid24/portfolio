@@ -4,6 +4,37 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import BulletIcon from "@/icons/BulletIcon";
 
+function Slide({ src, alt }) {
+  // Fade each image in as it finishes loading so slides don't "pop in"
+  // over the placeholder once their bytes arrive on production.
+  const [loaded, setLoaded] = useState(false);
+  const markLoaded = () => setLoaded(true);
+
+  return (
+    <motion.div className="h-[220px] w-full overflow-hidden rounded-xl bg-[#2a2a2a] shadow-lg">
+      <motion.div
+        className="h-full w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: loaded ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          draggable={false}
+          onDragStart={(e) => e.preventDefault()}
+          onLoad={markLoaded}
+          onError={markLoaded}
+          className="h-full w-full object-cover select-none"
+          style={{ WebkitUserDrag: "none" }}
+          height="220"
+          width="350"
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function Carousel() {
   const carouselRef = useRef(null);
   const [width, setWidth] = useState(0);
@@ -60,18 +91,10 @@ export default function Carousel() {
                 key={i}
                 className="flex h-[160px] min-w-[250px] flex-col items-center gap-3 md:h-[220px] md:min-w-[350px]"
               >
-                <motion.div className="h-[220px] w-full overflow-hidden rounded-xl shadow-lg">
-                  <Image
-                    src={item.src}
-                    alt={item.caption || `Slide ${i + 1}`}
-                    draggable={false}
-                    onDragStart={(e) => e.preventDefault()}
-                    className="h-full w-full object-cover select-none"
-                    style={{ WebkitUserDrag: "none" }}
-                    height="220"
-                    width="350"
-                  />
-                </motion.div>
+                <Slide
+                  src={item.src}
+                  alt={item.caption || `Slide ${i + 1}`}
+                />
                 <figcaption className="font-base text-body-text flex items-center gap-2 text-center text-xs sm:text-sm">
                   <BulletIcon className="text-highlight-color h-2 w-2" />
                   {item.caption}
