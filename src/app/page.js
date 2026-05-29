@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
@@ -14,6 +15,45 @@ import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 
 export default function Home() {
+  // Cursor-follow flash: coalesce pointer moves into a single rAF per frame so
+  // we read layout (getBoundingClientRect) and write CSS vars at most once per
+  // frame instead of on every high-frequency mousemove event.
+  const flashFrame = useRef(0);
+  const flashState = useRef({ el: null, x: 0, y: 0 });
+
+  const handleFlashEnter = (e) => {
+    e.currentTarget.style.setProperty("--flash-active", "0.4");
+    e.currentTarget.style.setProperty("--flash-size", "1");
+  };
+
+  const handleFlashMove = (e) => {
+    flashState.current.el = e.currentTarget;
+    flashState.current.x = e.clientX;
+    flashState.current.y = e.clientY;
+    if (flashFrame.current) return;
+    flashFrame.current = requestAnimationFrame(() => {
+      flashFrame.current = 0;
+      const { el, x, y } = flashState.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      el.style.setProperty("--flash-x", `${x - rect.left}px`);
+      el.style.setProperty("--flash-y", `${y - rect.top}px`);
+    });
+  };
+
+  const handleFlashLeave = (e) => {
+    if (flashFrame.current) {
+      cancelAnimationFrame(flashFrame.current);
+      flashFrame.current = 0;
+    }
+    flashState.current.el = null;
+    const el = e.currentTarget;
+    el.style.setProperty("--flash-active", "0");
+    el.style.setProperty("--flash-size", "0");
+    el.style.setProperty("--flash-x", "-100px");
+    el.style.setProperty("--flash-y", "-100px");
+  };
+
   return (
     <>
       <>
@@ -55,26 +95,9 @@ export default function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-white/75 md:hover:text-white/75"
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.setProperty(
-                        "--flash-active",
-                        "0.4",
-                      );
-                      e.currentTarget.style.setProperty("--flash-size", "1");
-                    }}
-                    onMouseMove={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const x = e.clientX - rect.left;
-                      const y = e.clientY - rect.top;
-                      e.currentTarget.style.setProperty("--flash-x", `${x}px`);
-                      e.currentTarget.style.setProperty("--flash-y", `${y}px`);
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.setProperty("--flash-active", "0");
-                      e.currentTarget.style.setProperty("--flash-size", "0");
-                      e.currentTarget.style.setProperty("--flash-x", "-100px");
-                      e.currentTarget.style.setProperty("--flash-y", "-100px");
-                    }}
+                    onMouseEnter={handleFlashEnter}
+                    onMouseMove={handleFlashMove}
+                    onMouseLeave={handleFlashLeave}
                   >
                     <div className="inline-flex items-center gap-2 px-2 py-1 md:px-4 md:py-1">
                       <span>Resume</span>
