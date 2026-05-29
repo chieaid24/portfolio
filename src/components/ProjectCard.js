@@ -7,6 +7,11 @@ import SimpleArrow from "@/icons/SimpleArrow";
 import SkillDisplay from "@/components/SkillDisplay";
 import { useMoney } from "@/lib/money-context";
 import RewardLink from "./RewardLink";
+import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
+import { useCallback, useEffect, useRef } from "react";
+
+const AMP = 8; // px of vertical drift each way from rest
+const PERIOD = 7; // ~seconds for one full up-down float cycle
 
 export default function ProjectCard({
   title,
@@ -14,14 +19,81 @@ export default function ProjectCard({
   slug,
   summary,
   github,
+  float = false,
 }) {
   const { hasAward } = useMoney();
   const rewardId = `project:${slug}`;
   const clicked = hasAward(rewardId);
 
+  const controls = useAnimationControls();
+  const prefersReduced = useReducedMotion();
+  const hoveredRef = useRef(false);
+
+  // Per-card random phase + slight period jitter so cards bob out of sync and
+  // slowly drift apart over time. Computed once; never rendered to the DOM, so
+  // it's hydration-safe even though it uses Math.random().
+  const cfg = useRef(null);
+  if (cfg.current === null) {
+    const N = 16;
+    const phase = Math.random();
+    cfg.current = {
+      period: PERIOD * (0.85 + Math.random() * 0.3),
+      keyframes: Array.from({ length: N + 1 }, (_, i) =>
+        Number((-AMP * Math.cos(2 * Math.PI * (i / N + phase))).toFixed(2)),
+      ),
+    };
+  }
+
+  // Ease from the current position into the card's phase, then loop forever.
+  // Used both on mount and to resume smoothly after a hover releases.
+  const startFloat = useCallback(() => {
+    const { keyframes, period } = cfg.current;
+    controls
+      .start({ y: keyframes[0], transition: { duration: 0.8, ease: "easeInOut" } })
+      .then(() => {
+        if (!hoveredRef.current) {
+          controls.start({
+            y: keyframes,
+            transition: {
+              duration: period,
+              ease: "linear", // easing is baked into the cosine keyframes
+              repeat: Infinity,
+            },
+          });
+        }
+      });
+  }, [controls]);
+
+  useEffect(() => {
+    if (!float || prefersReduced) return;
+    startFloat();
+    return () => controls.stop();
+  }, [float, prefersReduced, startFloat, controls]);
+
+  const handleHoverStart = () => {
+    if (prefersReduced) return;
+    hoveredRef.current = true;
+    // Bob up to the top of the float range and hold there.
+    controls.start({ y: -AMP, transition: { duration: 0.6, ease: "easeOut" } });
+  };
+
+  const handleHoverEnd = () => {
+    if (prefersReduced) return;
+    hoveredRef.current = false;
+    if (float) {
+      startFloat();
+    } else {
+      controls.start({ y: 0, transition: { duration: 0.5, ease: "easeOut" } });
+    }
+  };
+
   return (
-    <div
-      className={`transition-[box-shadow, transform] h-full rounded-xl p-px duration-200 md:hover:-translate-y-[2px] md:hover:shadow-[0_8px_25px_rgba(255,255,255,0.15)]`}
+    <motion.div
+      animate={controls}
+      onHoverStart={handleHoverStart}
+      onHoverEnd={handleHoverEnd}
+      style={float ? { willChange: "transform" } : undefined}
+      className={`h-full rounded-xl p-px transition-shadow duration-200 md:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]`}
     >
       <div
         className={`font-dm-sans bg-background border-outline-gray h-full rounded-xl border-1 text-white`}
@@ -82,6 +154,6 @@ export default function ProjectCard({
           </div>
         </RewardProjectLink>
       </div>
-    </div>
+    </motion.div>
   );
 }

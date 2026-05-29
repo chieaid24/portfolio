@@ -203,6 +203,7 @@ export default function Home() {
                       alt={project.title}
                       summary={project.summary}
                       github={project.github_link}
+                      float
                     />
                   </motion.div>
                 ))}
