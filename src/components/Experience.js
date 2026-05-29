@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import useMeasure from "react-use-measure";
 import Image from "next/image";
 import BulletIcon from "@/icons/BulletIcon";
@@ -69,11 +69,31 @@ function TimelineItem({ item }) {
 
 export default function Experience() {
   const [activeTab, setActiveTab] = useState("work");
+  const [tabFills, setTabFills] = useState({});
+  const shouldReduceMotion = useReducedMotion();
   const tabItems = tabs.map((tab) => ({
     ...tab,
     items: experiences[tab.id] ?? [],
   }));
   let [ref, { height }] = useMeasure();
+
+  // Capture the click point so the highlight can expand outward from the cursor.
+  const handleTabClick = (tabId, event) => {
+    if (tabId !== activeTab) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      // Keyboard activation has no pointer position; fall back to the center.
+      const isKeyboard = event.detail === 0;
+      const x = isKeyboard ? rect.width / 2 : event.clientX - rect.left;
+      const y = isKeyboard ? rect.height / 2 : event.clientY - rect.top;
+      // Radius needed to reach the farthest corner from the click point.
+      const radius = Math.hypot(
+        Math.max(x, rect.width - x),
+        Math.max(y, rect.height - y),
+      );
+      setTabFills((prev) => ({ ...prev, [tabId]: { x, y, radius } }));
+    }
+    setActiveTab(tabId);
+  };
 
   return (
     <section className="text-white">
@@ -82,18 +102,64 @@ export default function Experience() {
           <div className="grid grid-cols-2 gap-1">
             {tabs.map((tab) => {
               const isActive = tab.id === activeTab;
+              const fill = tabFills[tab.id];
               return (
                 <button
                   key={tab.id}
                   type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors duration-200 sm:text-base ${
+                  onClick={(event) => handleTabClick(tab.id, event)}
+                  className={`relative isolate overflow-hidden rounded-xl px-4 py-2 text-sm font-semibold text-white transition-[color,background-color,box-shadow] duration-200 sm:text-base ${
                     isActive
-                      ? "bg-highlight-color text-white shadow-[0_5px_30px_rgba(255,255,255,0.2)]"
-                      : "cursor-pointer text-white md:hover:bg-white/5"
+                      ? "shadow-[0_5px_30px_rgba(255,255,255,0.2)]"
+                      : "cursor-pointer md:hover:bg-white/5"
                   }`}
                 >
-                  {tab.label}
+                  <AnimatePresence initial={false}>
+                    {isActive &&
+                      (fill ? (
+                        <motion.span
+                          key="fill"
+                          aria-hidden="true"
+                          initial={{ scale: 0.05, opacity: 0.5 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={
+                            shouldReduceMotion
+                              ? { duration: 0 }
+                              : {
+                                  scale: {
+                                    duration: 0.45,
+                                    // Smooth settle: gentle ramp-in, soft finish.
+                                    ease: [0.22, 1, 0.36, 1],
+                                    // Previous ease — uncomment to toggle back:
+                                    // ease: "linear",
+                                  },
+                                  opacity: { duration: 0.2, ease: "easeOut" },
+                                }
+                          }
+                          style={{
+                            left: fill.x - fill.radius,
+                            top: fill.y - fill.radius,
+                            width: fill.radius * 2,
+                            height: fill.radius * 2,
+                          }}
+                          className="bg-highlight-color pointer-events-none absolute rounded-full"
+                        />
+                      ) : (
+                        <motion.span
+                          key="fill-initial"
+                          aria-hidden="true"
+                          exit={{ opacity: 0 }}
+                          transition={
+                            shouldReduceMotion
+                              ? { duration: 0 }
+                              : { opacity: { duration: 0.2, ease: "easeOut" } }
+                          }
+                          className="bg-highlight-color pointer-events-none absolute inset-0 rounded-[inherit]"
+                        />
+                      ))}
+                  </AnimatePresence>
+                  <span className="relative z-10">{tab.label}</span>
                 </button>
               );
             })}
