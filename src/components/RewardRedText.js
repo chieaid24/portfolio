@@ -6,7 +6,7 @@ export default function RedText({
   rewardId,
   kind = "redtext",
   children,
-  weight = "bold", // 'bold' | 'semibold'
+  weight = "semibold", // 'bold' | 'semibold'
   className = "",
 }) {
   const { awardOnce, hasAward } = useMoney();
