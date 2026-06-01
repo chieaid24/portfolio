@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import BulletIcon from "@/icons/BulletIcon";
 
-function Slide({ src, alt }) {
+function Slide({ src, alt, priority }) {
   // Fade each image in as it finishes loading so slides don't "pop in"
   // over the placeholder once their bytes arrive on production.
   const [loaded, setLoaded] = useState(false);
@@ -23,6 +23,7 @@ function Slide({ src, alt }) {
           alt={alt}
           fill
           sizes="(min-width: 768px) 350px, 250px"
+          priority={priority}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
           onLoad={markLoaded}
@@ -94,6 +95,7 @@ export default function Carousel() {
                 <Slide
                   src={item.src}
                   alt={item.caption || `Slide ${i + 1}`}
+                  priority={i === 0}
                 />
                 <figcaption className="font-base text-body-text flex items-center gap-2 text-center text-xs sm:text-sm">
                   <BulletIcon className="text-highlight-color h-2 w-2" />
