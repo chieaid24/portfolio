@@ -204,6 +204,7 @@ export default function Home() {
                       summary={project.summary}
                       github={project.github_link}
                       float
+                      index={index}
                     />
                   </motion.div>
                 ))}
