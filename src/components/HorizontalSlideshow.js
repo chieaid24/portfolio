@@ -13,7 +13,7 @@ function Slide({ src, alt }) {
   return (
     <motion.div className="h-[220px] w-full overflow-hidden rounded-xl bg-[#2a2a2a] shadow-lg">
       <motion.div
-        className="h-full w-full"
+        className="relative h-full w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: loaded ? 1 : 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -21,14 +21,14 @@ function Slide({ src, alt }) {
         <Image
           src={src}
           alt={alt}
+          fill
+          sizes="(min-width: 768px) 350px, 250px"
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
           onLoad={markLoaded}
           onError={markLoaded}
-          className="h-full w-full object-cover select-none"
+          className="object-cover select-none"
           style={{ WebkitUserDrag: "none" }}
-          height="220"
-          width="350"
         />
       </motion.div>
     </motion.div>
