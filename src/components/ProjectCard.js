@@ -10,8 +10,14 @@ import RewardLink from "./RewardLink";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 
-const AMP = 8; // px of vertical drift each way from rest
-const PERIOD = 7; // ~seconds for one full up-down float cycle
+const AMP = 3.5; // px of vertical drift each way from rest
+const PERIOD = 3.5; // ~seconds for one full up-down float cycle
+// Shape of the bob: 0 = pure sine (decelerates to a stop and lingers at the
+// top/bottom), 1 = triangle (constant speed, sharp turns). Blending keeps the
+// turns rounded but cuts the lingering, so even a small drift feels alive.
+const TRI_BLEND = 0.1;
+const HOVER_LIFT = 6; // px lifted above the top of the bob while hovered
+const HOVER_RETURN = 0.7; // s for the unhover drop to mid-swing; ~1.6 matches the bob's descent speed for a seamless join
 
 export default function ProjectCard({
   title,
@@ -20,6 +26,7 @@ export default function ProjectCard({
   summary,
   github,
   float = false,
+  index = 0,
 }) {
   const { hasAward } = useMoney();
   const rewardId = `project:${slug}`;
@@ -29,34 +36,55 @@ export default function ProjectCard({
   const prefersReduced = useReducedMotion();
   const hoveredRef = useRef(false);
 
-  // Per-card random phase + slight period jitter so cards bob out of sync and
-  // slowly drift apart over time. Computed once; never rendered to the DOM, so
-  // it's hydration-safe even though it uses Math.random().
+  // Every card bobs at the same PERIOD, but each starts at a different point in
+  // its cycle so they stay permanently offset and never look synced. Phases are
+  // spread with the golden-ratio sequence (well-distributed for any card count)
+  // rather than randomly, so no two cards can land close together. Computed once.
   const cfg = useRef(null);
   if (cfg.current === null) {
     const N = 16;
-    const phase = Math.random();
+    const phase = (index * 0.618033988749895) % 1;
+    const wave = (p) =>
+      Array.from({ length: N + 1 }, (_, i) => {
+        const f = (i / N + p) % 1; // cycle fraction in [0, 1)
+        const sine = -Math.cos(2 * Math.PI * f); // -1..1, peak (-1) at f=0
+        const tri = f < 0.5 ? -1 + 4 * f : 3 - 4 * f; // -1..1, same orientation
+        return Number(
+          (AMP * ((1 - TRI_BLEND) * sine + TRI_BLEND * tri)).toFixed(2),
+        );
+      });
     cfg.current = {
-      period: PERIOD * (0.85 + Math.random() * 0.3),
-      keyframes: Array.from({ length: N + 1 }, (_, i) =>
-        Number((-AMP * Math.cos(2 * Math.PI * (i / N + phase))).toFixed(2)),
-      ),
+      period: PERIOD,
+      keyframes: wave(phase), // desynced phase — used for the mount entrance
+      midKeyframes: wave(0.25), // starts mid-downswing (y=0, falling fastest) — used to resume after hover
     };
   }
 
-  // Ease from the current position into the card's phase, then loop forever.
-  // Used both on mount and to resume smoothly after a hover releases.
-  const startFloat = useCallback(() => {
-    const { keyframes, period } = cfg.current;
+  // Ease from the current position into a swing, then loop forever. On mount we
+  // ease into the card's desynced phase; on resume (after a hover) we drop into
+  // the middle of the downswing (y=0, where the bob is already falling fastest)
+  // and continue from there, so the release blends into the bob's own descent
+  // instead of braking to a stop at a turning point.
+  const startFloat = useCallback((resume = false) => {
+    const { keyframes, midKeyframes, period } = cfg.current;
+    const frames = resume ? midKeyframes : keyframes;
     controls
-      .start({ y: keyframes[0], transition: { duration: 0.8, ease: "easeInOut" } })
+      // resume = a steady drop that merges into the bob's mid-swing descent;
+      // otherwise this is the one-time ease-in on mount.
+      .start({
+        y: frames[0],
+        transition: {
+          duration: resume ? HOVER_RETURN : 0.6,
+          ease: resume ? "linear" : "easeOut",
+        },
+      })
       .then(() => {
         if (!hoveredRef.current) {
           controls.start({
-            y: keyframes,
+            y: frames,
             transition: {
               duration: period,
-              ease: "linear", // easing is baked into the cosine keyframes
+              ease: "linear", // easing is baked into the keyframes
               repeat: Infinity,
             },
           });
@@ -73,17 +101,20 @@ export default function ProjectCard({
   const handleHoverStart = () => {
     if (prefersReduced) return;
     hoveredRef.current = true;
-    // Bob up to the top of the float range and hold there.
-    controls.start({ y: -AMP, transition: { duration: 0.6, ease: "easeOut" } });
+    // Lift slightly above the top of the float range and hold there.
+    controls.start({
+      y: -(AMP + HOVER_LIFT),
+      transition: { duration: 0.6, ease: "easeOut" },
+    });
   };
 
   const handleHoverEnd = () => {
     if (prefersReduced) return;
     hoveredRef.current = false;
     if (float) {
-      startFloat();
+      startFloat(true);
     } else {
-      controls.start({ y: 0, transition: { duration: 0.5, ease: "easeOut" } });
+      controls.start({ y: 0, transition: { duration: 0.2, ease: "easeOut" } });
     }
   };
 
