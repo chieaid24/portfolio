@@ -1,6 +1,6 @@
 "use client";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 
 function CardRotate({ children, onSendToBack, sensitivity }) {
@@ -64,19 +64,14 @@ export default function Stack({
     },
   ]);
 
-  // All cards are visible at once (stacked), so wait for every image to load
-  // before revealing the stack to avoid a staggered "pop in" on production.
+  // All cards are visible at once (stacked), so reveal the stack only once
+  // EVERY image has fully loaded and decoded — never on a timer — so nothing
+  // pops/staggers in. Each <Image> settles exactly once: via onLoad (after
+  // decode) on success, or via onError so a broken image can't hang the stack.
   const [loadedCount, setLoadedCount] = useState(0);
-  const [forceShow, setForceShow] = useState(false);
-  const allLoaded = loadedCount >= cards.length || forceShow;
+  const allLoaded = loadedCount >= cards.length;
 
   const handleImageDone = () => setLoadedCount((c) => c + 1);
-
-  // Safety net: never keep the stack hidden if an image load event is missed.
-  useEffect(() => {
-    const timer = setTimeout(() => setForceShow(true), 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const cardSizeClasses = "w-[175px] h-[175px] md:w-[250px] md:h-[250px]";
   const sizeStyle = cardDimensions
@@ -141,7 +136,16 @@ export default function Stack({
                 className="pointer-events-none object-cover select-none"
                 fill
                 sizes={imageSizes}
-                onLoad={handleImageDone}
+                onLoad={(e) => {
+                  // Wait for the image to actually decode/paint, not just
+                  // download, so the card is rendered correctly before reveal.
+                  const img = e.currentTarget;
+                  if (img && typeof img.decode === "function") {
+                    img.decode().then(handleImageDone, handleImageDone);
+                  } else {
+                    handleImageDone();
+                  }
+                }}
                 onError={handleImageDone}
               />
             </motion.div>
