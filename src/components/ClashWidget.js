@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import ClashRoyale from "@/icons/ClashRoyale";
 import Trophy from "@/icons/ClashTrophy";
@@ -12,38 +13,47 @@ function formatCardAssetName(name) {
   return String(name).trim().toLowerCase().replace(/\s+/g, "-");
 }
 
-function DeckCardImage({ card, index, className }) {
+const UNKNOWN_CARD_SRC = "/royale/cards/card-legendary-unknown.png";
+
+function DeckCardImage({ card, index, className, show, onLoaded }) {
   const base = formatCardAssetName(card?.name ?? "");
   const normalSrc = base ? `/royale/cards/${base}.png` : null;
   const evolvedSrc = base ? `/royale/cards/${base}-ev1.png` : null;
 
   const evoEligible = index < 2 && Number(card?.evolutionLevel ?? 0) >= 1;
-  const [src, setSrc] = useState(evoEligible ? evolvedSrc : normalSrc);
+  const [src, setSrc] = useState(
+    (evoEligible ? evolvedSrc : normalSrc) ?? UNKNOWN_CARD_SRC,
+  );
 
-  if (!src) {
-    return (
+  // Report up exactly once when this card settles (loads, or exhausts its
+  // fallbacks) so the parent can reveal the whole deck only when all are ready.
+  const settledRef = useRef(false);
+  const settle = () => {
+    if (settledRef.current) return;
+    settledRef.current = true;
+    onLoaded();
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: show ? 1 : 0, y: show ? 0 : 8 }}
+      transition={{ duration: 0.35, ease: "easeOut", delay: index * 0.05 }}
+    >
       <Image
-        src="/royale/cards/card-legendary-unknown.png"
-        alt="Card"
+        src={src}
+        alt={card?.name || "Card"}
         width={40}
         height={40}
         className={className}
+        onLoad={settle}
+        onError={() => {
+          if (src === evolvedSrc && normalSrc) setSrc(normalSrc);
+          else if (src !== UNKNOWN_CARD_SRC) setSrc(UNKNOWN_CARD_SRC);
+          else settle(); // even the placeholder failed — don't hang the deck
+        }}
       />
-    );
-  }
-
-  return (
-    <Image
-      src={src}
-      alt={card?.name || "Card"}
-      width={40}
-      height={40}
-      className={className}
-      onError={() => {
-        if (src === evolvedSrc && normalSrc) setSrc(normalSrc);
-        else setSrc("/royale/cards/card-legendary-unknown.png");
-      }}
-    />
+    </motion.div>
   );
 }
 
@@ -71,6 +81,15 @@ export default function ClashWidget() {
 
   const player = data?.player;
   const deck = player?.currentDeck ?? [];
+  const visibleDeck = deck.slice(0, 8);
+
+  // Hold the deck hidden until every card image has settled, then reveal them
+  // all at once with a stagger that reads top-left → right → down (the grid's
+  // natural row-major order, which is exactly the card index order).
+  const [loadedCount, setLoadedCount] = useState(0);
+  const allCardsLoaded =
+    visibleDeck.length > 0 && loadedCount >= visibleDeck.length;
+  const handleCardLoaded = () => setLoadedCount((c) => c + 1);
 
   const careerWinPercent = useMemo(() => {
     const wins = player?.wins ?? 0;
@@ -143,12 +162,14 @@ export default function ClashWidget() {
 
         {/* Current deck */}
         <div className="ml-auto flex">
-          <div className="grid grid-cols-4 grid-rows-2 gap-x-1 rounded-xl bg-black/10 py-1 sm:gap-x-3 md:gap-x-1">
-            {deck.slice(0, 8).map((card, i) => (
+          <div className="grid grid-cols-4 grid-rows-2 gap-x-1 rounded-xl p-1 bg-black/10 sm:gap-x-3 md:gap-x-1">
+            {visibleDeck.map((card, i) => (
               <div key={card.id ?? i} className="items-center justify-center">
                 <DeckCardImage
                   card={card}
                   index={i}
+                  show={allCardsLoaded}
+                  onLoaded={handleCardLoaded}
                   className="duration-200 md:hover:scale-105"
                 />
               </div>
