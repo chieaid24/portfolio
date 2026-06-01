@@ -91,7 +91,7 @@ export const experiences = {
         src: "/company-images/aws_logo.png",
         alt: "AWS logo",
       },
-      title: "Cloud Certifications",
+      title: "Certifications",
       period: "",
       highlights: [
         {
