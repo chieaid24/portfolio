@@ -10,13 +10,15 @@ import RewardLink from "./RewardLink";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 
-const AMP = 3.5; // px of vertical drift each way from rest
+const AMP = 3.5; // half the bob range; the bob spans 2*AMP, sitting entirely below the layout position (see wave())
 const PERIOD = 3.5; // ~seconds for one full up-down float cycle
 // Shape of the bob: 0 = pure sine (decelerates to a stop and lingers at the
 // top/bottom), 1 = triangle (constant speed, sharp turns). Blending keeps the
 // turns rounded but cuts the lingering, so even a small drift feels alive.
 const TRI_BLEND = 0.1;
-const HOVER_LIFT = 6; // px lifted above the top of the bob while hovered
+// The bob's *top* rests HOVER_LIFT px below the layout position, so hovering —
+// which lifts the card by HOVER_LIFT — floats it up to its natural y=0.
+const HOVER_LIFT = 5;
 const HOVER_RETURN = 0.7; // s for the unhover drop to mid-swing; ~1.6 matches the bob's descent speed for a seamless join
 
 export default function ProjectCard({
@@ -49,21 +51,23 @@ export default function ProjectCard({
         const f = (i / N + p) % 1; // cycle fraction in [0, 1)
         const sine = -Math.cos(2 * Math.PI * f); // -1..1, peak (-1) at f=0
         const tri = f < 0.5 ? -1 + 4 * f : 3 - 4 * f; // -1..1, same orientation
-        return Number(
-          (AMP * ((1 - TRI_BLEND) * sine + TRI_BLEND * tri)).toFixed(2),
-        );
+        const bob = (1 - TRI_BLEND) * sine + TRI_BLEND * tri; // -1..1
+        // Sit the whole bob below the layout position: its top (bob = -1) rests
+        // HOVER_LIFT px down, so hovering — which lifts the card by HOVER_LIFT —
+        // floats it back up to its natural y=0.
+        return Number((HOVER_LIFT + AMP * (1 + bob)).toFixed(2)); // HOVER_LIFT at top .. HOVER_LIFT+2*AMP at bottom
       });
     cfg.current = {
       period: PERIOD,
       keyframes: wave(phase), // desynced phase — used for the mount entrance
-      midKeyframes: wave(0.25), // starts mid-downswing (y=0, falling fastest) — used to resume after hover
+      midKeyframes: wave(0.25), // starts mid-downswing (y = HOVER_LIFT + AMP, the bob's midpoint, falling fastest) — used to resume after hover
     };
   }
 
   // Ease from the current position into a swing, then loop forever. On mount we
   // ease into the card's desynced phase; on resume (after a hover) we drop into
-  // the middle of the downswing (y=0, where the bob is already falling fastest)
-  // and continue from there, so the release blends into the bob's own descent
+  // the middle of the downswing (y = HOVER_LIFT + AMP, where the bob is already
+  // falling fastest) and continue from there, so the release blends into the bob's own descent
   // instead of braking to a stop at a turning point.
   const startFloat = useCallback((resume = false) => {
     const { keyframes, midKeyframes, period } = cfg.current;
@@ -74,7 +78,7 @@ export default function ProjectCard({
       .start({
         y: frames[0],
         transition: {
-          duration: resume ? HOVER_RETURN : 0.6,
+          duration: resume ? HOVER_RETURN : 0.4,
           ease: resume ? "linear" : "easeOut",
         },
       })
@@ -101,10 +105,12 @@ export default function ProjectCard({
   const handleHoverStart = () => {
     if (prefersReduced) return;
     hoveredRef.current = true;
-    // Lift slightly above the top of the float range and hold there.
+    // Lift the card by HOVER_LIFT and hold. A floating card's bob sits HOVER_LIFT
+    // below its layout position, so this floats it up to its natural y=0; a
+    // non-floating card rests at y=0, so it lifts to -HOVER_LIFT.
     controls.start({
-      y: -(AMP + HOVER_LIFT),
-      transition: { duration: 0.6, ease: "easeOut" },
+      y: float ? 0 : -HOVER_LIFT,
+      transition: { duration: 0.3, ease: "easeOut" },
     });
   };
 
