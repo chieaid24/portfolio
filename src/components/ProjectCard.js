@@ -18,10 +18,10 @@ const PERIOD = 3.5; // ~seconds for one full up-down float cycle
 // top/bottom), 1 = triangle (constant speed, sharp turns). Blending keeps the
 // turns rounded but cuts the lingering, so even a small drift feels alive.
 const TRI_BLEND = 0.1;
-// The bob's *top* rests HOVER_LIFT px below the layout position, so hovering —
-// which lifts the card by HOVER_LIFT — floats it up to its natural y=0.
+// The bob sits below the card's resting spot: its top is HOVER_LIFT px down, so
+// hovering lifts the card by HOVER_LIFT back up to its natural y=0.
 const HOVER_LIFT = 5;
-const HOVER_RETURN = 0.7; // s for the unhover drop to mid-swing; ~1.6 matches the bob's descent speed for a seamless join
+const HOVER_RETURN = 0.7; // seconds for the post-hover drop back into the bob
 
 export default function ProjectCard({
   title,
@@ -56,29 +56,22 @@ export default function ProjectCard({
         const sine = -Math.cos(2 * Math.PI * f); // -1..1, peak (-1) at f=0
         const tri = f < 0.5 ? -1 + 4 * f : 3 - 4 * f; // -1..1, same orientation
         const bob = (1 - TRI_BLEND) * sine + TRI_BLEND * tri; // -1..1
-        // Sit the whole bob below the layout position: its top (bob = -1) rests
-        // HOVER_LIFT px down, so hovering — which lifts the card by HOVER_LIFT —
-        // floats it back up to its natural y=0.
-        return Number((HOVER_LIFT + AMP * (1 + bob)).toFixed(2)); // HOVER_LIFT at top .. HOVER_LIFT+2*AMP at bottom
+        return Number((HOVER_LIFT + AMP * (1 + bob)).toFixed(2)); // HOVER_LIFT (top) .. HOVER_LIFT+2*AMP (bottom)
       });
     cfg.current = {
       period: PERIOD,
-      keyframes: wave(phase), // desynced phase — used for the mount entrance
-      midKeyframes: wave(0.25), // starts mid-downswing (y = HOVER_LIFT + AMP, the bob's midpoint, falling fastest) — used to resume after hover
+      keyframes: wave(phase), // mount: this card's desynced phase
+      midKeyframes: wave(0.25), // resume: the bob's mid-downswing (y = HOVER_LIFT + AMP)
     };
   }
 
-  // Ease from the current position into a swing, then loop forever. On mount we
-  // ease into the card's desynced phase; on resume (after a hover) we drop into
-  // the middle of the downswing (y = HOVER_LIFT + AMP, where the bob is already
-  // falling fastest) and continue from there, so the release blends into the bob's own descent
-  // instead of braking to a stop at a turning point.
+  // Ease into the bob loop, then repeat. On resume (after a hover) we drop into
+  // the mid-downswing so the release blends into the bob rather than stopping at
+  // a turning point; on mount we ease into the card's desynced phase.
   const startFloat = useCallback((resume = false) => {
     const { keyframes, midKeyframes, period } = cfg.current;
     const frames = resume ? midKeyframes : keyframes;
     controls
-      // resume = a steady drop that merges into the bob's mid-swing descent;
-      // otherwise this is the one-time ease-in on mount.
       .start({
         y: frames[0],
         transition: {
@@ -109,9 +102,8 @@ export default function ProjectCard({
   const handleHoverStart = () => {
     if (prefersReduced) return;
     hoveredRef.current = true;
-    // Lift the card by HOVER_LIFT and hold. A floating card's bob sits HOVER_LIFT
-    // below its layout position, so this floats it up to its natural y=0; a
-    // non-floating card rests at y=0, so it lifts to -HOVER_LIFT.
+    // Lift by HOVER_LIFT: a floating card floats up to its natural y=0; a
+    // non-floating card (resting at y=0) lifts to -HOVER_LIFT.
     controls.start({
       y: float ? 0 : -HOVER_LIFT,
       transition: { duration: 0.3, ease: "easeOut" },
@@ -141,12 +133,12 @@ export default function ProjectCard({
       >
         <RewardProjectLink
           href={`/projects/${slug}`}
-          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-6 sm:px-8 sm:py-6"
+          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-6 sm:px-8 sm:py-8"
           rewardId={rewardId}
           ticketValue={1000}
         >
           <div className="">
-            {/* Project preview image — drops in a placeholder box when `image` is unset */}
+            {/* Preview image; falls back to a placeholder box when `image` is unset */}
             <div className="relative mb-5 aspect-[2/1] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.04]">
               {image ? (
                 <Image
@@ -162,10 +154,10 @@ export default function ProjectCard({
                 </div>
               )}
             </div>
-            <div className="mb-3">
-              <h3 className="text-xl font-semibold sm:text-2xl">{title}</h3>
+            <div className="mb-3 flex flex-col gap-1">
+              <h3 className="text-lg font-semibold sm:text-xl">{title}</h3>
               <span
-                className={`flex items-center gap-x-2 text-sm font-light ${clicked ? "text-gray-400" : "text-white"}`}
+                className={`flex items-center gap-x-1 text-sm ${clicked ? "text-gray-400" : "text-white"}`}
               >
                 <Telescope className="h-3.5 w-3.5" />
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
