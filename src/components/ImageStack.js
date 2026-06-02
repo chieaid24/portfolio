@@ -64,6 +64,15 @@ export default function Stack({
     },
   ]);
 
+  // All cards are visible at once (stacked), so reveal the stack only once
+  // EVERY image has fully loaded and decoded — never on a timer — so nothing
+  // pops/staggers in. Each <Image> settles exactly once: via onLoad (after
+  // decode) on success, or via onError so a broken image can't hang the stack.
+  const [loadedCount, setLoadedCount] = useState(0);
+  const allLoaded = loadedCount >= cards.length;
+
+  const handleImageDone = () => setLoadedCount((c) => c + 1);
+
   const cardSizeClasses = "w-[175px] h-[175px] md:w-[250px] md:h-[250px]";
   const sizeStyle = cardDimensions
     ? { width: cardDimensions.width, height: cardDimensions.height }
@@ -83,12 +92,15 @@ export default function Stack({
   };
 
   return (
-    <div
+    <motion.div
       className={`relative ${cardSizeClasses} z-10`}
       style={{
         perspective: 600,
         ...sizeStyle,
       }}
+      initial={{ opacity: 0, y: 0 }}
+      animate={{ opacity: allLoaded ? 1 : 0, y: allLoaded ? 0 : 5 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       {cards.map((card, index) => {
         return (
@@ -124,11 +136,22 @@ export default function Stack({
                 className="pointer-events-none object-cover select-none"
                 fill
                 sizes={imageSizes}
+                onLoad={(e) => {
+                  // Wait for the image to actually decode/paint, not just
+                  // download, so the card is rendered correctly before reveal.
+                  const img = e.currentTarget;
+                  if (img && typeof img.decode === "function") {
+                    img.decode().then(handleImageDone, handleImageDone);
+                  } else {
+                    handleImageDone();
+                  }
+                }}
+                onError={handleImageDone}
               />
             </motion.div>
           </CardRotate>
         );
       })}
-    </div>
+    </motion.div>
   );
 }
