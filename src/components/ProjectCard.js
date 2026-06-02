@@ -3,10 +3,12 @@
 import RewardProjectLink from "@/components/RewardProjectLink";
 import Telescope from "@/icons/Telescope";
 import FooterGithub from "@/icons/FooterGithub";
+import Globe from "@/icons/Globe";
 import SimpleArrow from "@/icons/SimpleArrow";
 import SkillDisplay from "@/components/SkillDisplay";
 import { useMoney } from "@/lib/money-context";
 import RewardLink from "./RewardLink";
+import Image from "next/image";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -26,7 +28,9 @@ export default function ProjectCard({
   skills_used,
   slug,
   summary,
+  image,
   github,
+  website,
   float = false,
   index = 0,
 }) {
@@ -137,11 +141,27 @@ export default function ProjectCard({
       >
         <RewardProjectLink
           href={`/projects/${slug}`}
-          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-8 sm:px-8 sm:py-6"
+          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-6 sm:px-8 sm:py-6"
           rewardId={rewardId}
           ticketValue={1000}
         >
           <div className="">
+            {/* Project preview image — drops in a placeholder box when `image` is unset */}
+            <div className="relative mb-5 aspect-[2/1] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.04]">
+              {image ? (
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <Telescope className="h-8 w-8 text-white/15" />
+                </div>
+              )}
+            </div>
             <div className="mb-3">
               <h3 className="text-xl font-semibold sm:text-2xl">{title}</h3>
               <span
@@ -170,18 +190,33 @@ export default function ProjectCard({
                 );
               })}
             </div>
-            <div className="my-5 h-px w-full bg-white/30 sm:my-6"></div>
-            <div className="flex justify-between">
-              <div className="duration-100 md:hover:translate-x-[2px]">
-                <RewardLink
-                  href={github}
-                  className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
-                  rewardId={`${slug}:github`}
-                  target="_blank"
-                >
-                  <FooterGithub className="h-4 w-4" />
-                  GitHub
-                </RewardLink>
+            <div className="my-4 h-px w-full bg-white/30 sm:my-5"></div>
+            <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+              <div className="flex flex-wrap gap-2">
+                {website && (
+                  <div className="duration-100 md:hover:translate-x-[2px]">
+                    <RewardLink
+                      href={website}
+                      className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
+                      rewardId={`${slug}:website`}
+                      target="_blank"
+                    >
+                      <Globe className="h-4 w-4" />
+                      Website
+                    </RewardLink>
+                  </div>
+                )}
+                <div className="duration-100 md:hover:translate-x-[2px]">
+                  <RewardLink
+                    href={github}
+                    className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
+                    rewardId={`${slug}:github`}
+                    target="_blank"
+                  >
+                    <FooterGithub className="h-4 w-4" />
+                    GitHub
+                  </RewardLink>
+                </div>
               </div>
               <div className="text-body-text group flex items-center gap-2 transition-all duration-100 md:hover:translate-x-[1px]">
                 <span>Explore Project </span>
