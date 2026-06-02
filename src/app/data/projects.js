@@ -11,7 +11,8 @@ export const quest_totals = {
   // CURR TOTAL: 4
   project: 4,
 
-  // Header: 3[about, projects, resume] | Footer: 3[linkedin, github, email] | OnePerProject: 4
+  // Header: 3[about, projects, resume] | Footer: 3[linkedin, github, email] | OnePerProject: 4 | Website: 0
+  // Website: each project with a non-empty website_link adds 1 (currently 0 filled in)
   // CURR TOTAL: 10
   link: 10,
 };
@@ -28,9 +29,10 @@ const bullet = "list-disc pl-8";
         ticket_no: "25", //hard coded fall back value that will appear if actual random generation goes wrong,
         fallback_value: "17,230.00", //fallback ticket value that should be in this format (between 15000 and 18000, with comma, rounded to 10s place)
         skills_used: ['Python', 'OOP'], // orange labels that appear on Card, rendered by components/SkillDisplay (icon with matching name should exist in app/icons/skills)
-        image: '/pmi_auto_generator/PMI Card2.png', // Card background image, 1536 x 768px
-        page_displays: [['/pmi_auto_generator/pmi_card.png', 'Example 3D model with attached PMI'], ['/pmi_auto_generator/pmi_card.png']], // list range(1-2) of lists range(1-2). Bigger list is each Display which contains its path and its subtitle. Subtitle not req. 
-        github_link: 'https://github.com/chieaid24/PMI-Auto-Generator-Desc',
+        image: '/pmi_auto_generator/PMI Card2.png', // Card preview image, shown at the top of the project card. ~2:1 aspect (e.g. 1536 x 768px)
+        page_displays: [['/pmi_auto_generator/pmi_card.png', 'Example 3D model with attached PMI'], ['/pmi_auto_generator/pmi_card.png']], // list range(1-2) of lists range(1-2). Bigger list is each Display which contains its path and its subtitle. Subtitle not req.
+        github_link: 'https://github.com/chieaid24/PMI-Auto-Generator-Desc', // "GitHub" button on the Card
+        website_link: '', // optional: adds a "Website" button on the Card (omit/leave empty to hide)
         subtitle: "a machinist's best friend", // tagline that appears below the title on the Page
         summaryMetaData: "PMI Auto Generator speeds up machinist workflows by 30%, automating CAD annotation with Python + AHK." //60-150 character desc. for the SEO (just ask ChatGPT to summarize the project into a few words)
         summary: <> </>, // summary on the landing section of the Page

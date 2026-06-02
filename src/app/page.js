@@ -202,7 +202,9 @@ export default function Home() {
                       slug={project.slug}
                       alt={project.title}
                       summary={project.summary}
+                      image={project.image}
                       github={project.github_link}
+                      website={project.website_link}
                       float
                       index={index}
                     />
