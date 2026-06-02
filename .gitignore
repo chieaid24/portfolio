@@ -42,3 +42,6 @@ next-env.d.ts
 
 CLAUDE.md
 .claude/
+
+# Windows/WSL mark-of-the-web metadata streams
+*:Zone.Identifier
