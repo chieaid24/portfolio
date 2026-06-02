@@ -11,7 +11,13 @@ function Slide({ src, alt, priority }) {
   const markLoaded = () => setLoaded(true);
 
   return (
-    <motion.div className="h-[220px] w-full overflow-hidden rounded-xl bg-[#2a2a2a] shadow-lg">
+    <motion.div className="relative h-[220px] w-full overflow-hidden rounded-xl bg-[#2a2a2a] shadow-lg">
+      {/* Spinner placeholder so the slide doesn't read as blank pre-load */}
+      {!loaded && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <span className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-white/40" />
+        </div>
+      )}
       <motion.div
         className="relative h-full w-full"
         initial={{ opacity: 0 }}
