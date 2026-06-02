@@ -68,14 +68,14 @@ const bullet = "list-disc pl-8";
     */
 
 //slugs of the currently "featured" projects on the home page
-export const featuredList = ["ai-sleep-analytics", "portfolio-website"];
+export const featuredList = ["canopy", "ai-sleep-analytics"];
 
 // image / second_image can also be 3D models, and will be conditionally rendered as so on the page
 export const projects = [
   {
-    slug: "ai-sleep-analytics",
-    title: "AI Sleep Analytics",
-    skills_used: ["Python", "JupyterLab", "AWS", "Scikitlearn/scikit-learn"],
+    slug: "canopy",
+    title: "Canopy",
+    skills_used: ["AWS", "Kubernetes", "Spring Boot", "Grafana", "Next/Next.js"],
     image: "/ai-sleep-analytics/ai-card-3.png",
     page_displays: [
       [
@@ -83,8 +83,8 @@ export const projects = [
         "Check out the dashboard visualization!",
       ],
     ],
-    github_link: "https://github.com/chieaid24/AI-Sleep-Analytics",
-    subtitle: "sleep apnea's worst nightmare",
+    github_link: "https://github.com/chieaid24/canopy",
+    subtitle: "saving your energy bill and the environment",
     summaryMetaData:
       "AWS-powered ML pipeline using CPAP data to predict sleep scores and forecast future sleep trends.",
     summary:
@@ -193,6 +193,127 @@ export const projects = [
       </>,
     ],
   },
+  {
+    slug: "ai-sleep-analytics",
+    title: "AI Sleep Analytics",
+    skills_used: ["Python", "JupyterLab", "AWS", "Scikitlearn/scikit-learn"],
+    image: "/ai-sleep-analytics/ai-card-3.png",
+    page_displays: [
+      [
+        "https://youtu.be/fvlz57VK23c",
+        "Check out the dashboard visualization!",
+      ],
+    ],
+    github_link: "https://github.com/chieaid24/sleep-ml",
+    subtitle: "sleep apnea's worst nightmare",
+    summaryMetaData:
+      "AWS-powered ML pipeline using CPAP data to predict sleep scores and forecast future sleep trends.",
+    summary:
+      "AWS-powered ML pipeline that cleans and models sleep data using Random Forest regression and Prophet forecasting",
+    background: (
+      <>
+        As someone who&apos;s lived with sleep apnea my whole life, I&apos;ve
+        always wondered how my sleep patterns have changed over time. So, I
+        collected two years of CPAP machine data and analyzed it with a{" "}
+        <RedText rewardId="red:sleep:random-forest">Random Forest</RedText>{" "}
+        regression model and a{" "}
+        <RedText rewardId="red:sleep:forecasting">forecasting</RedText>{" "}
+        model—check out what I found!
+      </>
+    ),
+    tool_paragraphs: [
+      <>
+        I developed in <SkillDisplay fileName="Python" project="sleep" /> and{" "}
+        <SkillDisplay fileName="JupyterLab" project="sleep" /> within the{" "}
+        <SkillDisplay fileName="AWS SageMaker Studio" project="sleep" /> IDE,
+        using Pandas and{" "}
+        <SkillDisplay fileName="AWS Glue" project="sleep">
+          AWS Glue
+        </SkillDisplay>{" "}
+        for data preparation and{" "}
+        <SkillDisplay fileName="AWS S3" project="sleep">
+          AWS S3
+        </SkillDisplay>{" "}
+        for storage. I also used scikit-learn models and Meta&apos;s Prophet
+        model as jumping off points.
+      </>,
+    ],
+    why_paragraphs: [
+      <>
+        After completing my AWS AI Practitioner and Associate ML Engineer
+        certifications, I wanted to create a simple machine learning project
+        leveraging AWS services to put my skills into practice.
+      </>,
+      <>
+        {" "}
+        Around the same time, I found out that my CPAP (Continuous Positive
+        Airway Pressure) machine had been tracking and storing my sleep data for
+        the past two years, and I was able to download the bulk of it as a CSV
+        file. So, I decided to use machine learning models to find out
+        <ul className={bullet}>
+          <li>
+            What factors contributed to the CPAP company&apos;s proprietary
+            “Sleep Score” metric
+          </li>
+          <li>
+            What my predicted sleep metrics might look like a week into the
+            future.
+          </li>
+        </ul>
+      </>,
+    ],
+    what_paragraphs: [
+      <>
+        First, I had to clean and normalize the data, as the{" "}
+        <RedText rewardId="red:sleep:600">600+ nights</RedText> of data and{" "}
+        <RedText rewardId="red:sleep:40">40+ features</RedText> in the CSV file
+        contained a lot of unnecessary information (like the company&apos;s
+        DynamoDB specifications). This included dropping rows with missing
+        entries, and choosing features that would produce the best model
+        predictions.
+      </>,
+      <>
+        For the regression model predicting my “Sleep Score”, I tested Linear
+        Regression, Random Forest, XGBoost, and Neural Network Regressor models
+        on the data to find the most fitting model for the task—resulting in
+        scikit-learn&apos;s Random Forest model performing the best. Check out
+        the
+        <Link
+          href="https://github.com/chieaid24/sleep-ml"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="italic transition hover:opacity-80"
+        >
+          {" "}
+          GitHub
+        </Link>{" "}
+        for a more detailed analysis. I then applied Bayesian Optimization to
+        further fine tune the model to my data, resulting in an R² value of 0.99
+        and RMSE of 0.28.{" "}
+      </>,
+      <>
+        Regarding the forecast model, I selected five of the most important
+        sleep metrics (i.e. usage hours, sleep score, etc), and created time
+        series models for each with Meta&apos;s Prophet. I also analyzed weekly
+        seasonality trends within the data, leading to interesting discoveries
+        like my usage hours being the lowest on Sundays and highest on Saturdays
+        on average. Finally, I created a dashboard visualization with Streamlit,
+        creating interactive graphs and tables of the model&apos;s predictions.
+      </>,
+    ],
+
+    learning_paragraphs: [
+      <>
+        This project allowed me to apply machine learning techniques such as
+        feature engineering and{" "}
+        <RedText rewardId="red:sleep:fine-tuning">fine-tuning</RedText> on a
+        dataset that was personal to me, as well as learn the AWS ecosystem with
+        hands-on experience. Overall, it was rewarding to take an end-to-end
+        approach with a project close to my heart, and I hope that all this data
+        might finally convince me to sleep earlier :).
+      </>,
+    ],
+  },
 
   {
     slug: "portfolio-website",
@@ -209,7 +330,7 @@ export const projects = [
     page_displays: [
       ["/portfolio_website/website-image-2.png", "System architecture diagram"],
     ],
-    github_link: "https://github.com/chieaid24/Portfolio-Website",
+    github_link: "https://github.com/chieaid24/portfolio",
     subtitle: "a portfolio that performs",
     summaryMetaData:
       "An interactive Next.js portfolio with gamified balance, slot machine, APIs, and creative UI/UX design.",
