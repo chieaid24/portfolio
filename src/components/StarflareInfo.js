@@ -20,9 +20,9 @@ export default function StarflareInfo() {
           setShowInfo(false);
           setToggleShowInfo(false);
         }}
-        className={`${showInfo || toggleShowInfo ? "text-highlight-color/50" : "text-outline-gray/70"} hover:text-highlight-color/50 p-1 transition duration-150 translate-y-[0px]`}
+        className={`${showInfo || toggleShowInfo ? "text-highlight-color/50" : "text-outline-gray/70"} hover:text-highlight-color/50 p-1 transition duration-150 -translate-y-[0.5px]`}
       >
-        <Info className="h-4 w-4" />
+        <Info className="h-3 w-3" />
       </button>
       <AnimatePresence>
         {(showInfo || toggleShowInfo) && (
