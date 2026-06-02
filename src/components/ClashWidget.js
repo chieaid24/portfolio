@@ -15,15 +15,35 @@ function formatCardAssetName(name) {
 
 const UNKNOWN_CARD_SRC = "/royale/cards/card-legendary-unknown.png";
 
-function DeckCardImage({ card, index, className, show, onLoaded }) {
+// Ordered list of candidate image srcs for a deck slot. The renderer walks the
+// list, advancing on each load error, and always ends on the placeholder:
+//   slot 0: evolved (-ev1) when the card is an evo, else normal
+//   slot 1: hero (-hero), else normal
+//   slot 2: hero (-hero), then evolved (-ev1), then normal
+//   slot 3+: normal
+function cardSources(card, index) {
   const base = formatCardAssetName(card?.name ?? "");
-  const normalSrc = base ? `/royale/cards/${base}.png` : null;
-  const evolvedSrc = base ? `/royale/cards/${base}-ev1.png` : null;
+  if (!base) return [UNKNOWN_CARD_SRC];
+  const normal = `/royale/cards/${base}.png`;
+  const evolved = `/royale/cards/${base}-ev1.png`;
+  const hero = `/royale/cards/${base}-hero.png`;
 
-  const evoEligible = index < 2 && Number(card?.evolutionLevel ?? 0) >= 1;
-  const [src, setSrc] = useState(
-    (evoEligible ? evolvedSrc : normalSrc) ?? UNKNOWN_CARD_SRC,
-  );
+  let chain;
+  if (index === 0) {
+    chain = Number(card?.evolutionLevel ?? 0) >= 1 ? [evolved, normal] : [normal];
+  } else if (index === 1) {
+    chain = [hero, normal];
+  } else if (index === 2) {
+    chain = [hero, evolved, normal];
+  } else {
+    chain = [normal];
+  }
+  return [...chain, UNKNOWN_CARD_SRC];
+}
+
+function DeckCardImage({ card, index, className, show, onLoaded }) {
+  const sources = useMemo(() => cardSources(card, index), [card, index]);
+  const [srcIndex, setSrcIndex] = useState(0);
 
   // Report up exactly once when this card settles (loads, or exhausts its
   // fallbacks) so the parent can reveal the whole deck only when all are ready.
@@ -41,16 +61,17 @@ function DeckCardImage({ card, index, className, show, onLoaded }) {
       transition={{ duration: 0.35, ease: "easeOut", delay: index * 0.05 }}
     >
       <Image
-        src={src}
+        src={sources[srcIndex]}
         alt={card?.name || "Card"}
         width={40}
         height={40}
         className={className}
         onLoad={settle}
         onError={() => {
-          if (src === evolvedSrc && normalSrc) setSrc(normalSrc);
-          else if (src !== UNKNOWN_CARD_SRC) setSrc(UNKNOWN_CARD_SRC);
-          else settle(); // even the placeholder failed — don't hang the deck
+          // Fall through to the next candidate; if the placeholder itself
+          // failed, settle so the deck doesn't hang waiting on this slot.
+          if (srcIndex < sources.length - 1) setSrcIndex((i) => i + 1);
+          else settle();
         }}
       />
     </motion.div>
