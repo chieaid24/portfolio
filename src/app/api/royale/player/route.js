@@ -46,6 +46,32 @@ function computeResult(battle) {
     return 'draw';
 }
 
+// The Supercell /players endpoint omits the equipped Champion from
+// `currentDeck` (a champion deck returns 7 cards, not 8). The battle log *does*
+// include it, so recover it: find a recent battle whose deck is exactly the
+// current deck plus one champion, and return that champion.
+function findEquippedChampion(currentDeck, battleLog) {
+    const deckIds = new Set((currentDeck ?? []).map(c => c.id));
+    if (!deckIds.size) return null;
+    for (const battle of Array.isArray(battleLog) ? battleLog : []) {
+        const teamDeck = battle.team?.[0]?.cards ?? [];
+        const champ = teamDeck.find(c => c.rarity === 'champion');
+        // Only trust this battle if its deck is exactly currentDeck + champion.
+        if (champ && teamDeck.filter(c => deckIds.has(c.id)).length === deckIds.size) {
+            return champ;
+        }
+    }
+    return null;
+}
+
+// Marker the client renders as the generic unknown-card placeholder (a null
+// name falls through to UNKNOWN_CARD_SRC) when the equipped champion can't be
+// recovered (e.g. no recent battle on this deck yet).
+const CHAMPION_PLACEHOLDER = {
+    id: '__champion_placeholder__',
+    name: null,
+};
+
 async function j(url) {
     // Data cache returns cached JSON immediately, revalidates in background.
     const res = await fetch(url, {
@@ -65,7 +91,13 @@ export async function GET() {
         ]);
 
         const results = (Array.isArray(battleLog) ? battleLog : []).map(computeResult);
-        const badgeId = clanBadgeSrc(player.clan?.badgeId);
+
+        // Re-attach the equipped champion the API drops from currentDeck.
+        const currentDeck = Array.isArray(player.currentDeck) ? [...player.currentDeck] : [];
+        if (currentDeck.length > 0 && currentDeck.length < 8) {
+            currentDeck.push(findEquippedChampion(currentDeck, battleLog) ?? CHAMPION_PLACEHOLDER);
+        }
+
         // Return trimmed data
         const data = {
             player: {
@@ -77,7 +109,7 @@ export async function GET() {
                 clanBadgeId: player.clan?.badgeId ?? null,
                 clanBadgeSrc: clanBadgeSrc(player.clan?.badgeId) ?? null,
                 role: player.role,
-                currentDeck: player.currentDeck,
+                currentDeck,
             },
             // shape is ['win', 'loss', 'win', 'draw'...]
             battleResults: results,
