@@ -76,7 +76,7 @@ export const projects = [
     slug: "canopy",
     title: "Canopy",
     skills_used: ["AWS", "Kubernetes", "Spring Boot", "Grafana", "Next/Next.js"],
-    image: "/ai-sleep-analytics/ai-card-3.png",
+    image: "/canopy/canopy_test_1.png",
     page_displays: [
       [
         "https://youtu.be/fvlz57VK23c",
@@ -196,7 +196,7 @@ export const projects = [
   {
     slug: "ai-sleep-analytics",
     title: "AI Sleep Analytics",
-    skills_used: ["Python", "JupyterLab", "AWS", "Scikitlearn/scikit-learn"],
+    skills_used: ["AWS", "Python", "JupyterLab", "Scikitlearn/scikit-learn"],
     image: "/ai-sleep-analytics/ai-card-3.png",
     page_displays: [
       [
