@@ -13,7 +13,7 @@ import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 
 const AMP = 3.5; // half the bob range; the bob spans 2*AMP, sitting entirely below the layout position (see wave())
-const PERIOD = 3.5; // ~seconds for one full up-down float cycle
+const PERIOD = 3.7; // ~seconds for one full up-down float cycle
 // Shape of the bob: 0 = pure sine (decelerates to a stop and lingers at the
 // top/bottom), 1 = triangle (constant speed, sharp turns). Blending keeps the
 // turns rounded but cuts the lingering, so even a small drift feels alive.
