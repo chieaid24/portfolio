@@ -77,9 +77,6 @@ export const experiences = {
         "Bachelor of Applied Science (BASc), Systems Design Engineering",
       highlights: [
         {
-          text: <>Minors in AI and Psychology</>,
-        },
-        {
           text: <>GPA: 3.95</>,
         },
 
