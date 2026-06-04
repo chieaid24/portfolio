@@ -11,7 +11,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params; // no need for await here since params is synchronous
   const project = getProjectBySlug(slug);
 
-  if (!project) {
+  if (!project || project.github_only) {
     return {
       title: "Project Not Found",
       alternates: {
@@ -57,7 +57,7 @@ export default async function ProjectPage({ params }) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
 
-  if (!project) {
+  if (!project || project.github_only) {
     notFound();
   }
   return (
