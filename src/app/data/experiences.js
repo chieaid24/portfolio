@@ -17,7 +17,7 @@ export const experiences = {
         {
           text: (
             <>
-              Navigated LLM application delivery on <span className="whitespace-nowrap"><RedText rewardId="exp:revvity:aws">AWS</RedText>,</span> provisioning <RedText rewardId="exp:revvity:terraform">Terraform</RedText> infrastructure and monitoring 
+              Navigated agentic LLM platform delivery on <span className="whitespace-nowrap"><RedText rewardId="exp:revvity:aws">AWS</RedText>,</span> provisioning <RedText rewardId="exp:revvity:terraform">Terraform</RedText> infrastructure and monitoring 
               performance with <RedText rewardId="exp:revvity:datadog">Datadog</RedText> and 
               CloudWatch.
             </>
