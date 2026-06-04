@@ -77,7 +77,7 @@ export const projects = [
     slug: "canopy",
     title: "Canopy",
     skills_used: ["AWS", "Kubernetes", "Spring Boot", "Grafana", "Next/Next.js"],
-    image: "/canopy/graph_2.jpg",
+    image: "/canopy/canopy_test_1.png",
     github_only: true,
     page_displays: [
       [
@@ -90,7 +90,7 @@ export const projects = [
     summaryMetaData:
       "AWS-powered ML pipeline using CPAP data to predict sleep scores and forecast future sleep trends.",
     summary:
-      "AWS-powered ML pipeline that cleans and models sleep data using Random Forest regression and Prophet forecasting",
+      "Cloud native platform bringing personalized energy insights to your home",
     background: (
       <>
         As someone who&apos;s lived with sleep apnea my whole life, I&apos;ve
@@ -211,7 +211,7 @@ export const projects = [
     summaryMetaData:
       "AWS-powered ML pipeline using CPAP data to predict sleep scores and forecast future sleep trends.",
     summary:
-      "AWS-powered ML pipeline that cleans and models sleep data using Random Forest regression and Prophet forecasting",
+      "Analyzing sleep apnea data to uncover what drives better sleep",
     background: (
       <>
         As someone who&apos;s lived with sleep apnea my whole life, I&apos;ve
@@ -328,7 +328,7 @@ export const projects = [
       "Three/Three.js",
       "MongoDB",
     ],
-    image: "/portfolio_website/website_card.png",
+    image: "/portfolio_website/portfolio_website_card.png",
     page_displays: [
       ["/portfolio_website/website-image-2.png", "System architecture diagram"],
     ],
@@ -337,7 +337,7 @@ export const projects = [
     summaryMetaData:
       "An interactive Next.js portfolio with gamified balance, slot machine, APIs, and creative UI/UX design.",
     summary:
-      "Full-stack Next.js portfolio with gamified balance, persisted state, and RESTful API integration",
+      "Current build of my full-stack portfolio site (yes, this one)",
 
     tool_paragraphs: [
       <>
@@ -461,7 +461,7 @@ export const projects = [
     summaryMetaData:
       "PMI Auto Generator speeds up machinist workflows by 30%, automating CAD annotation with Python + AHK.",
     summary:
-      "Python algorithm that automates CAD annotation, improving machinist efficiency by 30%",
+      "Script automating CAD annotation, improving machinist efficiency by 30%",
     background: (
       <>
         Manually transferring info from a{" "}
@@ -687,7 +687,7 @@ export const projects = [
     summaryMetaData:
       "Custom 3D printed key and remote holders designed in SOLIDWORKS, combining function, ergonomics, and office branding.",
     summary:
-      "Custom printed key and remote holders designed in SOLIDWORKS, combining function, ergonomics, and office branding",
+      "Custom designed and printed parts for efficiency around the office",
     background: (
       <>
         A messy and unorganized workspace is both{" "}
