@@ -261,22 +261,25 @@ body {
 .cursor-follow-btn::before {
   content: "";
   position: absolute;
+  top: 0;
+  left: 0;
   width: 70px;
   height: 70px;
+  margin: -35px 0 0 -35px; /* center the circle on (--flash-x, --flash-y) */
   border-radius: 50%;
   background: #d9d9d9;
   pointer-events: none;
-  translate: calc(var(--flash-x, -50px) - 38.5px)
-    calc(var(--flash-y, -50px) - 38.5px);
-  opacity: var(--flash-active, 0);
+  /* Position is driven every frame by the rAF lerp loop in page.js (writing
+     --flash-x/--flash-y), so transform carries NO transition — the smoothing
+     lives in the loop, not in CSS. Only the enter/leave pop (scale) and fade
+     (opacity) are eased here. translate3d keeps it on the compositor. */
+  transform: translate3d(var(--flash-x, -100px), var(--flash-y, -100px), 0);
   scale: var(--flash-size, 0);
-  /* Promote to its own compositor layer so translate/scale/opacity updates
-     stay off the main thread (no repaint of the button box on each move). */
-  will-change: transform, opacity;
+  opacity: var(--flash-active, 0);
+  will-change: transform, scale, opacity;
   transition:
-    translate 20ms ease-out,
-    scale 100ms ease-in-out,
-    opacity 0ms ease-out;
+    scale 140ms ease-out,
+    opacity 140ms ease-out;
 }
 
 .custom-bold {

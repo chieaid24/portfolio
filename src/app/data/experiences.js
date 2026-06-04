@@ -17,7 +17,7 @@ export const experiences = {
         {
           text: (
             <>
-              Navigated LLM application delivery on <span className="whitespace-nowrap"><RedText rewardId="exp:revvity:aws">AWS</RedText>,</span> provisioning <RedText rewardId="exp:revvity:terraform">Terraform</RedText> infrastructure and monitoring 
+              Navigated agentic LLM platform delivery on <span className="whitespace-nowrap"><RedText rewardId="exp:revvity:aws">AWS</RedText>,</span> provisioning <RedText rewardId="exp:revvity:terraform">Terraform</RedText> infrastructure and monitoring 
               performance with <RedText rewardId="exp:revvity:datadog">Datadog</RedText> and 
               CloudWatch.
             </>
@@ -77,9 +77,6 @@ export const experiences = {
         "Bachelor of Applied Science (BASc), Systems Design Engineering",
       highlights: [
         {
-          text: <>Minors in AI and Psychology</>,
-        },
-        {
           text: <>GPA: 3.95</>,
         },
 
@@ -91,7 +88,7 @@ export const experiences = {
         src: "/company-images/aws_logo.png",
         alt: "AWS logo",
       },
-      title: "Cloud Certifications",
+      title: "Certifications",
       period: "",
       highlights: [
         {

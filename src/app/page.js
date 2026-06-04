@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
@@ -15,43 +15,75 @@ import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 
 export default function Home() {
-  // Cursor-follow flash: coalesce pointer moves into a single rAF per frame so
-  // we read layout (getBoundingClientRect) and write CSS vars at most once per
-  // frame instead of on every high-frequency mousemove event.
-  const flashFrame = useRef(0);
-  const flashState = useRef({ el: null, x: 0, y: 0 });
+  // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
+  // the latest pointer position every frame, so the motion is decoupled from
+  // (bursty/sparse) mousemove events and from any CSS transition — that's what
+  // keeps it smooth. The button rect is read once on enter (not per frame), so
+  // there's no per-frame layout read.
+  const flashRaf = useRef(0);
+  const flashLast = useRef(0);
+  const flashEl = useRef(null);
+  const flashRect = useRef(null);
+  const flashTarget = useRef({ x: 0, y: 0 });
+  const flashPos = useRef({ x: 0, y: 0 });
+
+  const flashTick = useCallback((now) => {
+    const el = flashEl.current;
+    if (!el) {
+      flashRaf.current = 0;
+      return;
+    }
+    const dt = Math.min(now - flashLast.current, 64);
+    flashLast.current = now;
+    // Framerate-independent smoothing: ~0.25 catch-up per 60fps frame.
+    const k = 1 - Math.pow(0.75, dt / 16.6667);
+    const pos = flashPos.current;
+    const t = flashTarget.current;
+    pos.x += (t.x - pos.x) * k;
+    pos.y += (t.y - pos.y) * k;
+    el.style.setProperty("--flash-x", `${pos.x}px`);
+    el.style.setProperty("--flash-y", `${pos.y}px`);
+    flashRaf.current = requestAnimationFrame(flashTick);
+  }, []);
 
   const handleFlashEnter = (e) => {
-    e.currentTarget.style.setProperty("--flash-active", "0.4");
-    e.currentTarget.style.setProperty("--flash-size", "1");
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    flashEl.current = el;
+    flashRect.current = rect;
+    flashTarget.current = { x, y };
+    flashPos.current = { x, y }; // start under the cursor (no fly-in)
+    el.style.setProperty("--flash-x", `${x}px`);
+    el.style.setProperty("--flash-y", `${y}px`);
+    el.style.setProperty("--flash-active", "0.4");
+    el.style.setProperty("--flash-size", "1");
+    if (!flashRaf.current) {
+      flashLast.current = performance.now();
+      flashRaf.current = requestAnimationFrame(flashTick);
+    }
   };
 
   const handleFlashMove = (e) => {
-    flashState.current.el = e.currentTarget;
-    flashState.current.x = e.clientX;
-    flashState.current.y = e.clientY;
-    if (flashFrame.current) return;
-    flashFrame.current = requestAnimationFrame(() => {
-      flashFrame.current = 0;
-      const { el, x, y } = flashState.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      el.style.setProperty("--flash-x", `${x - rect.left}px`);
-      el.style.setProperty("--flash-y", `${y - rect.top}px`);
-    });
+    const rect = flashRect.current;
+    if (!rect) return;
+    flashTarget.current.x = e.clientX - rect.left;
+    flashTarget.current.y = e.clientY - rect.top;
   };
 
-  const handleFlashLeave = (e) => {
-    if (flashFrame.current) {
-      cancelAnimationFrame(flashFrame.current);
-      flashFrame.current = 0;
+  const handleFlashLeave = () => {
+    const el = flashEl.current;
+    if (el) {
+      el.style.setProperty("--flash-active", "0");
+      el.style.setProperty("--flash-size", "0");
     }
-    flashState.current.el = null;
-    const el = e.currentTarget;
-    el.style.setProperty("--flash-active", "0");
-    el.style.setProperty("--flash-size", "0");
-    el.style.setProperty("--flash-x", "-100px");
-    el.style.setProperty("--flash-y", "-100px");
+    if (flashRaf.current) {
+      cancelAnimationFrame(flashRaf.current);
+      flashRaf.current = 0;
+    }
+    flashEl.current = null;
+    flashRect.current = null;
   };
 
   return (
@@ -78,7 +110,7 @@ export default function Home() {
                 Greetings Earthling, {" "} 
                 <span className="gradient-text-header">
                   {" "}
-                  I'm <br className="sm:hidden" />
+                  I&apos;m <br className="sm:hidden" />
                   <span style={{ whiteSpace: "nowrap" }}>
                     Aidan
                   </span>
@@ -202,7 +234,12 @@ export default function Home() {
                       slug={project.slug}
                       alt={project.title}
                       summary={project.summary}
+                      image={project.image}
                       github={project.github_link}
+                      website={project.website_link}
+                      github_only={project.github_only}
+                      float
+                      index={index}
                     />
                   </motion.div>
                 ))}
