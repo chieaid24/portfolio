@@ -10,6 +10,8 @@ export default function RewardProjectLink({
   children,
   className,
   href,
+  external = false, // open href in a new tab instead of client-routing (github_only cards)
+  alsoAward, // optional { id, kind } claimed alongside rewardId on the same click
   ...rest
 }) {
   const { awardOnce, hasAward } = useMoney();
@@ -17,9 +19,14 @@ export default function RewardProjectLink({
 
   const handleClick = (e) => {
     onClick?.(e);
-    router.push(href);
+    if (external) {
+      window.open(href, "_blank", "noopener,noreferrer");
+    } else {
+      router.push(href);
+    }
     requestAnimationFrame(() => {
       awardOnce(rewardId, kind, ticketValue);
+      if (alsoAward) awardOnce(alsoAward.id, alsoAward.kind);
     });
   };
 

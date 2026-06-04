@@ -31,6 +31,7 @@ export default function ProjectCard({
   image,
   github,
   website,
+  github_only = false,
   float = false,
   index = 0,
 }) {
@@ -132,7 +133,11 @@ export default function ProjectCard({
         className={`font-dm-sans bg-background border-outline-gray h-full rounded-xl border-1 text-white`}
       >
         <RewardProjectLink
-          href={`/projects/${slug}`}
+          href={github_only ? github : `/projects/${slug}`}
+          external={github_only}
+          alsoAward={
+            github_only ? { id: `${slug}:github`, kind: "link" } : undefined
+          }
           className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-6 sm:px-8 sm:py-8"
           rewardId={rewardId}
           ticketValue={1000}
