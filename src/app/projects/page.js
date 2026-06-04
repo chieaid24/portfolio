@@ -40,7 +40,11 @@ export default function ProjectPage(props) {
                   slug={project.slug}
                   alt={project.title}
                   summary={project.summary}
+                  image={project.image}
                   github={project.github_link}
+                  website={project.website_link}
+                  github_only={project.github_only}
+                  index={index}
                 />
               </motion.div>
             ))}
