@@ -33,6 +33,7 @@ const bullet = "list-disc pl-8";
         page_displays: [['/pmi_auto_generator/pmi_card.png', 'Example 3D model with attached PMI'], ['/pmi_auto_generator/pmi_card.png']], // list range(1-2) of lists range(1-2). Bigger list is each Display which contains its path and its subtitle. Subtitle not req.
         github_link: 'https://github.com/chieaid24/PMI-Auto-Generator-Desc', // "GitHub" button on the Card
         website_link: '', // optional: adds a "Website" button on the Card (omit/leave empty to hide)
+        github_only: false, // optional: when true the Card has NO project page — clicking it opens github_link in a new tab (and claims its GitHub link reward). Page fields below can be omitted.
         subtitle: "a machinist's best friend", // tagline that appears below the title on the Page
         summaryMetaData: "PMI Auto Generator speeds up machinist workflows by 30%, automating CAD annotation with Python + AHK." //60-150 character desc. for the SEO (just ask ChatGPT to summarize the project into a few words)
         summary: <> </>, // summary on the landing section of the Page
@@ -76,7 +77,8 @@ export const projects = [
     slug: "canopy",
     title: "Canopy",
     skills_used: ["AWS", "Kubernetes", "Spring Boot", "Grafana", "Next/Next.js"],
-    image: "/canopy/canopy_test_1.png",
+    image: "/canopy/graph_2.jpg",
+    github_only: true,
     page_displays: [
       [
         "https://youtu.be/fvlz57VK23c",

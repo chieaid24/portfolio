@@ -237,6 +237,7 @@ export default function Home() {
                       image={project.image}
                       github={project.github_link}
                       website={project.website_link}
+                      github_only={project.github_only}
                       float
                       index={index}
                     />
