@@ -110,7 +110,7 @@ export default function Home() {
                 Greetings Earthling, {" "} 
                 <span className="gradient-text-header">
                   {" "}
-                  I'm <br className="sm:hidden" />
+                  I&apos;m <br className="sm:hidden" />
                   <span style={{ whiteSpace: "nowrap" }}>
                     Aidan
                   </span>

@@ -11,14 +11,6 @@ export default function SpotifyEmbed({
   const [isReady, setIsReady] = useState(false);
   const loadTimerRef = useRef(null);
 
-  if (!playlistId) {
-    return (
-      <div className="rounded-xl border border-white/15 bg-white/5 p-4 text-sm text-white shadow-[0_16px_40px_rgba(0,0,0,0.25)]">
-        Couldn&apos;t load Spotify right now. Please try again later.
-      </div>
-    );
-  }
-
   const src = `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=${theme}`;
 
   useEffect(() => {
@@ -35,6 +27,14 @@ export default function SpotifyEmbed({
       }
     };
   }, [src]);
+
+  if (!playlistId) {
+    return (
+      <div className="rounded-xl border border-white/15 bg-white/5 p-4 text-sm text-white shadow-[0_16px_40px_rgba(0,0,0,0.25)]">
+        Couldn&apos;t load Spotify right now. Please try again later.
+      </div>
+    );
+  }
 
   return (
     <div className="border-outline-gray relative overflow-hidden rounded-xl border-1">

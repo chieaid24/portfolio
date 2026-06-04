@@ -360,7 +360,8 @@ export const projects = [
       <>
         The main motivation for your “earnings” was to create a simple and
         satisfying incentive for the user to explore the entire site. I&apos;ve
-        also always been a big space nerd (Star Wars, Dune, Hitchhiker's Guide
+        also always been a big space nerd (Star Wars, Dune, Hitchhiker&apos;s
+        Guide
         to the Galaxy), so that seemed like the perfect setting to transport the
         users into.
       </>,
@@ -563,7 +564,8 @@ export const projects = [
         part drawing PDFs, as well as completely reverse-engineering the QIF
         format with few available resources. This project also attracted the
         attention of the company&apos;s CEO, who invited me to present my work
-        to the parent company's leadership team, and I received a light round of
+        to the parent company&apos;s leadership team, and I received a light
+        round of
         applause as I concluded.
       </>,
     ],
