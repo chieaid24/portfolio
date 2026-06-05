@@ -41,7 +41,7 @@ const renderParagraphs = (paragraphs, isSummary) => {
   return paragraphArray.map((paragraph, index) => (
     <div
       key={index}
-      className="text-body-text text-md mb-6 leading-loose font-normal sm:text-lg sm:leading-relaxed"
+      className="text-body-text text-base mb-6 leading-loose font-normal sm:text-lg sm:leading-relaxed"
     >
       {paragraph}
       {isSummary ? "." : ""}
@@ -97,7 +97,7 @@ export default async function ProjectPage({ params }) {
 
             {/* Background Section */}
             {project.background && (
-              <section className="text-md font-base mb-12">
+              <section className="mb-12">
                 {renderTitle("Background")}
                 <div>{renderParagraphs(project.background)}</div>
               </section>
@@ -125,7 +125,7 @@ export default async function ProjectPage({ params }) {
             {project.why_paragraphs && (
               <section className="mb-12">
                 {renderTitle("Why this project?")}
-                <div className="font-regular">
+                <div>
                   {renderParagraphs(project.why_paragraphs)}
                 </div>
               </section>
@@ -144,7 +144,7 @@ export default async function ProjectPage({ params }) {
             {project.what_paragraphs && (
               <section className="mb-12">
                 {renderTitle("What is it?")}
-                <div className="font-regular">
+                <div>
                   {renderParagraphs(project.what_paragraphs)}
                 </div>
               </section>
@@ -154,7 +154,7 @@ export default async function ProjectPage({ params }) {
             {project.learning_paragraphs && (
               <section>
                 {renderTitle("What did I learn?")}
-                <div className="font-regular">
+                <div>
                   {renderParagraphs(project.learning_paragraphs)}
                 </div>
               </section>
