@@ -1,11 +1,38 @@
 import { useMoney } from "@/lib/money-context";
-import { motion, useReducedMotion, useAnimationControls } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useAnimationControls,
+  useMotionValue,
+  useTransform,
+  animate,
+} from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 // Returns integer percent complete, floored to avoid over-reporting.
 function toPercent(done = 0, total = 0) {
   if (!total || total <= 0) return 0;
   return Math.min(100, Math.floor((done / total) * 100));
+}
+
+// Percentage label that counts up from 0 on hover, then settles on the real
+// value. Idle (and reduced-motion) state always shows the true percent.
+function AnimatedPercent({ value, isHovered }) {
+  const prefersReduced = useReducedMotion();
+  const count = useMotionValue(value);
+  const display = useTransform(count, (v) => `${Math.round(v)}%`);
+
+  useEffect(() => {
+    if (prefersReduced || !isHovered) {
+      count.set(value);
+      return;
+    }
+    count.set(0);
+    const controls = animate(count, value, { duration: 0.6, ease: "easeOut" });
+    return () => controls.stop();
+  }, [isHovered, value, prefersReduced, count]);
+
+  return <motion.span>{display}</motion.span>;
 }
 
 function ProgressBar({
@@ -91,7 +118,7 @@ export default function QuestSection({ className = "" }) {
       <motion.div
         onMouseEnter={() => setHoveredRow("redtext")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-dark-gray bg-background-secondary rounded-xl border p-2"
+        className="border-outline-dark-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
         key="bold-words"
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
@@ -99,9 +126,10 @@ export default function QuestSection({ className = "" }) {
       >
         <div className={`flex w-full justify-between`}>
           <span>Bold words clicked </span>
-          <motion.span>
-            {toPercent(stats.redtext.done, stats.redtext.total)}%
-          </motion.span>
+          <AnimatedPercent
+            value={toPercent(stats.redtext.done, stats.redtext.total)}
+            isHovered={hoveredRow === "redtext"}
+          />
         </div>
         <ProgressBar
           done={stats.redtext.done}
@@ -113,7 +141,7 @@ export default function QuestSection({ className = "" }) {
       <motion.div
         onMouseEnter={() => setHoveredRow("project")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-dark-gray bg-background-secondary rounded-xl border p-2"
+        className="border-outline-dark-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
         key="projects-disc"
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
@@ -121,9 +149,10 @@ export default function QuestSection({ className = "" }) {
       >
         <div className={`flex w-full justify-between`}>
           <span>Projects discovered</span>
-          <motion.span>
-            {toPercent(stats.project.done, stats.project.total)}%
-          </motion.span>
+          <AnimatedPercent
+            value={toPercent(stats.project.done, stats.project.total)}
+            isHovered={hoveredRow === "project"}
+          />
         </div>
         <ProgressBar
           done={stats.project.done}
@@ -135,7 +164,7 @@ export default function QuestSection({ className = "" }) {
       <motion.div
         onMouseEnter={() => setHoveredRow("link")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-dark-gray bg-background-secondary rounded-xl border p-2"
+        className="border-outline-dark-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
         key="links"
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
@@ -143,9 +172,10 @@ export default function QuestSection({ className = "" }) {
       >
         <div className={`flex w-full justify-between`}>
           <span>Links followed </span>
-          <motion.span>
-            {toPercent(stats.link.done, stats.link.total)}%
-          </motion.span>
+          <AnimatedPercent
+            value={toPercent(stats.link.done, stats.link.total)}
+            isHovered={hoveredRow === "link"}
+          />
         </div>
         <ProgressBar
           done={stats.link.done}
