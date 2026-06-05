@@ -12,7 +12,7 @@ import {
 export default function ThemeSection({ ...props }) {
   const { themeId, setThemeById, purchaseTheme, ownedThemes, balance } =
     useMoney();
-  const [selectedId, setSelectedId] = useState(themeId ?? "coral");
+  const [selectedId, setSelectedId] = useState(themeId ?? "blue");
   const [scope, animate] = useAnimate();
   const buttonRefs = useRef({});
   const innerRefs = useRef({});
@@ -22,7 +22,7 @@ export default function ThemeSection({ ...props }) {
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    setSelectedId(themeId ?? "coral");
+    setSelectedId(themeId ?? "blue");
   }, [themeId]);
 
   const handleSelect = (id) => {

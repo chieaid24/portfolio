@@ -38,8 +38,8 @@ export const experiences = {
         {
           text: (
             <>
-              Captained a squadron of <span className="whitespace-nowrap"><RedText rewardId="exp:needlist:7engineers">7 engineers</RedText>,</span> designing a <strong>Nest.js</strong> API layer,{" "}
-              <strong>GitHub Actions</strong> <RedText rewardId="exp:needlist:cicd">CI/CD</RedText> pipeline, and TanStack React frontend.
+              Captained a squadron of <span className="whitespace-nowrap"><RedText rewardId="exp:needlist:7engineers">7 engineers</RedText>,</span> designing a Nest.js API layer,{" "}
+              GitHub Actions <RedText rewardId="exp:needlist:cicd">CI/CD</RedText> pipeline, and TanStack React frontend.
             </>
           ),
         },
