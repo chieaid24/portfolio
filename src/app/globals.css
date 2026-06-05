@@ -270,13 +270,16 @@ body {
   background: #d9d9d9;
   pointer-events: none;
   /* Position is driven every frame by the rAF lerp loop in page.js (writing
-     --flash-x/--flash-y), so transform carries NO transition — the smoothing
+     --flash-x/--flash-y), so translate carries NO transition — the smoothing
      lives in the loop, not in CSS. Only the enter/leave pop (scale) and fade
-     (opacity) are eased here. translate3d keeps it on the compositor. */
-  transform: translate3d(var(--flash-x, -100px), var(--flash-y, -100px), 0);
+     (opacity) are eased here. Using the individual `translate` property (rather
+     than `transform: translate3d`) makes scale pivot around the cursor point,
+     so the circle grows from under the cursor instead of flying in from the
+     corner. translate keeps it on the compositor. */
+  translate: var(--flash-x, -100px) var(--flash-y, -100px);
   scale: var(--flash-size, 0);
   opacity: var(--flash-active, 0);
-  will-change: transform, scale, opacity;
+  will-change: translate, scale, opacity;
   transition:
     scale 140ms ease-out,
     opacity 140ms ease-out;
