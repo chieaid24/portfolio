@@ -35,14 +35,14 @@ function TimelineItem({ item }) {
             {item.title}
           </h3>
           {item.subtitle && (
-            <p className="text-md font-medium text-white/90">{item.subtitle}</p>
+            <p className="text-base font-medium text-white/90">{item.subtitle}</p>
           )}
           {item.period && (
             <p className="text-sm text-gray-400">{item.period}</p>
           )}
         </div>
 
-        <div className="space-y-1 font-light tracking-wide text-gray-100">
+        <div className="space-y-1 font-normal tracking-wide text-gray-100">
           {item.highlights.map((highlight, index) => (
             <div
               key={`${item.id}-highlight-${index}`}
