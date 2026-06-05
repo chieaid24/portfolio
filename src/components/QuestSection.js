@@ -1,38 +1,11 @@
 import { useMoney } from "@/lib/money-context";
-import {
-  motion,
-  useReducedMotion,
-  useAnimationControls,
-  useMotionValue,
-  useTransform,
-  animate,
-} from "framer-motion";
+import { motion, useReducedMotion, useAnimationControls } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 // Returns integer percent complete, floored to avoid over-reporting.
 function toPercent(done = 0, total = 0) {
   if (!total || total <= 0) return 0;
   return Math.min(100, Math.floor((done / total) * 100));
-}
-
-// Percentage label that counts up from 0 on hover, then settles on the real
-// value. Idle (and reduced-motion) state always shows the true percent.
-function AnimatedPercent({ value, isHovered }) {
-  const prefersReduced = useReducedMotion();
-  const count = useMotionValue(value);
-  const display = useTransform(count, (v) => `${Math.round(v)}%`);
-
-  useEffect(() => {
-    if (prefersReduced || !isHovered) {
-      count.set(value);
-      return;
-    }
-    count.set(0);
-    const controls = animate(count, value, { duration: 0.6, ease: "easeOut" });
-    return () => controls.stop();
-  }, [isHovered, value, prefersReduced, count]);
-
-  return <motion.span>{display}</motion.span>;
 }
 
 function ProgressBar({
@@ -126,10 +99,9 @@ export default function QuestSection({ className = "" }) {
       >
         <div className={`flex w-full justify-between`}>
           <span>Bold words clicked </span>
-          <AnimatedPercent
-            value={toPercent(stats.redtext.done, stats.redtext.total)}
-            isHovered={hoveredRow === "redtext"}
-          />
+          <motion.span>
+            {toPercent(stats.redtext.done, stats.redtext.total)}%
+          </motion.span>
         </div>
         <ProgressBar
           done={stats.redtext.done}
@@ -149,10 +121,9 @@ export default function QuestSection({ className = "" }) {
       >
         <div className={`flex w-full justify-between`}>
           <span>Projects discovered</span>
-          <AnimatedPercent
-            value={toPercent(stats.project.done, stats.project.total)}
-            isHovered={hoveredRow === "project"}
-          />
+          <motion.span>
+            {toPercent(stats.project.done, stats.project.total)}%
+          </motion.span>
         </div>
         <ProgressBar
           done={stats.project.done}
@@ -172,10 +143,9 @@ export default function QuestSection({ className = "" }) {
       >
         <div className={`flex w-full justify-between`}>
           <span>Links followed </span>
-          <AnimatedPercent
-            value={toPercent(stats.link.done, stats.link.total)}
-            isHovered={hoveredRow === "link"}
-          />
+          <motion.span>
+            {toPercent(stats.link.done, stats.link.total)}%
+          </motion.span>
         </div>
         <ProgressBar
           done={stats.link.done}
