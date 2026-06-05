@@ -22,17 +22,17 @@ const INIT_BAL = 100.0;
 
 const RAW_THEME_OPTIONS = [
   {
-    id: "coral",
-    label: "Coral",
-    color: "#ff7d7d",
-    lightColor: "#ffaeae",
+    id: "blue",
+    label: "Blue",
+    color: "#33a9de",
+    lightColor: "#6eb9db",
     price: "0",
   },
   {
-    id: "green",
-    label: "Green",
-    color: "#26e055",
-    lightColor: "#83e69b",
+    id: "purple",
+    label: "Purple",
+    color: "#c084fc",
+    lightColor: "#d4affa",
     price: "200",
   },
   {
@@ -43,17 +43,17 @@ const RAW_THEME_OPTIONS = [
     price: "200",
   },
   {
-    id: "blue",
-    label: "Blue",
-    color: "#33a9de",
-    lightColor: "#6eb9db",
+    id: "coral",
+    label: "Coral",
+    color: "#ff7d7d",
+    lightColor: "#ffaeae",
     price: "500",
   },
   {
-    id: "purple",
-    label: "Purple",
-    color: "#c084fc",
-    lightColor: "#d4affa",
+    id: "green",
+    label: "Green",
+    color: "#26e055",
+    lightColor: "#83e69b",
     price: "750",
   },
   {
@@ -67,7 +67,7 @@ const RAW_THEME_OPTIONS = [
 
 export const THEME_OPTIONS = RAW_THEME_OPTIONS;
 
-const DEFAULT_THEME_ID = "coral";
+const DEFAULT_THEME_ID = "blue";
 const THEME_BY_ID = THEME_OPTIONS.reduce((acc, theme) => {
   acc[theme.id] = theme;
   return acc;

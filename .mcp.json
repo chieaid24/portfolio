@@ -5,9 +5,14 @@
       "command": "npx",
       "args": [
         "-y",
-        "@playwright/mcp@latest"
+        "@playwright/mcp@latest",
+        "--browser",
+        "chromium",
+        "--no-sandbox"
       ],
-      "env": {}
+      "env": {
+        "LD_LIBRARY_PATH": "/home/secur/.cache/playwright-sys-libs"
+      }
     }
   }
 }
