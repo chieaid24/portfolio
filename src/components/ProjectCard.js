@@ -2,6 +2,8 @@
 
 import RewardProjectLink from "@/components/RewardProjectLink";
 import Telescope from "@/icons/Telescope";
+import PlanetRing from "@/icons/PlanetRing";
+import PlanetRingLine from "@/icons/PlanetRingLine";
 import FooterGithub from "@/icons/FooterGithub";
 import Globe from "@/icons/Globe";
 import SimpleArrow from "@/icons/SimpleArrow";
@@ -164,7 +166,11 @@ export default function ProjectCard({
               <span
                 className={`flex items-center gap-x-1 text-sm ${clicked ? "text-gray-400" : "text-white"}`}
               >
-                <Telescope className="h-3.5 w-3.5" />
+                {clicked ? (
+                  <PlanetRingLine className="h-3.5 w-3.5" />
+                ) : (
+                  <PlanetRing className="h-3.5 w-3.5" />
+                )}
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
               </span>
             </div>
