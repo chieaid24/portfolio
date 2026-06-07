@@ -107,11 +107,10 @@ export default function Home() {
               transition={{ duration: 1 }}
             >
               <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-3 lg:text-[42px]">
-                Greetings Earthling, {" "} I&apos;m
-                <span className="gradient-text-header">
-                  {" "}
-                   <br className="sm:hidden" />
-                  <span style={{ whiteSpace: "nowrap" }}>
+                Greetings Earthling, {" "} 
+                <span className="">
+                  <br className="sm:hidden" /> I&apos;m {" "}
+                  <span className="gradient-text-header" style={{ whiteSpace: "nowrap" }}>
                     Aidan
                   </span>
                 </span>
