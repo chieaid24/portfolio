@@ -106,19 +106,22 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
             >
-              <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-4 lg:text-5xl">
-                Greetings Earthling, {" "} 
+              <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-3 lg:text-[42px]">
+                Greetings Earthling, {" "} I&apos;m
                 <span className="gradient-text-header">
                   {" "}
-                  I&apos;m <br className="sm:hidden" />
+                   <br className="sm:hidden" />
                   <span style={{ whiteSpace: "nowrap" }}>
                     Aidan
                   </span>
                 </span>
               </h1>
-              <h2 className="mb-8 text-center text-lg font-semibold text-white sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[27px]">
-                Building practical solutions, one galaxy at a time.
+              <h2 className="mb-8 text-center text-lg font-semibold text-white sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[28px]">
+                Owning real world projects, one galaxy at a time. 
               </h2>
+              {/* Owning real world projects, one galaxy at a time. 
+                  Solving planetary problems, one galaxy at a time.
+                  Building practical solution, one galaxy at a time. */}
               <div className="flex w-80 justify-between md:w-100">
                 <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
                   <RewardLink
@@ -131,7 +134,7 @@ export default function Home() {
                     onMouseMove={handleFlashMove}
                     onMouseLeave={handleFlashLeave}
                   >
-                    <div className="inline-flex items-center gap-2 px-2 py-1 md:px-4 md:py-1">
+                    <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
                       <span>Resume</span>
                       <FileDownload className="text-dark-grey-text h-5 w-5" />
                     </div>
