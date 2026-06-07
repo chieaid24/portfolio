@@ -5,9 +5,16 @@
       "command": "npx",
       "args": [
         "-y",
-        "@playwright/mcp@latest"
+        "@playwright/mcp@latest",
+        "--browser",
+        "chromium",
+        "--no-sandbox",
+        "--executable-path",
+        "/home/secur/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome"
       ],
-      "env": {}
+      "env": {
+        "LD_LIBRARY_PATH": "/home/secur/.cache/playwright-sys-libs"
+      }
     }
   }
 }
