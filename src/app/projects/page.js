@@ -25,7 +25,7 @@ export default function ProjectPage(props) {
           >
             My Projects
           </motion.h1>
-          <div className="grid auto-rows-fr grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
             {projects.map((project, index) => (
               <motion.div
                 key={project.slug}
@@ -44,6 +44,7 @@ export default function ProjectPage(props) {
                   github={project.github_link}
                   website={project.website_link}
                   github_only={project.github_only}
+                  darkOutline
                   index={index}
                 />
               </motion.div>
