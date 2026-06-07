@@ -76,7 +76,7 @@ export const projects = [
   {
     slug: "canopy",
     title: "Canopy",
-    skills_used: ["AWS", "Kubernetes", "Spring Boot", "Grafana", "Next/Next.js"],
+    skills_used: ["AWS", "Kubernetes", "Spring Boot", "Grafana"],
     image: "/canopy/canopy_test_1.png",
     github_only: true,
     page_displays: [
@@ -229,8 +229,6 @@ export const projects = [
     title: "Portfolio Website",
     skills_used: [
       "Next/Next.js",
-      "React",
-      "Tailwind CSS",
       "JavaScript",
       "Three/Three.js",
       "MongoDB",
