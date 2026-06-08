@@ -241,6 +241,7 @@ export default function Home() {
                       website={project.website_link}
                       github_only={project.github_only}
                       float
+                      darkOutline
                       index={index}
                     />
                   </motion.div>
