@@ -37,7 +37,7 @@ export default function SpotifyEmbed({
   }
 
   return (
-    <div className="border-outline-gray relative overflow-hidden rounded-xl border-1">
+    <div className="widget-outline relative overflow-hidden rounded-xl border-1">
       <div
         className={`absolute inset-0 flex items-center justify-center rounded-xl bg-white/5 transition-opacity duration-500 ${isReady ? "pointer-events-none opacity-0" : "opacity-100"}`}
         aria-hidden={isReady}

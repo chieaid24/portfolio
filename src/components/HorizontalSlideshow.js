@@ -81,7 +81,7 @@ export default function Carousel() {
   ];
 
   return (
-    <div className="border-outline-gray w-full rounded-xl border bg-[#1f1f1f] p-3 md:p-5">
+    <div className="widget-outline w-full rounded-xl border bg-[#1f1f1f] p-3 md:p-5">
       <div className="overflow-hidden rounded-xl">
         <motion.div
           ref={carouselRef}
