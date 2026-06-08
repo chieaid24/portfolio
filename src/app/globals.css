@@ -76,6 +76,29 @@ html {
   background: linear-gradient(135deg, #949494 0%, #272727 100%);
 }
 
+/* === Widget hover outline ==============================================
+   Widget containers rest at the darker outline color and brighten to the
+   normal outline color on hover (desktop / md+ only), animating over 300ms.
+   Applied via the `widget-outline` class (in place of a static
+   `border-outline-gray`) on: ClashWidget, SpotifyEmbed, ModelViewer,
+   HorizontalSlideshow, and both Experience cards.
+
+   ROLLBACK (single edit): replace this whole block with just —
+       @layer utilities { .widget-outline { border-color: var(--color-outline-gray); } }
+   …and every widget reverts to the original static gray outline (the class
+   name can stay in the markup). Or `git revert` the commit that added this. */
+@layer utilities {
+  .widget-outline {
+    border-color: var(--color-outline-dark-gray);
+    transition: border-color 300ms ease;
+  }
+  @media (min-width: 768px) {
+    .widget-outline:hover {
+      border-color: var(--color-outline-gray);
+    }
+  }
+}
+
 @layer base {
   body {
     @apply opacity-0;
