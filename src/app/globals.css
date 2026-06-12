@@ -13,7 +13,7 @@
   /* v2 colors */
   --outline-gray: #858585;
   /* outline color for the skills on the project cards */
-  --outline-dark-gray: #4a4a4a;
+  --outline-dark-gray: #555555;
   /* this highlight color is currently red, but will be changed when user changes the theme */
   --highlight-color: #000000;
   --highlight-light-color: #000000;
