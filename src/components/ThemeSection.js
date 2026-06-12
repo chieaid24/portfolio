@@ -109,7 +109,7 @@ export default function ThemeSection({ ...props }) {
   return (
     <motion.div
       ref={scope}
-      className="border-outline-dark-gray bg-background-secondary flex h-full justify-center rounded-2xl border"
+      className="border-outline-darker-gray bg-background-secondary flex h-full justify-center rounded-2xl border"
       key="projects-themes"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
