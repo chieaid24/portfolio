@@ -133,9 +133,9 @@ export default function ClashWidget() {
   }, [data?.battleResults]);
 
   return (
-    <div className="border-outline-gray relative flex flex-col overflow-hidden rounded-xl border-1 bg-[#1f1f1f] p-3 md:h-[152px]">
+    <div className="border-outline-dark-gray relative flex flex-col overflow-hidden rounded-xl border-1 bg-[#1f1f1f] p-3 md:h-[154px]">
       {/* Header */}
-      <div className="mb-1 flex items-center justify-between">
+      <div className="mb-1.5 flex items-center justify-between">
         <a
           href="https://royaleapi.com/player/9UJLLC08R"
           target="_blank"
@@ -155,14 +155,14 @@ export default function ClashWidget() {
           </div>
         </div>
       </div>
-      <div className="font-base text-body-text grid grid-cols-2 gap-3 text-[10px] sm:text-sm md:text-xs md:leading-none lg:leading-normal">
-        <div className="flex flex-col flex-wrap justify-between py-2 md:gap-[5px] lg:gap-0">
+      <div className="font-base text-body-text grid grid-cols-2 gap-3 text-[10px] sm:text-sm md:text-xs md:leading-none lg:leading-normal items-center">
+        <div className="flex flex-col flex-wrap justify-between py-2 md:gap-[5px] lg:gap-0.5">
           <div className="flex items-center justify-between gap-x-1">
             <h1>Career wins</h1>
             <div className="text-dark-body-text">{player?.wins ?? "0"}</div>
           </div>
           <div className="flex items-center justify-between gap-x-1">
-            <h1>Career win percentage</h1>
+            <h1>Career win%</h1>
             <div className="text-dark-body-text">
               {careerWinPercent != null ? `${careerWinPercent}%` : "0%"}
             </div>
@@ -174,7 +174,7 @@ export default function ClashWidget() {
             </div>
           </div>
           <div className="flex items-center justify-between gap-x-1">
-            <h1>Recent win percentage</h1>
+            <h1>Recent win%</h1>
             <div className="text-dark-body-text">
               {summary.winRate != null ? `${summary.winRate}%` : "—"}
             </div>
@@ -185,7 +185,7 @@ export default function ClashWidget() {
         <div className="ml-auto flex">
           <div className="grid grid-cols-4 grid-rows-2 gap-x-1 rounded-xl p-1 bg-black/10 sm:gap-x-3 md:gap-x-1">
             {visibleDeck.map((card, i) => (
-              <div key={card.id ?? i} className="items-center justify-center">
+              <div key={card.id ?? i} className="flex items-center justify-center">
                 <DeckCardImage
                   card={card}
                   index={i}
