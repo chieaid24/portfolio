@@ -14,6 +14,8 @@
   --outline-gray: #858585;
   /* outline color for the skills on the project cards */
   --outline-dark-gray: #555555;
+  /* darker outline reserved for the header and its widgets */
+  --outline-darker-gray: #3a3a3a;
   /* this highlight color is currently red, but will be changed when user changes the theme */
   --highlight-color: #000000;
   --highlight-light-color: #000000;
@@ -114,6 +116,7 @@ html {
   --color-background-highlight: var(--background-highlight);
   --color-body-text: var(--body-text);
   --color-outline-dark-gray: var(--outline-dark-gray);
+  --color-outline-darker-gray: var(--outline-darker-gray);
   --color-spotify-background: var(--spotify-background);
   --color-dark-body-text: var(--dark-body-text);
 

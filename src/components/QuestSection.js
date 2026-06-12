@@ -91,7 +91,7 @@ export default function QuestSection({ className = "" }) {
       <motion.div
         onMouseEnter={() => setHoveredRow("redtext")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-dark-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
+        className="border-outline-darker-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
         key="bold-words"
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
@@ -113,7 +113,7 @@ export default function QuestSection({ className = "" }) {
       <motion.div
         onMouseEnter={() => setHoveredRow("project")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-dark-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
+        className="border-outline-darker-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
         key="projects-disc"
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
@@ -135,7 +135,7 @@ export default function QuestSection({ className = "" }) {
       <motion.div
         onMouseEnter={() => setHoveredRow("link")}
         onMouseLeave={() => setHoveredRow(null)}
-        className="border-outline-dark-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
+        className="border-outline-darker-gray bg-background-secondary hover:bg-background-highlight rounded-xl border p-2 transition-colors duration-200"
         key="links"
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}

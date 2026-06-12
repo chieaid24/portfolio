@@ -29,7 +29,7 @@ export default function Header() {
       className="font-dm-sans pointer-events-none fixed inset-x-0 top-0 z-1000 px-2 py-5 sm:px-5 md:px-0"
     >
       <motion.div
-        className={`border-outline-dark-gray transition-color pointer-events-auto relative mx-auto max-w-full overflow-hidden rounded-xl border duration-200 sm:max-w-[75vw] lg:max-w-[750px] ${walletOpen ? "bg-background" : "bg-background/40"} backdrop-blur-md`}
+        className={`border-outline-darker-gray transition-color pointer-events-auto relative mx-auto max-w-full overflow-hidden rounded-xl border duration-200 sm:max-w-[75vw] lg:max-w-[750px] ${walletOpen ? "bg-background" : "bg-background/40"} backdrop-blur-md`}
       >
         {/* Top row */}
         <div className="flex justify-between px-4 lg:grid lg:grid-cols-[1fr_4fr] lg:px-5">
