@@ -69,7 +69,7 @@ export default function ModelViewer({
     <div className="relative h-full w-full">
       {/* Model viewer - full width/height */}
       <div
-        className={`widget-outline relative h-[500px] w-full cursor-grab overflow-hidden rounded-lg border bg-gray-200 shadow-md active:cursor-grabbing`}
+        className={`border-outline-gray relative h-[500px] w-full cursor-grab overflow-hidden rounded-lg border bg-gray-200 shadow-md active:cursor-grabbing`}
         onPointerEnter={(e) => {
           setModelHovered(true);
         }}
