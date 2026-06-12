@@ -8,7 +8,9 @@
         "@playwright/mcp@latest",
         "--browser",
         "chromium",
-        "--no-sandbox"
+        "--no-sandbox",
+        "--executable-path",
+        "/home/secur/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome"
       ],
       "env": {
         "LD_LIBRARY_PATH": "/home/secur/.cache/playwright-sys-libs"

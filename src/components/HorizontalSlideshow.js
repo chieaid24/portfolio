@@ -81,7 +81,7 @@ export default function Carousel() {
   ];
 
   return (
-    <div className="border-outline-gray w-full rounded-xl border bg-[#1f1f1f] p-3 md:p-5">
+    <div className="border-outline-dark-gray w-full rounded-xl border bg-[#1f1f1f] p-3 md:p-5">
       <div className="overflow-hidden rounded-xl">
         <motion.div
           ref={carouselRef}
@@ -96,7 +96,7 @@ export default function Carousel() {
             {images.map((item, i) => (
               <figure
                 key={i}
-                className="flex h-[160px] min-w-[250px] flex-col items-center gap-3 md:h-[220px] md:min-w-[350px]"
+                className="flex h-[160px] min-w-[250px] flex-col items-center gap-3 md:h-[200px] md:min-w-[300px]"
               >
                 <Slide
                   src={item.src}

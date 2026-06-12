@@ -35,6 +35,7 @@ export default function ProjectCard({
   website,
   github_only = false,
   float = false,
+  darkOutline = false,
   index = 0,
 }) {
   const { hasAward } = useMoney();
@@ -132,7 +133,11 @@ export default function ProjectCard({
       className={`h-full rounded-xl p-px transition-shadow duration-200 md:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]`}
     >
       <div
-        className={`font-dm-sans bg-background border-outline-gray h-full rounded-xl border-1 text-white`}
+        className={`font-dm-sans bg-background h-full rounded-xl border-1 text-white transition-colors duration-300 ${
+          darkOutline
+            ? "border-outline-dark-gray md:hover:border-outline-gray"
+            : "border-outline-gray"
+        }`}
       >
         <RewardProjectLink
           href={github_only ? github : `/projects/${slug}`}
