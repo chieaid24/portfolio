@@ -17,7 +17,7 @@ const badgeImagePath = "/company-images/waterloo-logo_v2.png";
 function TimelineItem({ item }) {
   return (
     <div className="relative flex gap-3 sm:gap-6">
-      <div className="h-10 w-10 overflow-hidden rounded-full border-[2px] border-outline-gray sm:h-13 sm:w-13">
+      <div className="h-10 w-10 overflow-hidden rounded-full border-[2px] border-outline-dark-gray sm:h-13 sm:w-13">
         <Image
           src={item.badge?.src ?? badgeImagePath}
           alt={item.badge?.alt ?? `${item.title} logo`}
@@ -98,7 +98,7 @@ export default function Experience() {
   return (
     <section className="text-white">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
-        <div className="bg-background border-outline-gray rounded-2xl border p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
+        <div className="bg-background border-outline-dark-gray rounded-2xl border p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
           <div className="grid grid-cols-2 gap-1">
             {tabs.map((tab) => {
               const isActive = tab.id === activeTab;
@@ -169,7 +169,7 @@ export default function Experience() {
         <motion.div
           animate={{ height }}
           transition={{ duration: 0 }}
-          className="bg-background border-outline-gray relative rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
+          className="bg-background border-outline-dark-gray relative rounded-2xl border shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
         >
           {tabItems.map((tab) => {
             const isActive = tab.id === activeTab;
@@ -188,7 +188,7 @@ export default function Experience() {
                   className="relative px-3 py-5 sm:px-6 sm:py-6"
                 >
                   <div
-                    className="absolute top-0 bottom-0.5 left-[2rem] w-[1px] bg-outline-gray sm:left-[3.1rem]"
+                    className="absolute top-0 bottom-0.5 left-[2rem] w-[1px] bg-outline-dark-gray sm:left-[3.1rem]"
                     aria-hidden="true"
                   />
                   <div className="z-10 space-y-8">

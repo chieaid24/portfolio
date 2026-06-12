@@ -80,7 +80,7 @@ export default function AboutPage() {
                 <ImageStack />
               </div>
             </div>
-            <div className="flex flex-col space-y-6 md:space-y-8">
+            <div className="flex flex-col space-y-6 md:space-y-7">
               <div className="mb-8">
                 <h1 className="mb-4 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:mb-8 md:text-4xl">
                   Interests
@@ -93,7 +93,7 @@ export default function AboutPage() {
                   <BulletRow>Check out some of my stats below!</BulletRow>
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-7">
                 <motion.div
                   key="spotify"
                   initial={{ opacity: 0, y: 10 }}
