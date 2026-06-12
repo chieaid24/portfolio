@@ -33,7 +33,7 @@ export default function StarflareInfo() {
             transition={{ duration: 0.15 }}
             className="border-highlight-color/20 bg-background-secondary/80 absolute top-full -right-2 z-20 mt-1 w-48 max-w-[10rem] rounded-xl border-[1px] p-3 text-left text-xs leading-snug text-white shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-lg"
           >
-            Real-time and globally persisted. Click to leave your mark on the universe.
+            Real time and globally persisted. Click to leave your mark on the universe.
           </motion.div>
         )}
       </AnimatePresence>
