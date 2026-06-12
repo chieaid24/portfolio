@@ -133,7 +133,7 @@ export default function ClashWidget() {
   }, [data?.battleResults]);
 
   return (
-    <div className="widget-outline relative flex flex-col overflow-hidden rounded-xl border-1 bg-[#1f1f1f] p-3 md:h-[154px]">
+    <div className="border-outline-gray relative flex flex-col overflow-hidden rounded-xl border-1 bg-[#1f1f1f] p-3 md:h-[154px]">
       {/* Header */}
       <div className="mb-1.5 flex items-center justify-between">
         <a
