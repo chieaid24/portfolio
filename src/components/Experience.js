@@ -31,11 +31,11 @@ function TimelineItem({ item }) {
 
       <div className="flex-1 space-y-2">
         <div className="space-y-0">
-          <h3 className="text-lg leading-tight font-semibold text-white sm:text-xl sm:leading-normal">
+          <h3 className="text-lg leading-tight font-semibold text-main-text sm:text-xl sm:leading-normal">
             {item.title}
           </h3>
           {item.subtitle && (
-            <p className="text-base font-medium text-white/90">{item.subtitle}</p>
+            <p className="text-base font-medium text-main-text/90">{item.subtitle}</p>
           )}
           {item.period && (
             <p className="text-sm text-gray-400">{item.period}</p>
@@ -96,7 +96,7 @@ export default function Experience() {
   };
 
   return (
-    <section className="text-white">
+    <section className="text-main-text">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <div className="bg-background border-outline-dark-gray rounded-2xl border p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
           <div className="grid grid-cols-2 gap-1">
@@ -108,10 +108,10 @@ export default function Experience() {
                   key={tab.id}
                   type="button"
                   onClick={(event) => handleTabClick(tab.id, event)}
-                  className={`relative isolate overflow-hidden rounded-xl px-4 py-2 text-sm font-semibold text-white transition-[color,background-color,box-shadow] duration-200 sm:text-base ${
+                  className={`relative isolate overflow-hidden rounded-xl px-4 py-2 text-sm font-semibold text-main-text transition-[color,background-color,box-shadow] duration-200 sm:text-base ${
                     isActive
                       ? "shadow-[0_5px_30px_rgba(255,255,255,0.2)]"
-                      : "cursor-pointer md:hover:bg-white/5"
+                      : "cursor-pointer md:hover:bg-main-text/5"
                   }`}
                 >
                   <AnimatePresence initial={false}>
@@ -159,7 +159,11 @@ export default function Experience() {
                         />
                       ))}
                   </AnimatePresence>
-                  <span className="relative z-10">{tab.label}</span>
+                  <span
+                    className={`relative z-10 ${isActive ? "text-white" : ""}`}
+                  >
+                    {tab.label}
+                  </span>
                 </button>
               );
             })}
