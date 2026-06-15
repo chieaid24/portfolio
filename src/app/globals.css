@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
 
 :root {
   --custom-red: #ff7d7d;
@@ -31,6 +32,12 @@
   --body-text: #e0e0e0;
   /* darker body text (numbers in the ClashWidget) */
   --dark-body-text: #bdbdbd;
+  /* page backdrop behind everything (html element + starfield container) */
+  --page-bg: #02030a;
+  /* elevated widget card surface (clash / slideshow panels) */
+  --widget-surface: #1f1f1f;
+  /* recessed media well inside widgets (slideshow image area) */
+  --widget-surface-2: #2a2a2a;
   /* smooth highlight updates when theme changes */
   --highlight-transition:
     color 180ms ease, background-color 180ms ease, border-color 180ms ease,
@@ -40,7 +47,34 @@
 }
 
 html {
-  background: #02030a;
+  background: var(--page-bg);
+}
+
+/* ----------------------------------------------------------------------------
+   Light mode. `:root` above holds the dark palette byte-for-byte; this single
+   block is the only place light values live. next-themes toggles the `.light`
+   class on <html> before first paint, so these override the dark defaults with a
+   warm off-white interface. Keep this in sync with the dark vars above.
+   ------------------------------------------------------------------------- */
+.light {
+  --main-text: #1c1813; /* headings */
+  --body-text: #2b2620; /* body copy */
+  --dark-body-text: #4a443b; /* secondary numbers/labels */
+
+  --page-bg: #faf8f5; /* warm off-white backdrop */
+  --background: #faf8f5; /* page surface */
+  --background-secondary: #f2ede6; /* slight-contrast panels (header widgets) */
+  --background-highlight: #ece4d8; /* skill chips / elevated bits */
+  --spotify-background: #e7ddcf; /* clash / carousel / spotify card surface */
+
+  --outline-gray: #b7ad9e; /* skill outlines + scrollbar */
+  --outline-dark-gray: #d8cfc0; /* header + widgets outline */
+  --outline-darker-gray: #cdc3b3; /* darker header outline */
+
+  --widget-surface: #ffffff; /* elevated white card */
+  --widget-surface-2: #ece4d8; /* warm media well */
+
+  color-scheme: light;
 }
 
 /* WebKit (Chrome, Edge, Safari) */
@@ -119,6 +153,9 @@ html {
   --color-outline-darker-gray: var(--outline-darker-gray);
   --color-spotify-background: var(--spotify-background);
   --color-dark-body-text: var(--dark-body-text);
+  --color-main-text: var(--main-text);
+  --color-widget-surface: var(--widget-surface);
+  --color-widget-surface-2: var(--widget-surface-2);
 
   --font-alienNew: var(--font-alienNew); /* 2560 */
   --animate-gradient-hero: gradient 8s linear infinite;
@@ -179,6 +216,15 @@ html {
   /* custom red */
   color: white;
   /* text color when selected */
+}
+
+.light ::selection {
+  background-color: #ffc8a8;
+  color: #1c1813;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #a79c8b;
 }
 
 body {
