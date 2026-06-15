@@ -1,0 +1,61 @@
+# Dependencies & node
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Build outputs & caches
+.next/
+out/
+dist/
+build/
+.vercel/
+*.tsbuildinfo
+
+# Lock files (large, deterministic)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment & secrets (already in .gitignore)
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Test coverage
+coverage/
+
+# Version control
+.git/
+.gitignore
+
+# OS files
+.DS_Store
+*:Zone.Identifier
+
+# Large generated/binary assets
+public/sitemap*.xml
+public/**/*.png
+public/**/*.jpg
+public/**/*.glb
+public/documents/
+
+# IDE & tools
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Project management
+tasks/
