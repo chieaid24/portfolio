@@ -2,46 +2,33 @@
 
 import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useTheme } from "next-themes";
 import { useMoney } from "@/lib/money-context"
 
 export default function DarkModeToggle({ className = "", onFailedToggle, questClicked }) {
     const [mounted, setMounted] = useState(false);
-    const [isDark, setIsDark] = useState(false);
     const [denied, setDenied] = useState(false);
     const [clickedAnim, setClickedAnim] = useState(false);
+    const [spin, setSpin] = useState(0);
 
+    const { resolvedTheme, setTheme } = useTheme();
+    const shouldReduceMotion = useReducedMotion();
 
     const { getAllQuestsComplete, ready } = useMoney();
     const allQuestComp = getAllQuestsComplete();
     const canToggle = ready && allQuestComp;
 
+    const isDark = resolvedTheme === "dark";
 
-    // On mount, read from the DOM/localStorage (no system check)
+    // next-themes applies the html class + persistence; we only flip the theme.
     useEffect(() => {
         setMounted(true);
-        try {
-            const saved = localStorage.getItem("theme");     // 'dark' | 'light' | null
-            const initial = saved === "dark";                // default false (light) if null
-            setIsDark(initial);
-        } catch {
-            setIsDark(false);
-        }
     }, []);
 
-    // Apply class + persist
-    useEffect(() => {
-        if (!mounted) return;
-        const root = document.documentElement;
-        root.classList.toggle("dark", isDark);
-        root.style.colorScheme = isDark ? "dark" : "light";
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-    }, [isDark, mounted]);
-
-
-    // Track last triggerFlash value
+    // Track last questClicked value to replay the shake hint when the user
+    // pokes the locked toggle from elsewhere (the quest progress bars).
     const lastClick = useRef(questClicked);
-    // Trigger animation when questClicked changes
     useEffect(() => {
         if (questClicked !== lastClick.current) {
             lastClick.current = questClicked;
@@ -55,7 +42,8 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     const handleClick = () => {
         if (canToggle) {
-            setIsDark((v) => !v);
+            setTheme(isDark ? "light" : "dark");
+            if (!shouldReduceMotion) setSpin((s) => s + 360);
         } else {
             // trigger failed animation
             setDenied(true);
@@ -72,7 +60,8 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
         <motion.button
             key="darkmode"
             type="button"
-            aria-label="Dark Mode"
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-pressed={!isDark}
             title={canToggle ? undefined : "The progress bars (left) track quest completion"}
             onClick={handleClick}
             initial={{ opacity: 0, rotate: -90, scale: 0.9, transition: { duration: 0.18 }  }}
@@ -81,14 +70,14 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
                     ? {
                         x: [0, -1, 1, -1, 1, -1, 0], // shake
                         opacity: 1,
-                        rotate: 0,
+                        rotate: spin,
                         scale: 1,
                         transition: {duration: 0.3}
                     }
-                    : { x: 0, backgroundColor: "transparent", opacity: 1, rotate: 0, scale: 1 }
+                    : { x: 0, backgroundColor: "transparent", opacity: 1, rotate: spin, scale: 1 }
             }
             exit={{ opacity: 0, rotate: 90, scale: 0.9, transition: { duration: 0.18 } }}
-            transition={{ duration: 0.18 }}
+            transition={{ rotate: { type: "spring", stiffness: 180, damping: 18 }, duration: 0.18 }}
             className={`rounded-md ${canToggle ? "hover:bg-black/7 cursor-pointer" : "cursor-default"} transition-colors duration-250 ${className}`}
         >
 
@@ -97,7 +86,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
                 src={isDark ? "/icons/darkmode_light.svg" : "/icons/darkmode_dark.svg"}
                 width={20}
                 height={20}
-                alt="Dark mode toggle"
+                alt=""
                 className={canToggle ? "opacity-100" : "opacity-0 md:opacity-50"}
                 draggable={false}
             />
