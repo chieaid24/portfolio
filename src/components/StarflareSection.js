@@ -151,7 +151,7 @@ export default function StarflareSection({ cost = 25 }) {
   return (
     <motion.div
       ref={sectionRef}
-      className="bg-background-secondary border-outline-darker-gray relative h-full w-full overflow-visible rounded-2xl border px-3 py-3 text-center text-white"
+      className="bg-background-secondary border-outline-darker-gray relative h-full w-full overflow-visible rounded-2xl border px-3 py-3 text-center text-main-text"
       key="starflare-section"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -185,7 +185,7 @@ export default function StarflareSection({ cost = 25 }) {
       {sparkles.map((s) => (
         <div
           key={s.id}
-          className="animate-sparkle pointer-events-none absolute text-lg font-bold text-white select-none"
+          className="animate-sparkle pointer-events-none absolute text-lg font-bold text-main-text select-none"
           style={{
             left: `${s.x}%`,
             top: `${s.y}%`,

@@ -33,15 +33,18 @@ export default function SkillDisplay({
     [fileName],
   );
   // Define the style on the card
-  const divCard = `inline-flex items-center gap-2 text-white rounded-full 
+  const divCard = `inline-flex items-center gap-2 text-main-text rounded-full
                     font-normal py-0.5 text-xs
                     duration-200 bg-background-highlight px-2.5 py-1 border-1 border-outline-dark-gray`;
 
   const iconCard = `h-3.5 w-3.5`;
 
-  const divProject = `inline-flex items-center gap-2 text-white rounded-md 
+  // Unclaimed inline chips sit on the accent fill (white text/icon, legible in
+  // both modes); once claimed they drop the fill for an outline, so the label
+  // must use the theme text color to stay readable on a light background.
+  const divProject = `inline-flex items-center gap-2 rounded-md
                       sm:rounded-lg font-semibold translate-y-[1px] md:translate-y-[2px]  text-lg border
-                      ${claimed ? "border-outline-gray" : "border-highlight-color/90 bg-highlight-color/90"} px-[5px] md:px-1.5 leading-tight md:leading-normal`;
+                      ${claimed ? "border-outline-gray text-main-text" : "border-highlight-color/90 bg-highlight-color/90 text-white"} px-[5px] md:px-1.5 leading-tight md:leading-normal`;
 
   const iconProject = `h-4 w-4 `;
 
@@ -49,7 +52,7 @@ export default function SkillDisplay({
     <div className={card ? divCard : divProject}>
       <Icon
         className={card ? iconCard : iconProject}
-        color={card ? undefined : `white`}
+        color={card || claimed ? undefined : `white`}
         aria-hidden="true"
       />
       <div>{displayName || fileName}</div>

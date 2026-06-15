@@ -133,7 +133,7 @@ export default function ProjectCard({
       className={`h-full rounded-xl p-px transition-shadow duration-200 md:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]`}
     >
       <div
-        className={`font-dm-sans bg-background h-full rounded-xl border-1 text-white transition-colors duration-300 ${
+        className={`font-dm-sans bg-background h-full rounded-xl border-1 text-main-text transition-colors duration-300 ${
           darkOutline
             ? "border-outline-dark-gray md:hover:border-outline-gray"
             : "border-outline-gray"
@@ -151,7 +151,7 @@ export default function ProjectCard({
         >
           <div className="">
             {/* Preview image; falls back to a placeholder box when `image` is unset */}
-            <div className="relative mb-5 aspect-[2/1] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.04]">
+            <div className="relative mb-5 aspect-[2/1] w-full overflow-hidden rounded-lg border border-main-text/10 bg-main-text/[0.04]">
               {image ? (
                 <Image
                   src={image}
@@ -162,14 +162,14 @@ export default function ProjectCard({
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <Telescope className="h-8 w-8 text-white/15" />
+                  <Telescope className="h-8 w-8 text-main-text/15" />
                 </div>
               )}
             </div>
             <div className="mb-3 flex flex-col gap-1">
               <h3 className="text-lg font-semibold sm:text-xl">{title}</h3>
               <span
-                className={`flex items-center gap-x-1 text-sm ${clicked ? "text-gray-400" : "text-white"}`}
+                className={`flex items-center gap-x-1 text-sm ${clicked ? "text-gray-400" : "text-main-text"}`}
               >
                 {clicked ? (
                   <PlanetRingLine className="h-3.5 w-3.5" />
@@ -198,14 +198,14 @@ export default function ProjectCard({
                 );
               })}
             </div>
-            <div className="my-4 h-px w-full bg-white/30 sm:my-5"></div>
+            <div className="my-4 h-px w-full bg-main-text/30 sm:my-5"></div>
             <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
               <div className="flex flex-wrap gap-2">
                 {website && (
                   <div className="duration-100 md:hover:translate-x-[2px]">
                     <RewardLink
                       href={website}
-                      className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
+                      className="flex items-center gap-x-1 rounded-md bg-main-text px-2 py-1 text-sm font-medium text-background transition-all"
                       rewardId={`${slug}:website`}
                       target="_blank"
                     >
@@ -217,7 +217,7 @@ export default function ProjectCard({
                 <div className="duration-100 md:hover:translate-x-[2px]">
                   <RewardLink
                     href={github}
-                    className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
+                    className="flex items-center gap-x-1 rounded-md bg-main-text px-2 py-1 text-sm font-medium text-background transition-all"
                     rewardId={`${slug}:github`}
                     target="_blank"
                   >
