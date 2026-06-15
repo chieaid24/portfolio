@@ -17,7 +17,9 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     const { getAllQuestsComplete, ready } = useMoney();
     const allQuestComp = getAllQuestsComplete();
-    const canToggle = ready && allQuestComp;
+    // TEMP(light-mode): toggle unlocked unconditionally for testing.
+    // Restore the quest gate before merging: `const canToggle = ready && allQuestComp;`
+    const canToggle = ready || allQuestComp;
 
     const isDark = resolvedTheme === "dark";
 
