@@ -11,10 +11,10 @@ export const quest_totals = {
   // CURR TOTAL: 4
   project: 4,
 
-  // Header: 3[about, projects, resume] | Footer: 3[linkedin, github, email] | OnePerProject: 4 | Website: 0
+  // Header: 3[about, projects, resume] | Footer: 3[linkedin, github, email] | OnePerProject: 4 | Home/Experience: 1[education-tab] | Website: 0
   // Website: each project with a non-empty website_link adds 1 (currently 0 filled in)
-  // CURR TOTAL: 10
-  link: 10,
+  // CURR TOTAL: 11
+  link: 11,
 };
 
 /* Helper Formatting Functions */
