@@ -9,6 +9,7 @@ import React, {
   useRef,
   useCallback,
 } from "react";
+import { usePathname } from "next/navigation";
 import { createPayoutGenerator } from "@/lib/payout.js";
 import { defaultMixtureConfig } from "@/lib/payout-default.js";
 import { quest_totals } from "@/app/data/projects.js";
@@ -254,12 +255,39 @@ export function MoneyProvider({ children }) {
   );
   const [ownedThemes, setOwnedThemes] = useState([DEFAULT_THEME_ID]);
   const [starflareClickCount, setStarflareClickCount] = useState(0);
+  // ids whose award is in-flight (deferred, awaiting navigation) — guards against
+  // double-claiming on rapid clicks before the destination route commits.
   const pendingAwardsRef = useRef(new Set());
+  // queued deferred awards ({ id, kind, amount }) paid out on the next route change.
+  const pendingNavAwardsRef = useRef([]);
+
+  const pathname = usePathname();
+  const prevPathRef = useRef(pathname);
 
   const stateRef = useRef(state);
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  // Pay out every queued deferred award atomically (balance + mark-awarded).
+  const flushPendingAwards = useCallback(() => {
+    const queue = pendingNavAwardsRef.current;
+    if (!queue.length) return;
+    pendingNavAwardsRef.current = [];
+    for (const { id, kind, amount } of queue) {
+      pendingAwardsRef.current.delete(id);
+      dispatch({ type: "AWARD", id, amount, kind });
+    }
+  }, []);
+
+  // When the route actually changes, the destination page (and the remounted
+  // Header/AnimatedBalance) is committed — flush queued awards now so the
+  // +balance animation plays on the page just landed on, no fixed timer needed.
+  useEffect(() => {
+    if (prevPathRef.current === pathname) return;
+    prevPathRef.current = pathname;
+    flushPendingAwards();
+  }, [pathname, flushPendingAwards]);
 
   useEffect(() => {
     try {
@@ -448,9 +476,13 @@ export function MoneyProvider({ children }) {
        * @param {string} id
        * @param {'redtext'|'project'|'link'|'egg'|'lever'} kind
        * @param {number|string} [projValue] Optional amount when kind === 'project'
-       * @returns {boolean} true if paid (first time), false otherwise
+       * @param {{ defer?: boolean }} [opts] When `defer` is true the award is
+       *   queued and paid out on the next route change (see flushPendingAwards).
+       *   Used for clicks that trigger in-tab navigation, so the +balance
+       *   animation lands on the destination page instead of riding a timer.
+       * @returns {boolean} true if paid/queued (first time), false otherwise
        */
-      awardOnce: (id, kind, projValue) => {
+      awardOnce: (id, kind, projValue, opts) => {
         if (state.awarded[id] != null || pendingAwardsRef.current.has(id))
           return false;
 
@@ -468,22 +500,14 @@ export function MoneyProvider({ children }) {
           setOverflowTick((t) => t + 1);
         }
 
-        pendingAwardsRef.current.add(id);
-        // if a red word, add to balance and update awarded map immediately.
-        // If a link (redirects to another page, wait 200ms before updating the awarded tab)
-        if (kind === "redtext") {
-          dispatch({ type: "AWARD", id, amount, kind });
+        if (opts?.defer) {
+          // Queue now; pay out when the destination route commits.
+          pendingAwardsRef.current.add(id);
+          pendingNavAwardsRef.current.push({ id, kind, amount });
         } else {
-          // Add balance immediately
-          window.setTimeout(() => {
-            dispatch({ type: "AWARDINF", amount });
-          }, 300);
-          const awardedDelay = kind === "project" ? 800 : 300;
-          // Mark awarded after a small delay to avoid pre-navigation UI shifts
-          window.setTimeout(() => {
-            pendingAwardsRef.current.delete(id);
-            dispatch({ type: "MARK_AWARDED", id, kind });
-          }, awardedDelay);
+          // Page stays mounted (in-page action / new-tab / same route):
+          // add balance and mark awarded atomically, right now.
+          dispatch({ type: "AWARD", id, amount, kind });
         }
 
         return true;
@@ -554,6 +578,7 @@ export function MoneyProvider({ children }) {
       inputBalance: (amt) => {
         dispatch({ type: "INPUT", amount: amt });
       },
+      flushPendingAwards,
       getQuestStats,
 
       getAllQuestsComplete,
@@ -593,6 +618,7 @@ export function MoneyProvider({ children }) {
       getQuestStats,
       setThemeById,
       purchaseTheme,
+      flushPendingAwards,
     ],
   );
 

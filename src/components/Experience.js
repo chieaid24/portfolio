@@ -6,6 +6,7 @@ import useMeasure from "react-use-measure";
 import Image from "next/image";
 import BulletIcon from "@/icons/BulletIcon";
 import { experiences } from "@/app/data/experiences";
+import { useMoney } from "@/lib/money-context";
 
 const tabs = [
   { id: "work", label: "Work" },
@@ -71,6 +72,7 @@ export default function Experience() {
   const [activeTab, setActiveTab] = useState("work");
   const [tabFills, setTabFills] = useState({});
   const shouldReduceMotion = useReducedMotion();
+  const { awardOnce } = useMoney();
   const tabItems = tabs.map((tab) => ({
     ...tab,
     items: experiences[tab.id] ?? [],
@@ -79,6 +81,11 @@ export default function Experience() {
 
   // Capture the click point so the highlight can expand outward from the cursor.
   const handleTabClick = (tabId, event) => {
+    // Clicking the Education tab is an in-page action (no navigation) — pay out
+    // immediately, once ever (dedup handled by awardOnce).
+    if (tabId === "education") {
+      awardOnce("education-tab", "link");
+    }
     if (tabId !== activeTab) {
       const rect = event.currentTarget.getBoundingClientRect();
       // Keyboard activation has no pointer position; fall back to the center.
