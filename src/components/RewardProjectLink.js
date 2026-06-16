@@ -20,14 +20,19 @@ export default function RewardProjectLink({
   const handleClick = (e) => {
     onClick?.(e);
     if (external) {
+      // Opens in a new tab — this page stays mounted, so pay out now.
       window.open(href, "_blank", "noopener,noreferrer");
+      awardOnce(rewardId, kind, ticketValue, { defer: false });
+      if (alsoAward)
+        awardOnce(alsoAward.id, alsoAward.kind, undefined, { defer: false });
     } else {
+      // In-tab client navigation remounts the Header — queue the award and let
+      // the route-change flush pay it out on the destination project page.
+      awardOnce(rewardId, kind, ticketValue, { defer: true });
+      if (alsoAward)
+        awardOnce(alsoAward.id, alsoAward.kind, undefined, { defer: true });
       router.push(href);
     }
-    requestAnimationFrame(() => {
-      awardOnce(rewardId, kind, ticketValue);
-      if (alsoAward) awardOnce(alsoAward.id, alsoAward.kind);
-    });
   };
 
   return (
