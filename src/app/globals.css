@@ -57,22 +57,22 @@ html {
    warm off-white interface. Keep this in sync with the dark vars above.
    ------------------------------------------------------------------------- */
 .light {
-  --main-text: #1c1813; /* headings */
-  --body-text: #2b2620; /* body copy */
-  --dark-body-text: #4a443b; /* secondary numbers/labels */
+  --main-text: #18222e; /* headings — cool charcoal-navy */
+  --body-text: #2a3645; /* body copy — cool slate */
+  --dark-body-text: #4c5a69; /* secondary numbers/labels */
 
-  --page-bg: #faf8f5; /* warm off-white backdrop */
-  --background: #faf8f5; /* page surface */
-  --background-secondary: #f2ede6; /* slight-contrast panels (header widgets) */
-  --background-highlight: #ece4d8; /* skill chips / elevated bits */
-  --spotify-background: #e7ddcf; /* clash / carousel / spotify card surface */
+  --page-bg: #f4f8fc; /* cool off-white backdrop */
+  --background: #f4f8fc; /* page surface */
+  --background-secondary: #e9f1fa; /* slight-contrast panels (header widgets) */
+  --background-highlight: #dce8f4; /* skill chips / elevated bits */
+  --spotify-background: #e1ecf6; /* clash / carousel / spotify card surface */
 
-  --outline-gray: #b7ad9e; /* skill outlines + scrollbar */
-  --outline-dark-gray: #d8cfc0; /* header + widgets outline */
-  --outline-darker-gray: #cdc3b3; /* darker header outline */
+  --outline-gray: #a9b8c8; /* skill outlines + scrollbar */
+  --outline-dark-gray: #cdd9e5; /* header + widgets outline */
+  --outline-darker-gray: #bfcdda; /* darker header outline */
 
   --widget-surface: #ffffff; /* elevated white card */
-  --widget-surface-2: #ece4d8; /* warm media well */
+  --widget-surface-2: #e6eef7; /* cool media well */
 
   color-scheme: light;
 }
@@ -219,12 +219,12 @@ html {
 }
 
 .light ::selection {
-  background-color: #ffc8a8;
-  color: #1c1813;
+  background-color: #b9dbff;
+  color: #18222e;
 }
 
 .light ::-webkit-scrollbar-thumb:hover {
-  background: #a79c8b;
+  background: #92a3b4;
 }
 
 body {
