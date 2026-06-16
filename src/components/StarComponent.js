@@ -15,10 +15,10 @@ export function lightenHexColor(hex, amount = 0.2) {
   }
 }
 
-// In dark mode the sprite is a soft white disc (tinted per-star by vertexColors)
-// that glows against the near-black sky. In light mode the disc carries its own
-// two-tone gradient — a dark core ringed by the accent color, fading out — so the
-// stars stay visible (with their accent halo) on the warm off-white "day sky".
+// The sprite is a soft white disc (tinted per-star by vertexColors) that glows
+// against the sky. In light mode the stars read as little white suns / dandelion
+// puffs scattered across the blue "day sky": a bright white core blooming out to
+// a soft transparent edge.
 function createStarTexture(isLight = false, accentHex = "#1b86c0") {
   const size = 128;
   const canvas = document.createElement("canvas");
@@ -37,8 +37,9 @@ function createStarTexture(isLight = false, accentHex = "#1b86c0") {
   );
 
   if (isLight) {
-    gradient.addColorStop(0, "#2b2620"); // dark core
-    gradient.addColorStop(0.3, accentHex); // accent halo
+    gradient.addColorStop(0, "white"); // bright sun-like core
+    gradient.addColorStop(0.35, "white");
+    gradient.addColorStop(0.6, "rgba(255,255,255,0.5)"); // soft dandelion bloom
     gradient.addColorStop(1, "transparent");
   } else {
     gradient.addColorStop(0, "white");
