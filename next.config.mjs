@@ -1,3 +1,18 @@
+import path from 'node:path';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// In a git worktree, node_modules is symlinked to the main checkout. Turbopack
+// rejects that as a symlink pointing "out of the filesystem root", so point its
+// root at the real parent of node_modules — the symlinked deps then resolve inside
+// the root. For a normal checkout this is just the project dir.
+let turbopackRoot = __dirname;
+try {
+  turbopackRoot = path.dirname(fs.realpathSync(path.join(__dirname, 'node_modules')));
+} catch {}
+
 const svgrLoader = {
   loader: '@svgr/webpack',
   options: {
@@ -35,6 +50,7 @@ const nextConfig = {
     return config;
   },
   turbopack: {
+    root: turbopackRoot,
     rules: {
       '*.svg': {
         loaders: [svgrLoader],
