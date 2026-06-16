@@ -179,7 +179,7 @@ export default function ProjectCard({
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
               </span>
             </div>
-            <div className="text-dark-body-text text-sm">{summary}</div>
+            <div className="text-dark-body-text text-xs">{summary}</div>
           </div>
           <div className="">
             <div className="flex flex-wrap gap-2">
@@ -199,8 +199,8 @@ export default function ProjectCard({
               })}
             </div>
             <div className="my-4 h-px w-full bg-white/30 sm:my-5"></div>
-            <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
-              <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+              <div className="flex flex-wrap gap-2 ">
                 {website && (
                   <div className="duration-100 md:hover:translate-x-[2px]">
                     <RewardLink
@@ -214,7 +214,7 @@ export default function ProjectCard({
                     </RewardLink>
                   </div>
                 )}
-                <div className="duration-100 md:hover:translate-x-[2px]">
+                <div className="duration-100 md:hover:translate-x-[1px]">
                   <RewardLink
                     href={github}
                     className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
@@ -226,9 +226,9 @@ export default function ProjectCard({
                   </RewardLink>
                 </div>
               </div>
-              <div className="text-body-text group flex items-center gap-2 transition-all duration-100 md:hover:translate-x-[1px]">
+              <div className="text-body-text group flex items-center gap-1.5 text-sm transition-all duration-100 md:hover:translate-x-[1px]">
                 <span>Explore Project </span>
-                <SimpleArrow className="h-2.5 w-2.5 translate-y-[1px] transition-transform md:group-hover:translate-x-[2px]" />
+                <SimpleArrow className="h-2 w-2 translate-y-[0px] transition-transform md:group-hover:translate-x-[2px]" />
               </div>
             </div>
           </div>
