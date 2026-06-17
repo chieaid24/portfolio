@@ -151,7 +151,7 @@ export default function ProjectCard({
         >
           <div className="">
             {/* Preview image; falls back to a placeholder box when `image` is unset */}
-            <div className="relative mb-5 aspect-[2/1] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.04]">
+            <div className="relative mb-5 mx-0 aspect-[2/1] overflow-hidden rounded-lg border-t border-l border-r border-white/10 bg-white/[0.04]">
               {image ? (
                 <Image
                   src={image}
@@ -169,7 +169,7 @@ export default function ProjectCard({
             <div className="mb-3 flex flex-col gap-1">
               <h3 className="text-lg font-semibold sm:text-xl">{title}</h3>
               <span
-                className={`flex items-center gap-x-1 text-sm ${clicked ? "text-gray-400" : "text-white"}`}
+                className={`flex items-center gap-x-1.5 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
               >
                 {clicked ? (
                   <PlanetRingLine className="h-3.5 w-3.5" />
@@ -226,9 +226,9 @@ export default function ProjectCard({
                   </RewardLink>
                 </div>
               </div>
-              <div className="text-body-text group flex items-center gap-1.5 text-sm transition-all duration-100 md:hover:translate-x-[1px]">
+              <div className="text-body-text group flex items-center gap-1.5 text-sm transition-transform duration-100 md:hover:translate-x-[1px]">
                 <span>Explore Project </span>
-                <SimpleArrow className="h-2 w-2 translate-y-[0px] transition-transform md:group-hover:translate-x-[2px]" />
+                <SimpleArrow className="h-2 w-2 transition-transform md:group-hover:translate-x-[2px]" />
               </div>
             </div>
           </div>
