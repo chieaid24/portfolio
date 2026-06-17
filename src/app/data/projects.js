@@ -105,7 +105,7 @@ export const projects = [
   {
     slug: "ai-sleep-analytics",
     title: "AI Sleep Analytics",
-    skills_used: ["AWS", "Python", "JupyterLab", "Scikitlearn/scikit-learn"],
+    skills_used: ["AWS", "Python", "JupyterLab", "Scikitlearn/scikit-learn", "Pandas"],
     image: "/ai-sleep-analytics/sleepcard_3.jpg",
     page_displays: [
       [
