@@ -151,7 +151,7 @@ export default function ProjectCard({
         >
           <div className="">
             {/* Preview image; falls back to a placeholder box when `image` is unset */}
-            <div className="relative mb-5 aspect-[2/1] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.04]">
+            <div className="relative mb-5 mx-4 aspect-[2/1] overflow-hidden rounded-lg border border-white/10 bg-white/[0.04]">
               {image ? (
                 <Image
                   src={image}
