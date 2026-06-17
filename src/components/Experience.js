@@ -38,7 +38,7 @@ function TimelineItem({ item }) {
             <p className="text-base font-medium text-main-text/90">{item.subtitle}</p>
           )}
           {item.period && (
-            <p className="text-sm text-gray-400">{item.period}</p>
+            <p className="text-sm text-experience-meta">{item.period}</p>
           )}
         </div>
 
@@ -54,7 +54,7 @@ function TimelineItem({ item }) {
                   {highlight.text}
                 </p>
                 {highlight.note && (
-                  <p className="text-xs text-gray-400 sm:text-sm">
+                  <p className="text-xs text-experience-meta sm:text-sm">
                     {highlight.note}
                   </p>
                 )}
