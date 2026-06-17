@@ -151,7 +151,7 @@ export default function ProjectCard({
         >
           <div className="">
             {/* Preview image; falls back to a placeholder box when `image` is unset */}
-            <div className="relative mb-5 mx-0 aspect-[2/1] overflow-hidden rounded-lg border-t border-l border-r border-white/10 bg-white/[0.04]">
+            <div className="relative mb-5 mx-0 aspect-[2/1] overflow-hidden rounded-lg border border-white/5 bg-white/[0.02]">
               {image ? (
                 <Image
                   src={image}
@@ -166,10 +166,10 @@ export default function ProjectCard({
                 </div>
               )}
             </div>
-            <div className="mb-3 flex flex-col gap-1">
+            <div className="mb-3 flex flex-col gap-0.5">
               <h3 className="text-lg font-semibold sm:text-xl">{title}</h3>
               <span
-                className={`flex items-center gap-x-1.5 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
+                className={`flex items-center gap-x-1 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
               >
                 {clicked ? (
                   <PlanetRingLine className="h-3.5 w-3.5" />
@@ -198,7 +198,7 @@ export default function ProjectCard({
                 );
               })}
             </div>
-            <div className="my-4 h-px w-full bg-white/30 sm:my-5"></div>
+            <div className="my-4 h-px w-full bg-white/30 sm:mt-4 sm:mb-6"></div>
             <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
               <div className="flex flex-wrap gap-2 ">
                 {website && (
