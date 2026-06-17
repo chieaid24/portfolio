@@ -34,7 +34,7 @@ export default function SkillDisplay({
   );
   // Define the style on the card
   const divCard = `inline-flex items-center gap-1.5 text-white rounded-full 
-                    font-normal py-0.5 text-xs
+                    font-normal text-xs
                     duration-200 bg-background-highlight px-2 py-1 border-1 border-outline-dark-gray`;
 
   const iconCard = `h-2.5 w-2.5`;
