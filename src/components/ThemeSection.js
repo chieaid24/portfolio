@@ -143,8 +143,8 @@ export default function ThemeSection({ ...props }) {
                     : jigglingId === theme.id
                       ? "border-[#ff6161]/70"
                       : isLocked
-                        ? "border-white/30"
-                        : "border-white/30 hover:border-white/50"
+                        ? "border-white/30 light:border-outline-dark-gray/70"
+                        : "border-white/30 light:border-outline-dark-gray/70 hover:border-white/50 light:hover:border-outline-dark-gray/80"
                 } `}
                 style={{ transition: "border-color 200ms ease" }}
               >
@@ -168,7 +168,7 @@ export default function ThemeSection({ ...props }) {
                       transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                     >
                       <span
-                        className={`flex items-center rounded-full bg-black/80 px-[5px] py-[2px] text-xs font-semibold transition duration-200 ${
+                        className={`flex items-center rounded-full bg-black/80 light:bg-black/60 px-[5px] py-[2px] text-xs font-semibold transition duration-200 ${
                           jigglingId === theme.id
                             ? "text-[#ff6161] opacity-60"
                             : isLocked
