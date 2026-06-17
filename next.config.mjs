@@ -24,7 +24,7 @@ const svgrLoader = {
         { name: 'removeViewBox', active: false },
       ],
     },
-    replaceAttrValues: { '#000': 'currentColor', '#111': 'currentColor', '#fff': 'currentColor' },
+    replaceAttrValues: { '#000': 'currentColor', '#111': 'currentColor', '#fff': 'currentColor', '#ffffff': 'currentColor', '#FFFFFF': 'currentColor', 'white': 'currentColor' },
   },
 };
 
