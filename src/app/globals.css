@@ -266,9 +266,9 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 70px;
-  height: 70px;
-  margin: -35px 0 0 -35px; /* center the circle on (--flash-x, --flash-y) */
+  width: 80px;
+  height: 80px;
+  margin: -40px 0 0 -40px; /* center the circle on (--flash-x, --flash-y) */
   border-radius: 50%;
   background: #d9d9d9;
   pointer-events: none;
@@ -286,6 +286,15 @@ body {
   transition:
     scale 140ms ease-out,
     opacity 140ms ease-out;
+}
+
+/* Larger follow circle for the Experience tab headers — the buttons are wider
+   than the Resume button, so the circle is scaled up to read as a glow. */
+.cursor-follow-btn--lg::before {
+  width: 300px;
+  height: 300px;
+  margin: -150px 0 0 -150px; /* keep the circle centered on (--flash-x, --flash-y) */
+  background: #fff; /* white; alpha driven by --flash-active to match bg-white/5 */
 }
 
 .custom-bold {
