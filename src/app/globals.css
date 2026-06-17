@@ -38,6 +38,8 @@
   --widget-surface: #1f1f1f;
   /* recessed media well inside widgets (slideshow image area) */
   --widget-surface-2: #2a2a2a;
+  /* muted meta text (experience period, location labels) */
+  --experience-meta: #9ca3af;
   /* smooth highlight updates when theme changes */
   --highlight-transition:
     color 180ms ease, background-color 180ms ease, border-color 180ms ease,
@@ -57,22 +59,23 @@ html {
    warm off-white interface. Keep this in sync with the dark vars above.
    ------------------------------------------------------------------------- */
 .light {
-  --main-text: #18222e; /* headings — cool charcoal-navy */
-  --body-text: #2a3645; /* body copy — cool slate */
-  --dark-body-text: #4c5a69; /* secondary numbers/labels */
+  --main-text: #3d332c; /* headings — charred wood */
+  --body-text: #52473f; /* body — warm umber, clear step from heading */
+  --dark-body-text: #7b6e69; /* secondary — muted rose-brown, clearly lighter */
 
-  --page-bg: #f4f8fc; /* cool off-white backdrop */
-  --background: #f4f8fc; /* page surface */
-  --background-secondary: #e9f1fa; /* slight-contrast panels (header widgets) */
-  --background-highlight: #dce8f4; /* skill chips / elevated bits */
-  --spotify-background: #e1ecf6; /* clash / carousel / spotify card surface */
+  --page-bg: #f5f2ef; /* barely warm off-white */
+  --background: #f5f2ef; /* page surface */
+  --background-secondary: #ece8e4; /* warm panels (header widgets) */
+  --background-highlight: #e2dbd5; /* skill chips / elevated bits */
+  --spotify-background: #ddd5ce; /* clash / carousel / spotify card surface */
 
-  --outline-gray: #a9b8c8; /* skill outlines + scrollbar */
-  --outline-dark-gray: #cdd9e5; /* header + widgets outline */
-  --outline-darker-gray: #bfcdda; /* darker header outline */
+  --outline-gray: #7b736f; /* subtle warm stone — skill chips, scrollbar */
+  --outline-dark-gray: #b0a49e; /* medium — widget / header borders */
+  --outline-darker-gray: #9e918b; /* emphatic — accent borders */
 
-  --widget-surface: #ffffff; /* elevated white card */
-  --widget-surface-2: #e6eef7; /* cool media well */
+  --widget-surface: #fdfbf9; /* barely-warm white card */
+  --widget-surface-2: #e5ddd7; /* warm media well */
+  --experience-meta: #7a6f6b; /* muted meta text — darker warm gray */
 
   color-scheme: light;
 }
@@ -156,6 +159,7 @@ html {
   --color-main-text: var(--main-text);
   --color-widget-surface: var(--widget-surface);
   --color-widget-surface-2: var(--widget-surface-2);
+  --color-experience-meta: var(--experience-meta);
 
   --font-alienNew: var(--font-alienNew); /* 2560 */
   --animate-gradient-hero: gradient 8s linear infinite;
