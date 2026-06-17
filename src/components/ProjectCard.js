@@ -145,7 +145,7 @@ export default function ProjectCard({
           alsoAward={
             github_only ? { id: `${slug}:github`, kind: "link" } : undefined
           }
-          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-6 sm:px-8 sm:py-8"
+          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-6 sm:px-7 sm:py-7"
           rewardId={rewardId}
           ticketValue={1000}
         >
