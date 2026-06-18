@@ -76,7 +76,7 @@ export const projects = [
   {
     slug: "canopy",
     title: "Canopy",
-    skills_used: ["AWS", "Kubernetes", "Spring Boot", "Grafana"],
+    skills_used: ["AWS", "Kubernetes", "Spring Boot", "Grafana", "Terraform"],
     image: "/canopy/canopy_test_1.png",
     github_only: true,
     page_displays: [
