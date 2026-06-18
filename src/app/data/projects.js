@@ -174,8 +174,8 @@ export const projects = [
     what_paragraphs: [
       <>
         First, I had to clean and normalize the data, as the{" "}
-        <RedText rewardId="red:sleep:600">600+ nights</RedText> of data and{" "}
-        <RedText rewardId="red:sleep:40">40+ features</RedText> in the CSV file
+        <RedText rewardId="red:sleep:600">600+ nights</RedText>&nbsp;of data and{" "}
+        <RedText rewardId="red:sleep:40">40+ features</RedText>&nbsp;in the CSV file
         contained a lot of unnecessary information (like the company&apos;s
         DynamoDB specifications). This included dropping rows with missing
         entries, and choosing features that would produce the best model
@@ -215,7 +215,7 @@ export const projects = [
       <>
         This project allowed me to apply machine learning techniques such as
         feature engineering and{" "}
-        <RedText rewardId="red:sleep:fine-tuning">fine-tuning</RedText> on a
+        <RedText rewardId="red:sleep:fine-tuning">fine-tuning</RedText>&nbsp;on a
         dataset that was personal to me, as well as learn the AWS ecosystem with
         hands-on experience. Overall, it was rewarding to take an end-to-end
         approach with a project close to my heart, and I hope that all this data
@@ -373,7 +373,7 @@ export const projects = [
         <RedText rewardId="red:pmi:technical-drawing">
           technical drawing
         </RedText>{" "}
-        to a 3D <RedText rewardId="red:pmi:CAD-model">CAD model</RedText> can be
+        to a 3D <RedText rewardId="red:pmi:CAD-model">CAD model</RedText>&nbsp;can be
         tedious and the worst part of a machinist&apos;s day. Keep scrolling to
         find out how I cut production time by{" "}
         <RedText rewardId="red:pmi:30-percent">30 percent</RedText>!{" "}
@@ -411,8 +411,8 @@ export const projects = [
         But due to old-fashioned &quot;this is the way it&apos;s always been
         done&quot; practices, many times the machine shop only receives a
         stripped-down (no PMI){" "}
-        <RedText rewardId="red:pmi:3dmodel">3D model</RedText> and a{" "}
-        <RedText rewardId="red:pmi:2dpdf">2D PDF</RedText> containing the
+        <RedText rewardId="red:pmi:3dmodel">3D model</RedText>&nbsp;and a{" "}
+        <RedText rewardId="red:pmi:2dpdf">2D PDF</RedText>&nbsp;containing the
         necessary specifications. Someone then must manually annotate the model,
         which is a tedious and time-consuming task, especially for a small team
         like the one I worked with at my internship. Seeing this, I realized it
@@ -432,7 +432,7 @@ export const projects = [
       </>,
       <>
         The .qif file is the key that my program relies on, as its{" "}
-        <RedText rewardId="red:pmi:xml">XML structure</RedText> allows me to
+        <RedText rewardId="red:pmi:xml">XML structure</RedText>&nbsp;allows me to
         parse and insert information without a GUI. This unlocks automation and
         greater speed capabilities, which I take advantage of through this
         project. Now, using Python with NumPy and openpyxl, it scrapes the Excel
