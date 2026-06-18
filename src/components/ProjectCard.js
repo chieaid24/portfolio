@@ -227,8 +227,8 @@ export default function ProjectCard({
                 </div>
               </div>
               <div className="text-body-text group flex items-center gap-1.5 text-sm transition-transform duration-100 md:hover:translate-x-[1px]">
-                <span>Explore Project </span>
-                <SimpleArrow className="h-2 w-2 transition-transform md:group-hover:translate-x-[2px]" />
+                <span>Warp here </span>
+                <SimpleArrow className="h-2 w-2 translate-y-[1px] transition-transform md:group-hover:translate-x-[2px]" />
               </div>
             </div>
           </div>
