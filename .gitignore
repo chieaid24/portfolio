@@ -47,3 +47,6 @@ AGENTS.md
 
 # Windows/WSL mark-of-the-web metadata streams
 *:Zone.Identifier
+
+# Playwright MCP session files
+.playwright-mcp/

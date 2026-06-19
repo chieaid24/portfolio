@@ -145,7 +145,7 @@ export default function ProjectCard({
           alsoAward={
             github_only ? { id: `${slug}:github`, kind: "link" } : undefined
           }
-          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-6 sm:px-7 sm:py-7"
+          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-7 sm:px-7 sm:py-7"
           rewardId={rewardId}
           ticketValue={1000}
         >
@@ -166,10 +166,9 @@ export default function ProjectCard({
                 </div>
               )}
             </div>
-            <div className="mb-3 flex flex-col gap-0.5">
-              <h3 className="text-lg font-semibold sm:text-xl">{title}</h3>
+            <div className="flex flex-col">
               <span
-                className={`flex items-center gap-x-1 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
+                className={`mb-0.5 flex items-center gap-x-1 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
               >
                 {clicked ? (
                   <PlanetRingLine className="h-3.5 w-3.5" />
@@ -178,8 +177,9 @@ export default function ProjectCard({
                 )}
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
               </span>
+              <h3 className="mb-1.5 text-lg font-semibold sm:text-xl">{title}</h3>
+              <div className="text-dark-body-text text-sm">{summary}</div>
             </div>
-            <div className="text-dark-body-text text-xs">{summary}</div>
           </div>
           <div className="">
             <div className="flex flex-wrap gap-2">

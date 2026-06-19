@@ -42,7 +42,7 @@ export default function RewardLink({
         onClick?.(e);
       }}
       data-reward-id={rewardId}
-      className={`transition-all duration-200 ${dim ? "opacity-75 dark:opacity-100" : "opacity-100"} ${className}`}
+      className={`transition-all duration-200 ${dim ? "opacity-75" : "opacity-100"} ${className}`}
     >
       {children}
     </Link>
