@@ -35,6 +35,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
     const [denied, setDenied] = useState(false);
     const [clickedAnim, setClickedAnim] = useState(false);
     const [spin, setSpin] = useState(0);
+    const [allowInquiry, setAllowInquiry] = useState(true);
     const buttonRef = useRef(null);
 
     const { resolvedTheme, setTheme } = useTheme();
@@ -68,6 +69,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     const handleClick = () => {
         if (canToggle) {
+            setAllowInquiry(false);
             const nextTheme = isDark ? "light" : "dark";
             if (!shouldReduceMotion) setSpin((s) => s + 360);
 
@@ -150,7 +152,11 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
             style={{ lineHeight: 0 }}
             className={`${canToggle ? "cursor-pointer" : "cursor-default"} ${canToggle ? "opacity-100" : "opacity-0 md:opacity-50"} ${className}`}
         >
-            <span className={shouldReduceMotion ? undefined : "dm-icon-hover"} style={{ display: "inline-flex" }}>
+            <span
+                className={allowInquiry && !shouldReduceMotion ? "dm-icon-hover" : undefined}
+                onMouseLeave={() => setAllowInquiry(true)}
+                style={{ display: "inline-flex" }}
+            >
                 {isDark ? <SunIcon /> : <MoonIcon />}
             </span>
         </motion.button>
