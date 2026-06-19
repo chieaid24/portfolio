@@ -85,22 +85,22 @@ html {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  margin-top: 8px; /* gutter at top */
-  margin-bottom: 8px; /* optional gutter at bottom */
-  background: var(--background); /* dark track */
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-outline-gray); /* dark thumb */
+  background: rgba(128, 128, 128, 0.45);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #717171;
+  background: rgba(128, 128, 128, 0.7);
 }
 
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--outline-gray) var(--background);
+  scrollbar-color: rgba(128, 128, 128, 0.45) transparent;
 }
 
 .dark:root {
@@ -225,10 +225,6 @@ html {
 .light ::selection {
   background-color: #b9dbff;
   color: #18222e;
-}
-
-.light ::-webkit-scrollbar-thumb:hover {
-  background: #92a3b4;
 }
 
 body {
@@ -421,4 +417,32 @@ body {
   .animate-gradient {
     gradient: "gradient 8s linear infinite";
   }
+}
+
+@keyframes dm-inquiry {
+  0%   { transform: rotate(0deg); }
+  30%  { transform: rotate(30deg); }
+  50%  { transform: rotate(26deg); }
+  72%  { transform: rotate(-5deg); }
+  88%  { transform: rotate(2deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.dm-icon-hover:hover {
+  animation: dm-inquiry 0.5s ease-out;
+}
+
+html.no-transition * {
+  transition: none !important;
+}
+
+/* Theme toggle — View Transitions API */
+:root[data-theme-vt="active"]::view-transition-old(root),
+:root[data-theme-vt="active"]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+/* Pin new-theme panel at collapsed circle until JS animation takes over */
+:root[data-theme-vt="active"]::view-transition-new(root) {
+  clip-path: var(--theme-vt-clip-from);
 }
