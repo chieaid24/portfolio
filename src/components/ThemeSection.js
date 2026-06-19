@@ -133,7 +133,13 @@ export default function ThemeSection({ ...props }) {
                 aria-label={`${theme.label} for ₳ ${theme.price}`}
                 aria-pressed={isSelected}
                 onClick={() => handleSelect(theme.id)}
-                className={`group relative h-full w-full transform overflow-hidden rounded-xl border-2 transition duration-200 ${
+                animate={{
+                  boxShadow: isSelected
+                    ? `0 0 7px 3px ${theme.color}30`
+                    : "0 0 0px 0px rgba(0,0,0,0)",
+                }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className={`relative h-full w-full overflow-hidden rounded-xl border-2 ${
                   isLocked ? "cursor-default" : "cursor-pointer"
                 } ${
                   isSelected
