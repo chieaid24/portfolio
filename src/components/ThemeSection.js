@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useMoney, THEME_OPTIONS } from "@/lib/money-context";
-import DarkModeToggle from "./DarkModeToggle";
 import {
   motion,
   AnimatePresence,
@@ -116,7 +115,6 @@ export default function ThemeSection({ ...props }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.15, delay: 0.1 }}
     >
-      <DarkModeToggle className="absolute top-2 right-2 z-10 p-1" />
       <div className="mx-auto my-auto grid grid-cols-3 gap-2.5 p-2.5 sm:gap-5 sm:p-5 md:gap-5 lg:gap-5 lg:p-5">
         {THEME_OPTIONS.map((theme) => {
           const isSelected = selectedId === theme.id;

@@ -169,7 +169,7 @@ export default function ProjectCard({
             <div className="mb-3 flex flex-col gap-1">
               <h3 className="text-lg font-semibold sm:text-xl">{title}</h3>
               <span
-                className={`flex items-center gap-x-1 text-sm ${clicked ? "text-gray-400" : "text-main-text"}`}
+                className={`flex items-center gap-x-1 text-xs ${clicked ? "text-gray-400" : "text-main-text"}`}
               >
                 {clicked ? (
                   <PlanetRingLine className="h-3.5 w-3.5" />
