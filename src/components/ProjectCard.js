@@ -168,7 +168,7 @@ export default function ProjectCard({
             </div>
             <div className="flex flex-col">
               <span
-                className={`mb-0.5 flex items-center gap-x-1 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
+                className={`mb-1 flex items-center gap-x-1 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
               >
                 {clicked ? (
                   <PlanetRingLine className="h-3.5 w-3.5" />
@@ -177,7 +177,7 @@ export default function ProjectCard({
                 )}
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
               </span>
-              <h3 className="mb-1.5 text-lg font-semibold sm:text-xl">{title}</h3>
+              <h3 className="mb-1.5 text-lg font-semibold sm:text-lg">{title}</h3>
               <div className="text-dark-body-text text-sm">{summary}</div>
             </div>
           </div>
