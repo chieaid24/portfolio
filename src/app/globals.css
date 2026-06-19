@@ -30,7 +30,7 @@
   /* body color of text (project page text, experience body text, etc) */
   --body-text: #e0e0e0;
   /* darker body text (numbers in the ClashWidget) */
-  --dark-body-text: #bdbdbd;
+  --dark-body-text: #9ca3af;
   /* smooth highlight updates when theme changes */
   --highlight-transition:
     color 180ms ease, background-color 180ms ease, border-color 180ms ease,
