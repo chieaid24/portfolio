@@ -32,14 +32,18 @@ function TimelineItem({ item }) {
 
       <div className="flex-1 space-y-2">
         <div className="space-y-0">
-          <h3 className="text-lg leading-tight font-semibold text-white sm:text-xl sm:leading-normal">
+          <h3 className="text-lg leading-tight font-semibold text-white sm:text-lg sm:leading-tight">
             {item.title}
           </h3>
-          {item.subtitle && (
-            <p className="text-base font-medium text-white/90">{item.subtitle}</p>
-          )}
-          {item.period && (
-            <p className="text-sm text-gray-400">{item.period}</p>
+          {(item.subtitle || item.period) && (
+            <div className="flex items-baseline justify-between gap-2">
+              {item.subtitle && (
+                <p className="text-base font-medium text-dark-body-text">{item.subtitle}</p>
+              )}
+              {item.period && (
+                <p className="ml-auto text-sm text-dark-body-text">{item.period}</p>
+              )}
+            </div>
           )}
         </div>
 
