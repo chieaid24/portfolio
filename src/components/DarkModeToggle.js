@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import { motion, useReducedMotion } from "framer-motion";
 import { useTheme } from "next-themes";
-import { useMoney } from "@/lib/money-context"
+import { useMoney } from "@/lib/money-context";
 
 function SunIcon() {
     return (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <circle cx="12" cy="12" r="4"/>
             <line x1="12" y1="2" x2="12" y2="4"/>
             <line x1="12" y1="20" x2="12" y2="22"/>
@@ -23,7 +24,7 @@ function SunIcon() {
 
 function MoonIcon() {
     return (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
     );
@@ -34,6 +35,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
     const [denied, setDenied] = useState(false);
     const [clickedAnim, setClickedAnim] = useState(false);
     const [spin, setSpin] = useState(0);
+    const buttonRef = useRef(null);
 
     const { resolvedTheme, setTheme } = useTheme();
     const shouldReduceMotion = useReducedMotion();
@@ -66,8 +68,53 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     const handleClick = () => {
         if (canToggle) {
-            setTheme(isDark ? "light" : "dark");
+            const nextTheme = isDark ? "light" : "dark";
             if (!shouldReduceMotion) setSpin((s) => s + 360);
+
+            if (!shouldReduceMotion && typeof document.startViewTransition === "function") {
+                const rect = buttonRef.current?.getBoundingClientRect();
+                const vw = window.visualViewport?.width ?? window.innerWidth;
+                const vh = window.visualViewport?.height ?? window.innerHeight;
+                const cx = rect ? rect.left + rect.width / 2 : vw / 2;
+                const cy = rect ? rect.top + rect.height / 2 : vh / 2;
+                const maxRadius = Math.hypot(Math.max(cx, vw - cx), Math.max(cy, vh - cy));
+                const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
+                const clipTo = `circle(${maxRadius}px at ${cx}px ${cy}px)`;
+
+                const root = document.documentElement;
+                root.dataset.themeVt = "active";
+                root.style.setProperty("--theme-vt-clip-from", clipFrom);
+
+                const transition = document.startViewTransition(() => {
+                    flushSync(() => setTheme(nextTheme));
+                });
+
+                transition.ready.then(() => {
+                    root.animate(
+                        { clipPath: [clipFrom, clipTo] },
+                        {
+                            duration: 280,
+                            easing: "ease-in-out",
+                            fill: "forwards",
+                            pseudoElement: "::view-transition-new(root)",
+                        }
+                    );
+                });
+
+                transition.finished.finally(() => {
+                    delete root.dataset.themeVt;
+                    root.style.removeProperty("--theme-vt-clip-from");
+                });
+            } else {
+                // Option A: reduced-motion / no-startViewTransition fallback — instant atomic swap
+                document.documentElement.classList.add("no-transition");
+                setTheme(nextTheme);
+                requestAnimationFrame(() =>
+                    requestAnimationFrame(() =>
+                        document.documentElement.classList.remove("no-transition")
+                    )
+                );
+            }
         } else {
             setDenied(true);
             onFailedToggle?.();
@@ -79,6 +126,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     return (
         <motion.button
+            ref={buttonRef}
             key="darkmode"
             type="button"
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
@@ -98,10 +146,13 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
                     : { x: 0, opacity: 1, rotate: spin, scale: 1 }
             }
             exit={{ opacity: 0, rotate: 90, scale: 0.9, transition: { duration: 0.18 } }}
-            transition={{ rotate: { type: "spring", stiffness: 180, damping: 18 }, duration: 0.18 }}
+            transition={{ rotate: { type: "spring", stiffness: 180, damping: 18 }, duration: 0.2 }}
+            style={{ lineHeight: 0 }}
             className={`${canToggle ? "cursor-pointer" : "cursor-default"} ${canToggle ? "opacity-100" : "opacity-0 md:opacity-50"} ${className}`}
         >
-            {isDark ? <SunIcon /> : <MoonIcon />}
+            <span className={shouldReduceMotion ? undefined : "dm-icon-hover"} style={{ display: "inline-flex" }}>
+                {isDark ? <SunIcon /> : <MoonIcon />}
+            </span>
         </motion.button>
     );
 }

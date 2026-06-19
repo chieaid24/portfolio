@@ -195,7 +195,7 @@ export default function Header() {
                   </motion.div>
                   <div className="grid h-full grid-cols-[3fr_2fr] gap-x-5 sm:gap-x-6">
                     <div className="text-body-text flex flex-col gap-y-2">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5">
                         <h3 className="font-bold tracking-[0.2em]">Themes</h3>
                         <DarkModeToggle />
                       </div>
