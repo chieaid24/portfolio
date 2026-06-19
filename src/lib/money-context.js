@@ -27,6 +27,7 @@ const RAW_THEME_OPTIONS = [
     label: "Blue",
     color: "#33a9de",
     lightColor: "#6eb9db",
+    selectionColor: "#e8b84a",
     price: "0",
   },
   {
@@ -34,6 +35,7 @@ const RAW_THEME_OPTIONS = [
     label: "Purple",
     color: "#c084fc",
     lightColor: "#d4affa",
+    selectionColor: "#f5c842",
     price: "200",
   },
   {
@@ -41,6 +43,7 @@ const RAW_THEME_OPTIONS = [
     label: "Orange",
     color: "#ff863b",
     lightColor: "#ffb385",
+    selectionColor: "#38c4d0",
     price: "200",
   },
   {
@@ -48,6 +51,7 @@ const RAW_THEME_OPTIONS = [
     label: "Coral",
     color: "#ff7d7d",
     lightColor: "#ffaeae",
+    selectionColor: "#40d4b0",
     price: "500",
   },
   {
@@ -55,6 +59,7 @@ const RAW_THEME_OPTIONS = [
     label: "Green",
     color: "#26e055",
     lightColor: "#83e69b",
+    selectionColor: "#c040e0",
     price: "750",
   },
   {
@@ -62,6 +67,7 @@ const RAW_THEME_OPTIONS = [
     label: "Crimson",
     color: "#d1243b",
     lightColor: "#e33446",
+    selectionColor: "#28c8a0",
     price: "2000",
   },
 ];
@@ -83,6 +89,11 @@ const getThemeLightHex = (id) => {
   const theme = THEME_BY_ID[id];
   if (theme?.lightColor) return theme.lightColor;
   return THEME_BY_ID[DEFAULT_THEME_ID].lightColor;
+};
+const getThemeSelectionHex = (id) => {
+  const theme = THEME_BY_ID[id];
+  if (theme?.selectionColor) return theme.selectionColor;
+  return THEME_BY_ID[DEFAULT_THEME_ID].selectionColor;
 };
 
 // total values for the different quests...
@@ -338,6 +349,7 @@ export function MoneyProvider({ children }) {
   useEffect(() => {
     const hex = getThemeHex(themeId);
     const lightHex = getThemeLightHex(themeId);
+    const selectionHex = getThemeSelectionHex(themeId);
     setHighlightHex(hex);
     setHighlightLightHex(lightHex);
     try {
@@ -345,6 +357,10 @@ export function MoneyProvider({ children }) {
       document.documentElement.style.setProperty(
         "--highlight-light-color",
         lightHex,
+      );
+      document.documentElement.style.setProperty(
+        "--selection-color",
+        selectionHex,
       );
     } catch {}
   }, [themeId]);

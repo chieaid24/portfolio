@@ -19,6 +19,7 @@
   /* this highlight color is currently red, but will be changed when user changes the theme */
   --highlight-color: #000000;
   --highlight-light-color: #000000;
+  --selection-color: #e8b84a;
   /* background of experience and project pages */
   --background: #0f0f0f;
   /* background of the skill displays on the project pages */
@@ -175,10 +176,8 @@ html {
 }
 
 ::selection {
-  background-color: #7d7dff;
-  /* custom red */
+  background-color: color-mix(in srgb, var(--selection-color) 80%, transparent);
   color: white;
-  /* text color when selected */
 }
 
 body {
