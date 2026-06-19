@@ -13,6 +13,7 @@ import StarflareSection from "./StarflareSection";
 import StarflareInfo from "./StarflareInfo";
 import BountyInfo from "./BountyInfo";
 import CloseSimple from "@/icons/CloseSimple";
+import DarkModeToggle from "./DarkModeToggle";
 
 export default function Header() {
   const [walletOpen, setWalletOpen] = useState(false);
@@ -194,7 +195,10 @@ export default function Header() {
                   </motion.div>
                   <div className="grid h-full grid-cols-[3fr_2fr] gap-x-5 sm:gap-x-6">
                     <div className="text-body-text flex flex-col gap-y-2">
-                      <h3 className="font-bold tracking-[0.2em]">Themes</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold tracking-[0.2em]">Themes</h3>
+                        <DarkModeToggle />
+                      </div>
                       <ThemeSection className="h-full" />
                     </div>
                     <div className="text-body-text flex flex-col gap-y-2">
