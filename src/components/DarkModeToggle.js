@@ -1,10 +1,33 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import { motion, useReducedMotion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useMoney } from "@/lib/money-context"
+
+function SunIcon() {
+    return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <circle cx="12" cy="12" r="4"/>
+            <line x1="12" y1="2" x2="12" y2="4"/>
+            <line x1="12" y1="20" x2="12" y2="22"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="2" y1="12" x2="4" y2="12"/>
+            <line x1="20" y1="12" x2="22" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+    );
+}
+
+function MoonIcon() {
+    return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    );
+}
 
 export default function DarkModeToggle({ className = "", onFailedToggle, questClicked }) {
     const [mounted, setMounted] = useState(false);
@@ -23,7 +46,6 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     const isDark = resolvedTheme === "dark";
 
-    // next-themes applies the html class + persistence; we only flip the theme.
     useEffect(() => {
         setMounted(true);
     }, []);
@@ -47,11 +69,8 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
             setTheme(isDark ? "light" : "dark");
             if (!shouldReduceMotion) setSpin((s) => s + 360);
         } else {
-            // trigger failed animation
             setDenied(true);
             onFailedToggle?.();
-
-            // reset denied after animation ends
             setTimeout(() => setDenied(false), 500);
         }
     };
@@ -66,33 +85,23 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
             aria-pressed={!isDark}
             title={canToggle ? undefined : "The progress bars (left) track quest completion"}
             onClick={handleClick}
-            initial={{ opacity: 0, rotate: -90, scale: 0.9, transition: { duration: 0.18 }  }}
+            initial={{ opacity: 0, rotate: -90, scale: 0.9, transition: { duration: 0.18 } }}
             animate={
                 clickedAnim || denied
                     ? {
-                        x: [0, -1, 1, -1, 1, -1, 0], // shake
+                        x: [0, -1, 1, -1, 1, -1, 0],
                         opacity: 1,
                         rotate: spin,
                         scale: 1,
-                        transition: {duration: 0.3}
+                        transition: { duration: 0.3 },
                     }
-                    : { x: 0, backgroundColor: "transparent", opacity: 1, rotate: spin, scale: 1 }
+                    : { x: 0, opacity: 1, rotate: spin, scale: 1 }
             }
             exit={{ opacity: 0, rotate: 90, scale: 0.9, transition: { duration: 0.18 } }}
             transition={{ rotate: { type: "spring", stiffness: 180, damping: 18 }, duration: 0.18 }}
-            className={`rounded-md ${canToggle ? "hover:bg-black/7 cursor-pointer" : "cursor-default"} transition-colors duration-250 ${className}`}
+            className={`${canToggle ? "cursor-pointer" : "cursor-default"} ${canToggle ? "opacity-100" : "opacity-0 md:opacity-50"} ${className}`}
         >
-
-            <Image
-                key={isDark ? "dark" : "light"}
-                src={isDark ? "/icons/darkmode_light.svg" : "/icons/darkmode_dark.svg"}
-                width={20}
-                height={20}
-                alt=""
-                className={canToggle ? "opacity-100" : "opacity-0 md:opacity-50"}
-                draggable={false}
-            />
+            {isDark ? <SunIcon /> : <MoonIcon />}
         </motion.button>
-
     );
 }
