@@ -269,7 +269,7 @@ body {
   height: 80px;
   margin: -40px 0 0 -40px; /* center the circle on (--flash-x, --flash-y) */
   border-radius: 50%;
-  background: #d9d9d9;
+  background: var(--highlight-color);
   pointer-events: none;
   /* Position is driven every frame by the rAF lerp loop in page.js (writing
      --flash-x/--flash-y), so translate carries NO transition — the smoothing
@@ -293,7 +293,7 @@ body {
   width: 300px;
   height: 300px;
   margin: -150px 0 0 -150px; /* keep the circle centered on (--flash-x, --flash-y) */
-  background: #fff; /* white; alpha driven by --flash-active to match bg-white/5 */
+  background: var(--highlight-color);
 }
 
 .custom-bold {
