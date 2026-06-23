@@ -10,10 +10,10 @@ const aurebesh = localFont({
 
 const ALPHA = "abcdefghijklmnopqrstuvwxyz";
 const SCRAMBLE_MS = 50;
-const LOCK_START_MS = 120;
-const LOCK_STEP_MS = 80;
-const UNLOCK_STEP_MS = 60;
-const NOISE_TAIL_MS = 200;
+const STAGGER_MS = 80;     // delay between each char entering noise
+const NOISE_HOLD_MS = 150; // how long a char scrambles before locking
+const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
+const NOISE_TAIL_MS = 200; // noise duration after last char unlocks
 
 function rchar() {
   return ALPHA[Math.floor(Math.random() * ALPHA.length)];
@@ -32,6 +32,8 @@ export default function ScrambledText({ text, className }) {
   const noiseRef = useRef(null);
   const timers = useRef([]);
   const lastX = useRef(0);
+  // per-char: 'latin' | 'noise' | 'locked'
+  const charPhase = useRef(chars.map(() => "latin"));
 
   const clearAll = useCallback(() => {
     clearInterval(noiseRef.current);
@@ -49,7 +51,7 @@ export default function ScrambledText({ text, className }) {
       });
       const dists = centers.map((cx) => Math.abs(cx - cursorX));
       return Array.from({ length: n }, (_, i) => i).sort(
-        (a, b) => dists[b] - dists[a]
+        (a, b) => dists[a] - dists[b]
       );
     },
     [n]
@@ -62,33 +64,47 @@ export default function ScrambledText({ text, className }) {
       lastX.current = e.clientX;
 
       const order = getOrder(e.clientX);
-      const lockedSet = new Set();
+      const cp = chars.map(() => "latin");
+      charPhase.current = cp;
 
-      setDisplay(chars.map(() => ({ ch: rchar(), alien: true })));
-
+      // interval only scrambles chars currently in 'noise' state
       noiseRef.current = setInterval(() => {
         setDisplay((prev) =>
           prev.map((item, i) =>
-            lockedSet.has(i) ? item : { ch: rchar(), alien: true }
+            cp[i] === "noise" ? { ch: rchar(), alien: true } : item
           )
         );
       }, SCRAMBLE_MS);
 
+      let lockedCount = 0;
       order.forEach((idx, rank) => {
-        const t = setTimeout(() => {
-          lockedSet.add(idx);
+        // latin → noise (staggered entry)
+        const noiseT = setTimeout(() => {
+          cp[idx] = "noise";
+          setDisplay((prev) =>
+            prev.map((item, i) =>
+              i === idx ? { ch: rchar(), alien: true } : item
+            )
+          );
+        }, rank * STAGGER_MS);
+        timers.current.push(noiseT);
+
+        // noise → locked (after noise hold duration)
+        const lockT = setTimeout(() => {
+          cp[idx] = "locked";
+          lockedCount++;
           setDisplay((prev) =>
             prev.map((item, i) =>
               i === idx ? { ch: chars[idx], alien: true } : item
             )
           );
-          if (lockedSet.size === n) {
+          if (lockedCount === n) {
             clearInterval(noiseRef.current);
             noiseRef.current = null;
             phase.current = "holding";
           }
-        }, LOCK_START_MS + rank * LOCK_STEP_MS);
-        timers.current.push(t);
+        }, rank * STAGGER_MS + NOISE_HOLD_MS);
+        timers.current.push(lockT);
       });
     },
     [chars, n, clearAll, getOrder]
@@ -103,20 +119,30 @@ export default function ScrambledText({ text, className }) {
     clearAll();
     phase.current = "out";
 
-    const exitOrder = [...getOrder(lastX.current)].reverse();
-    const stillLocked = new Set(Array.from({ length: n }, (_, i) => i));
+    const cp = charPhase.current;
+    const order = getOrder(lastX.current);
+    // only revert chars that have already entered Aurebesh
+    const exitOrder = [...order].reverse().filter((i) => cp[i] !== "latin");
+
+    if (exitOrder.length === 0) {
+      setDisplay(chars.map((c) => ({ ch: c, alien: false })));
+      phase.current = "idle";
+      return;
+    }
+
+    const exitNoising = new Set();
 
     noiseRef.current = setInterval(() => {
       setDisplay((prev) =>
         prev.map((item, i) =>
-          stillLocked.has(i) ? item : { ch: rchar(), alien: true }
+          exitNoising.has(i) ? { ch: rchar(), alien: true } : item
         )
       );
     }, SCRAMBLE_MS);
 
     exitOrder.forEach((idx, rank) => {
       const t = setTimeout(() => {
-        stillLocked.delete(idx);
+        exitNoising.add(idx);
         setDisplay((prev) =>
           prev.map((item, i) =>
             i === idx ? { ch: rchar(), alien: true } : item
@@ -126,7 +152,7 @@ export default function ScrambledText({ text, className }) {
       timers.current.push(t);
     });
 
-    const snapAt = (n - 1) * UNLOCK_STEP_MS + NOISE_TAIL_MS;
+    const snapAt = (exitOrder.length - 1) * UNLOCK_STEP_MS + NOISE_TAIL_MS;
     const snap = setTimeout(() => {
       clearAll();
       setDisplay(chars.map((c) => ({ ch: c, alien: false })));
