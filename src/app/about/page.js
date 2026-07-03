@@ -102,7 +102,6 @@ export default function AboutPage() {
                 >
                   <SpotifyEmbed playlistId="1oQngKRVkU7oI8hmB4hf7i" theme={0} />
                 </motion.div>
-                {/* <ChessWidget className="flex-1" /> */}
                 <motion.div
                   key="clash"
                   initial={{ opacity: 0, y: 10 }}
