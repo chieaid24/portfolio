@@ -88,9 +88,6 @@ export default function Header() {
             </button>
           </div>
           <div className="text-outline-gray flex items-center text-sm md:text-lg">
-            {/* <DevMoneyReset /> */}
-            {/* <OverflowButton />
-                <DevBalanceInput /> */}
             <AnimatePresence initial={false} mode="wait">
               {!walletOpen ? (
                 <motion.nav
