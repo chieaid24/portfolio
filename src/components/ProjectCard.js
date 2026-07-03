@@ -130,7 +130,7 @@ export default function ProjectCard({
       onHoverStart={handleHoverStart}
       onHoverEnd={handleHoverEnd}
       style={float ? { willChange: "transform" } : undefined}
-      className={`h-full rounded-xl p-px transition-shadow duration-200 md:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] light:md:hover:shadow-[0_4px_20px_rgba(0,0,0,0.12)]`}
+      className={`h-full rounded-xl p-px transition-shadow duration-200 md:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] light:md:hover:shadow-[0_0_25px_rgba(255,250,240,0.7)]`}
     >
       <div
         className={`font-dm-sans bg-background h-full rounded-xl border-1 text-main-text transition-colors duration-300 ${
