@@ -334,6 +334,10 @@ body {
     opacity 140ms ease-out;
 }
 
+.light .cursor-follow-btn::before {
+  background: #e0f0fd; /* pale sky-blue, lighter than the day-sky gradient */
+}
+
 .custom-bold {
   font-weight: bold;
 }
