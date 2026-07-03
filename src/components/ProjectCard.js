@@ -45,6 +45,7 @@ export default function ProjectCard({
   const controls = useAnimationControls();
   const prefersReduced = useReducedMotion();
   const hoveredRef = useRef(false);
+  const mountedRef = useRef(false);
 
   // Every card bobs at the same PERIOD, but each starts at a different point in
   // its cycle so they stay permanently offset and never look synced. Phases are
@@ -84,7 +85,7 @@ export default function ProjectCard({
         },
       })
       .then(() => {
-        if (!hoveredRef.current) {
+        if (mountedRef.current && !hoveredRef.current) {
           controls.start({
             y: frames,
             transition: {
@@ -96,6 +97,14 @@ export default function ProjectCard({
         }
       });
   }, [controls]);
+
+  useEffect(() => {
+    mountedRef.current = true;
+
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!float || prefersReduced) return;
