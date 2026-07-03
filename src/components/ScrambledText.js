@@ -194,7 +194,15 @@ export default function ScrambledText({ text, className }) {
   }, [handleMouseEnter, handleMouseMove, handleMouseLeave]);
 
   return (
-    <span ref={wrapperRef} className={className} style={{ whiteSpace: "nowrap" }}>
+    <span
+      ref={wrapperRef}
+      className={className}
+      style={{
+        display: "inline-block",
+        height: "1lh",
+        whiteSpace: "nowrap",
+      }}
+    >
       {display.map((item, i) => (
         <span
           key={i}
