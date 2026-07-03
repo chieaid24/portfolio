@@ -337,6 +337,10 @@ body {
   background: #e0f0fd; /* pale sky-blue, lighter than the day-sky gradient */
 }
 
+.light .cursor-follow-btn {
+  --resume-flash-opacity: 0.3;
+}
+
 /* Larger follow circle for the Experience tab headers — the buttons are wider
    than the Resume button, so the circle is scaled up to read as a glow. */
 .cursor-follow-btn--lg::before {
@@ -344,6 +348,10 @@ body {
   height: 300px;
   margin: -150px 0 0 -150px; /* keep the circle centered on (--flash-x, --flash-y) */
   background: #fff;
+}
+
+.light .cursor-follow-btn--lg::before {
+  background: #8f8782; /* warm gray that remains visible on the light surface */
 }
 
 .custom-bold {
