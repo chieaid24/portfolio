@@ -13,6 +13,7 @@ import StarflareSection from "./StarflareSection";
 import StarflareInfo from "./StarflareInfo";
 import BountyInfo from "./BountyInfo";
 import CloseSimple from "@/icons/CloseSimple";
+import DarkModeToggle from "./DarkModeToggle";
 
 export default function Header() {
   const [walletOpen, setWalletOpen] = useState(false);
@@ -146,7 +147,7 @@ export default function Header() {
                       animate={{ opacity: 1, rotate: 0, scale: 1 }}
                       exit={{ opacity: 0, rotate: 45, scale: 0.9 }}
                       transition={{ duration: 0.18 }}
-                      className="cursor-pointer px-3 py-2 transition-colors duration-100 md:px-[2px] md:py-[2px] md:hover:text-white/75"
+                      className="cursor-pointer px-3 py-2 transition-colors duration-100 md:px-[2px] md:py-[2px] md:hover:text-main-text/75"
                     >
                       <CloseSimple className="text-dark-grey-text h-3 w-3" />
                     </motion.button>
@@ -185,7 +186,7 @@ export default function Header() {
             >
               <div className="animate-fade-in-7 flex w-full flex-col justify-center">
                 <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-4 text-base sm:mt-5 lg:grid-cols-[2fr_3fr] lg:gap-y-0">
-                  <motion.div className="flex flex-col gap-y-2 text-white">
+                  <motion.div className="flex flex-col gap-y-2 text-main-text">
                     <div className="flex items-end gap-0">
                       <h3 className="font-bold tracking-[0.2em]">Bounties</h3>
                       <BountyInfo />
@@ -194,7 +195,10 @@ export default function Header() {
                   </motion.div>
                   <div className="grid h-full grid-cols-[3fr_2fr] gap-x-5 sm:gap-x-6">
                     <div className="text-body-text flex flex-col gap-y-2">
-                      <h3 className="font-bold tracking-[0.2em]">Themes</h3>
+                      <div className="flex items-center gap-1.5">
+                        <h3 className="font-bold tracking-[0.2em]">Themes</h3>
+                        <DarkModeToggle />
+                      </div>
                       <ThemeSection className="h-full" />
                     </div>
                     <div className="text-body-text flex flex-col gap-y-2">

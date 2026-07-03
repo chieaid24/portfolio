@@ -32,7 +32,7 @@ function TimelineItem({ item }) {
 
       <div className="flex-1 space-y-2">
         <div className="space-y-0">
-          <h3 className="text-lg leading-tight font-semibold text-white sm:text-lg sm:leading-tight">
+          <h3 className="text-lg leading-tight font-semibold text-main-text sm:text-lg sm:leading-tight">
             {item.title}
           </h3>
           {(item.subtitle || item.period) && (
@@ -59,7 +59,7 @@ function TimelineItem({ item }) {
                   {highlight.text}
                 </p>
                 {highlight.note && (
-                  <p className="text-xs text-gray-400 sm:text-sm">
+                  <p className="text-xs text-experience-meta sm:text-sm">
                     {highlight.note}
                   </p>
                 )}
@@ -182,7 +182,7 @@ export default function Experience() {
   };
 
   return (
-    <section className="text-white">
+    <section className="text-main-text">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <div className="bg-background border-outline-dark-gray rounded-2xl border p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
           <div className="grid grid-cols-2 gap-1">
@@ -197,7 +197,7 @@ export default function Experience() {
                   onMouseEnter={isActive ? undefined : handleFlashEnter}
                   onMouseMove={isActive ? undefined : handleFlashMove}
                   onMouseLeave={isActive ? undefined : handleFlashLeave}
-                  className={`relative isolate overflow-hidden rounded-xl px-4 py-2 text-sm font-semibold text-white transition-[color,background-color,box-shadow] duration-200 sm:text-base ${
+                  className={`relative isolate overflow-hidden rounded-xl px-4 py-2 text-sm font-semibold text-main-text transition-[color,background-color,box-shadow] duration-200 sm:text-base ${
                     isActive
                       ? "shadow-[0_5px_30px_rgba(255,255,255,0.2)]"
                       : "cursor-follow-btn cursor-follow-btn--lg cursor-pointer"
@@ -248,7 +248,11 @@ export default function Experience() {
                         />
                       ))}
                   </AnimatePresence>
-                  <span className="relative z-10">{tab.label}</span>
+                  <span
+                    className={`relative z-10 ${isActive ? "text-white" : ""}`}
+                  >
+                    {tab.label}
+                  </span>
                 </button>
               );
             })}

@@ -11,11 +11,11 @@ function Slide({ src, alt, priority }) {
   const markLoaded = () => setLoaded(true);
 
   return (
-    <motion.div className="relative h-[220px] w-full overflow-hidden rounded-xl bg-[#2a2a2a] shadow-lg">
+    <motion.div className="relative h-[220px] w-full overflow-hidden rounded-xl bg-widget-surface-2 shadow-lg">
       {/* Spinner placeholder so the slide doesn't read as blank pre-load */}
       {!loaded && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-white/40" />
+          <span className="h-6 w-6 animate-spin rounded-full border-2 border-main-text/20 border-t-main-text/40" />
         </div>
       )}
       <motion.div
@@ -81,7 +81,7 @@ export default function Carousel() {
   ];
 
   return (
-    <div className="border-outline-dark-gray w-full rounded-xl border bg-[#1f1f1f] p-3 md:p-5">
+    <div className="border-outline-dark-gray w-full rounded-xl border bg-widget-surface p-3 md:p-5">
       <div className="overflow-hidden rounded-xl">
         <motion.div
           ref={carouselRef}

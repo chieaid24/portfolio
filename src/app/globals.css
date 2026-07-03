@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
 
 :root {
   --custom-red: #ff7d7d;
@@ -23,7 +24,7 @@
   /* background of experience and project pages */
   --background: #0f0f0f;
   /* background of the skill displays on the project pages */
-  --background-highlight: #1d1d1d;
+  --background-highlight: #3d3d3d;
   /* lighter than background, used for slight contrast on background, for bounty, theme, starflare section in header */
   --background-secondary: #141414;
   /* color of the spotify background - sets the clash and carousel backgrounds */
@@ -32,6 +33,14 @@
   --body-text: #e0e0e0;
   /* darker body text (numbers in the ClashWidget) */
   --dark-body-text: #b6bac1;
+  /* page backdrop behind everything (html element + starfield container) */
+  --page-bg: #02030a;
+  /* elevated widget card surface (clash / slideshow panels) */
+  --widget-surface: #1f1f1f;
+  /* recessed media well inside widgets (slideshow image area) */
+  --widget-surface-2: #2a2a2a;
+  /* muted meta text (experience period, location labels) */
+  --experience-meta: #9ca3af;
   /* smooth highlight updates when theme changes */
   --highlight-transition:
     color 180ms ease, background-color 180ms ease, border-color 180ms ease,
@@ -41,7 +50,35 @@
 }
 
 html {
-  background: #02030a;
+  background: var(--page-bg);
+}
+
+/* ----------------------------------------------------------------------------
+   Light mode. `:root` above holds the dark palette byte-for-byte; this single
+   block is the only place light values live. next-themes toggles the `.light`
+   class on <html> before first paint, so these override the dark defaults with a
+   warm off-white interface. Keep this in sync with the dark vars above.
+   ------------------------------------------------------------------------- */
+.light {
+  --main-text: #3d332c; /* headings — charred wood */
+  --body-text: #52473f; /* body — warm umber, clear step from heading */
+  --dark-body-text: #7b6e69; /* secondary — muted rose-brown, clearly lighter */
+
+  --page-bg: #f5f2ef; /* barely warm off-white */
+  --background: #f5f2ef; /* page surface */
+  --background-secondary: #ece8e4; /* warm panels (header widgets) */
+  --background-highlight: #e2dbd5; /* skill chips / elevated bits */
+  --spotify-background: #ddd5ce; /* clash / carousel / spotify card surface */
+
+  --outline-gray: #7b736f; /* subtle warm stone — skill chips, scrollbar */
+  --outline-dark-gray: #b0a49e; /* medium — widget / header borders */
+  --outline-darker-gray: #9e918b; /* emphatic — accent borders */
+
+  --widget-surface: #fdfbf9; /* barely-warm white card */
+  --widget-surface-2: #e5ddd7; /* warm media well */
+  --experience-meta: #7a6f6b; /* muted meta text — darker warm gray */
+
+  color-scheme: light;
 }
 
 /* WebKit (Chrome, Edge, Safari) */
@@ -49,22 +86,22 @@ html {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  margin-top: 8px; /* gutter at top */
-  margin-bottom: 8px; /* optional gutter at bottom */
-  background: var(--background); /* dark track */
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-outline-gray); /* dark thumb */
+  background: rgba(128, 128, 128, 0.45);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #717171;
+  background: rgba(128, 128, 128, 0.7);
 }
 
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--outline-gray) var(--background);
+  scrollbar-color: rgba(128, 128, 128, 0.45) transparent;
 }
 
 .dark:root {
@@ -120,6 +157,10 @@ html {
   --color-outline-darker-gray: var(--outline-darker-gray);
   --color-spotify-background: var(--spotify-background);
   --color-dark-body-text: var(--dark-body-text);
+  --color-main-text: var(--main-text);
+  --color-widget-surface: var(--widget-surface);
+  --color-widget-surface-2: var(--widget-surface-2);
+  --color-experience-meta: var(--experience-meta);
 
   --font-alienNew: var(--font-alienNew); /* 2560 */
   --animate-gradient-hero: gradient 8s linear infinite;
@@ -178,6 +219,11 @@ html {
 ::selection {
   background-color: color-mix(in srgb, var(--selection-color) 80%, transparent);
   color: white;
+}
+
+.light ::selection {
+  background-color: #b9dbff;
+  color: #18222e;
 }
 
 body {
@@ -287,6 +333,14 @@ body {
     opacity 140ms ease-out;
 }
 
+.light .cursor-follow-btn::before {
+  background: #e0f0fd; /* pale sky-blue, lighter than the day-sky gradient */
+}
+
+.light .cursor-follow-btn {
+  --resume-flash-opacity: 0.3;
+}
+
 /* Larger follow circle for the Experience tab headers — the buttons are wider
    than the Resume button, so the circle is scaled up to read as a glow. */
 .cursor-follow-btn--lg::before {
@@ -294,6 +348,10 @@ body {
   height: 300px;
   margin: -150px 0 0 -150px; /* keep the circle centered on (--flash-x, --flash-y) */
   background: #fff;
+}
+
+.light .cursor-follow-btn--lg::before {
+  background: #8f8782; /* warm gray that remains visible on the light surface */
 }
 
 .custom-bold {
@@ -379,4 +437,32 @@ body {
   .animate-gradient {
     gradient: "gradient 8s linear infinite";
   }
+}
+
+@keyframes dm-inquiry {
+  0%   { transform: rotate(0deg); }
+  30%  { transform: rotate(30deg); }
+  50%  { transform: rotate(26deg); }
+  72%  { transform: rotate(-5deg); }
+  88%  { transform: rotate(2deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.dm-icon-hover:hover {
+  animation: dm-inquiry 0.5s ease-out;
+}
+
+html.no-transition * {
+  transition: none !important;
+}
+
+/* Theme toggle — View Transitions API */
+:root[data-theme-vt="active"]::view-transition-old(root),
+:root[data-theme-vt="active"]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+/* Pin new-theme panel at collapsed circle until JS animation takes over */
+:root[data-theme-vt="active"]::view-transition-new(root) {
+  clip-path: var(--theme-vt-clip-from);
 }
