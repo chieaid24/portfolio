@@ -14,6 +14,7 @@ const STAGGER_MS = 80;     // delay between each char entering noise
 const NOISE_HOLD_MS = 150; // how long a char scrambles before locking
 const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
 const NOISE_TAIL_MS = 200; // noise duration after last char unlocks
+const PROXIMITY_PX = 24;   // trigger radius around the text, not just exact hover
 
 function rchar() {
   return ALPHA[Math.floor(Math.random() * ALPHA.length)];
@@ -27,6 +28,8 @@ export default function ScrambledText({ text, className }) {
     chars.map((c) => ({ ch: c, alien: false }))
   );
 
+  const wrapperRef = useRef(null);
+  const nearRef = useRef(false);
   const charSpans = useRef(Array(n).fill(null));
   const phase = useRef("idle");
   const noiseRef = useRef(null);
@@ -163,14 +166,35 @@ export default function ScrambledText({ text, className }) {
 
   useEffect(() => clearAll, [clearAll]);
 
+  // trigger on cursor proximity to the wrapper's box, not just exact hover
+  useEffect(() => {
+    const onMove = (e) => {
+      const el = wrapperRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
+      const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist <= PROXIMITY_PX) {
+        if (!nearRef.current) {
+          nearRef.current = true;
+          handleMouseEnter(e);
+        } else {
+          handleMouseMove(e);
+        }
+      } else if (nearRef.current) {
+        nearRef.current = false;
+        handleMouseLeave();
+      }
+    };
+
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [handleMouseEnter, handleMouseMove, handleMouseLeave]);
+
   return (
-    <span
-      className={className}
-      style={{ whiteSpace: "nowrap" }}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-    >
+    <span ref={wrapperRef} className={className} style={{ whiteSpace: "nowrap" }}>
       {display.map((item, i) => (
         <span
           key={i}
