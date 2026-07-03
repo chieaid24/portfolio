@@ -130,10 +130,10 @@ export default function ProjectCard({
       onHoverStart={handleHoverStart}
       onHoverEnd={handleHoverEnd}
       style={float ? { willChange: "transform" } : undefined}
-      className={`h-full rounded-xl p-px transition-shadow duration-200 md:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]`}
+      className={`h-full rounded-xl p-px transition-shadow duration-200 md:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] light:md:hover:shadow-[0_0_25px_rgba(255,250,240,0.7)]`}
     >
       <div
-        className={`font-dm-sans bg-background h-full rounded-xl border-1 text-white transition-colors duration-300 ${
+        className={`font-dm-sans bg-background h-full rounded-xl border-1 text-main-text transition-colors duration-300 ${
           darkOutline
             ? "border-outline-dark-gray md:hover:border-outline-gray"
             : "border-outline-gray"
@@ -151,7 +151,7 @@ export default function ProjectCard({
         >
           <div className="">
             {/* Preview image; falls back to a placeholder box when `image` is unset */}
-            <div className="relative mb-5 mx-0 aspect-[2/1] overflow-hidden rounded-lg border border-white/5 bg-white/[0.02]">
+            <div className="relative mb-5 mx-0 aspect-[2/1] overflow-hidden rounded-lg border border-main-text/5 bg-main-text/[0.02]">
               {image ? (
                 <Image
                   src={image}
@@ -162,7 +162,7 @@ export default function ProjectCard({
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <Telescope className="h-8 w-8 text-white/15" />
+                  <Telescope className="h-8 w-8 text-main-text/15" />
                 </div>
               )}
             </div>
@@ -198,14 +198,14 @@ export default function ProjectCard({
                 );
               })}
             </div>
-            <div className="my-4 h-px w-full bg-white/30 sm:mt-4 sm:mb-6"></div>
+            <div className="my-4 h-px w-full bg-main-text/30 sm:mt-4 sm:mb-6"></div>
             <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
-              <div className="flex flex-wrap gap-2 ">
+              <div className="flex flex-wrap gap-2">
                 {website && (
                   <div className="duration-100 md:hover:translate-x-[2px]">
                     <RewardLink
                       href={website}
-                      className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
+                      className="flex items-center gap-x-1 rounded-md bg-main-text px-2 py-1 text-sm font-medium text-background transition-all"
                       rewardId={`${slug}:website`}
                       target="_blank"
                     >
@@ -217,7 +217,7 @@ export default function ProjectCard({
                 <div className="duration-100 md:hover:translate-x-[1px]">
                   <RewardLink
                     href={github}
-                    className="flex items-center gap-x-1 rounded-md bg-white px-2 py-1 text-sm font-medium text-black transition-all"
+                    className="flex items-center gap-x-1 rounded-md bg-main-text px-2 py-1 text-sm font-medium text-background transition-all"
                     rewardId={`${slug}:github`}
                     target="_blank"
                   >

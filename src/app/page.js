@@ -58,7 +58,10 @@ export default function Home() {
     flashPos.current = { x, y }; // start under the cursor (no fly-in)
     el.style.setProperty("--flash-x", `${x}px`);
     el.style.setProperty("--flash-y", `${y}px`);
-    el.style.setProperty("--flash-active", "0.15");
+    el.style.setProperty(
+      "--flash-active",
+      "var(--resume-flash-opacity, 0.15)",
+    );
     el.style.setProperty("--flash-size", "1");
     if (!flashRaf.current) {
       flashLast.current = performance.now();
@@ -102,7 +105,7 @@ export default function Home() {
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
             <motion.div
-              className="flex min-h-screen flex-col items-center justify-center text-white"
+              className="flex min-h-screen flex-col items-center justify-center text-main-text"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
@@ -114,7 +117,7 @@ export default function Home() {
                   <ScrambledText text="Aidan" className="gradient-text-header" />
                 </span>
               </h1>
-              <h2 className="mb-8 text-center text-lg font-semibold text-white sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[28px]">
+              <h2 className="mb-8 text-center text-lg font-semibold text-main-text sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[28px]">
                 Owning real world projects, one galaxy at a time. 
               </h2>
               {/* Owning real world projects, one galaxy at a time. 
@@ -127,7 +130,7 @@ export default function Home() {
                     rewardId="resume"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-white/75 md:hover:text-[#c0c0c0]"
+                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
                     onMouseEnter={handleFlashEnter}
                     onMouseMove={handleFlashMove}
                     onMouseLeave={handleFlashLeave}
@@ -146,7 +149,7 @@ export default function Home() {
                     aria-label="LinkedIn"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 hover:text-[#c0c0c0]" />
+                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 hover:text-main-text/75" />
                   </RewardLink>
                   <RewardLink
                     href="https://github.com/chieaid24"
@@ -155,7 +158,7 @@ export default function Home() {
                     aria-label="GitHub"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterGithub className="h-8 w-8 transition-colors duration-100 hover:text-[#c0c0c0]" />
+                    <FooterGithub className="h-8 w-8 transition-colors duration-100 hover:text-main-text/75" />
                   </RewardLink>
                   <RewardLink
                     href="mailto:aidan.chien@uwaterloo.ca"
@@ -164,14 +167,14 @@ export default function Home() {
                     aria-label="Email"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-[#c0c0c0]" />
+                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text/75" />
                   </RewardLink>
                 </div>
               </div>
             </motion.div>
             <section className="mb-20">
               <motion.h2
-                className="mb-6 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:text-4xl"
+                className="mb-6 text-2xl font-bold tracking-[0.2em] text-main-text sm:text-3xl md:text-4xl"
                 key="experience-header"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -193,7 +196,7 @@ export default function Home() {
             {/**project section */}
             <motion.div className="mb-6 items-baseline justify-between sm:flex">
               <motion.h2
-                className="mb-2 text-2xl font-bold tracking-[0.2em] text-white sm:mb-0 sm:text-3xl md:text-4xl"
+                className="mb-2 text-2xl font-bold tracking-[0.2em] text-main-text sm:mb-0 sm:text-3xl md:text-4xl"
                 key="my-projects"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -212,7 +215,7 @@ export default function Home() {
                 <RewardLink
                   href="/projects"
                   scroll
-                  className="text-body-text group flex items-center gap-1 font-medium duration-100 sm:text-base md:hover:text-white"
+                  className="text-body-text group flex items-center gap-1 font-medium duration-100 sm:text-base md:hover:text-main-text"
                   rewardId="projects-page"
                 >
                   <span>View more</span>

@@ -48,7 +48,7 @@ export default function AboutPage() {
           <div className="text-body-text min-h-[90vh]">
             <div className="mb-6 grid grid-cols-1 pt-35 md:grid-cols-2 md:pt-40">
               <div className="order-2 md:order-1">
-                <h1 className="bg-background mb-4 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:mb-8 md:text-4xl">
+                <h1 className="bg-background mb-4 text-2xl font-bold tracking-[0.2em] text-main-text sm:text-3xl md:mb-8 md:text-4xl">
                   About Me
                 </h1>
                 {/* blurb section*/}
@@ -82,7 +82,7 @@ export default function AboutPage() {
             </div>
             <div className="flex flex-col space-y-6 md:space-y-7">
               <div className="mb-8">
-                <h1 className="mb-4 text-2xl font-bold tracking-[0.2em] text-white sm:text-3xl md:mb-8 md:text-4xl">
+                <h1 className="mb-4 text-2xl font-bold tracking-[0.2em] text-main-text sm:text-3xl md:mb-8 md:text-4xl">
                   Interests
                 </h1>
                 <div className="space-y-1">

@@ -133,7 +133,7 @@ export default function ClashWidget() {
   }, [data?.battleResults]);
 
   return (
-    <div className="border-outline-dark-gray relative flex flex-col overflow-hidden rounded-xl border-1 bg-[#1f1f1f] p-3 md:h-[154px]">
+    <div className="border-outline-dark-gray relative flex flex-col overflow-hidden rounded-xl border-1 bg-widget-surface p-3 md:h-[154px]">
       {/* Header */}
       <div className="mb-1.5 flex items-center justify-between">
         <a
@@ -141,15 +141,15 @@ export default function ClashWidget() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div className="flex items-center gap-1 text-xl leading-tight font-semibold tracking-tighter text-white duration-100 hover:opacity-90 sm:text-2xl md:text-xl">
-            <ClashRoyale className="h-6 w-6 text-white" />
+          <div className="flex items-center gap-1 text-xl leading-tight font-semibold tracking-tighter text-main-text duration-100 hover:opacity-90 sm:text-2xl md:text-xl">
+            <ClashRoyale className="h-6 w-6 text-main-text" />
             Merlord
           </div>
         </a>
         <div className="flex flex-col">
           <div className="flex items-center justify-end gap-1 text-base sm:text-lg md:text-base">
-            <Trophy className="h-3.5 w-3.5 text-white sm:-translate-y-[1px] md:translate-y-0" />
-            <div className="justify-end font-semibold tracking-tight text-white">
+            <Trophy className="h-3.5 w-3.5 text-main-text sm:-translate-y-[1px] md:translate-y-0" />
+            <div className="justify-end font-semibold tracking-tight text-main-text">
               {player?.trophies ?? "—"}
             </div>
           </div>

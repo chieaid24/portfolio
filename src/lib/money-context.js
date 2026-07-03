@@ -9,6 +9,7 @@ import React, {
   useRef,
   useCallback,
 } from "react";
+import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { createPayoutGenerator } from "@/lib/payout.js";
 import { defaultMixtureConfig } from "@/lib/payout-default.js";
@@ -21,12 +22,16 @@ const MoneyContext = createContext(null);
 const MAX_BAL = 9999.99;
 const INIT_BAL = 100.0;
 
+// `onLightColor` is a deeper shade used as the active accent when the site is in
+// light mode, so links / borders / highlighted words / accent buttons stay legible
+// on the warm off-white background (the standard `color` washes out there).
 const RAW_THEME_OPTIONS = [
   {
     id: "blue",
     label: "Blue",
     color: "#33a9de",
     lightColor: "#6eb9db",
+    onLightColor: "#1b86c0",
     selectionColor: "#e8b84a",
     price: "0",
   },
@@ -35,6 +40,7 @@ const RAW_THEME_OPTIONS = [
     label: "Purple",
     color: "#c084fc",
     lightColor: "#d4affa",
+    onLightColor: "#8b39d6",
     selectionColor: "#f5c842",
     price: "200",
   },
@@ -43,6 +49,7 @@ const RAW_THEME_OPTIONS = [
     label: "Orange",
     color: "#ff863b",
     lightColor: "#ffb385",
+    onLightColor: "#d96618",
     selectionColor: "#38c4d0",
     price: "200",
   },
@@ -51,6 +58,7 @@ const RAW_THEME_OPTIONS = [
     label: "Coral",
     color: "#ff7d7d",
     lightColor: "#ffaeae",
+    onLightColor: "#db4f4f",
     selectionColor: "#40d4b0",
     price: "500",
   },
@@ -59,6 +67,7 @@ const RAW_THEME_OPTIONS = [
     label: "Green",
     color: "#26e055",
     lightColor: "#83e69b",
+    onLightColor: "#109434",
     selectionColor: "#c040e0",
     price: "750",
   },
@@ -67,6 +76,7 @@ const RAW_THEME_OPTIONS = [
     label: "Crimson",
     color: "#d1243b",
     lightColor: "#e33446",
+    onLightColor: "#b81b2f",
     selectionColor: "#28c8a0",
     price: "2000",
   },
@@ -89,6 +99,11 @@ const getThemeLightHex = (id) => {
   const theme = THEME_BY_ID[id];
   if (theme?.lightColor) return theme.lightColor;
   return THEME_BY_ID[DEFAULT_THEME_ID].lightColor;
+};
+const getThemeOnLightHex = (id) => {
+  const theme = THEME_BY_ID[id];
+  if (theme?.onLightColor) return theme.onLightColor;
+  return THEME_BY_ID[DEFAULT_THEME_ID].onLightColor;
 };
 const getThemeSelectionHex = (id) => {
   const theme = THEME_BY_ID[id];
@@ -248,6 +263,8 @@ function leverPayout() {
 }
 
 export function MoneyProvider({ children }) {
+  const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === "light";
   const [state, dispatch] = useReducer(reducer, {
     balance: 0,
     awarded: {},
@@ -347,8 +364,13 @@ export function MoneyProvider({ children }) {
   }, [state, ready]);
 
   useEffect(() => {
-    const hex = getThemeHex(themeId);
-    const lightHex = getThemeLightHex(themeId);
+    // The accent is set as an inline style on <html>, which overrides any
+    // `.light` CSS rule — so the light-mode swap to the deeper, legible shade is
+    // made here, keyed off the resolved theme. In light mode the standard
+    // mid-tone `color` plays the "lighter accent" role, since the usual
+    // lightColor tint washes out on the off-white background.
+    const hex = isLight ? getThemeOnLightHex(themeId) : getThemeHex(themeId);
+    const lightHex = isLight ? getThemeHex(themeId) : getThemeLightHex(themeId);
     const selectionHex = getThemeSelectionHex(themeId);
     setHighlightHex(hex);
     setHighlightLightHex(lightHex);
@@ -363,7 +385,7 @@ export function MoneyProvider({ children }) {
         selectionHex,
       );
     } catch {}
-  }, [themeId]);
+  }, [themeId, isLight]);
 
   useEffect(() => {
     try {

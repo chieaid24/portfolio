@@ -15,7 +15,11 @@ export function lightenHexColor(hex, amount = 0.2) {
   }
 }
 
-function createStarTexture() {
+// The sprite is a soft white disc (tinted per-star by vertexColors) that glows
+// against the sky. In light mode the stars read as little white suns / dandelion
+// puffs scattered across the blue "day sky": a bright white core blooming out to
+// a soft transparent edge.
+function createStarTexture(isLight = false, accentHex = "#1b86c0") {
   const size = 128;
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -32,9 +36,16 @@ function createStarTexture() {
     size / 2,
   );
 
-  gradient.addColorStop(0, "white");
-  gradient.addColorStop(0.3, "white");
-  gradient.addColorStop(1, "transparent");
+  if (isLight) {
+    gradient.addColorStop(0, "white"); // bright sun-like core
+    gradient.addColorStop(0.35, "white");
+    gradient.addColorStop(0.6, "rgba(255,255,255,0.5)"); // soft dandelion bloom
+    gradient.addColorStop(1, "transparent");
+  } else {
+    gradient.addColorStop(0, "white");
+    gradient.addColorStop(0.3, "white");
+    gradient.addColorStop(1, "transparent");
+  }
 
   ctx.fillStyle = gradient;
   ctx.beginPath();
@@ -54,8 +65,12 @@ export default function CustomStarComponent({
   speed = 0,
   color = "#ffffff",
   opacity = 0.4,
+  isLight = false,
 }) {
-  const texture = useMemo(() => createStarTexture(), []);
+  const texture = useMemo(
+    () => createStarTexture(isLight, color),
+    [isLight, color],
+  );
 
   const { positions, colors, sizes } = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -79,24 +94,33 @@ export default function CustomStarComponent({
       positions[i * 3 + 1] = y;
       positions[i * 3 + 2] = z;
 
-      // Random shade between white + targetColor
-      const t = Math.random();
-      const mixed = new THREE.Color().lerpColors(
-        new THREE.Color(lightenHexColor(targetColor)),
-        targetColor,
-        t,
-      );
+      if (isLight) {
+        // Light mode: the two-tone sprite texture carries the color (dark core +
+        // accent halo), so leave vertexColors white to show it untinted.
+        colors[i * 3] = 1;
+        colors[i * 3 + 1] = 1;
+        colors[i * 3 + 2] = 1;
+      } else {
+        // Dark mode: tint each star a random shade between a lightened target and
+        // the target accent, for a glowing star field.
+        const t = Math.random();
+        const mixed = new THREE.Color().lerpColors(
+          new THREE.Color(lightenHexColor(targetColor)),
+          targetColor,
+          t,
+        );
 
-      colors[i * 3] = mixed.r;
-      colors[i * 3 + 1] = mixed.g;
-      colors[i * 3 + 2] = mixed.b;
+        colors[i * 3] = mixed.r;
+        colors[i * 3 + 1] = mixed.g;
+        colors[i * 3 + 2] = mixed.b;
+      }
 
       // Random size (like <Stars/>)
       sizes[i] = (Math.random() * 0.5 + 0.5) * factor;
     }
 
     return { positions, colors, sizes };
-  }, [radius, depth, count, factor, color]);
+  }, [radius, depth, count, factor, color, isLight]);
 
   return (
     <points>
