@@ -162,7 +162,7 @@ export default function ScrambledText({ text, className }) {
       phase.current = "idle";
     }, snapAt);
     timers.current.push(snap);
-  }, [chars, n, clearAll, getOrder]);
+  }, [chars, clearAll, getOrder]);
 
   useEffect(() => clearAll, [clearAll]);
 
