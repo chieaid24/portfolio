@@ -52,7 +52,7 @@ export default function SkillDisplay({
     <div className={card ? divCard : divProject}>
       <Icon
         className={card ? iconCard : iconProject}
-        color={card || claimed ? undefined : `white`}
+        color={card ? "currentColor" : claimed ? undefined : `white`}
         aria-hidden="true"
       />
       <div>{displayName || fileName}</div>
