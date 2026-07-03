@@ -13,6 +13,7 @@ export default function Footer() {
             href="https://www.linkedin.com/in/aidanchien/"
             target="_blank"
             rewardId="footer:linkedin"
+            aria-label="LinkedIn"
             className="md:hover:translate-y-[-1px]"
           >
             <FooterLinkedin className="h-8 w-8 transition-colors duration-100 md:hover:text-[#c0c0c0]" />
@@ -21,6 +22,7 @@ export default function Footer() {
             href="https://github.com/chieaid24"
             target="_blank"
             rewardId="footer:github"
+            aria-label="GitHub"
             className="md:hover:translate-y-[-1px]"
           >
             <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-[#c0c0c0]" />
@@ -29,6 +31,7 @@ export default function Footer() {
             href="mailto:aidan.chien@uwaterloo.ca"
             target="_blank"
             rewardId="email"
+            aria-label="Email"
             className="md:hover:translate-y-[-1px]"
           >
             <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-[#c0c0c0]" />
