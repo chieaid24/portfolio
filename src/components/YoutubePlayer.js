@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo, useEffect } from "react";
+import Image from "next/image";
 import { getYouTubeId } from "@/utils/youtube";
 
 export default function YouTubePlayer({ urlOrId, title }) {
@@ -27,9 +28,11 @@ export default function YouTubePlayer({ urlOrId, title }) {
           className="group relative block h-full w-full"
           aria-label={`Play ${title}`}
         >
-          <img
+          <Image
             src={thumbSrc}
             alt=""
+            fill
+            unoptimized
             className="h-full w-full object-cover opacity-80 transition duration-200 group-hover:opacity-85"
             onError={() => {
               // Fallback when a video doesn't have a max-res thumbnail available.
