@@ -20,10 +20,10 @@ function BulletRow({ children }) {
 }
 
 export default function AboutPage() {
-  // states "Currently <Job Title>" if Job is working until the "present"
-  // states "Previously <Job Title" if Job does not include "present"
+  // states "Currently <Job Title>" if the job period is "active"
+  // states "Previously <Job Title>" if the job period is not "active"
   const currentOrPrev = () => {
-    return experiences.work[0].period.toLowerCase().includes("present")
+    return experiences.work[0].period.toLowerCase().includes("active")
       ? "Currently"
       : "Previously";
   };
