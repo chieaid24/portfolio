@@ -41,7 +41,7 @@ function TimelineItem({ item }) {
                 <p className="text-base font-medium text-dark-body-text">{item.subtitle}</p>
               )}
               {item.period && (
-                <p className="ml-auto text-sm text-dark-body-text">{item.period}</p>
+                <p className="tracking-wide ml-auto text-sm text-dark-body-text">{item.period}</p>
               )}
             </div>
           )}
