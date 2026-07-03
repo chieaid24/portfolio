@@ -20,6 +20,7 @@
   /* this highlight color is currently red, but will be changed when user changes the theme */
   --highlight-color: #000000;
   --highlight-light-color: #000000;
+  --selection-color: #e8b84a;
   /* background of experience and project pages */
   --background: #0f0f0f;
   /* background of the skill displays on the project pages */
@@ -31,7 +32,7 @@
   /* body color of text (project page text, experience body text, etc) */
   --body-text: #e0e0e0;
   /* darker body text (numbers in the ClashWidget) */
-  --dark-body-text: #bdbdbd;
+  --dark-body-text: #b6bac1;
   /* page backdrop behind everything (html element + starfield container) */
   --page-bg: #02030a;
   /* elevated widget card surface (clash / slideshow panels) */
@@ -216,10 +217,8 @@ html {
 }
 
 ::selection {
-  background-color: #7d7dff;
-  /* custom red */
+  background-color: color-mix(in srgb, var(--selection-color) 80%, transparent);
   color: white;
-  /* text color when selected */
 }
 
 .light ::selection {
@@ -312,9 +311,9 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 70px;
-  height: 70px;
-  margin: -35px 0 0 -35px; /* center the circle on (--flash-x, --flash-y) */
+  width: 80px;
+  height: 80px;
+  margin: -40px 0 0 -40px; /* center the circle on (--flash-x, --flash-y) */
   border-radius: 50%;
   background: #d9d9d9;
   pointer-events: none;
@@ -336,6 +335,15 @@ body {
 
 .light .cursor-follow-btn::before {
   background: #e0f0fd; /* pale sky-blue, lighter than the day-sky gradient */
+}
+
+/* Larger follow circle for the Experience tab headers — the buttons are wider
+   than the Resume button, so the circle is scaled up to read as a glow. */
+.cursor-follow-btn--lg::before {
+  width: 300px;
+  height: 300px;
+  margin: -150px 0 0 -150px; /* keep the circle centered on (--flash-x, --flash-y) */
+  background: #fff;
 }
 
 .custom-bold {

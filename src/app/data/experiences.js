@@ -12,7 +12,7 @@ export const experiences = {
       },
       title: "AI DevOps Engineer",
       subtitle: "Revvity",
-      period: "May 2026 - Present",
+      period: "May 2026 - Active",
       highlights: [
         {
           text: (

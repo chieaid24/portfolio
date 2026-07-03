@@ -145,13 +145,13 @@ export default function ProjectCard({
           alsoAward={
             github_only ? { id: `${slug}:github`, kind: "link" } : undefined
           }
-          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-6 sm:px-8 sm:py-8"
+          className="mobile:select-none flex h-full flex-col justify-between gap-5 px-5 py-5 sm:gap-7 sm:px-7 sm:py-7"
           rewardId={rewardId}
           ticketValue={1000}
         >
           <div className="">
             {/* Preview image; falls back to a placeholder box when `image` is unset */}
-            <div className="relative mb-5 aspect-[2/1] w-full overflow-hidden rounded-lg border border-main-text/10 bg-main-text/[0.04]">
+            <div className="relative mb-5 mx-0 aspect-[2/1] overflow-hidden rounded-lg border border-main-text/5 bg-main-text/[0.02]">
               {image ? (
                 <Image
                   src={image}
@@ -166,10 +166,9 @@ export default function ProjectCard({
                 </div>
               )}
             </div>
-            <div className="mb-3 flex flex-col gap-1">
-              <h3 className="text-lg font-semibold sm:text-xl">{title}</h3>
+            <div className="flex flex-col">
               <span
-                className={`flex items-center gap-x-1 text-sm ${clicked ? "text-gray-400" : "text-main-text"}`}
+                className={`mb-1 flex items-center gap-x-1 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
               >
                 {clicked ? (
                   <PlanetRingLine className="h-3.5 w-3.5" />
@@ -178,8 +177,9 @@ export default function ProjectCard({
                 )}
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
               </span>
+              <h3 className="mb-1.5 text-lg font-semibold sm:text-lg">{title}</h3>
+              <div className="text-dark-body-text text-sm">{summary}</div>
             </div>
-            <div className="text-dark-body-text text-sm">{summary}</div>
           </div>
           <div className="">
             <div className="flex flex-wrap gap-2">
@@ -198,8 +198,8 @@ export default function ProjectCard({
                 );
               })}
             </div>
-            <div className="my-4 h-px w-full bg-main-text/30 sm:my-5"></div>
-            <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+            <div className="my-4 h-px w-full bg-main-text/30 sm:mt-4 sm:mb-6"></div>
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
               <div className="flex flex-wrap gap-2">
                 {website && (
                   <div className="duration-100 md:hover:translate-x-[2px]">
@@ -214,7 +214,7 @@ export default function ProjectCard({
                     </RewardLink>
                   </div>
                 )}
-                <div className="duration-100 md:hover:translate-x-[2px]">
+                <div className="duration-100 md:hover:translate-x-[1px]">
                   <RewardLink
                     href={github}
                     className="flex items-center gap-x-1 rounded-md bg-main-text px-2 py-1 text-sm font-medium text-background transition-all"
@@ -226,9 +226,9 @@ export default function ProjectCard({
                   </RewardLink>
                 </div>
               </div>
-              <div className="text-body-text group flex items-center gap-2 transition-all duration-100 md:hover:translate-x-[1px]">
-                <span>Explore Project </span>
-                <SimpleArrow className="h-2.5 w-2.5 translate-y-[1px] transition-transform md:group-hover:translate-x-[2px]" />
+              <div className="text-body-text group flex items-center gap-1.5 text-sm transition-transform duration-100 md:hover:translate-x-[1px]">
+                <span>Warp here </span>
+                <SimpleArrow className="h-2 w-2 translate-y-[1px] transition-transform md:group-hover:translate-x-[2px]" />
               </div>
             </div>
           </div>
