@@ -127,7 +127,7 @@ export default function Home() {
                     rewardId="resume"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-white/75 md:hover:text-white/75"
+                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-white/75 md:hover:text-[#c0c0c0]"
                     onMouseEnter={handleFlashEnter}
                     onMouseMove={handleFlashMove}
                     onMouseLeave={handleFlashLeave}
@@ -145,7 +145,7 @@ export default function Home() {
                     rewardId="linkedin"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
+                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 hover:text-[#c0c0c0]" />
                   </RewardLink>
                   <RewardLink
                     href="https://github.com/chieaid24"
@@ -153,7 +153,7 @@ export default function Home() {
                     rewardId="github"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterGithub className="h-8 w-8 transition-colors duration-100 hover:text-white/75" />
+                    <FooterGithub className="h-8 w-8 transition-colors duration-100 hover:text-[#c0c0c0]" />
                   </RewardLink>
                   <RewardLink
                     href="mailto:aidan.chien@uwaterloo.ca"
@@ -161,7 +161,7 @@ export default function Home() {
                     rewardId="email"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-white/75" />
+                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-[#c0c0c0]" />
                   </RewardLink>
                 </div>
               </div>
