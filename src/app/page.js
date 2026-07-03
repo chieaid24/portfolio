@@ -13,6 +13,7 @@ import FooterGithub from "@/icons/FooterGithub";
 import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
+import ScrambledText from "@/components/ScrambledText";
 
 export default function Home() {
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
@@ -57,7 +58,7 @@ export default function Home() {
     flashPos.current = { x, y }; // start under the cursor (no fly-in)
     el.style.setProperty("--flash-x", `${x}px`);
     el.style.setProperty("--flash-y", `${y}px`);
-    el.style.setProperty("--flash-active", "0.4");
+    el.style.setProperty("--flash-active", "0.15");
     el.style.setProperty("--flash-size", "1");
     if (!flashRaf.current) {
       flashLast.current = performance.now();
@@ -110,9 +111,7 @@ export default function Home() {
                 Greetings Earthling, {" "} 
                 <span className="">
                   <br className="sm:hidden" /> I&apos;m {" "}
-                  <span className="gradient-text-header" style={{ whiteSpace: "nowrap" }}>
-                    Aidan
-                  </span>
+                  <ScrambledText text="Aidan" className="gradient-text-header" />
                 </span>
               </h1>
               <h2 className="mb-8 text-center text-lg font-semibold text-main-text sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[28px]">
@@ -210,7 +209,7 @@ export default function Home() {
                 <RewardLink
                   href="/projects"
                   scroll
-                  className="text-body-text group flex items-center gap-1 font-medium duration-100 sm:text-lg md:hover:text-main-text"
+                  className="text-body-text group flex items-center gap-1 font-medium duration-100 sm:text-base md:hover:text-main-text"
                   rewardId="projects-page"
                 >
                   <span>View more</span>

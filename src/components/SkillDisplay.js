@@ -33,11 +33,11 @@ export default function SkillDisplay({
     [fileName],
   );
   // Define the style on the card
-  const divCard = `inline-flex items-center gap-2 text-main-text rounded-full
-                    font-normal py-0.5 text-xs
-                    duration-200 bg-background-highlight px-2.5 py-1 border-1 border-outline-dark-gray`;
+  const divCard = `inline-flex items-center gap-1.5 text-main-text rounded-full
+                    font-normal text-xs
+                    transition-colors duration-200 bg-background-highlight hover:bg-highlight-color/15 px-2 py-1 border-1 border-outline-dark-gray`;
 
-  const iconCard = `h-3.5 w-3.5`;
+  const iconCard = `h-2.5 w-2.5`;
 
   // Unclaimed inline chips sit on the accent fill (white text/icon, legible in
   // both modes); once claimed they drop the fill for an outline, so the label

@@ -103,13 +103,13 @@ export default function Header() {
                 >
                   <Link
                     href="/"
-                    className="md:hover:text-highlight-color/80 transition-colors duration-100"
+                    className="md:hover:text-highlight-color transition-colors duration-100"
                   >
                     home
                   </Link>
                   <RewardLink
                     href="/about"
-                    className="md:hover:text-highlight-color/80 transition-colors duration-100"
+                    className="md:hover:text-highlight-color transition-colors duration-100"
                     rewardId="about-page"
                     transparent={false}
                     scroll
@@ -118,7 +118,7 @@ export default function Header() {
                   </RewardLink>
                   <RewardLink
                     href="/projects"
-                    className="md:hover:text-highlight-color/80 transition-colors duration-100"
+                    className="md:hover:text-highlight-color transition-colors duration-100"
                     rewardId="projects-page"
                     transparent={false}
                   >
@@ -128,7 +128,7 @@ export default function Header() {
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="md:hover:text-highlight-color/80 transition-colors duration-100"
+                    className="md:hover:text-highlight-color transition-colors duration-100"
                     rewardId="resume"
                     transparent={false}
                   >

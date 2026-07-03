@@ -6,15 +6,19 @@ export default function FooterGithub(props) {
       fill="none"
       {...props}
     >
-      <path
-        d="M20 4H4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V6C22 4.89543 21.1046 4 20 4Z"
+      <rect
+        width="20"
+        height="16"
+        x="2"
+        y="4"
+        rx="2"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M22 7L13.03 12.7C12.7213 12.8934 12.3643 12.996 12 12.996C11.6357 12.996 11.2787 12.8934 10.97 12.7L2 7"
+        d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
