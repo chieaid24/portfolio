@@ -44,6 +44,7 @@ CLAUDE.md
 .claude/
 AGENTS.md
 .codex/
+.worktrees/
 
 # Windows/WSL mark-of-the-web metadata streams
 *:Zone.Identifier
