@@ -15,7 +15,7 @@ export default function Footer() {
             rewardId="footer:linkedin"
             className="md:hover:translate-y-[-1px]"
           >
-            <FooterLinkedin className="h-8 w-8 transition-colors duration-100 md:hover:text-white/75" />
+            <FooterLinkedin className="h-8 w-8 transition-colors duration-100 md:hover:text-[#c0c0c0]" />
           </RewardLink>
           <RewardLink
             href="https://github.com/chieaid24"
@@ -23,7 +23,7 @@ export default function Footer() {
             rewardId="footer:github"
             className="md:hover:translate-y-[-1px]"
           >
-            <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-white/75" />
+            <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-[#c0c0c0]" />
           </RewardLink>
           <RewardLink
             href="mailto:aidan.chien@uwaterloo.ca"
@@ -31,7 +31,7 @@ export default function Footer() {
             rewardId="email"
             className="md:hover:translate-y-[-1px]"
           >
-            <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-white/75" />
+            <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-[#c0c0c0]" />
           </RewardLink>
         </div>
         <div className="text-center text-sm leading-tight">
