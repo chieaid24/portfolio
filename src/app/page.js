@@ -58,7 +58,10 @@ export default function Home() {
     flashPos.current = { x, y }; // start under the cursor (no fly-in)
     el.style.setProperty("--flash-x", `${x}px`);
     el.style.setProperty("--flash-y", `${y}px`);
-    el.style.setProperty("--flash-active", "0.15");
+    el.style.setProperty(
+      "--flash-active",
+      "var(--resume-flash-opacity, 0.15)",
+    );
     el.style.setProperty("--flash-size", "1");
     if (!flashRaf.current) {
       flashLast.current = performance.now();
