@@ -158,6 +158,13 @@ export default function HeroSlot() {
     );
   };
 
+  const handleLeverKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      pullLever();
+    }
+  };
+
   const pullLever = async () => {
     // Mark as clicked and clear any pending jiggle timeouts
     markClicked();
@@ -374,8 +381,12 @@ export default function HeroSlot() {
                     stiffness: 300,
                     damping: 20,
                   }}
-                  className="cursor-pointer"
+                  className="cursor-pointer focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight-color"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Pull lever"
                   onClick={pullLever}
+                  onKeyDown={handleLeverKeyDown}
                 ></motion.circle>
               </svg>
             )}
@@ -420,7 +431,11 @@ export default function HeroSlot() {
                 damping: 20,
               }}
               onClick={pullLever}
-              className="cursor-pointer"
+              onKeyDown={handleLeverKeyDown}
+              role="button"
+              tabIndex={0}
+              aria-label="Pull lever"
+              className="cursor-pointer focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight-color"
             ></motion.circle>
           </svg>
         </div>
