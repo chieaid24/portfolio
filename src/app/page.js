@@ -149,7 +149,7 @@ export default function Home() {
                     aria-label="LinkedIn"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 hover:text-main-text/75" />
+                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
                   </RewardLink>
                   <RewardLink
                     href="https://github.com/chieaid24"
@@ -158,7 +158,7 @@ export default function Home() {
                     aria-label="GitHub"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterGithub className="h-8 w-8 transition-colors duration-100 hover:text-main-text/75" />
+                    <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
                   </RewardLink>
                   <RewardLink
                     href="mailto:aidan.chien@uwaterloo.ca"
@@ -167,7 +167,7 @@ export default function Home() {
                     aria-label="Email"
                     className="md:hover:translate-y-[-1px]"
                   >
-                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text/75" />
+                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
                   </RewardLink>
                 </div>
               </div>
