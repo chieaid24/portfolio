@@ -121,6 +121,7 @@ export default function ThemeSection({ ...props }) {
           const isOwned = ownedThemes?.includes?.(theme.id);
           const canAfford = Number(theme.price) <= (balance ?? 0);
           const isLocked = !isOwned && !canAfford;
+          const isBuyable = !isOwned && canAfford;
 
           return (
             <div
@@ -139,7 +140,7 @@ export default function ThemeSection({ ...props }) {
                     : "0 0 0px 0px rgba(0,0,0,0)",
                 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className={`relative h-full w-full overflow-hidden rounded-xl border-2 ${
+                className={`group relative h-full w-full overflow-hidden rounded-xl border-2 ${
                   isLocked ? "cursor-default" : "cursor-pointer"
                 } ${
                   isSelected
@@ -172,12 +173,16 @@ export default function ThemeSection({ ...props }) {
                       transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                     >
                       <span
-                        className={`flex items-center rounded-full bg-black/80 light:bg-black/60 px-[5px] py-[2px] text-xs font-semibold transition duration-200 ${
+                        className={`flex items-center rounded-full bg-black/80 light:bg-black/60 px-[5px] py-[2px] text-xs font-semibold transition duration-100 ${
                           jigglingId === theme.id
                             ? "text-[#ff6161] opacity-60"
                             : isLocked
                               ? "text-white opacity-60"
                               : "text-white opacity-100"
+                        } ${
+                          isBuyable
+                            ? "group-hover:-translate-y-[1px] group-hover:shadow-[0_1px_3px_rgba(0,0,0,0.4)]"
+                            : ""
                         }`}
                       >
                         <span className="noto-symbol">₳ </span> {theme.price}
