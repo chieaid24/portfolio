@@ -1,19 +1,24 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import HeroVariant from "@/components/prototype/HeroVariants";
+import PrototypeSwitcher from "@/components/prototype/PrototypeSwitcher";
+import { HERO_VARIANTS } from "@/components/prototype/HeroVariants";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
 import RewardLink from "@/components/RewardLink";
 import { motion } from "framer-motion";
 import StarBackground from "@/components/StarBackground";
-import FileDownload from "@/icons/FileDownload";
-import FooterLinkedin from "@/icons/FooterLinkedin";
-import FooterGithub from "@/icons/FooterGithub";
-import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
-import ScrambledText from "@/components/ScrambledText";
+
+// PROTOTYPE — hero variant exploration. Delete this + the prototype/ files and
+// restore the plain hero once a layout wins.
+const VARIANT_KEYS = Object.keys(HERO_VARIANTS);
+const VARIANT_NAMES = Object.fromEntries(
+  VARIANT_KEYS.map((k) => [k, HERO_VARIANTS[k].variantName]),
+);
 
 export default function Home() {
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
@@ -90,6 +95,21 @@ export default function Home() {
     flashRect.current = null;
   };
 
+  // PROTOTYPE — read/sync the hero variant from ?variant=.
+  const [variant, setVariant] = useState(VARIANT_KEYS[0]);
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+      .get("variant")
+      ?.toUpperCase();
+    if (p && VARIANT_KEYS.includes(p)) setVariant(p);
+  }, []);
+  const changeVariant = useCallback((v) => {
+    setVariant(v);
+    const url = new URL(window.location.href);
+    url.searchParams.set("variant", v);
+    window.history.replaceState(null, "", url);
+  }, []);
+
   return (
     <>
       <>
@@ -104,74 +124,16 @@ export default function Home() {
       <main className="">
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
-            <motion.div
-              className="flex min-h-screen flex-col items-center justify-center text-main-text"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-            >
-              <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-3 lg:text-[42px]">
-                Greetings Earthling, {" "} 
-                <span className="">
-                  <br className="sm:hidden" /> I&apos;m {" "}
-                  <ScrambledText text="Aidan" className="gradient-text-header" />
-                </span>
-              </h1>
-              <h2 className="mb-8 text-center text-lg font-semibold text-main-text sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[28px]">
-                Owning real world projects, one galaxy at a time. 
-              </h2>
-              {/* Owning real world projects, one galaxy at a time. 
-                  Solving planetary problems, one galaxy at a time.
-                  Building practical solution, one galaxy at a time. */}
-              <div className="flex w-80 justify-between md:w-100">
-                <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
-                  <RewardLink
-                    href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
-                    rewardId="resume"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
-                    onMouseEnter={handleFlashEnter}
-                    onMouseMove={handleFlashMove}
-                    onMouseLeave={handleFlashLeave}
-                  >
-                    <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
-                      <span>Resume</span>
-                      <FileDownload className="text-dark-grey-text h-5 w-5" />
-                    </div>
-                  </RewardLink>
-                </div>
-                <div className="text-outline-gray flex items-center justify-center gap-x-4 transition-colors lg:gap-x-3">
-                  <RewardLink
-                    href="https://www.linkedin.com/in/aidanchien/"
-                    target="_blank"
-                    rewardId="linkedin"
-                    aria-label="LinkedIn"
-                    className="md:hover:translate-y-[-1px]"
-                  >
-                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-                  </RewardLink>
-                  <RewardLink
-                    href="https://github.com/chieaid24"
-                    target="_blank"
-                    rewardId="github"
-                    aria-label="GitHub"
-                    className="md:hover:translate-y-[-1px]"
-                  >
-                    <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-                  </RewardLink>
-                  <RewardLink
-                    href="mailto:aidan.chien@uwaterloo.ca"
-                    target="_blank"
-                    rewardId="email"
-                    aria-label="Email"
-                    className="md:hover:translate-y-[-1px]"
-                  >
-                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-                  </RewardLink>
-                </div>
-              </div>
-            </motion.div>
+            {/* PROTOTYPE — hero variants via ?variant=. Restore the plain hero
+                (a centered greeting + link row) once a layout is chosen. */}
+            <HeroVariant
+              variant={variant}
+              flash={{
+                enter: handleFlashEnter,
+                move: handleFlashMove,
+                leave: handleFlashLeave,
+              }}
+            />
             <section className="mb-20">
               <motion.h2
                 className="mb-6 text-2xl font-bold tracking-[0.2em] text-main-text sm:text-3xl md:text-4xl"
@@ -255,6 +217,13 @@ export default function Home() {
           </section>
         </MaxWidthWrapper>
       </main>
+      {/* PROTOTYPE — remove with the prototype/ files once a hero wins. */}
+      <PrototypeSwitcher
+        variants={VARIANT_KEYS}
+        current={variant}
+        names={VARIANT_NAMES}
+        onChange={changeVariant}
+      />
     </>
   );
 }
