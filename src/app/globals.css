@@ -35,6 +35,9 @@
   --dark-body-text: #b6bac1;
   /* page backdrop behind everything (html element + starfield container) */
   --page-bg: #02030a;
+  /* footer social icon hover: opaque equivalent of --main-text @ 75% over --page-bg
+     (var() refs resolve per-theme, so .light recomputes automatically) */
+  --main-text-hover: color-mix(in srgb, var(--main-text) 75%, var(--page-bg));
   /* elevated widget card surface (clash / slideshow panels) */
   --widget-surface: #1f1f1f;
   /* recessed media well inside widgets (slideshow image area) */
@@ -158,6 +161,7 @@ html {
   --color-spotify-background: var(--spotify-background);
   --color-dark-body-text: var(--dark-body-text);
   --color-main-text: var(--main-text);
+  --color-main-text-hover: var(--main-text-hover);
   --color-widget-surface: var(--widget-surface);
   --color-widget-surface-2: var(--widget-surface-2);
   --color-experience-meta: var(--experience-meta);
