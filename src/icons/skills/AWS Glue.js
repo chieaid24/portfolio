@@ -1,4 +1,4 @@
-export default function SageMaker({ color = "#f29400", ...props }) {
+export default function SageMaker({ color = "#7343cc", ...props }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
