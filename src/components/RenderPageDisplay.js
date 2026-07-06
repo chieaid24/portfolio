@@ -79,6 +79,7 @@ export default function RenderPageDisplay({ info, projectTitle }) {
               src={info[0]}
               alt={projectTitle}
               fill
+              sizes="(min-width: 768px) 768px, 100vw"
               className="scale-100 object-cover object-center"
             />
           </div>
