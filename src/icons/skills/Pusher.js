@@ -1,4 +1,4 @@
-export default function Pusher({ color = "#300D4F", ...props }) {
+export default function Pusher({ color = "#8f5cbc", ...props }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
