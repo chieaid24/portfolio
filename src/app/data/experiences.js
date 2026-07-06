@@ -26,6 +26,28 @@ export const experiences = {
       ],
     },
     {
+      id: "uwaterloo-research",
+      badge: {
+        src: "/company-images/waterloo-logo_v2.png",
+        alt: "University of Waterloo logo",
+      },
+      title: "AI Research Assistant",
+      subtitle: "University of Waterloo",
+      period: "Dec 2025 - Apr 2026",
+      highlights: [
+        {
+          text: (
+            <>
+             Piloted child-safe dialogue systems for robotics research, 
+             building <span className="whitespace-nowrap"><RedText rewardId="exp:sirrl:rag">RAG</RedText>-grounded</span> pipelines 
+             with <RedText rewardId="exp:sirrl:fastapi">FastAPI</RedText> and Hugging Face.
+
+            </>
+          ),
+        },
+      ],
+    },
+    {
       id: "needlistorg",
       badge: {
         src: "/company-images/needlist-logo.png",
