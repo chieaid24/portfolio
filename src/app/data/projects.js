@@ -3,9 +3,9 @@ import RedText from "@/components/RewardRedText";
 import SkillDisplay from "@/components/SkillDisplay";
 
 export const quest_totals = {
-  // About: 3 | Experiences: 8 | AI Sleep: 10 | Website: 11 | PMI: 9 | 3D Tools: 5
-  // CURR TOTAL: 46
-  redtext: 46,
+  // About: 3 | Experiences: 10 | AI Sleep: 10 | Website: 11 | PMI: 9 | 3D Tools: 5
+  // CURR TOTAL: 48
+  redtext: 48,
 
   // OnePerProject: 4
   // CURR TOTAL: 4
