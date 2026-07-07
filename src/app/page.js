@@ -2,22 +2,27 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import HeroVariant from "@/components/prototype/HeroVariants";
-import PrototypeSwitcher from "@/components/prototype/PrototypeSwitcher";
-import { HERO_VARIANTS } from "@/components/prototype/HeroVariants";
+import RightSideVariant, {
+  RIGHT_VARIANTS,
+} from "@/components/prototype/RightSideVariants";
+import RightSideSwitcher from "@/components/prototype/RightSideSwitcher";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
 import RewardLink from "@/components/RewardLink";
 import { motion } from "framer-motion";
 import StarBackground from "@/components/StarBackground";
+import FileDownload from "@/icons/FileDownload";
+import FooterLinkedin from "@/icons/FooterLinkedin";
+import FooterGithub from "@/icons/FooterGithub";
+import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
+import ScrambledText from "@/components/ScrambledText";
 
-// PROTOTYPE — hero variant exploration. Delete this + the prototype/ files and
-// restore the plain hero once a layout wins.
-const VARIANT_KEYS = Object.keys(HERO_VARIANTS);
-const VARIANT_NAMES = Object.fromEntries(
-  VARIANT_KEYS.map((k) => [k, HERO_VARIANTS[k].variantName]),
+// PROTOTYPE — right-side hero exploration. Delete with the prototype/ files.
+const RSIDE_KEYS = Object.keys(RIGHT_VARIANTS);
+const RSIDE_NAMES = Object.fromEntries(
+  RSIDE_KEYS.map((k) => [k, RIGHT_VARIANTS[k].name]),
 );
 
 export default function Home() {
@@ -95,18 +100,16 @@ export default function Home() {
     flashRect.current = null;
   };
 
-  // PROTOTYPE — read/sync the hero variant from ?variant=.
-  const [variant, setVariant] = useState(VARIANT_KEYS[0]);
+  // PROTOTYPE — read/sync the right-side variant from ?rside=.
+  const [rside, setRside] = useState(RSIDE_KEYS[0]);
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search)
-      .get("variant")
-      ?.toUpperCase();
-    if (p && VARIANT_KEYS.includes(p)) setVariant(p);
+    const p = new URLSearchParams(window.location.search).get("rside");
+    if (p && RSIDE_KEYS.includes(p)) setRside(p);
   }, []);
-  const changeVariant = useCallback((v) => {
-    setVariant(v);
+  const changeRside = useCallback((v) => {
+    setRside(v);
     const url = new URL(window.location.href);
-    url.searchParams.set("variant", v);
+    url.searchParams.set("rside", v);
     window.history.replaceState(null, "", url);
   }, []);
 
@@ -124,17 +127,84 @@ export default function Home() {
       <main className="">
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
-            {/* PROTOTYPE — hero variants via ?variant=. Restore the plain hero
-                (a centered greeting + link row) once a layout is chosen. */}
-            <HeroVariant
-              variant={variant}
-              flash={{
-                enter: handleFlashEnter,
-                move: handleFlashMove,
-                leave: handleFlashLeave,
-              }}
-            />
-            <section className="mb-20">
+            {/* PROTOTYPE — 2-col hero: text left, right-side widget right. */}
+            <div className="flex min-h-screen flex-col items-center justify-center gap-10 md:flex-row md:items-center md:gap-8">
+            <motion.div
+              className="flex w-full max-w-100 flex-col items-start justify-center text-left text-main-text md:max-w-none md:flex-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
+              <h1 className="mb-3 text-2xl font-bold leading-tight sm:text-3xl md:text-4xl lg:text-[40px]">
+                Greetings Earthling, I&apos;m {" "}
+                <ScrambledText text="Aidan" className="gradient-text-header" />
+              </h1>
+              <p className="text-body-text mb-5 max-w-[30rem] text-lg font-medium sm:text-xl">
+                I build automation-first backend and platform infrastructure for AI applications.
+              </p>
+              <div className="flex w-full items-center gap-5 justify-start">
+                <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
+                  <RewardLink
+                    href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
+                    rewardId="resume"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
+                    onMouseEnter={handleFlashEnter}
+                    onMouseMove={handleFlashMove}
+                    onMouseLeave={handleFlashLeave}
+                  >
+                    <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
+                      <span>Resume</span>
+                      <FileDownload className="text-dark-grey-text h-5 w-5" />
+                    </div>
+                  </RewardLink>
+                </div>
+                <div className="text-outline-gray flex items-center justify-center gap-x-4">
+                  <RewardLink
+                    href="https://www.linkedin.com/in/aidanchien/"
+                    target="_blank"
+                    rewardId="linkedin"
+                    aria-label="LinkedIn"
+                    className="md:hover:translate-y-[-1px]"
+                  >
+                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
+                  </RewardLink>
+                  <RewardLink
+                    href="https://github.com/chieaid24"
+                    target="_blank"
+                    rewardId="github"
+                    aria-label="GitHub"
+                    className="md:hover:translate-y-[-1px]"
+                  >
+                    <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
+                  </RewardLink>
+                  <RewardLink
+                    href="mailto:aidan.chien@uwaterloo.ca"
+                    target="_blank"
+                    rewardId="email"
+                    aria-label="Email"
+                    className="md:hover:translate-y-[-1px]"
+                  >
+                    <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
+                  </RewardLink>
+                </div>
+              </div>
+            </motion.div>
+            {/* Variant 2 is a compact pill — size the column to content so
+                the text column can expand; others get a fixed widget width. */}
+            <div
+              className={
+                "hidden shrink-0 md:block " +
+                (rside === "2"
+                  ? "md:w-auto"
+                  : "w-full md:w-[19rem] lg:w-[21rem]")
+              }
+            >
+              <RightSideVariant variant={rside} />
+            </div>
+            </div>
+            <section id="experience" className="mb-20 scroll-mt-28">
               <motion.h2
                 className="mb-6 text-2xl font-bold tracking-[0.2em] text-main-text sm:text-3xl md:text-4xl"
                 key="experience-header"
@@ -217,12 +287,12 @@ export default function Home() {
           </section>
         </MaxWidthWrapper>
       </main>
-      {/* PROTOTYPE — remove with the prototype/ files once a hero wins. */}
-      <PrototypeSwitcher
-        variants={VARIANT_KEYS}
-        current={variant}
-        names={VARIANT_NAMES}
-        onChange={changeVariant}
+      {/* PROTOTYPE — remove with the prototype/ files once a widget wins. */}
+      <RightSideSwitcher
+        variants={RSIDE_KEYS}
+        current={rside}
+        names={RSIDE_NAMES}
+        onChange={changeRside}
       />
     </>
   );
