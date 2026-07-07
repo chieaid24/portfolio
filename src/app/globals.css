@@ -44,6 +44,9 @@
   --widget-surface-2: #2a2a2a;
   /* muted meta text (experience period, location labels) */
   --experience-meta: #9ca3af;
+  /* fill for an inactive experience tab on hover — a dark gray a step off the
+     background, expanded to cover the whole tab */
+  --tab-hover-fill: #1c1c1c;
   /* smooth highlight updates when theme changes */
   --highlight-transition:
     color 180ms ease, background-color 180ms ease, border-color 180ms ease,
@@ -80,6 +83,7 @@ html {
   --widget-surface: #fdfbf9; /* barely-warm white card */
   --widget-surface-2: #e5ddd7; /* warm media well */
   --experience-meta: #7a6f6b; /* muted meta text — darker warm gray */
+  --tab-hover-fill: #e8e2dc; /* a step darker than the light surface */
 
   color-scheme: light;
 }
@@ -343,19 +347,6 @@ body {
 
 .light .cursor-follow-btn {
   --resume-flash-opacity: 0.3;
-}
-
-/* Larger follow circle for the Experience tab headers — the buttons are wider
-   than the Resume button, so the circle is scaled up to read as a glow. */
-.cursor-follow-btn--lg::before {
-  width: 300px;
-  height: 300px;
-  margin: -150px 0 0 -150px; /* keep the circle centered on (--flash-x, --flash-y) */
-  background: #fff;
-}
-
-.light .cursor-follow-btn--lg::before {
-  background: #8f8782; /* warm gray that remains visible on the light surface */
 }
 
 .custom-bold {
