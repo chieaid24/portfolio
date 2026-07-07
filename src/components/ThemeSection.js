@@ -139,7 +139,7 @@ export default function ThemeSection({ ...props }) {
                     ? `0 0 7px 3px ${theme.color}30`
                     : "0 0 0px 0px rgba(0,0,0,0)",
                 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 className={`group relative h-full w-full overflow-hidden rounded-xl border-2 ${
                   isLocked ? "cursor-default" : "cursor-pointer"
                 } ${
@@ -173,7 +173,7 @@ export default function ThemeSection({ ...props }) {
                       transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                     >
                       <span
-                        className={`flex items-center rounded-full bg-black/80 light:bg-black/60 px-[5px] py-[2px] text-xs font-semibold transition duration-100 ${
+                        className={`flex items-center rounded-full bg-black/80 light:bg-black/60 px-[5px] py-[2px] text-xs font-semibold transition duration-200 ${
                           jigglingId === theme.id
                             ? "text-[#ff6161] opacity-60"
                             : isLocked
@@ -181,7 +181,7 @@ export default function ThemeSection({ ...props }) {
                               : "text-white opacity-100"
                         } ${
                           isBuyable
-                            ? "group-hover:-translate-y-[1px] group-hover:shadow-[0_1px_3px_rgba(0,0,0,0.4)]"
+                            ? "shadow-[0_1px_2px_rgba(0,0,0,0.01)] group-hover:-translate-y-[1px] group-hover:shadow-[0_1px_2px_rgba(0,0,0,0.22)]"
                             : ""
                         }`}
                       >
