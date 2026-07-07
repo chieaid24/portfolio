@@ -67,7 +67,7 @@ export default async function ProjectPage({ params }) {
           <div className="">
             <div className="mb-12">
               <div className="mb-6 flex flex-col gap-2">
-                <h1 className="text-2xl font-bold tracking-[0.2em] text-main-text sm:text-3xl md:text-4xl">
+                <h1 className="text-xl font-bold tracking-[0.2em] text-main-text sm:text-2xl md:text-3xl">
                   {project.title}
                 </h1>
                 <h3 className="text-light-grey-text text-lg italic sm:text-xl">
