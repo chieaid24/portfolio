@@ -46,7 +46,7 @@
   --experience-meta: #9ca3af;
   /* fill for an inactive experience tab on hover — a dark gray a step off the
      background, expanded to cover the whole tab */
-  --tab-hover-fill: #1c1c1c;
+  --tab-hover-fill: rgb(36, 37, 41); /* = resume flash's rendered color (#d9d9d9 @ 0.15 over the #02030a page bg) */
   /* smooth highlight updates when theme changes */
   --highlight-transition:
     color 180ms ease, background-color 180ms ease, border-color 180ms ease,
