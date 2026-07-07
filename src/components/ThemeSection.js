@@ -121,6 +121,7 @@ export default function ThemeSection({ ...props }) {
           const isOwned = ownedThemes?.includes?.(theme.id);
           const canAfford = Number(theme.price) <= (balance ?? 0);
           const isLocked = !isOwned && !canAfford;
+          const isBuyable = !isOwned && canAfford;
 
           return (
             <div
@@ -138,8 +139,8 @@ export default function ThemeSection({ ...props }) {
                     ? `0 0 7px 3px ${theme.color}30`
                     : "0 0 0px 0px rgba(0,0,0,0)",
                 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className={`relative h-full w-full overflow-hidden rounded-xl border-2 ${
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className={`group relative h-full w-full overflow-hidden rounded-xl border-2 ${
                   isLocked ? "cursor-default" : "cursor-pointer"
                 } ${
                   isSelected
@@ -178,6 +179,10 @@ export default function ThemeSection({ ...props }) {
                             : isLocked
                               ? "text-white opacity-60"
                               : "text-white opacity-100"
+                        } ${
+                          isBuyable
+                            ? "shadow-[0_1px_2px_rgba(0,0,0,0.01)] group-hover:-translate-y-[1px] group-hover:shadow-[0_1px_2px_rgba(0,0,0,0.22)]"
+                            : ""
                         }`}
                       >
                         <span className="noto-symbol">₳ </span> {theme.price}
