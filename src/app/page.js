@@ -120,9 +120,6 @@ export default function Home() {
               <h2 className="mb-8 text-center text-lg font-semibold text-main-text sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[28px]">
                 Owning real world projects, one galaxy at a time. 
               </h2>
-              {/* Owning real world projects, one galaxy at a time. 
-                  Solving planetary problems, one galaxy at a time.
-                  Building practical solution, one galaxy at a time. */}
               <div className="flex w-80 justify-between md:w-100">
                 <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
                   <RewardLink
