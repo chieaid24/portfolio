@@ -15,7 +15,7 @@ const NOISE_HOLD_MS = 150; // how long a char scrambles before locking
 const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
 const NOISE_TAIL_MS = 200; // noise duration after last char unlocks
 const PROXIMITY_PX = 24;   // trigger radius around the text, not just exact hover
-const INTRO_DELAY_MS = 600; // hold static Aurebesh during the hero fade-in,
+const INTRO_DELAY_MS = 750; // hold static Aurebesh during the hero fade-in,
                             // then decrypt so it resolves near full opacity
 
 function rchar() {
@@ -173,7 +173,8 @@ export default function ScrambledText({ text, className }) {
   // intro decrypt on every mount/refresh: the name first shows as static
   // Aurebesh (the initial useState) and fades in with the hero, then after
   // INTRO_DELAY_MS the scramble kicks in and decrypts to readable Latin,
-  // staggered left-to-right, so the resolve is visible near full opacity.
+  // staggered from the middle outward, so the resolve is visible near full
+  // opacity.
   useEffect(() => {
     clearAll();
     phase.current = "intro";
@@ -205,7 +206,7 @@ export default function ScrambledText({ text, className }) {
             noiseRef.current = null;
             phase.current = "idle";
           }
-        }, idx * STAGGER_MS + NOISE_HOLD_MS);
+        }, Math.abs(idx - (n - 1) / 2) * STAGGER_MS + NOISE_HOLD_MS);
         timers.current.push(lockT);
       });
     }, INTRO_DELAY_MS);
