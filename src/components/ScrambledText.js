@@ -10,7 +10,8 @@ const aurebesh = localFont({
 
 const ALPHA = "abcdefghijklmnopqrstuvwxyz";
 const SCRAMBLE_MS = 50;
-const STAGGER_MS = 80;     // delay between each char entering noise
+const STAGGER_MS = 80;     // delay between each char entering noise (hover)
+const INTRO_STAGGER_MS = 140; // delay between each char locking on intro decrypt
 const NOISE_HOLD_MS = 150; // how long a char scrambles before locking (hover)
 const INTRO_NOISE_HOLD_MS = 400; // longer scramble before locking on intro decrypt
 const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
@@ -207,7 +208,7 @@ export default function ScrambledText({ text, className }) {
             noiseRef.current = null;
             phase.current = "idle";
           }
-        }, Math.abs(idx - (n - 1) / 2) * STAGGER_MS + INTRO_NOISE_HOLD_MS);
+        }, Math.abs(idx - (n - 1) / 2) * INTRO_STAGGER_MS + INTRO_NOISE_HOLD_MS);
         timers.current.push(lockT);
       });
     }, INTRO_DELAY_MS);
