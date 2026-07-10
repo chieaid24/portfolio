@@ -15,6 +15,8 @@ const NOISE_HOLD_MS = 150; // how long a char scrambles before locking
 const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
 const NOISE_TAIL_MS = 200; // noise duration after last char unlocks
 const PROXIMITY_PX = 24;   // trigger radius around the text, not just exact hover
+const INTRO_DELAY_MS = 600; // hold static Aurebesh during the hero fade-in,
+                            // then decrypt so it resolves near full opacity
 
 function rchar() {
   return ALPHA[Math.floor(Math.random() * ALPHA.length)];
@@ -168,41 +170,46 @@ export default function ScrambledText({ text, className }) {
 
   useEffect(() => clearAll, [clearAll]);
 
-  // intro decrypt on every mount/refresh: Aurebesh noise -> readable Latin,
-  // staggered left-to-right, reusing the same scramble mechanic as hover.
+  // intro decrypt on every mount/refresh: the name first shows as static
+  // Aurebesh (the initial useState) and fades in with the hero, then after
+  // INTRO_DELAY_MS the scramble kicks in and decrypts to readable Latin,
+  // staggered left-to-right, so the resolve is visible near full opacity.
   useEffect(() => {
     clearAll();
     phase.current = "intro";
     const cp = chars.map(() => "noise");
     charPhase.current = cp;
 
-    setDisplay((prev) => prev.map(() => ({ ch: rchar(), alien: true })));
-    noiseRef.current = setInterval(() => {
-      setDisplay((prev) =>
-        prev.map((item, i) =>
-          cp[i] === "noise" ? { ch: rchar(), alien: true } : item
-        )
-      );
-    }, SCRAMBLE_MS);
-
-    let lockedCount = 0;
-    chars.forEach((_, idx) => {
-      const lockT = setTimeout(() => {
-        cp[idx] = "locked";
-        lockedCount++;
+    const startT = setTimeout(() => {
+      setDisplay((prev) => prev.map(() => ({ ch: rchar(), alien: true })));
+      noiseRef.current = setInterval(() => {
         setDisplay((prev) =>
           prev.map((item, i) =>
-            i === idx ? { ch: chars[idx], alien: false } : item
+            cp[i] === "noise" ? { ch: rchar(), alien: true } : item
           )
         );
-        if (lockedCount === n) {
-          clearInterval(noiseRef.current);
-          noiseRef.current = null;
-          phase.current = "idle";
-        }
-      }, idx * STAGGER_MS + NOISE_HOLD_MS);
-      timers.current.push(lockT);
-    });
+      }, SCRAMBLE_MS);
+
+      let lockedCount = 0;
+      chars.forEach((_, idx) => {
+        const lockT = setTimeout(() => {
+          cp[idx] = "locked";
+          lockedCount++;
+          setDisplay((prev) =>
+            prev.map((item, i) =>
+              i === idx ? { ch: chars[idx], alien: false } : item
+            )
+          );
+          if (lockedCount === n) {
+            clearInterval(noiseRef.current);
+            noiseRef.current = null;
+            phase.current = "idle";
+          }
+        }, idx * STAGGER_MS + NOISE_HOLD_MS);
+        timers.current.push(lockT);
+      });
+    }, INTRO_DELAY_MS);
+    timers.current.push(startT);
 
     return clearAll;
     // run once on mount
