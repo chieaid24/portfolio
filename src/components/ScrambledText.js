@@ -175,7 +175,7 @@ export default function ScrambledText({ text, className }) {
   // intro decrypt on every mount/refresh: the name first shows as static
   // Aurebesh (the initial useState) and fades in with the hero, then after
   // INTRO_DELAY_MS the scramble kicks in and decrypts to readable Latin,
-  // staggered from the middle outward, so the resolve is visible near full
+  // staggered from the outer edges inward, so the resolve is visible near full
   // opacity.
   useEffect(() => {
     clearAll();
@@ -208,7 +208,8 @@ export default function ScrambledText({ text, className }) {
             noiseRef.current = null;
             phase.current = "idle";
           }
-        }, Math.abs(idx - (n - 1) / 2) * INTRO_STAGGER_MS + INTRO_NOISE_HOLD_MS);
+        }, ((n - 1) / 2 - Math.abs(idx - (n - 1) / 2)) * INTRO_STAGGER_MS +
+          INTRO_NOISE_HOLD_MS);
         timers.current.push(lockT);
       });
     }, INTRO_DELAY_MS);
