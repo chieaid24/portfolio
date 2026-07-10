@@ -11,7 +11,8 @@ const aurebesh = localFont({
 const ALPHA = "abcdefghijklmnopqrstuvwxyz";
 const SCRAMBLE_MS = 50;
 const STAGGER_MS = 80;     // delay between each char entering noise
-const NOISE_HOLD_MS = 150; // how long a char scrambles before locking
+const NOISE_HOLD_MS = 150; // how long a char scrambles before locking (hover)
+const INTRO_NOISE_HOLD_MS = 400; // longer scramble before locking on intro decrypt
 const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
 const NOISE_TAIL_MS = 200; // noise duration after last char unlocks
 const PROXIMITY_PX = 24;   // trigger radius around the text, not just exact hover
@@ -206,7 +207,7 @@ export default function ScrambledText({ text, className }) {
             noiseRef.current = null;
             phase.current = "idle";
           }
-        }, Math.abs(idx - (n - 1) / 2) * STAGGER_MS + NOISE_HOLD_MS);
+        }, Math.abs(idx - (n - 1) / 2) * STAGGER_MS + INTRO_NOISE_HOLD_MS);
         timers.current.push(lockT);
       });
     }, INTRO_DELAY_MS);
