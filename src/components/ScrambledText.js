@@ -24,6 +24,13 @@ function rchar() {
   return ALPHA[Math.floor(Math.random() * ALPHA.length)];
 }
 
+// Distinguishes a fresh document load (refresh / direct URL / external link) from
+// an in-app SPA navigation. The module evaluates once per real page load, so this
+// stays false on the first mount after a fresh load and becomes true for every
+// client-side navigation that follows — the module (and this flag) survive App
+// Router route changes but reset on a full reload.
+let hadFreshLoad = false;
+
 export default function ScrambledText({ text, className }) {
   const chars = text.split("");
   const n = chars.length;
@@ -183,6 +190,19 @@ export default function ScrambledText({ text, className }) {
     const cp = chars.map(() => "noise");
     charPhase.current = cp;
 
+    // Fresh load keeps the static hold (masked by load latency anyway); SPA
+    // navigation skips it so the decrypt starts immediately instead of sitting
+    // frozen at full paint.
+    const introDelay = hadFreshLoad ? 0 : INTRO_DELAY_MS;
+    if (!hadFreshLoad) {
+      // Defer the flip so React StrictMode's synchronous dev remount still reads a
+      // fresh load on both passes; the real value latches on the next tick.
+      const markT = setTimeout(() => {
+        hadFreshLoad = true;
+      }, 0);
+      timers.current.push(markT);
+    }
+
     const startT = setTimeout(() => {
       setDisplay((prev) => prev.map(() => ({ ch: rchar(), alien: true })));
       noiseRef.current = setInterval(() => {
@@ -212,7 +232,7 @@ export default function ScrambledText({ text, className }) {
           INTRO_NOISE_HOLD_MS);
         timers.current.push(lockT);
       });
-    }, INTRO_DELAY_MS);
+    }, introDelay);
     timers.current.push(startT);
 
     return clearAll;
