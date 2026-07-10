@@ -5,7 +5,7 @@
 // Pick a winner, fold it into page.js, then DELETE this file + the switcher.
 //
 // Four very different fillers for the blank right half of the hero:
-//   1 — Mission control status panel (live Starflare counter)
+//   1 — Mission control status panel (live Starflare counter + ASCII globe)
 //   2 — Draggable low-poly planet (r3f)
 //   3 — "Begin mission" quest onboarding card
 //   4 — "Now": 3D earth globe + pin at my location + live local time
@@ -15,7 +15,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { feature } from "topojson-client";
-import { geoContains } from "d3-geo";
+import { geoContains, geoEquirectangular, geoPath } from "d3-geo";
 import land110m from "world-atlas/land-110m.json";
 import { motion } from "framer-motion";
 import { useMoney } from "@/lib/money-context";
@@ -77,41 +77,201 @@ const cardBase =
 
 // --- 1 — Mission control ----------------------------------------------------
 
-function Sparkline({ color }) {
-  // Deterministic initial points — Math.random() here would make the SSR and
-  // client first renders differ (React hydration mismatch).
-  const [pts, setPts] = useState(() => Array.from({ length: 24 }, () => 0.5));
+// Land lookup raster: LAND_GEO painted once onto an offscreen canvas via an
+// equirectangular projection, then read back into a bitmask — per-frame land
+// tests become an array index instead of a geoContains polygon walk.
+const MASK_W = 720;
+const MASK_H = 360;
+let landMaskCache = null;
+function getLandMask() {
+  if (!landMaskCache) {
+    const canvas = document.createElement("canvas");
+    canvas.width = MASK_W;
+    canvas.height = MASK_H;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const projection = geoEquirectangular()
+      .scale(MASK_W / (2 * Math.PI))
+      .translate([MASK_W / 2, MASK_H / 2]);
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    geoPath(projection, ctx)(LAND_GEO);
+    ctx.fill();
+    const img = ctx.getImageData(0, 0, MASK_W, MASK_H).data;
+    landMaskCache = new Uint8Array(MASK_W * MASK_H);
+    for (let i = 0; i < landMaskCache.length; i++)
+      landMaskCache[i] = img[i * 4 + 3] > 127 ? 1 : 0;
+  }
+  return landMaskCache;
+}
+
+function maskIsLand(mask, latDeg, lonDeg) {
+  const x = Math.round(((lonDeg + 180) / 360) * (MASK_W - 1));
+  const y = Math.round(((90 - latDeg) / 180) * (MASK_H - 1));
+  return mask[Math.min(MASK_H - 1, Math.max(0, y)) * MASK_W +
+    Math.min(MASK_W - 1, Math.max(0, x))] === 1;
+}
+
+// ASCII globe: orthographic projection of the real coastlines onto a text
+// grid. Two stacked <pre> layers — faint dots for ocean, bright ramp chars
+// for land (shaded by a fixed light) — plus a pulsing pin overlay at
+// LOCATION. Auto-rotates; drag to spin (yaw free, pitch clamped).
+const GLOBE_ROWS = 21;
+const GLOBE_FONT_PX = 10;
+const LAND_RAMP = ".,:;=+*#%@"; // dark → bright
+const AUTO_SPIN = 0.14; // rad/s
+const DEG = Math.PI / 180;
+
+function AsciiGlobe({ color }) {
+  const oceanRef = useRef(null);
+  const landRef = useRef(null);
+  const pinRef = useRef(null);
+  const drag = useRef(null); // last pointer pos while dragging, else null
+  // Start with the pin's longitude facing the camera, tilted a bit north.
+  const rot = useRef({ yaw: -LOCATION.lon * DEG, pitch: 0.55 });
+
   useEffect(() => {
-    setPts(Array.from({ length: 24 }, () => 0.4 + Math.random() * 0.2));
-    const id = setInterval(() => {
-      setPts((p) => {
-        const next = Math.min(
-          0.95,
-          Math.max(0.05, p[p.length - 1] + (Math.random() - 0.5) * 0.3),
-        );
-        return [...p.slice(1), next];
-      });
-    }, 600);
-    return () => clearInterval(id);
+    const mask = getLandMask();
+    const oceanPre = oceanRef.current;
+    const landPre = landRef.current;
+    const pin = pinRef.current;
+    if (!oceanPre || !landPre || !pin) return;
+
+    // Measure the mono cell — char cells aren't square, so the disc needs an
+    // x-scale correction to come out round.
+    oceanPre.textContent = "0".repeat(20);
+    const cellW = oceanPre.getBoundingClientRect().width / 20;
+    const lineH = GLOBE_FONT_PX;
+    const aspect = cellW / lineH; // col width in row units
+    const rows = GLOBE_ROWS;
+    const radius = (rows - 1) / 2; // in rows
+    const cols = 2 * Math.ceil(radius / aspect) + 3;
+    const cRow = (rows - 1) / 2;
+    const cCol = (cols - 1) / 2;
+    const radiusPx = radius * lineH;
+
+    // Fixed light, camera space (upper-left, toward viewer).
+    const L = [-0.45, 0.55, 0.7];
+    const lLen = Math.hypot(...L);
+
+    const pinDir = [
+      Math.cos(LOCATION.lat * DEG) * Math.sin(LOCATION.lon * DEG),
+      Math.sin(LOCATION.lat * DEG),
+      Math.cos(LOCATION.lat * DEG) * Math.cos(LOCATION.lon * DEG),
+    ];
+
+    let raf;
+    let last = performance.now();
+    const frame = (now) => {
+      const dt = Math.min(0.1, (now - last) / 1000);
+      last = now;
+      if (!drag.current) rot.current.yaw += AUTO_SPIN * dt;
+      const { yaw, pitch } = rot.current;
+      const cy = Math.cos(yaw);
+      const sy = Math.sin(yaw);
+      const cp = Math.cos(pitch);
+      const sp = Math.sin(pitch);
+
+      const ocean = [];
+      const land = [];
+      for (let j = 0; j < rows; j++) {
+        let oRow = "";
+        let lRow = "";
+        const y = (cRow - j) / radius;
+        for (let i = 0; i < cols; i++) {
+          const x = ((i - cCol) * aspect) / radius;
+          const r2 = x * x + y * y;
+          if (r2 > 1) {
+            oRow += " ";
+            lRow += " ";
+            continue;
+          }
+          const z = Math.sqrt(1 - r2);
+          // Camera → globe frame: Ry(-yaw) · Rx(-pitch)
+          const y1 = y * cp + z * sp;
+          const z1 = -y * sp + z * cp;
+          const gx = x * cy - z1 * sy;
+          const gz = x * sy + z1 * cy;
+          const lat = Math.asin(y1) / DEG;
+          const lon = Math.atan2(gx, gz) / DEG;
+          if (maskIsLand(mask, lat, lon)) {
+            // Ambient floor keeps night-side land legible against the ocean.
+            const diffuse = Math.max(0, (x * L[0] + y * L[1] + z * L[2]) / lLen);
+            const b = 0.25 + 0.75 * diffuse;
+            lRow += LAND_RAMP[Math.round(b * (LAND_RAMP.length - 1))];
+            oRow += " ";
+          } else {
+            oRow += ".";
+            lRow += " ";
+          }
+        }
+        ocean.push(oRow);
+        land.push(lRow);
+      }
+      oceanPre.textContent = ocean.join("\n");
+      landPre.textContent = land.join("\n");
+
+      // Pin: globe → camera frame: Rx(pitch) · Ry(yaw)
+      const px = pinDir[0] * cy + pinDir[2] * sy;
+      const pz0 = -pinDir[0] * sy + pinDir[2] * cy;
+      const py = pinDir[1] * cp - pz0 * sp;
+      const pz = pinDir[1] * sp + pz0 * cp;
+      pin.style.left = `${(cols * cellW) / 2 + px * radiusPx}px`;
+      pin.style.top = `${(rows * lineH) / 2 - py * radiusPx}px`;
+      pin.style.opacity = Math.min(1, Math.max(0, (pz - 0.05) / 0.25));
+
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
   }, []);
-  const d = pts
-    .map((v, i) => `${(i / (pts.length - 1)) * 100},${(1 - v) * 100}`)
-    .join(" ");
+
+  const onPointerDown = (e) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    drag.current = { x: e.clientX, y: e.clientY };
+  };
+  const onPointerMove = (e) => {
+    if (!drag.current) return;
+    rot.current.yaw += (e.clientX - drag.current.x) * 0.007;
+    rot.current.pitch = Math.min(
+      1.2,
+      Math.max(-1.2, rot.current.pitch + (e.clientY - drag.current.y) * 0.007),
+    );
+    drag.current = { x: e.clientX, y: e.clientY };
+  };
+  const endDrag = () => {
+    drag.current = null;
+  };
+
+  const preStyle = {
+    color,
+    fontSize: `${GLOBE_FONT_PX}px`,
+    lineHeight: `${GLOBE_FONT_PX}px`,
+  };
   return (
-    <svg
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-      className="h-8 w-full"
-      aria-hidden="true"
+    <div
+      className="relative mx-auto w-fit cursor-grab touch-none select-none active:cursor-grabbing"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      aria-label={`Rotating globe with a pin on ${LOCATION.label}`}
+      role="img"
     >
-      <polyline
-        points={d}
-        fill="none"
-        stroke={color}
-        strokeWidth="2.5"
-        vectorEffect="non-scaling-stroke"
+      <pre aria-hidden="true" ref={oceanRef} className="font-mono opacity-35" style={preStyle} />
+      <pre
+        aria-hidden="true"
+        ref={landRef}
+        className="absolute inset-0 font-mono"
+        style={preStyle}
       />
-    </svg>
+      <div
+        ref={pinRef}
+        className="pointer-events-none absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2"
+      >
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ffd24a] opacity-70" />
+        <span className="relative block h-2 w-2 rounded-full bg-[#ffd24a]" />
+      </div>
+    </div>
   );
 }
 
@@ -184,9 +344,9 @@ export function MissionControl() {
       </div>
       <div className="mt-3">
         <div className="text-body-text/50 mb-1 text-[11px] tracking-[0.15em] uppercase">
-          Requests / s
+          Ground station
         </div>
-        <Sparkline color={accent} />
+        <AsciiGlobe color={accent} />
       </div>
     </motion.div>
   );

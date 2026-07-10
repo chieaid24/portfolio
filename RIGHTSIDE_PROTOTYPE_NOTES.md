@@ -15,7 +15,12 @@ with one of four switchable widgets so a human can pick a look.
 
 - `?rside=1` — **Mission control**: live status card. Pulsing "SYSTEMS NOMINAL",
   the real global Starflare count (GET `/api/counter`), a ticking uptime, region,
-  deploy, and an animated requests/s sparkline. Plays the backend/infra identity.
+  deploy, and a "Ground station" **ASCII globe** — real coastlines orthographically
+  projected onto a text grid (`AsciiGlobe`), theme-tinted, auto-rotating, drag to
+  spin (pointer drag = yaw/pitch, pitch clamped), with a pulsing gold pin at
+  `LOCATION`. Land tests use a raster mask (`getLandMask`): `LAND_GEO` painted once
+  to an offscreen canvas via `d3-geo` equirectangular, read back as a bitmask.
+  Plays the backend/infra identity.
 - `?rside=2` — **Low-poly planet**: compact pill CTA — a tiny spinning r3f
   ringed planet (theme-tinted) inline with "Click to explore" + chevron, with a
   pulsing accent glow. Clicking smooth-scrolls to `#experience` (id + `scroll-mt-28`
