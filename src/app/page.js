@@ -1,11 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import RightSideVariant, {
-  RIGHT_VARIANTS,
-} from "@/components/prototype/RightSideVariants";
-import RightSideSwitcher from "@/components/prototype/RightSideSwitcher";
+import MissionControl from "@/components/MissionControl";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
 import RewardLink from "@/components/RewardLink";
@@ -18,12 +15,6 @@ import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 import ScrambledText from "@/components/ScrambledText";
-
-// PROTOTYPE — right-side hero exploration. Delete with the prototype/ files.
-const RSIDE_KEYS = Object.keys(RIGHT_VARIANTS);
-const RSIDE_NAMES = Object.fromEntries(
-  RSIDE_KEYS.map((k) => [k, RIGHT_VARIANTS[k].name]),
-);
 
 export default function Home() {
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
@@ -100,19 +91,6 @@ export default function Home() {
     flashRect.current = null;
   };
 
-  // PROTOTYPE — read/sync the right-side variant from ?rside=.
-  const [rside, setRside] = useState(RSIDE_KEYS[0]);
-  useEffect(() => {
-    const p = new URLSearchParams(window.location.search).get("rside");
-    if (p && RSIDE_KEYS.includes(p)) setRside(p);
-  }, []);
-  const changeRside = useCallback((v) => {
-    setRside(v);
-    const url = new URL(window.location.href);
-    url.searchParams.set("rside", v);
-    window.history.replaceState(null, "", url);
-  }, []);
-
   return (
     <>
       <>
@@ -127,7 +105,7 @@ export default function Home() {
       <main className="">
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
-            {/* PROTOTYPE — 2-col hero: text left, right-side widget right. */}
+            {/* 2-col hero: intro text left, mission-control widget right. */}
             <div className="flex min-h-screen flex-col items-center justify-center gap-10 md:flex-row md:items-center md:gap-8">
             <motion.div
               className="flex w-full max-w-100 flex-col items-start justify-center text-left text-main-text md:max-w-none md:flex-1"
@@ -140,7 +118,7 @@ export default function Home() {
                 <ScrambledText text="Aidan" className="gradient-text-header" />
               </h1>
               <p className="text-body-text mb-5 max-w-[30rem] text-lg font-medium sm:text-xl">
-                I build automation-first platform infrastructure for AI.
+                I build automation-first platforms and developer infrastructure for AI.
               </p>
               <div className="flex w-full items-center gap-5 justify-start">
                 <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
@@ -191,17 +169,8 @@ export default function Home() {
                 </div>
               </div>
             </motion.div>
-            {/* Variant 2 is a compact pill — size the column to content so
-                the text column can expand; others get a fixed widget width. */}
-            <div
-              className={
-                "hidden shrink-0 md:block " +
-                (rside === "2"
-                  ? "md:w-auto"
-                  : "w-full md:w-[19rem] lg:w-[21rem]")
-              }
-            >
-              <RightSideVariant variant={rside} />
+            <div className="hidden shrink-0 md:block md:w-[19rem] lg:w-[21rem]">
+              <MissionControl />
             </div>
             </div>
             <section id="experience" className="mb-20 scroll-mt-28">
@@ -287,13 +256,6 @@ export default function Home() {
           </section>
         </MaxWidthWrapper>
       </main>
-      {/* PROTOTYPE — remove with the prototype/ files once a widget wins. */}
-      <RightSideSwitcher
-        variants={RSIDE_KEYS}
-        current={rside}
-        names={RSIDE_NAMES}
-        onChange={changeRside}
-      />
     </>
   );
 }
