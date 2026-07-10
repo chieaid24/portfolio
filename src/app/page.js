@@ -140,7 +140,7 @@ export default function Home() {
                 <ScrambledText text="Aidan" className="gradient-text-header" />
               </h1>
               <p className="text-body-text mb-5 max-w-[30rem] text-lg font-medium sm:text-xl">
-                I build automation-first backend and platform infrastructure for AI applications.
+                I build automation-first platform infrastructure for AI.
               </p>
               <div className="flex w-full items-center gap-5 justify-start">
                 <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
