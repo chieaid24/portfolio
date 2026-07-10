@@ -300,19 +300,18 @@ export default function MissionControl() {
   const { highlightHex } = useMoney();
   const accent = highlightHex || "#ff5e5e";
   const now = useNow();
-  let time = "--:--:--";
+  let time = "--:--";
   let zone = "";
   if (now) {
     const parts = new Intl.DateTimeFormat("en-US", {
       timeZone: LOCATION.tz,
       hour: "2-digit",
       minute: "2-digit",
-      second: "2-digit",
       hourCycle: "h23",
       timeZoneName: "short",
     }).formatToParts(now);
     const part = (t) => parts.find((p) => p.type === t)?.value ?? "";
-    time = `${part("hour")}:${part("minute")}:${part("second")}`;
+    time = `${part("hour")}:${part("minute")}`;
     zone = part("timeZoneName");
   }
 
