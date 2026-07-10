@@ -169,7 +169,7 @@ export default function Home() {
                 </div>
               </div>
             </motion.div>
-            <div className="hidden shrink-0 md:block md:w-[19rem] lg:w-[21rem]">
+            <div className="hidden shrink-0 md:block md:w-[13rem] lg:w-[14rem]">
               <MissionControl />
             </div>
             </div>

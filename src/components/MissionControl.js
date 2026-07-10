@@ -1,9 +1,9 @@
 "use client";
 
-// Mission control status panel for the hero's right side: a live "SYSTEMS
-// NOMINAL" card (Starflare count + ticking uptime) over an ASCII globe that
+// Compact ground-station widget for the hero's right side: an ASCII globe that
 // orthographically projects the real coastlines onto a text grid, with a
-// blinking beacon marker at LOCATION.
+// blinking beacon at LOCATION, over a live local-time readout. Space/telemetry
+// styling to match the site's starfield.
 
 import { useEffect, useRef, useState } from "react";
 import { feature } from "topojson-client";
@@ -15,12 +15,26 @@ import { useMoney } from "@/lib/money-context";
 // Real coastlines (coarse 110m set → naturally low-poly). Decoded once.
 const LAND_GEO = feature(land110m, land110m.objects.land);
 
-// My location — the beacon pin. Swap lat/lon to relocate.
+// My location — the beacon pin + local clock. Swap lat/lon/tz to relocate.
 const LOCATION = {
   label: "Waterloo, ON",
   lat: 43.4643,
   lon: -80.5204,
+  tz: "America/Toronto",
 };
+
+// Ticking wall clock, re-renders every second. Starts null so the server and
+// first client render agree (a real time would differ → hydration mismatch);
+// the real time is set on mount.
+function useNow() {
+  const [now, setNow] = useState(null);
+  useEffect(() => {
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
+}
 
 const cardBase =
   "border-outline-darker-gray bg-background/40 relative w-full overflow-hidden rounded-2xl border backdrop-blur-md";
@@ -59,7 +73,7 @@ function maskIsLand(mask, latDeg, lonDeg) {
     Math.min(MASK_W - 1, Math.max(0, x))] === 1;
 }
 
-const GLOBE_ROWS = 21;
+const GLOBE_ROWS = 15;
 const GLOBE_FONT_PX = 10;
 const LAND_RAMP = ".,:;=+*#%@"; // dark → bright
 const AUTO_SPIN = 0.14; // rad/s
@@ -279,78 +293,47 @@ function AsciiGlobe({ color }) {
   );
 }
 
-function StatRow({ label, value, mono = true }) {
-  return (
-    <div className="flex items-baseline justify-between gap-3 py-1.5">
-      <span className="text-body-text/60 text-[11px] tracking-[0.15em] uppercase">
-        {label}
-      </span>
-      <span
-        className={`text-main-text text-sm ${mono ? "font-mono" : "font-semibold"}`}
-      >
-        {value}
-      </span>
-    </div>
-  );
-}
-
+// Compact "ground station" widget: the ASCII globe over a live local-time
+// readout for LOCATION. Space/telemetry styling — mono, muted labels, the
+// theme accent, a blinking beacon on the globe.
 export default function MissionControl() {
   const { highlightHex } = useMoney();
-  const [flares, setFlares] = useState(null);
-  const [uptime, setUptime] = useState(0);
-  useEffect(() => {
-    let ok = true;
-    fetch("/api/counter")
-      .then((r) => r.json())
-      .then((d) => ok && typeof d.count === "number" && setFlares(d.count))
-      .catch(() => {});
-    const id = setInterval(() => setUptime((u) => u + 1), 1000);
-    return () => {
-      ok = false;
-      clearInterval(id);
-    };
-  }, []);
   const accent = highlightHex || "#ff5e5e";
-  const fmtUptime = `${String(Math.floor(uptime / 3600)).padStart(2, "0")}:${String(
-    Math.floor((uptime % 3600) / 60),
-  ).padStart(2, "0")}:${String(uptime % 60).padStart(2, "0")}`;
+  const now = useNow();
+  let time = "--:--:--";
+  let zone = "";
+  if (now) {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: LOCATION.tz,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+      timeZoneName: "short",
+    }).formatToParts(now);
+    const part = (t) => parts.find((p) => p.type === t)?.value ?? "";
+    time = `${part("hour")}:${part("minute")}:${part("second")}`;
+    zone = part("timeZoneName");
+  }
 
   return (
     <motion.div
-      className={cardBase + " px-5 py-5"}
+      className={cardBase + " px-4 pt-4 pb-3"}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="mb-4 flex items-center gap-2">
-        <span className="relative flex h-2.5 w-2.5">
-          <span
-            className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-            style={{ backgroundColor: accent }}
-          />
-          <span
-            className="relative inline-flex h-2.5 w-2.5 rounded-full"
-            style={{ backgroundColor: accent }}
-          />
-        </span>
-        <span className="text-main-text font-mono text-xs tracking-[0.2em]">
-          SYSTEMS NOMINAL
-        </span>
-      </div>
-      <div className="divide-outline-darker-gray/60 divide-y">
-        <StatRow
-          label="Starflares"
-          value={flares == null ? "······" : flares.toLocaleString()}
-        />
-        <StatRow label="Uptime" value={fmtUptime} />
-        <StatRow label="Region" value="yyz-1 · waterloo" />
-        <StatRow label="Deploy" value="live · main" />
-      </div>
-      <div className="mt-3">
-        <div className="text-body-text/50 mb-1 text-[11px] tracking-[0.15em] uppercase">
-          Ground station
+      <AsciiGlobe color={accent} />
+      <div className="border-outline-darker-gray/60 mt-2 border-t pt-2.5 text-center font-mono">
+        <div className="text-body-text/55 text-[10px] tracking-[0.15em] uppercase">
+          {LOCATION.label}
         </div>
-        <AsciiGlobe color={accent} />
+        <div className="text-main-text mt-0.5 text-sm tabular-nums">
+          {time}
+          {zone && (
+            <span className="text-body-text/45 ml-1 text-[10px]">{zone}</span>
+          )}
+        </div>
       </div>
     </motion.div>
   );
