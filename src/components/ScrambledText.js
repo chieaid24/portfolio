@@ -15,7 +15,7 @@ const NOISE_HOLD_MS = 150; // how long a char scrambles before locking
 const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
 const NOISE_TAIL_MS = 200; // noise duration after last char unlocks
 const PROXIMITY_PX = 24;   // trigger radius around the text, not just exact hover
-const INTRO_DELAY_MS = 750; // hold static Aurebesh during the hero fade-in,
+const INTRO_DELAY_MS = 500; // hold static Aurebesh during the hero fade-in,
                             // then decrypt so it resolves near full opacity
 
 function rchar() {
