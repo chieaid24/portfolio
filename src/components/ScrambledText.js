@@ -24,8 +24,10 @@ export default function ScrambledText({ text, className }) {
   const chars = text.split("");
   const n = chars.length;
 
+  // start "encrypted": real letters shown in the Aurebesh font (deterministic,
+  // no hydration mismatch), then the mount effect decrypts to readable Latin.
   const [display, setDisplay] = useState(
-    chars.map((c) => ({ ch: c, alien: false }))
+    chars.map((c) => ({ ch: c, alien: true }))
   );
 
   const wrapperRef = useRef(null);
@@ -165,6 +167,47 @@ export default function ScrambledText({ text, className }) {
   }, [chars, clearAll, getOrder]);
 
   useEffect(() => clearAll, [clearAll]);
+
+  // intro decrypt on every mount/refresh: Aurebesh noise -> readable Latin,
+  // staggered left-to-right, reusing the same scramble mechanic as hover.
+  useEffect(() => {
+    clearAll();
+    phase.current = "intro";
+    const cp = chars.map(() => "noise");
+    charPhase.current = cp;
+
+    setDisplay((prev) => prev.map(() => ({ ch: rchar(), alien: true })));
+    noiseRef.current = setInterval(() => {
+      setDisplay((prev) =>
+        prev.map((item, i) =>
+          cp[i] === "noise" ? { ch: rchar(), alien: true } : item
+        )
+      );
+    }, SCRAMBLE_MS);
+
+    let lockedCount = 0;
+    chars.forEach((_, idx) => {
+      const lockT = setTimeout(() => {
+        cp[idx] = "locked";
+        lockedCount++;
+        setDisplay((prev) =>
+          prev.map((item, i) =>
+            i === idx ? { ch: chars[idx], alien: false } : item
+          )
+        );
+        if (lockedCount === n) {
+          clearInterval(noiseRef.current);
+          noiseRef.current = null;
+          phase.current = "idle";
+        }
+      }, idx * STAGGER_MS + NOISE_HOLD_MS);
+      timers.current.push(lockT);
+    });
+
+    return clearAll;
+    // run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // trigger on cursor proximity to the wrapper's box, not just exact hover
   useEffect(() => {
