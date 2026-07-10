@@ -10,11 +10,15 @@ const aurebesh = localFont({
 
 const ALPHA = "abcdefghijklmnopqrstuvwxyz";
 const SCRAMBLE_MS = 50;
-const STAGGER_MS = 80;     // delay between each char entering noise
-const NOISE_HOLD_MS = 150; // how long a char scrambles before locking
+const STAGGER_MS = 80;     // delay between each char entering noise (hover)
+const INTRO_STAGGER_MS = 140; // delay between each char locking on intro decrypt
+const NOISE_HOLD_MS = 150; // how long a char scrambles before locking (hover)
+const INTRO_NOISE_HOLD_MS = 400; // longer scramble before locking on intro decrypt
 const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
 const NOISE_TAIL_MS = 200; // noise duration after last char unlocks
 const PROXIMITY_PX = 24;   // trigger radius around the text, not just exact hover
+const INTRO_DELAY_MS = 500; // hold static Aurebesh during the hero fade-in,
+                            // then decrypt so it resolves near full opacity
 
 function rchar() {
   return ALPHA[Math.floor(Math.random() * ALPHA.length)];
@@ -24,8 +28,10 @@ export default function ScrambledText({ text, className }) {
   const chars = text.split("");
   const n = chars.length;
 
+  // start "encrypted": real letters shown in the Aurebesh font (deterministic,
+  // no hydration mismatch), then the mount effect decrypts to readable Latin.
   const [display, setDisplay] = useState(
-    chars.map((c) => ({ ch: c, alien: false }))
+    chars.map((c) => ({ ch: c, alien: true }))
   );
 
   const wrapperRef = useRef(null);
@@ -165,6 +171,54 @@ export default function ScrambledText({ text, className }) {
   }, [chars, clearAll, getOrder]);
 
   useEffect(() => clearAll, [clearAll]);
+
+  // intro decrypt on every mount/refresh: the name first shows as static
+  // Aurebesh (the initial useState) and fades in with the hero, then after
+  // INTRO_DELAY_MS the scramble kicks in and decrypts to readable Latin,
+  // staggered from the outer edges inward, so the resolve is visible near full
+  // opacity.
+  useEffect(() => {
+    clearAll();
+    phase.current = "intro";
+    const cp = chars.map(() => "noise");
+    charPhase.current = cp;
+
+    const startT = setTimeout(() => {
+      setDisplay((prev) => prev.map(() => ({ ch: rchar(), alien: true })));
+      noiseRef.current = setInterval(() => {
+        setDisplay((prev) =>
+          prev.map((item, i) =>
+            cp[i] === "noise" ? { ch: rchar(), alien: true } : item
+          )
+        );
+      }, SCRAMBLE_MS);
+
+      let lockedCount = 0;
+      chars.forEach((_, idx) => {
+        const lockT = setTimeout(() => {
+          cp[idx] = "locked";
+          lockedCount++;
+          setDisplay((prev) =>
+            prev.map((item, i) =>
+              i === idx ? { ch: chars[idx], alien: false } : item
+            )
+          );
+          if (lockedCount === n) {
+            clearInterval(noiseRef.current);
+            noiseRef.current = null;
+            phase.current = "idle";
+          }
+        }, ((n - 1) / 2 - Math.abs(idx - (n - 1) / 2)) * INTRO_STAGGER_MS +
+          INTRO_NOISE_HOLD_MS);
+        timers.current.push(lockT);
+      });
+    }, INTRO_DELAY_MS);
+    timers.current.push(startT);
+
+    return clearAll;
+    // run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // trigger on cursor proximity to the wrapper's box, not just exact hover
   useEffect(() => {

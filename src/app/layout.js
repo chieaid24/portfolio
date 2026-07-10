@@ -23,7 +23,11 @@ const notoSans = Noto_Sans({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  // block form so a patched window.scrollTo (e.g. smooth-scroll browser
+  // extensions returning a Promise) is never treated as a cleanup function
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <html

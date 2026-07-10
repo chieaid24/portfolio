@@ -94,7 +94,7 @@ export default function Home() {
   return (
     <>
       <>
-        <title>Aidan Chien</title>
+        <title>AIDAN CHIEN</title>
         <meta
           name="description"
           content="Portfolio of Aidan Chien, systems engineer specializing in design and development."
@@ -175,7 +175,7 @@ export default function Home() {
             </div>
             <section id="experience" className="mb-20 scroll-mt-28">
               <motion.h2
-                className="mb-6 text-2xl font-bold tracking-[0.2em] text-main-text sm:text-3xl md:text-4xl"
+                className="mb-6 text-xl font-bold tracking-[0.2em] text-main-text sm:text-2xl md:text-3xl"
                 key="experience-header"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -197,7 +197,7 @@ export default function Home() {
             {/**project section */}
             <motion.div className="mb-6 items-baseline justify-between sm:flex">
               <motion.h2
-                className="mb-2 text-2xl font-bold tracking-[0.2em] text-main-text sm:mb-0 sm:text-3xl md:text-4xl"
+                className="mb-2 text-xl font-bold tracking-[0.2em] text-main-text sm:mb-0 sm:text-2xl md:text-3xl"
                 key="my-projects"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}

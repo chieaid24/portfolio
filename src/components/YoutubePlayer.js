@@ -32,6 +32,7 @@ export default function YouTubePlayer({ urlOrId, title }) {
             src={thumbSrc}
             alt=""
             fill
+            sizes="(min-width: 768px) 768px, 100vw"
             unoptimized
             className="h-full w-full object-cover opacity-80 transition duration-200 group-hover:opacity-85"
             onError={() => {

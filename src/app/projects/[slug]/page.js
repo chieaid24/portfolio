@@ -5,6 +5,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import BackToProjects from "@/components/BackToProjects";
 import RenderPageDisplay from "@/components/RenderPageDisplay";
 import FooterGithub from "@/icons/FooterGithub";
+import BulletIcon from "@/icons/BulletIcon"
 
 // Generate metadata for each project page
 export async function generateMetadata({ params }) {
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${project.title} | Aidan Chien`,
+    title: `${project.title.toUpperCase()}`,
     description: project.summaryMetaData,
     alternates: {
       canonical: `https://aidanchien.com/projects/${slug}`,
@@ -66,12 +67,16 @@ export default async function ProjectPage({ params }) {
         <MaxWidthWrapper>
           <div className="">
             <div className="mb-12">
-              <div className="mb-6 flex flex-col gap-2">
-                <h1 className="text-2xl font-bold tracking-[0.2em] text-main-text sm:text-3xl md:text-4xl">
+              <div className="mb-6 flex flex-col gap-1">
+                <h1 className="text-xl font-bold tracking-[0.2em] text-main-text sm:text-2xl md:text-3xl">
                   {project.title}
                 </h1>
-                <h3 className="text-light-grey-text text-lg italic sm:text-xl">
-                  &apos;&nbsp;{project.subtitle}&nbsp;&apos;
+                <h3 className="text-light-grey-text text-lg sm:text-xl">
+                  <span className="flex items-center gap-x-2">
+                    <BulletIcon className="text-highlight-color h-2 w-2 shrink-0"/>
+                    {project.subtitle}
+                    <BulletIcon className="text-highlight-color h-2 w-2 shrink-0"/>
+                    </span>
                 </h3>
               </div>
 
@@ -87,7 +92,7 @@ export default async function ProjectPage({ params }) {
                 rewardId={`${project.slug}:github`}
               >
                 <div
-                  className={`inline-flex items-center gap-2 rounded-md bg-main-text text-background px-2 py-1.5 font-semibold`}
+                  className={`inline-flex items-center gap-2 rounded-md bg-main-text text-background px-2 py-1.5 font-semibold duration-100 md:hover:translate-x-[1px]`}
                 >
                   <FooterGithub className={`h-6 w-6`} aria-hidden="true" />
                   <div>View GitHub</div>

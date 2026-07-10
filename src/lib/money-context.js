@@ -42,7 +42,7 @@ const RAW_THEME_OPTIONS = [
     lightColor: "#d4affa",
     onLightColor: "#8b39d6",
     selectionColor: "#f5c842",
-    price: "200",
+    price: "100",
   },
   {
     id: "orange",
