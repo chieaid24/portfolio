@@ -326,7 +326,7 @@ export default function MissionControl() {
       <AsciiGlobe color={accent} />
       <div className="border-outline-darker-gray/60 mt-2 border-t pt-2.5 text-center font-mono">
         <div className="text-body-text/55 text-[10px] tracking-[0.15em] uppercase">
-          {LOCATION.label}
+          Adjusted local time
         </div>
         <div className="text-main-text mt-0.5 text-sm tabular-nums">
           {time}
