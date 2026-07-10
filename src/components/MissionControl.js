@@ -77,6 +77,7 @@ const GLOBE_ROWS = 15;
 const GLOBE_FONT_PX = 10;
 const LAND_RAMP = ".,:;=+*#%@"; // dark → bright
 const AUTO_SPIN = 0.14; // rad/s
+const REDRAW_MS = 110; // grid redraw cadence — ~9fps, calmer than 60fps shimmer
 const DEG = Math.PI / 180;
 
 // The location marker is stamped straight into the ASCII grid as
@@ -143,10 +144,20 @@ function AsciiGlobe({ color }) {
 
     let raf;
     let last = performance.now();
+    let lastDraw = 0;
     const frame = (now) => {
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
       if (!drag.current) rot.current.yaw += AUTO_SPIN * dt;
+
+      // Throttle the (shimmery) grid rebuild to a calm cadence; redraw at full
+      // rate only while dragging so interaction stays responsive.
+      if (!drag.current && now - lastDraw < REDRAW_MS) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
+      lastDraw = now;
+
       const { yaw, pitch } = rot.current;
       const cy = Math.cos(yaw);
       const sy = Math.sin(yaw);
