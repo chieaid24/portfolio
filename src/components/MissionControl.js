@@ -44,7 +44,48 @@ const cardBase =
 // tests become an array index instead of a geoContains polygon walk.
 const MASK_W = 720;
 const MASK_H = 360;
+// Drop connected land blobs smaller than this (mask px) so tiny islands don't
+// flicker on/off across the coarse character grid. Continents stay intact.
+const MIN_ISLAND_PX = 200;
 let landMaskCache = null;
+
+// Flood-fill (8-connectivity) each land component once; zero out any smaller
+// than minPx. Removes speckly little islands while leaving big landmasses whole.
+function pruneSmallLand(mask, w, h, minPx) {
+  const seen = new Uint8Array(w * h);
+  const stack = [];
+  const comp = [];
+  for (let start = 0; start < mask.length; start++) {
+    if (mask[start] !== 1 || seen[start]) continue;
+    stack.length = 0;
+    comp.length = 0;
+    stack.push(start);
+    seen[start] = 1;
+    while (stack.length) {
+      const idx = stack.pop();
+      comp.push(idx);
+      const cx = idx % w;
+      const cy = (idx / w) | 0;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          if (dx === 0 && dy === 0) continue;
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+          const nIdx = ny * w + nx;
+          if (mask[nIdx] === 1 && !seen[nIdx]) {
+            seen[nIdx] = 1;
+            stack.push(nIdx);
+          }
+        }
+      }
+    }
+    if (comp.length < minPx) {
+      for (let k = 0; k < comp.length; k++) mask[comp[k]] = 0;
+    }
+  }
+}
+
 function getLandMask() {
   if (!landMaskCache) {
     const canvas = document.createElement("canvas");
@@ -62,6 +103,7 @@ function getLandMask() {
     landMaskCache = new Uint8Array(MASK_W * MASK_H);
     for (let i = 0; i < landMaskCache.length; i++)
       landMaskCache[i] = img[i * 4 + 3] > 127 ? 1 : 0;
+    pruneSmallLand(landMaskCache, MASK_W, MASK_H, MIN_ISLAND_PX);
   }
   return landMaskCache;
 }
