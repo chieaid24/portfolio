@@ -16,7 +16,7 @@ import { useMoney } from "@/lib/money-context";
 const LAND_GEO = feature(land110m, land110m.objects.land);
 
 // My location — the beacon pin + local clock. Swap lat/lon/tz to relocate.
-const LOCATION = {
+export const LOCATION = {
   label: "Waterloo, ON",
   lat: 43.4643,
   lon: -80.5204,
@@ -34,6 +34,21 @@ function useNow() {
     return () => clearInterval(id);
   }, []);
   return now;
+}
+
+// Live "HH:MM" + zone abbreviation for LOCATION. "--:--" until mounted.
+export function useLocalTime() {
+  const now = useNow();
+  if (!now) return { time: "--:--", zone: "" };
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: LOCATION.tz,
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZoneName: "short",
+  }).formatToParts(now);
+  const part = (t) => parts.find((p) => p.type === t)?.value ?? "";
+  return { time: `${part("hour")}:${part("minute")}`, zone: part("timeZoneName") };
 }
 
 const cardBase =
@@ -86,7 +101,7 @@ function pruneSmallLand(mask, w, h, minPx) {
   }
 }
 
-function getLandMask() {
+export function getLandMask() {
   if (!landMaskCache) {
     const canvas = document.createElement("canvas");
     canvas.width = MASK_W;
@@ -108,7 +123,7 @@ function getLandMask() {
   return landMaskCache;
 }
 
-function maskIsLand(mask, latDeg, lonDeg) {
+export function maskIsLand(mask, latDeg, lonDeg) {
   const x = Math.round(((lonDeg + 180) / 360) * (MASK_W - 1));
   const y = Math.round(((90 - latDeg) / 180) * (MASK_H - 1));
   return mask[Math.min(MASK_H - 1, Math.max(0, y)) * MASK_W +
@@ -145,7 +160,9 @@ const PIN_BEACON = [
 // Stacked <pre> layers — faint dots for ocean, bright ramp chars for land
 // (shaded by a fixed light), a steady gold marker, and a blinking beacon.
 // Auto-rotates; drag to spin (yaw free, pitch clamped).
-function AsciiGlobe({ color }) {
+export function AsciiGlobe({ color, rows: rowsProp, fontPx }) {
+  const rows = rowsProp ?? GLOBE_ROWS;
+  const fontSize = fontPx ?? GLOBE_FONT_PX;
   const oceanRef = useRef(null);
   const landRef = useRef(null);
   const pinRef = useRef(null);
@@ -166,9 +183,8 @@ function AsciiGlobe({ color }) {
     // x-scale correction to come out round.
     oceanPre.textContent = "0".repeat(20);
     const cellW = oceanPre.getBoundingClientRect().width / 20;
-    const lineH = GLOBE_FONT_PX;
+    const lineH = fontSize;
     const aspect = cellW / lineH; // col width in row units
-    const rows = GLOBE_ROWS;
     const radius = (rows - 1) / 2; // in rows
     const cols = 2 * Math.ceil(radius / aspect) + 3;
     const cRow = (rows - 1) / 2;
@@ -281,7 +297,7 @@ function AsciiGlobe({ color }) {
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [rows, fontSize]);
 
   const onPointerDown = (e) => {
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -302,8 +318,8 @@ function AsciiGlobe({ color }) {
 
   const preStyle = {
     color,
-    fontSize: `${GLOBE_FONT_PX}px`,
-    lineHeight: `${GLOBE_FONT_PX}px`,
+    fontSize: `${fontSize}px`,
+    lineHeight: `${fontSize}px`,
   };
   return (
     <div
@@ -352,21 +368,7 @@ function AsciiGlobe({ color }) {
 export default function MissionControl() {
   const { highlightHex } = useMoney();
   const accent = highlightHex || "#ff5e5e";
-  const now = useNow();
-  let time = "--:--";
-  let zone = "";
-  if (now) {
-    const parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: LOCATION.tz,
-      hour: "2-digit",
-      minute: "2-digit",
-      hourCycle: "h23",
-      timeZoneName: "short",
-    }).formatToParts(now);
-    const part = (t) => parts.find((p) => p.type === t)?.value ?? "";
-    time = `${part("hour")}:${part("minute")}`;
-    zone = part("timeZoneName");
-  }
+  const { time, zone } = useLocalTime();
 
   return (
     <motion.div

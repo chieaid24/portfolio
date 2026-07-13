@@ -15,8 +15,15 @@ import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 import ScrambledText from "@/components/ScrambledText";
+// PROTOTYPE — hero layout variants behind ?variant=. Remove with the prototype.
+import HeroVariant, {
+  HERO_VARIANTS,
+  useHeroVariant,
+} from "@/components/prototype/HeroVariants";
+import PrototypeSwitcher from "@/components/prototype/PrototypeSwitcher";
 
 export default function Home() {
+  const [heroVariant, selectHeroVariant] = useHeroVariant();
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
   // the latest pointer position every frame, so the motion is decoupled from
   // (bursty/sparse) mousemove events and from any CSS transition — that's what
@@ -105,6 +112,10 @@ export default function Home() {
       <main className="">
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
+            {/* PROTOTYPE: ?variant= swaps the hero layout; "current" = the block below. */}
+            {heroVariant !== "current" && <HeroVariant variant={heroVariant} />}
+            {heroVariant === "current" && (
+            <>
             {/* 2-col hero: intro text left, mission-control widget right. */}
             <div className="flex min-h-screen flex-col items-center justify-center gap-10 md:flex-row md:items-center md:gap-8">
             <motion.div
@@ -173,6 +184,8 @@ export default function Home() {
               <MissionControl />
             </div>
             </div>
+            </>
+            )}
             <section id="experience" className="mb-20 scroll-mt-28">
               <motion.h2
                 className="mb-6 text-xl font-bold tracking-[0.2em] text-main-text sm:text-2xl md:text-3xl"
@@ -256,6 +269,11 @@ export default function Home() {
           </section>
         </MaxWidthWrapper>
       </main>
+      <PrototypeSwitcher
+        variants={HERO_VARIANTS}
+        current={heroVariant}
+        onSelect={selectHeroVariant}
+      />
     </>
   );
 }
