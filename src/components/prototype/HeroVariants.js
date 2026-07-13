@@ -29,7 +29,7 @@ import {
 export const HERO_VARIANTS = [
   { key: "current", name: "Current (2-col, globe right)" },
   { key: "A", name: "Instrument panel" },
-  { key: "B", name: "Bare rail (globe left)" },
+  { key: "B", name: "Bare rail (globe right)" },
   { key: "C", name: "Telemetry strip" },
   { key: "D", name: "Flat world band" },
 ];
@@ -363,7 +363,7 @@ function VariantA() {
       className="flex min-h-screen flex-col justify-center gap-10 py-24"
       {...fadeIn}
     >
-      <HeroTitle className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px]" />
+      <HeroTitle className="text-2xl sm:text-3xl md:text-[34px] lg:text-[38px]" />
       <div className="border-outline-darker-gray bg-background/40 flex w-full flex-col overflow-hidden rounded-2xl border backdrop-blur-md md:flex-row md:items-stretch">
         <div className="flex flex-1 flex-col justify-center gap-5 px-6 py-7 md:px-8">
           <p className="text-body-text max-w-[34rem] text-lg font-medium sm:text-xl">
@@ -401,36 +401,36 @@ function VariantA() {
 }
 
 // ---------------------------------------------------------------------------
-// B — Bare rail: no card at all. Big globe on the LEFT, text on the right,
-// clock hanging off the globe as a bare mono line. Chrome-free.
+// B — Bare rail: no card at all. Copy on the left, globe on the RIGHT, clock
+// hanging off the globe as a bare mono line. Chrome-free, tight stack.
 // ---------------------------------------------------------------------------
 function VariantB() {
   const accent = useAccent();
   const { time, zone } = useLocalTime();
   return (
     <motion.div
-      className="flex min-h-screen flex-col justify-center gap-12 py-24"
+      className="flex min-h-[78vh] flex-col justify-center gap-7 py-16"
       {...fadeIn}
     >
-      <HeroTitle className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px]" />
-      <div className="flex flex-col items-start gap-10 md:flex-row md:items-end md:gap-12">
-        <div className="hidden shrink-0 flex-col items-center gap-2 md:flex">
-          <AsciiGlobe color={accent} rows={23} fontPx={11} />
-          <div className="flex items-baseline gap-2 font-mono">
-            <span className="text-body-text/50 text-[9px] tracking-[0.18em] uppercase">
-              {LOCATION.label}
-            </span>
-            <span className="text-main-text text-sm tabular-nums">{time}</span>
-            {zone && <span className="text-body-text/45 text-[9px]">{zone}</span>}
-          </div>
-        </div>
-        <div className="flex flex-col items-start gap-6 md:pb-6">
-          <p className="text-body-text max-w-[32rem] text-lg font-medium sm:text-xl">
+      <HeroTitle className="text-2xl sm:text-3xl md:text-[34px] lg:text-[38px]" />
+      <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between md:gap-10">
+        <div className="flex flex-col items-start gap-6">
+          <p className="text-body-text max-w-[28rem] text-lg font-medium sm:text-xl">
             {DESCRIPTION}
           </p>
           <div className="flex items-center gap-5">
             <ResumeButton />
             <SocialLinks />
+          </div>
+        </div>
+        <div className="hidden shrink-0 flex-col items-end gap-1.5 md:flex">
+          <AsciiGlobe color={accent} rows={17} fontPx={10} />
+          <div className="flex items-baseline gap-2 whitespace-nowrap font-mono">
+            <span className="text-body-text/50 text-[9px] tracking-[0.18em] uppercase">
+              {LOCATION.label}
+            </span>
+            <span className="text-main-text text-sm tabular-nums">{time}</span>
+            {zone && <span className="text-body-text/45 text-[9px]">{zone}</span>}
           </div>
         </div>
       </div>
@@ -456,7 +456,7 @@ function VariantC() {
   return (
     <motion.div className="flex min-h-screen flex-col py-24" {...fadeIn}>
       <div className="flex flex-1 flex-col justify-center gap-6">
-        <HeroTitle className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px]" />
+        <HeroTitle className="text-2xl sm:text-3xl md:text-[34px] lg:text-[38px]" />
         <p className="text-body-text max-w-[38rem] text-lg font-medium sm:text-xl">
           {DESCRIPTION}
         </p>
@@ -499,7 +499,7 @@ function VariantD() {
       className="flex min-h-screen flex-col justify-center gap-12 py-24"
       {...fadeIn}
     >
-      <HeroTitle className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px]" />
+      <HeroTitle className="text-2xl sm:text-3xl md:text-[34px] lg:text-[38px]" />
       {/* The band is a horizon under the title: full width, always panning east. */}
       <div className="hidden w-full flex-col gap-2 md:flex">
         <div className="border-outline-darker-gray/60 bg-background/30 overflow-hidden rounded-xl border px-4 py-3 backdrop-blur-md">

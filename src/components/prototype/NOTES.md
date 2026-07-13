@@ -12,7 +12,7 @@ cycles variants; the left/right arrow keys do the same. `current` is the existin
 | --- | --- | --- |
 | `current` | Current | title in the left column, globe card on the right |
 | `A` | Instrument panel | title full width; one wide bordered console below it: copy + buttons \| globe \| telemetry column (local time, station, coords), split by vertical rules |
-| `B` | Bare rail | no card at all: big globe on the left, copy + buttons on the right, clock as a bare mono line under the globe |
+| `B` | Bare rail | no card at all: copy + buttons on the left, globe on the right (smaller, 17 rows), clock as a bare mono line under it; hero block is `min-h-[78vh]` so the fold isn't mostly void |
 | `C` | Telemetry strip | title, copy, buttons read as a normal stack; the globe shrinks into a thin full-width instrument rail pinned to the bottom of the fold, with station / local time / coords / online spread across it |
 | `D` | Flat world band | the globe unrolled: a wide equirectangular ASCII map that pans east forever, full width under the title, with copy + buttons beneath it and the clock on the caption line |
 
