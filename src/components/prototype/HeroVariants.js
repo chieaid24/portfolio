@@ -401,15 +401,16 @@ function VariantA() {
 }
 
 // ---------------------------------------------------------------------------
-// B — Bare rail: no card at all. Copy on the left, globe on the RIGHT, clock
-// hanging off the globe as a bare mono line. Chrome-free, tight stack.
+// B — Bare rail: no card at all. Copy on the left, globe on the RIGHT.
+// Chrome-free, tight stack. The station/clock line under the globe is commented
+// out for now — uncomment the block below to bring the readout back.
 // ---------------------------------------------------------------------------
 function VariantB() {
   const accent = useAccent();
-  const { time, zone } = useLocalTime();
+  const { time, zone } = useLocalTime(); // only used by the commented-out clock line
   return (
     <motion.div
-      className="flex min-h-[78vh] flex-col justify-center gap-7 py-16"
+      className="flex min-h-[78vh] flex-col justify-center gap-4 py-16"
       {...fadeIn}
     >
       <HeroTitle className="text-2xl sm:text-3xl md:text-[34px] lg:text-[38px]" />
@@ -423,8 +424,11 @@ function VariantB() {
             <SocialLinks />
           </div>
         </div>
-        <div className="hidden shrink-0 flex-col items-end gap-1.5 md:flex">
-          <AsciiGlobe color={accent} rows={17} fontPx={10} />
+        {/* No card behind the globe here, so the 35%-opacity ocean layer washes
+            out on the light sky — push it up in light mode only. */}
+        <div className="hidden shrink-0 flex-col items-end gap-1.5 [&_pre:first-child]:opacity-60 md:flex dark:[&_pre:first-child]:opacity-35">
+          <AsciiGlobe color={accent} rows={13} fontPx={9} />
+          {/*
           <div className="flex items-baseline gap-2 whitespace-nowrap font-mono">
             <span className="text-body-text/50 text-[9px] tracking-[0.18em] uppercase">
               {LOCATION.label}
@@ -432,6 +436,7 @@ function VariantB() {
             <span className="text-main-text text-sm tabular-nums">{time}</span>
             {zone && <span className="text-body-text/45 text-[9px]">{zone}</span>}
           </div>
+          */}
         </div>
       </div>
     </motion.div>
