@@ -413,9 +413,9 @@ function VariantB() {
       className="flex min-h-[78vh] flex-col justify-center gap-4 py-16"
       {...fadeIn}
     >
-      <HeroTitle className="text-2xl sm:text-3xl md:text-[34px] lg:text-[38px]" />
+      <HeroTitle className="text-2xl sm:text-3xl md:text-[38px] lg:text-[46px]" />
       <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between md:gap-10">
-        <div className="flex flex-col items-start gap-6">
+        <div className="flex flex-col items-start gap-9">
           <p className="text-body-text max-w-[28rem] text-lg font-medium sm:text-xl">
             {DESCRIPTION}
           </p>
