@@ -35,13 +35,6 @@ export default function AboutPage() {
 
   return (
     <>
-      <>
-        <title>AIDAN CHIEN</title>
-        <meta
-          name="description"
-          content="About Aidan Chien - software engineer specializing in cloud computing, AWS-integrated AI solutions, and intelligent applications. Learn more about my work and background."
-        />
-      </>
       {/* <StarBackground /> */}
       <main className="font-dm-sans bg-background font-medium">
         <MaxWidthWrapper>

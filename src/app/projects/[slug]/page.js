@@ -9,23 +9,21 @@ import BulletIcon from "@/icons/BulletIcon"
 
 // Generate metadata for each project page
 export async function generateMetadata({ params }) {
-  const { slug } = await params; // no need for await here since params is synchronous
+  const { slug } = await params;
   const project = getProjectBySlug(slug);
 
   if (!project || project.github_only) {
     return {
       title: "Project Not Found",
-      alternates: {
-        canonical: "https://aidanchien.com", // fallback
-      },
+      robots: { index: false },
     };
   }
 
   return {
-    title: `${project.title.toUpperCase()}`,
+    title: project.title.toUpperCase(),
     description: project.summaryMetaData,
     alternates: {
-      canonical: `https://aidanchien.com/projects/${slug}`,
+      canonical: `/projects/${slug}`,
     },
   };
 }
