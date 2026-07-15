@@ -240,14 +240,30 @@ export default function ScrambledText({ text, className }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // trigger on cursor proximity to the wrapper's box, not just exact hover
+  // trigger on cursor proximity to the visible glyphs, not just exact hover.
+  // The box is locked to the resting width, so the wider scramble glyphs
+  // overflow it; measuring the union of the actual char spans keeps the hitbox
+  // on the text the user sees (else the overflow reads as "outside" and reverts).
   useEffect(() => {
     const onMove = (e) => {
       const el = wrapperRef.current;
       if (!el) return;
-      const r = el.getBoundingClientRect();
-      const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
-      const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+      let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+      for (const c of charSpans.current) {
+        if (!c) continue;
+        const cr = c.getBoundingClientRect();
+        if (cr.width === 0 && cr.height === 0) continue;
+        left = Math.min(left, cr.left);
+        top = Math.min(top, cr.top);
+        right = Math.max(right, cr.right);
+        bottom = Math.max(bottom, cr.bottom);
+      }
+      if (left === Infinity) {
+        const r = el.getBoundingClientRect();
+        left = r.left; top = r.top; right = r.right; bottom = r.bottom;
+      }
+      const dx = Math.max(left - e.clientX, 0, e.clientX - right);
+      const dy = Math.max(top - e.clientY, 0, e.clientY - bottom);
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist <= PROXIMITY_PX) {
