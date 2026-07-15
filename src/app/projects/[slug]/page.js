@@ -14,13 +14,11 @@ export async function generateMetadata({ params }) {
 
   if (!project || project.github_only) {
     return {
-      title: "Project Not Found",
       robots: { index: false },
     };
   }
 
   return {
-    title: project.title.toUpperCase(),
     description: project.summaryMetaData,
     alternates: {
       canonical: `/projects/${slug}`,
