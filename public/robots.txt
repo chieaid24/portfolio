@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://aidanchien.com
-
-# Sitemaps
-Sitemap: https://aidanchien.com/sitemap.xml
