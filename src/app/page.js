@@ -92,14 +92,6 @@ export default function Home() {
 
   return (
     <>
-      <>
-        <title>AIDAN CHIEN</title>
-        <meta
-          name="description"
-          content="Portfolio of Aidan Chien, systems engineer specializing in design and development."
-        />
-      </>
-
       <StarBackground />
       <main className="">
         <MaxWidthWrapper>

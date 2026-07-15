@@ -7,13 +7,6 @@ import ProjectCard from "@/components/ProjectCard";
 export default function ProjectPage(props) {
   return (
     <>
-      <>
-        <title>AIDAN CHIEN</title>
-        <meta
-          name="description"
-          content="Projects of Aidan Chien - software engineer specializing in cloud computing, AWS-integrated AI solutions, and intelligent applications. Learn more about my work and background."
-        />
-      </>
       <div className="bg-background min-h-[90vh]">
         <MaxWidthWrapper>
           <motion.h1
