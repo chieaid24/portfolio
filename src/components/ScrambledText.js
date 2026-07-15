@@ -35,6 +35,12 @@ export default function ScrambledText({ text, className }) {
   );
 
   const wrapperRef = useRef(null);
+  const measureRef = useRef(null);
+  // Lock the box to the resting (Latin) width. The scramble renders wider
+  // Aurebesh glyphs; without this the inline-block grows and the whole word
+  // reflows onto the next title line. Overflow from the wider glyphs spills
+  // past the fixed box (harmless — it's the last word in the title).
+  const [lockW, setLockW] = useState(null);
   const nearRef = useRef(false);
   const charSpans = useRef(Array(n).fill(null));
   const phase = useRef("idle");
@@ -172,6 +178,20 @@ export default function ScrambledText({ text, className }) {
 
   useEffect(() => clearAll, [clearAll]);
 
+  // Measure the resting Latin width from a hidden copy (always the body font,
+  // never scrambled) and lock the visible box to it. Re-measure once webfonts
+  // load and on resize, since the title font-size is responsive.
+  useEffect(() => {
+    const measure = () => {
+      const el = measureRef.current;
+      if (el) setLockW(el.getBoundingClientRect().width);
+    };
+    measure();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [text]);
+
   // intro decrypt on every mount/refresh: the name first shows as static
   // Aurebesh (the initial useState) and fades in with the hero, then after
   // INTRO_DELAY_MS the scramble kicks in and decrypts to readable Latin,
@@ -255,8 +275,22 @@ export default function ScrambledText({ text, className }) {
         display: "inline-block",
         height: "1lh",
         whiteSpace: "nowrap",
+        width: lockW ? `${lockW}px` : undefined,
       }}
     >
+      {/* hidden width reference: the resting text in the body font, never scrambled */}
+      <span
+        ref={measureRef}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          visibility: "hidden",
+          whiteSpace: "nowrap",
+          pointerEvents: "none",
+        }}
+      >
+        {text}
+      </span>
       {display.map((item, i) => (
         <span
           key={i}
