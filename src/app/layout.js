@@ -21,10 +21,7 @@ const SITE_DESCRIPTION =
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: {
-    default: "AIDAN CHIEN",
-    template: "%s | AIDAN CHIEN",
-  },
+  title: "AIDAN CHIEN",
   description: SITE_DESCRIPTION,
   applicationName: "Aidan Chien",
   authors: [{ name: "Aidan Chien", url: SITE_URL }],
