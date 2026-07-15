@@ -110,7 +110,7 @@ export default function Home() {
           <section id="hero" className="min-h-screen">
             {/* Hero: title full-width, copy + links on the left, globe on the right. */}
             <motion.div
-              className="flex min-h-[78vh] flex-col justify-center gap-4 py-16 text-main-text"
+              className="flex min-h-screen flex-col items-center justify-center gap-4 text-main-text"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
@@ -119,7 +119,7 @@ export default function Home() {
                 Greetings Earthling, I&apos;m{" "}
                 <ScrambledText text="Aidan" className="gradient-text-header" />
               </h1>
-              <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between md:gap-10">
+              <div className="flex w-full flex-col items-start gap-8 md:flex-row md:items-center md:justify-between md:gap-10">
                 <div className="flex flex-col items-start gap-9">
                   <p className="text-body-text max-w-[28rem] text-lg font-medium sm:text-xl">
                     I build automation-first platforms and developer infrastructure for AI.
