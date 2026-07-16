@@ -177,6 +177,9 @@ const RotatingNavText = forwardRef((props, ref) => {
 
   const k = currentTextIndex;
 
+  // No `layout` props on any span below: rotation is driven purely by
+  // AnimatePresence + y transforms, and layout corrections would fight the
+  // parent's width tween (visible jitter).
   return (
     <motion.span
       className={cn(
@@ -184,8 +187,6 @@ const RotatingNavText = forwardRef((props, ref) => {
         mainClassName,
       )}
       {...rest}
-      layout
-      transition={transition}
     >
       <span className="sr-only">{texts[currentTextIndex]}</span>
 
@@ -200,7 +201,6 @@ const RotatingNavText = forwardRef((props, ref) => {
               ? "flex w-full flex-col"
               : "relative flex flex-wrap whitespace-pre-wrap",
           )}
-          layout
           aria-hidden="true"
         >
           {elements.map((wordObj, wordIndex, array) => {

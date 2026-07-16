@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import RotatingNavText from "@/components/RotatingNavText";
+import RollingText from "@/components/RollingText";
 import { useMoney } from "@/lib/money-context";
 
 export default function AnimatedBalance({
@@ -44,26 +44,11 @@ export default function AnimatedBalance({
   // is always a number
 
   // ---- width measurement + animation ----
-  const contentRef = useRef(null);
-  const [width, setWidth] = useState(0);
-
-  useLayoutEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-
-    const update = () => {
-      const w = el.getBoundingClientRect().width;
-      setWidth(w);
-    };
-
-    // initial measure
-    update();
-
-    // watch for internal content size changes (rotations)
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [rtKey]); // re-measure after we remount RotatingNavText
+  // null until first measure so the wrapper starts at its natural width.
+  // RollingText reports its active row's width on mount and on every index
+  // change — whole pixels only, so subpixel noise can't restart the tween.
+  const [width, setWidth] = useState(null);
+  const handleActiveWidth = useCallback((w) => setWidth(Math.ceil(w)), []);
 
   //when the overflowTick increases, it calls this function, which creates the custom animation, saying that it has overflowed
   useEffect(() => {
@@ -239,40 +224,28 @@ export default function AnimatedBalance({
   }, [value, holdMs, rotateMs, snapDelayMs, leverPullTick]);
 
   return (
-    // Animate the wrapper's WIDTH so siblings slide smoothly.
+    // Animate the wrapper's WIDTH so siblings slide smoothly. The width tween
+    // is the only thing animating this box — no `layout` prop, which would
+    // add competing scale corrections and make the text shake. Content must
+    // stay left-anchored: right-aligning would snap narrower text sideways
+    // the frame it swaps in, before the width tween catches up.
     <motion.span
-      layout="size"
       initial={false}
-      className={`inline-block w-[10ch] text-right align-baseline tabular-nums ${className}`}
+      className={`inline-block text-left align-baseline tabular-nums ${className}`}
       style={{ lineHeight: 1, overflow: "hidden" }}
       // Animate from previous measured width to new width
-      animate={{ width }}
+      animate={width === null ? undefined : { width }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
     >
-      {/* Inner content is measured by ResizeObserver */}
-      <span ref={contentRef} className="inline-block items-baseline">
-        <RotatingNavText
-          key={rtKey}
-          ref={rtRef}
-          texts={trio}
-          auto={false}
-          loop={false}
-          splitBy="words"
-          transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          initial={{ y: "-100%", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: "100%", opacity: 0 }}
-          staggerFrom="first"
-          animatePresenceMode="popLayout"
-          animatePresenceInitial={false}
-          disableFirstAnimation
-          mainClassName=""
-          splitLevelClassName="inline-flex"
-          elementLevelClassName="inline-block"
-          deltaColor={deltaColor}
-          leverAward={leverAward}
-        />
-      </span>
+      {/* keyed remount resets the odometer to row 0 for each new trio */}
+      <RollingText
+        key={rtKey}
+        ref={rtRef}
+        texts={trio}
+        deltaColor={deltaColor}
+        leverAward={leverAward}
+        onActiveWidth={handleActiveWidth}
+      />
     </motion.span>
   );
 }

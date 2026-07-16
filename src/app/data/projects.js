@@ -2,20 +2,9 @@ import Link from "next/link";
 import RedText from "@/components/RewardRedText";
 import SkillDisplay from "@/components/SkillDisplay";
 
-export const quest_totals = {
-  // About: 3 | Experiences: 10 | AI Sleep: 10 | Website: 11 | PMI: 9 | 3D Tools: 5
-  // CURR TOTAL: 48
-  redtext: 48,
-
-  // OnePerProject: 4
-  // CURR TOTAL: 4
-  project: 4,
-
-  // Header: 3[about, projects, resume] | Footer: 3[linkedin, github, email] | OnePerProject: 4 | Home/Experience: 1[education-tab] | Website: 0
-  // Website: each project with a non-empty website_link adds 1 (currently 0 filled in)
-  // CURR TOTAL: 11
-  link: 11,
-};
+// quest_totals moved to ./quest-totals.js so money-context (which wraps every
+// page) doesn't pull this file's full JSX content into every route's bundle.
+export { quest_totals } from "./quest-totals";
 
 /* Helper Formatting Functions */
 const bullet = "list-disc pl-8";
