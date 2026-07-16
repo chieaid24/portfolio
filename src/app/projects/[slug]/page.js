@@ -1,31 +1,38 @@
 import { notFound } from "next/navigation";
 import RewardLink from "@/components/RewardLink";
-import { getProjectBySlug } from "@/app/data/projects";
+import { getProjectBySlug, projects } from "@/app/data/projects";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import BackToProjects from "@/components/BackToProjects";
 import RenderPageDisplay from "@/components/RenderPageDisplay";
 import FooterGithub from "@/icons/FooterGithub";
 import BulletIcon from "@/icons/BulletIcon"
 
+// Prerender every project page at build time (github_only projects have no
+// page). Content is fully static, so serving from the CDN beats invoking a
+// server function per visit. Unknown slugs still render on demand and 404.
+export function generateStaticParams() {
+  return projects
+    .filter((project) => !project.github_only)
+    .map((project) => ({ slug: project.slug }));
+}
+
 // Generate metadata for each project page
 export async function generateMetadata({ params }) {
-  const { slug } = await params; // no need for await here since params is synchronous
+  const { slug } = await params;
   const project = getProjectBySlug(slug);
 
   if (!project || project.github_only) {
     return {
       title: "Project Not Found",
-      alternates: {
-        canonical: "https://aidanchien.com", // fallback
-      },
+      robots: { index: false },
     };
   }
 
   return {
-    title: `${project.title.toUpperCase()}`,
+    title: project.title.toUpperCase(),
     description: project.summaryMetaData,
     alternates: {
-      canonical: `https://aidanchien.com/projects/${slug}`,
+      canonical: `/projects/${slug}`,
     },
   };
 }

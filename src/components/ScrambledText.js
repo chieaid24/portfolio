@@ -24,6 +24,13 @@ function rchar() {
   return ALPHA[Math.floor(Math.random() * ALPHA.length)];
 }
 
+// Distinguishes a fresh document load (refresh / direct URL / external link) from
+// an in-app SPA navigation. The module evaluates once per real page load, so this
+// stays false on the first mount after a fresh load and becomes true for every
+// client-side navigation that follows — the module (and this flag) survive App
+// Router route changes but reset on a full reload.
+let hadFreshLoad = false;
+
 export default function ScrambledText({ text, className }) {
   const chars = text.split("");
   const n = chars.length;
@@ -210,6 +217,19 @@ export default function ScrambledText({ text, className }) {
     const cp = chars.map(() => "noise");
     charPhase.current = cp;
 
+    // Fresh load keeps the static hold (masked by load latency anyway); SPA
+    // navigation skips it so the decrypt starts immediately instead of sitting
+    // frozen at full paint.
+    const introDelay = hadFreshLoad ? 0 : INTRO_DELAY_MS;
+    if (!hadFreshLoad) {
+      // Defer the flip so React StrictMode's synchronous dev remount still reads a
+      // fresh load on both passes; the real value latches on the next tick.
+      const markT = setTimeout(() => {
+        hadFreshLoad = true;
+      }, 0);
+      timers.current.push(markT);
+    }
+
     const startT = setTimeout(() => {
       setDisplay((prev) => prev.map(() => ({ ch: rchar(), alien: true })));
       noiseRef.current = setInterval(() => {
@@ -239,7 +259,7 @@ export default function ScrambledText({ text, className }) {
           INTRO_NOISE_HOLD_MS);
         timers.current.push(lockT);
       });
-    }, INTRO_DELAY_MS);
+    }, introDelay);
     timers.current.push(startT);
 
     return clearAll;
@@ -247,15 +267,24 @@ export default function ScrambledText({ text, className }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Trigger on cursor proximity to a STABLE box, not the live scramble glyphs.
-  // The locked box holds the resting width; the Aurebesh spills past it, so the
-  // hitbox extends right to the (fixed) Aurebesh width of the text. Using a
-  // constant keeps the region from ballooning with the noise or the exit
-  // re-scramble, which made the hover stick far past the visible text.
+  // Trigger on cursor proximity to a STABLE box, not on exact hover and not on
+  // the live scramble glyphs. The locked box holds the resting width; the
+  // Aurebesh spills past it, so the hitbox extends right to the (fixed) Aurebesh
+  // width of the text. Using a constant keeps the region from ballooning with
+  // the noise or the exit re-scramble, which made the hover stick far past the
+  // visible text.
+  //
+  // The check runs at most once per frame (rAF-coalesced) so a high-frequency
+  // mouse doesn't trigger a getBoundingClientRect per event.
   useEffect(() => {
-    const onMove = (e) => {
+    let raf = 0;
+    let lastEvent = null;
+
+    const check = () => {
+      raf = 0;
+      const e = lastEvent;
       const el = wrapperRef.current;
-      if (!el) return;
+      if (!e || !el) return;
       const r = el.getBoundingClientRect();
       const left = r.left;
       const top = r.top;
@@ -278,8 +307,16 @@ export default function ScrambledText({ text, className }) {
       }
     };
 
+    const onMove = (e) => {
+      lastEvent = e;
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+
     window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [handleMouseEnter, handleMouseMove, handleMouseLeave]);
 
   return (

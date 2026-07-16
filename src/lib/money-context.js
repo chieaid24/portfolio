@@ -13,12 +13,16 @@ import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { createPayoutGenerator } from "@/lib/payout.js";
 import { defaultMixtureConfig } from "@/lib/payout-default.js";
-import { quest_totals } from "@/app/data/projects.js";
+import { quest_totals } from "@/app/data/quest-totals.js";
 
 const STORAGE_KEY = "moneyState_v2";
 const THEME_STORAGE_KEY = "themeSelection_v2";
 const STARFLARE_STORAGE_KEY = "localStarflareClickCount_v2";
 const MoneyContext = createContext(null);
+// Accent/theme selection lives in its own context so components that only care
+// about the highlight color (e.g. the star background) don't rerender on every
+// balance change.
+const AccentContext = createContext(null);
 const MAX_BAL = 9999.99;
 const INIT_BAL = 100.0;
 
@@ -31,7 +35,7 @@ const RAW_THEME_OPTIONS = [
     label: "Blue",
     color: "#33a9de",
     lightColor: "#6eb9db",
-    onLightColor: "#1b86c0",
+    onLightColor: "#1775a7",
     selectionColor: "#e8b84a",
     price: "0",
   },
@@ -49,7 +53,7 @@ const RAW_THEME_OPTIONS = [
     label: "Orange",
     color: "#ff863b",
     lightColor: "#ffb385",
-    onLightColor: "#d96618",
+    onLightColor: "#b25414",
     selectionColor: "#38c4d0",
     price: "200",
   },
@@ -58,7 +62,7 @@ const RAW_THEME_OPTIONS = [
     label: "Coral",
     color: "#ff7d7d",
     lightColor: "#ffaeae",
-    onLightColor: "#db4f4f",
+    onLightColor: "#d42b2b",
     selectionColor: "#40d4b0",
     price: "500",
   },
@@ -67,7 +71,7 @@ const RAW_THEME_OPTIONS = [
     label: "Green",
     color: "#26e055",
     lightColor: "#83e69b",
-    onLightColor: "#109434",
+    onLightColor: "#0e802d",
     selectionColor: "#c040e0",
     price: "750",
   },
@@ -501,13 +505,28 @@ export function MoneyProvider({ children }) {
     setThemeId(nextId);
   }, []);
 
-  const api = useMemo(
+  const accentApi = useMemo(
     () => ({
-      ...state,
       themeId,
       highlightHex,
       highlightLightHex,
       ownedThemes,
+      setThemeById,
+      purchaseTheme,
+    }),
+    [
+      themeId,
+      highlightHex,
+      highlightLightHex,
+      ownedThemes,
+      setThemeById,
+      purchaseTheme,
+    ],
+  );
+
+  const api = useMemo(
+    () => ({
+      ...state,
 
       /**
        * Award once per `rewardId`, computing the amount from a category string.
@@ -625,8 +644,6 @@ export function MoneyProvider({ children }) {
       overflowTick,
       leverPullTick,
       ready,
-      setThemeById,
-      purchaseTheme,
 
       // Spend balance specifically for a starflare purchase
       buyStarflare: (amount) => {
@@ -642,10 +659,6 @@ export function MoneyProvider({ children }) {
     }),
     [
       state,
-      themeId,
-      highlightHex,
-      highlightLightHex,
-      ownedThemes,
       starflareClickCount,
       ready,
       overflowTick,
@@ -654,17 +667,29 @@ export function MoneyProvider({ children }) {
       getCompletedQuests,
       getAllQuestsComplete,
       getQuestStats,
-      setThemeById,
-      purchaseTheme,
       flushPendingAwards,
     ],
   );
 
-  return <MoneyContext.Provider value={api}>{children}</MoneyContext.Provider>;
+  return (
+    <AccentContext.Provider value={accentApi}>
+      <MoneyContext.Provider value={api}>{children}</MoneyContext.Provider>
+    </AccentContext.Provider>
+  );
+}
+
+// Accent-only consumers subscribe here and skip balance-driven rerenders.
+export function useAccent() {
+  const ctx = useContext(AccentContext);
+  if (!ctx) throw new Error("useAccent must be used inside MoneyProvider");
+  return ctx;
 }
 
 export function useMoney() {
-  const ctx = useContext(MoneyContext);
-  if (!ctx) throw new Error("useMoney must be used inside MoneyProvider");
-  return ctx;
+  const money = useContext(MoneyContext);
+  const accent = useContext(AccentContext);
+  if (!money) throw new Error("useMoney must be used inside MoneyProvider");
+  // Merged for compatibility: existing consumers keep the old single-object API
+  // (and rerender on either context changing, exactly as before the split).
+  return useMemo(() => ({ ...money, ...accent }), [money, accent]);
 }

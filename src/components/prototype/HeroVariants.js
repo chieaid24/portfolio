@@ -201,13 +201,14 @@ function readGlobeEdge(globeEl) {
 // frozen line breaks are guaranteed to survive. Lines beside the disc's waist
 // barely move; lines toward its poles slide right into the space the curve gives
 // back. That stagger is the whole effect.
-function useArcAlign({ groupRef, colRef, globeRef, lineRefs, enabled }) {
+function useArcAlign({ groupRef, colRef, globeRef, enabled }) {
   useLayoutEffect(() => {
     const apply = () => {
       const group = groupRef.current;
       const col = colRef.current;
       const globe = globeRef.current;
-      const lines = lineRefs.current.filter(Boolean);
+      // The lines are exactly the column's children, in order — no ref array.
+      const lines = col ? Array.from(col.children) : [];
       if (!group || !col || !globe || lines.length === 0) return;
 
       // Clear last pass first: every measurement below must be of the untouched
@@ -272,24 +273,20 @@ function useArcAlign({ groupRef, colRef, globeRef, lineRefs, enabled }) {
       ro.disconnect();
       window.removeEventListener("resize", apply);
     };
-  }, [groupRef, colRef, globeRef, lineRefs, enabled]);
+  }, [groupRef, colRef, globeRef, enabled]);
 }
 
 function ShapedHero({ accent, flash }) {
   const groupRef = useRef(null);
   const colRef = useRef(null);
   const globeRef = useRef(null);
-  const lineRefs = useRef([]);
-  const setLine = (i) => (el) => {
-    lineRefs.current[i] = el;
-  };
   // md- hides the globe entirely, so there's no arc to align to down there.
   const enabled = useCallback(
     () => window.matchMedia("(min-width: 768px)").matches,
     [],
   );
 
-  useArcAlign({ groupRef, colRef, globeRef, lineRefs, enabled });
+  useArcAlign({ groupRef, colRef, globeRef, enabled });
 
   return (
     <motion.div
@@ -326,16 +323,12 @@ function ShapedHero({ accent, flash }) {
           {COPY_LINES.map((line, i) => (
             <div
               key={line}
-              ref={setLine(i)}
               className="text-body-text text-xl font-medium whitespace-nowrap"
             >
               {line}
             </div>
           ))}
-          <div
-            ref={setLine(COPY_LINES.length)}
-            className="mt-9 flex items-center gap-5"
-          >
+          <div className="mt-9 flex items-center gap-5">
             <HeroLinks flash={flash} />
           </div>
         </div>

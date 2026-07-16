@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useMoney } from "@/lib/money-context.js";
-import { pusherClient } from "@/lib/pusher-client";
+import { getPusherClient } from "@/lib/pusher-client";
 import { motion, useAnimate } from "framer-motion";
 import SparkleIcon from "@/icons/SparkleIcon.js";
 
@@ -80,7 +80,12 @@ export default function StarflareSection({ cost = 25 }) {
   }, [balance, cost]);
 
   useEffect(() => {
-    let channel;
+    // pusher-js loads (and its WebSocket connects) on first wallet open, not on
+    // page load — see lib/pusher-client.js. Guard against unmount racing the
+    // dynamic import.
+    let cancelled = false;
+    let client = null;
+    let channel = null;
     const handleUpdate = (data) => {
       if (typeof data.count !== "number") return;
 
@@ -93,17 +98,23 @@ export default function StarflareSection({ cost = 25 }) {
       if (shouldSparkle) spawnSparkle();
     };
 
-    try {
-      channel = pusherClient.subscribe("global-counter");
-      channel.bind("updated", handleUpdate);
-    } catch (err) {
-      console.error(err);
-      return () => {};
-    }
+    getPusherClient()
+      .then((c) => {
+        if (cancelled) return;
+        client = c;
+        channel = c.subscribe("global-counter");
+        channel.bind("updated", handleUpdate);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     return () => {
-      channel?.unbind("updated", handleUpdate);
-      pusherClient.unsubscribe("global-counter");
+      cancelled = true;
+      if (channel) {
+        channel.unbind("updated", handleUpdate);
+        client?.unsubscribe("global-counter");
+      }
     };
   }, [spawnSparkle]);
 
@@ -171,13 +182,13 @@ export default function StarflareSection({ cost = 25 }) {
             stiffness: 300,
             damping: 20,
           }}
-          className={`bg-highlight-color text-md items-center justify-center rounded-lg px-4.5 py-2.5 leading-4 font-semibold text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] ${loading || !canPurchase ? "cursor-default opacity-60" : "cursor-pointer opacity-100"}`}
+          className={`bg-highlight-color items-center justify-center rounded-lg px-3 py-2.5 text-sm leading-4 font-semibold whitespace-nowrap text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] sm:text-md sm:px-4.5 ${loading || !canPurchase ? "cursor-default opacity-60" : "cursor-pointer opacity-100"}`}
         >
           CLICK ME
         </motion.button>
       </motion.div>
 
-      <p className="text-outline-gray mt-3 text-[9px] font-medium sm:text-xs">
+      <p className="text-outline-gray mt-3 text-[11px] font-medium sm:text-xs">
         You&apos;ve sent {starflareClickCount} flare
         {starflareClickCount === 1 ? "" : "s"}.
       </p>
