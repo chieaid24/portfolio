@@ -1,12 +1,12 @@
 "use client";
 
 import { useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
 import RewardLink from "@/components/RewardLink";
 import { motion } from "framer-motion";
-import StarBackground from "@/components/StarBackground";
 import FileDownload from "@/icons/FileDownload";
 import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
@@ -14,6 +14,17 @@ import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 import ScrambledText from "@/components/ScrambledText";
+
+// Loaded lazily so three.js / react-three-fiber (~250KB gzip) stay out of the
+// home page's critical bundle. The placeholder paints the same sky (near-black
+// in dark mode, day-sky gradient in light) so there's no flash while the
+// canvas chunk loads; stars then fade in on top.
+const StarBackground = dynamic(() => import("@/components/StarBackground"), {
+  ssr: false,
+  loading: () => (
+    <div className="pointer-events-none fixed inset-0 -z-10 h-full bg-[#02030a] light:bg-[linear-gradient(180deg,#c4e4fb_0%,#a3cef7_55%,#95c4ee_100%)]" />
+  ),
+});
 
 export default function Home() {
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
