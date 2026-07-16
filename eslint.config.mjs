@@ -18,6 +18,9 @@ const eslintConfig = [
       "**/.next/**",
       "**/node_modules/**",
       "**/public/**",
+      // sibling worktrees live under .worktrees/ and carry their own source;
+      // linting them makes results depend on which branches exist on disk
+      "**/.worktrees/**",
     ],
   },
 ];
