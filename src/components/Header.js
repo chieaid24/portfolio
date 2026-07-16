@@ -100,13 +100,13 @@ export default function Header() {
                 >
                   <Link
                     href="/"
-                    className="md:hover:text-highlight-color transition-colors duration-100"
+                    className="md:hover:text-highlight-color py-1.5 transition-colors duration-100"
                   >
                     home
                   </Link>
                   <RewardLink
                     href="/about"
-                    className="md:hover:text-highlight-color transition-colors duration-100"
+                    className="md:hover:text-highlight-color py-1.5 transition-colors duration-100"
                     rewardId="about-page"
                     transparent={false}
                     scroll
@@ -115,7 +115,7 @@ export default function Header() {
                   </RewardLink>
                   <RewardLink
                     href="/projects"
-                    className="md:hover:text-highlight-color transition-colors duration-100"
+                    className="md:hover:text-highlight-color py-1.5 transition-colors duration-100"
                     rewardId="projects-page"
                     transparent={false}
                   >
@@ -125,7 +125,7 @@ export default function Header() {
                     href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="md:hover:text-highlight-color transition-colors duration-100"
+                    className="md:hover:text-highlight-color py-1.5 transition-colors duration-100"
                     rewardId="resume"
                     transparent={false}
                   >
@@ -144,7 +144,7 @@ export default function Header() {
                       animate={{ opacity: 1, rotate: 0, scale: 1 }}
                       exit={{ opacity: 0, rotate: 45, scale: 0.9 }}
                       transition={{ duration: 0.18 }}
-                      className="cursor-pointer px-3 py-2 transition-colors duration-100 md:px-[2px] md:py-[2px] md:hover:text-main-text/75"
+                      className="cursor-pointer px-3 py-2 transition-colors duration-100 md:-m-1 md:px-1.5 md:py-1.5 md:hover:text-main-text/75"
                     >
                       <CloseSimple className="text-dark-grey-text h-3 w-3" />
                     </motion.button>
