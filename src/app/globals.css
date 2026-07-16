@@ -68,7 +68,7 @@ html {
 .light {
   --main-text: #3d332c; /* headings — charred wood */
   --body-text: #52473f; /* body — warm umber, clear step from heading */
-  --dark-body-text: #7b6e69; /* secondary — muted rose-brown, clearly lighter */
+  --dark-body-text: #796c67; /* secondary — muted rose-brown, clearly lighter (AA on cream) */
 
   --page-bg: #f5f2ef; /* barely warm off-white */
   --background: #f5f2ef; /* page surface */
@@ -76,13 +76,13 @@ html {
   --background-highlight: #e2dbd5; /* skill chips / elevated bits */
   --spotify-background: #ddd5ce; /* clash / carousel / spotify card surface */
 
-  --outline-gray: #7b736f; /* subtle warm stone — skill chips, scrollbar */
+  --outline-gray: #6e6763; /* subtle warm stone — skill chips, scrollbar (AA on cream + panels) */
   --outline-dark-gray: #b0a49e; /* medium — widget / header borders */
   --outline-darker-gray: #9e918b; /* emphatic — accent borders */
 
   --widget-surface: #fdfbf9; /* barely-warm white card */
   --widget-surface-2: #e5ddd7; /* warm media well */
-  --experience-meta: #7a6f6b; /* muted meta text — darker warm gray */
+  --experience-meta: #776c68; /* muted meta text — darker warm gray (AA on cream) */
   --tab-hover-fill: #e8e2dc; /* a step darker than the light surface */
 
   color-scheme: light;

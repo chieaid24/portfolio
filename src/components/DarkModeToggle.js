@@ -150,7 +150,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
             exit={{ opacity: 0, rotate: 90, scale: 0.9, transition: { duration: 0.18 } }}
             transition={{ rotate: { type: "spring", stiffness: 180, damping: 18 }, duration: 0.2 }}
             style={{ lineHeight: 0 }}
-            className={`${canToggle ? "cursor-pointer" : "cursor-default"} ${canToggle ? "opacity-100" : "opacity-0 md:opacity-50"} ${className}`}
+            className={`-m-1.5 p-1.5 ${canToggle ? "cursor-pointer" : "cursor-default"} ${canToggle ? "opacity-100" : "opacity-0 md:opacity-50"} ${className}`}
         >
             <span
                 className={allowInquiry && !shouldReduceMotion ? "dm-icon-hover" : undefined}

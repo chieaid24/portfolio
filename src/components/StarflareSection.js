@@ -171,13 +171,13 @@ export default function StarflareSection({ cost = 25 }) {
             stiffness: 300,
             damping: 20,
           }}
-          className={`bg-highlight-color text-md items-center justify-center rounded-lg px-4.5 py-2.5 leading-4 font-semibold text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] ${loading || !canPurchase ? "cursor-default opacity-60" : "cursor-pointer opacity-100"}`}
+          className={`bg-highlight-color items-center justify-center rounded-lg px-3 py-2.5 text-sm leading-4 font-semibold whitespace-nowrap text-white shadow-[0_6px_18px_rgba(0,0,0,0.35)] sm:text-md sm:px-4.5 ${loading || !canPurchase ? "cursor-default opacity-60" : "cursor-pointer opacity-100"}`}
         >
           CLICK ME
         </motion.button>
       </motion.div>
 
-      <p className="text-outline-gray mt-3 text-[9px] font-medium sm:text-xs">
+      <p className="text-outline-gray mt-3 text-[11px] font-medium sm:text-xs">
         You&apos;ve sent {starflareClickCount} flare
         {starflareClickCount === 1 ? "" : "s"}.
       </p>
