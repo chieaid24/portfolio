@@ -33,3 +33,4 @@ File-only probes (UA-002 token scan, UA-009 asset budget) need no browser.
 | UA-009 | UI image sources <=1600px wide and <=700KB |
 | UA-011 | project cards bob only at >=md, still below it |
 | UA-012 | page gutter grows with the viewport; content never exceeds the 704px desktop measure, and never narrows as the window widens |
+| UA-013 | experience company/date each stay single-line; section has no overflow and no sub-11px text |
