@@ -16,10 +16,17 @@ import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 import ScrambledText from "@/components/ScrambledText";
+// PROTOTYPE — hero shaping behind ?variant=. Remove with the prototype.
+import HeroVariant, {
+  HERO_VARIANTS,
+  useHeroVariant,
+} from "@/components/prototype/HeroVariants";
+import PrototypeSwitcher from "@/components/prototype/PrototypeSwitcher";
 
 export default function Home() {
   const { highlightHex } = useMoney();
   const accent = highlightHex || "#ff5e5e";
+  const [heroVariant, selectHeroVariant] = useHeroVariant();
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
   // the latest pointer position every frame, so the motion is decoupled from
   // (bursty/sparse) mousemove events and from any CSS transition — that's what
@@ -108,6 +115,25 @@ export default function Home() {
       <main className="">
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
+            {/* PROTOTYPE: ?variant= swaps the hero; "current" = the block below. */}
+            <PrototypeSwitcher
+              variants={HERO_VARIANTS}
+              current={heroVariant}
+              onSelect={selectHeroVariant}
+            />
+            {heroVariant !== "current" && (
+              <HeroVariant
+                variant={heroVariant}
+                accent={accent}
+                flash={{
+                  onEnter: handleFlashEnter,
+                  onMove: handleFlashMove,
+                  onLeave: handleFlashLeave,
+                }}
+              />
+            )}
+            {heroVariant === "current" && (
+            <>
             {/* Hero: title full-width, copy + links on the left, globe on the right. */}
             <motion.div
               className="flex min-h-screen flex-col items-center justify-center gap-4 text-main-text"
@@ -178,6 +204,8 @@ export default function Home() {
                 </div>
               </div>
             </motion.div>
+            </>
+            )}
             <section id="experience" className="mb-20 scroll-mt-28">
               <motion.h2
                 className="mb-6 text-xl font-bold tracking-[0.2em] text-main-text sm:text-2xl md:text-3xl"
