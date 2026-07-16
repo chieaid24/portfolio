@@ -170,6 +170,24 @@ export function AsciiGlobe({ color, rows: rowsProp, fontPx }) {
   const drag = useRef(null); // last pointer pos while dragging, else null
   // Start with the pin's longitude facing the camera, tilted a bit north.
   const rot = useRef({ yaw: -LOCATION.lon * DEG, pitch: 0.55 });
+  const running = useRef(false); // did setup get a real box to measure?
+  const [shown, setShown] = useState(0); // bumped when we go hidden → visible
+
+  // Setup can only measure a visible element, so when the globe mounts hidden
+  // (below md) it bails — pick it up the moment it first has a box: crossing the
+  // breakpoint, or a phone turned landscape. Gated on `running` so the resizes
+  // our own textContent writes cause can't feed back into a loop.
+  useEffect(() => {
+    const el = oceanRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      if (!running.current && el.getBoundingClientRect().width) {
+        setShown((n) => n + 1);
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     const mask = getLandMask();
@@ -183,6 +201,14 @@ export function AsciiGlobe({ color, rows: rowsProp, fontPx }) {
     // x-scale correction to come out round.
     oceanPre.textContent = "0".repeat(20);
     const cellW = oceanPre.getBoundingClientRect().width / 20;
+    // A zero-width cell means we're display:none — the hero hides the globe
+    // below md. Bail, or aspect is 0, cols diverges to Infinity, and the
+    // per-cell loop below spins forever growing a row string until the tab dies.
+    if (!cellW) {
+      running.current = false;
+      return;
+    }
+    running.current = true;
     const lineH = fontSize;
     const aspect = cellW / lineH; // col width in row units
     const radius = (rows - 1) / 2; // in rows
@@ -296,8 +322,11 @@ export function AsciiGlobe({ color, rows: rowsProp, fontPx }) {
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
-  }, [rows, fontSize]);
+    return () => {
+      running.current = false;
+      cancelAnimationFrame(raf);
+    };
+  }, [rows, fontSize, shown]);
 
   const onPointerDown = (e) => {
     e.currentTarget.setPointerCapture(e.pointerId);
