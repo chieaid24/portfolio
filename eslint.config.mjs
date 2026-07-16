@@ -21,6 +21,8 @@ const eslintConfig = [
       // sibling worktrees live under .worktrees/ and carry their own source;
       // linting them makes results depend on which branches exist on disk
       "**/.worktrees/**",
+      // gitignored scratch for browser probe runners; not shipped source
+      "**/.playwright-mcp/**",
     ],
   },
 ];
