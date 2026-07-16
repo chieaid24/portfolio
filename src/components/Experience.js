@@ -35,13 +35,19 @@ function TimelineItem({ item }) {
           <h3 className="text-lg leading-tight font-semibold text-main-text sm:text-lg sm:leading-tight">
             {item.title}
           </h3>
+          {/* Side by side once there is room for both. Narrow screens can't fit
+              a company and a date range on one line, and letting each wrap
+              independently interleaves two ragged blocks 8px apart, so they
+              stack instead: each gets the full column and neither wraps. */}
           {(item.subtitle || item.period) && (
-            <div className="flex items-baseline justify-between gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between sm:gap-2">
               {item.subtitle && (
                 <p className="text-base font-medium text-dark-body-text">{item.subtitle}</p>
               )}
               {item.period && (
-                <p className="tracking-wide ml-auto text-sm text-dark-body-text">{item.period}</p>
+                <p className="tracking-wide text-sm text-dark-body-text sm:ml-auto sm:whitespace-nowrap">
+                  {item.period}
+                </p>
               )}
             </div>
           )}

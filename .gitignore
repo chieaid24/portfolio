@@ -55,3 +55,5 @@ AGENTS.md
 
 # Playwright MCP session files
 .playwright-mcp/
+# worktree dev server logs (see AGENTS.md)
+dev-server.log
