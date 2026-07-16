@@ -12,7 +12,7 @@ import { useMoney } from "@/lib/money-context";
 import RewardLink from "./RewardLink";
 import Image from "next/image";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useSyncExternalStore } from "react";
 
 const AMP = 3.5; // half the bob range; the bob spans 2*AMP, sitting entirely below the layout position (see wave())
 const PERIOD = 3.7; // ~seconds for one full up-down float cycle
@@ -24,6 +24,29 @@ const TRI_BLEND = 0.1;
 // hovering lifts the card by HOVER_LIFT back up to its natural y=0.
 const HOVER_LIFT = 5;
 const HOVER_RETURN = 0.7; // seconds for the post-hover drop back into the bob
+
+const BOB_QUERY = "(min-width: 768px)"; // Tailwind md breakpoint
+
+const subscribeToBobQuery = (onChange) => {
+  const mql = window.matchMedia(BOB_QUERY);
+  mql.addEventListener("change", onChange);
+  return () => mql.removeEventListener("change", onChange);
+};
+
+// The bob only makes sense paired with hover: the card rests HOVER_LIFT px low
+// and hover lifts it back to y=0. Below md there is no hover (every hover style
+// on this site is md:hover:-gated), so the bob stops there and the card sits at
+// its natural y=0. The server can't know the viewport, so it reports "no bob"
+// and hydration turns it on; first paint is still either way.
+function useBobEnabled(float) {
+  const wide = useSyncExternalStore(
+    subscribeToBobQuery,
+    () => window.matchMedia(BOB_QUERY).matches,
+    () => false,
+  );
+
+  return float && wide;
+}
 
 export default function ProjectCard({
   title,
@@ -44,6 +67,7 @@ export default function ProjectCard({
 
   const controls = useAnimationControls();
   const prefersReduced = useReducedMotion();
+  const bobs = useBobEnabled(float);
   const hoveredRef = useRef(false);
   const mountedRef = useRef(false);
 
@@ -107,10 +131,15 @@ export default function ProjectCard({
   }, []);
 
   useEffect(() => {
-    if (!float || prefersReduced) return;
+    if (!bobs || prefersReduced) {
+      // Crossing below md mid-bob leaves the card parked at an arbitrary y;
+      // settle it back to its layout position.
+      if (float) controls.start({ y: 0, transition: { duration: 0.2, ease: "easeOut" } });
+      return;
+    }
     startFloat();
     return () => controls.stop();
-  }, [float, prefersReduced, startFloat, controls]);
+  }, [bobs, float, prefersReduced, startFloat, controls]);
 
   const handleHoverStart = () => {
     if (prefersReduced) return;
@@ -118,7 +147,7 @@ export default function ProjectCard({
     // Lift by HOVER_LIFT: a floating card floats up to its natural y=0; a
     // non-floating card (resting at y=0) lifts to -HOVER_LIFT.
     controls.start({
-      y: float ? 0 : -HOVER_LIFT,
+      y: bobs ? 0 : -HOVER_LIFT,
       transition: { duration: 0.3, ease: "easeOut" },
     });
   };
@@ -126,7 +155,7 @@ export default function ProjectCard({
   const handleHoverEnd = () => {
     if (prefersReduced) return;
     hoveredRef.current = false;
-    if (float) {
+    if (bobs) {
       startFloat(true);
     } else {
       controls.start({ y: 0, transition: { duration: 0.2, ease: "easeOut" } });
@@ -138,7 +167,7 @@ export default function ProjectCard({
       animate={controls}
       onHoverStart={handleHoverStart}
       onHoverEnd={handleHoverEnd}
-      style={float ? { willChange: "transform" } : undefined}
+      style={bobs ? { willChange: "transform" } : undefined}
       className={`h-full rounded-xl p-px transition-shadow duration-200 md:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] light:md:hover:shadow-[0_0_25px_rgba(255,250,240,0.7)]`}
     >
       <div
