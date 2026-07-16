@@ -240,11 +240,18 @@ export default function ScrambledText({ text, className }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // trigger on cursor proximity to the wrapper's box, not just exact hover
+  // trigger on cursor proximity to the wrapper's box, not just exact hover.
+  // The check runs at most once per frame (rAF-coalesced) so a high-frequency
+  // mouse doesn't trigger a getBoundingClientRect per event.
   useEffect(() => {
-    const onMove = (e) => {
+    let raf = 0;
+    let lastEvent = null;
+
+    const check = () => {
+      raf = 0;
+      const e = lastEvent;
       const el = wrapperRef.current;
-      if (!el) return;
+      if (!e || !el) return;
       const r = el.getBoundingClientRect();
       const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
       const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
@@ -263,8 +270,16 @@ export default function ScrambledText({ text, className }) {
       }
     };
 
+    const onMove = (e) => {
+      lastEvent = e;
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+
     window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [handleMouseEnter, handleMouseMove, handleMouseLeave]);
 
   return (

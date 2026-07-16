@@ -62,7 +62,7 @@ export default function SpotifyEmbed({
         height={152}
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         allowFullScreen
-        loading="eager"
+        loading="lazy"
         onLoad={() => {
           if (loadTimerRef.current) clearTimeout(loadTimerRef.current);
           loadTimerRef.current = setTimeout(() => setIsReady(true), 700);
