@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useTheme } from "next-themes";
 import StarComponent from "./StarComponent";
-import { useMoney } from "@/lib/money-context";
+import { useAccent } from "@/lib/money-context";
 
 function RotatingStars({ highlightHex, isLight }) {
   const groupRef = useRef(null);
@@ -40,7 +40,8 @@ function RotatingStars({ highlightHex, isLight }) {
 
 // exported
 export default function StarBackground() {
-  const { highlightHex } = useMoney();
+  // useAccent (not useMoney) so the canvas doesn't rerender on balance changes.
+  const { highlightHex } = useAccent();
   const { resolvedTheme } = useTheme();
   // Resolved theme is unknown during SSR; render the dark sky until mounted so
   // the server and first client paint match (no hydration mismatch), then switch.
@@ -59,7 +60,10 @@ export default function StarBackground() {
           : "#02030a",
       }}
     >
-      <Canvas camera={{ position: [0, 0, 300], fov: 60 }} dpr={[1, 2]}>
+      {/* dpr capped at 1.5: the stars are soft radial-gradient sprites, so the
+          extra resolution of dpr 2 is invisible while costing ~78% more pixels
+          on retina screens. */}
+      <Canvas camera={{ position: [0, 0, 300], fov: 60 }} dpr={[1, 1.5]}>
         {!isLight && <color attach="background" args={["#02030a"]} />}
         <ambientLight intensity={0.5} />
         <RotatingStars
