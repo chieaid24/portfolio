@@ -155,7 +155,7 @@ export default function ClashWidget() {
           </div>
         </div>
       </div>
-      <div className="font-base text-body-text grid grid-cols-2 gap-3 text-[10px] sm:text-sm md:text-xs md:leading-none lg:leading-normal items-center">
+      <div className="font-base text-body-text grid grid-cols-2 gap-3 text-[11px] sm:text-sm md:text-xs md:leading-none lg:leading-normal items-center">
         <div className="flex flex-col flex-wrap justify-between py-2 md:gap-[5px] lg:gap-0.5">
           <div className="flex items-center justify-between gap-x-1">
             <h1>Career wins</h1>
