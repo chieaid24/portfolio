@@ -1,8 +1,15 @@
 # Handoff: dark mode toggle snapping
 
-Status: FIXED on `main` at `a0cd064` (fix: dark mode toggle wiggle and spin
-snapping). This doc records the real root causes so nobody re-litigates the
-earlier dead ends.
+Status: NOT FIXED. Owner reported the snap persisted after `a0cd064` and asked
+for a full revert; `06c7ede` restored `DarkModeToggle.js` and `globals.css` to
+their pre-fix state (`46cb2ef`, before `a391fcf`/`2eea164`/`a0cd064`). The
+toggle now has ALL original defects again, including the three mechanisms below
+that were demonstrated with traces - but since fixing all three still did not
+match what the owner sees, the user-visible snap is either environment-specific
+(their browser/DPR/hardware) or a fourth mechanism nobody has reproduced yet.
+Next attempt: get a screen recording from the owner, or reproduce on their
+actual setup before touching code. The analysis below is kept because the traces
+and ruled-out list remain valid.
 
 ## Symptom
 
