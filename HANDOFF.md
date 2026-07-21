@@ -1,80 +1,80 @@
-# Handoff: dark mode toggle animate-in snap
+# Handoff: dark mode toggle snapping
 
-Status: DONE and pushed to `main`. This doc exists so a fresh agent can verify or
-continue if the user reports the snap again.
+Status: FIXED on `main` at `a0cd064` (fix: dark mode toggle wiggle and spin
+snapping). This doc records the real root causes so nobody re-litigates the
+earlier dead ends.
 
-## Task
+## Symptom
 
-User reported: when the expanded wallet opens, the dark mode toggle icon "snaps to
-place at the end" of its animate-in. Fix on `main` directly (no worktree).
+"It rotates and then it snaps a couple pixels, every single time." Two earlier
+commits (`a391fcf`, `2eea164`) smoothed the wallet-open animate-in, but the snap
+persisted because it never came from the animate-in.
 
-## What was wrong and what shipped
+## Ruled out (with evidence)
 
-The toggle is `src/components/DarkModeToggle.js` (a `motion.button`). It only mounts
-inside the open wallet panel (`src/components/Header.js`, the expanded
-`AnimatePresence` panel), so opening the wallet plays its `initial -> animate`.
+- Framer stripping `transform` to `none` at animation end: pixel-diffed the
+  settled button with `none` vs identity matrix vs `rotate(360deg)` at DPR 1,
+  1.25, 1.5, and 2 - zero changed pixels in every combination. Harmless.
+- The animate-in itself: frame traces show opacity/scale/rotate converging
+  together with a sub-pixel terminal step. It was already clean after `2eea164`.
+- Wallet panel `height: auto` end-snap: panel content is top-anchored; a stale
+  height target cannot move the toggle row.
 
-Two commits on `main`:
+## Actual root causes (three, all fixed in `a0cd064`)
 
-- `a391fcf` fix: smooth dark mode toggle animate-in
-  - First hypothesis: underdamped rotate spring (`stiffness 180, damping 18`)
-    overshot ~5 deg then corrected back. Replaced with a no-bounce spring.
-  - This removed the overshoot but the user still saw a snap. Insufficient.
-- `2eea164` fix: unify toggle animate-in timing to kill trailing rotate
-  - Real root cause: split timing. opacity + scale finished at ~250ms while rotate
-    kept going to ~520ms, so the icon sat fully visible and full-size, still
-    rotating, then settled last. That trailing rotate read as "snap into place."
-  - Final change: collapse the whole animate-in onto one transition:
-    `transition={{ duration: 0.3, ease: "easeOut" }}` (was a per-property mix of
-    spring rotate + 0.25s tween). All three properties (opacity, scale, rotate) now
-    start and finish together.
+1. **Hover wiggle aborted mid-flight.** The inquiry wiggle was a CSS `:hover`
+   animation (`dm-inquiry`, up to 30deg). Any interruption - mouse leaving
+   mid-wiggle, or click removing the class - cancelled the CSS animation and the
+   icon jumped instantly back to 0 (about 5px at the icon corners). Now a framer
+   `whileHover` variant on a `motion.span`: interruptions ease back to rest
+   (0.15s) from the current angle. CSS keyframes deleted from `globals.css`.
+2. **Spin fought the View Transition on the main thread.** The 360 spin started
+   before `startViewTransition` captured its snapshot, so the capture stall froze
+   the spin at ~2deg and then teleported it ~200deg (framer tweens run on wall
+   clock). The VT teardown style recalc at 280ms also landed right before the
+   300ms spin ended, guaranteeing a dropped-frame snap at the end of every click.
+   Now the spin starts inside `transition.ready` (after capture) and runs 0.25s,
+   ending before teardown. Animate-in still uses the unified 0.3s transition
+   (the `spin ? ... : ...` transition override keys off spin being nonzero).
+3. **VT hover steal replayed the wiggle under a static pointer.** The VT overlay
+   takes hover from the whole document: pointerout fires at VT start and
+   pointerover at teardown with the pointer never moving. That re-triggered
+   `whileHover` right after the spin settled - a fresh "rotates then moves again"
+   artifact. Gated by `allowInquiry`: cleared on click, re-armed only by a native
+   `pointerleave` on the button whose coordinates are genuinely outside it (and
+   not while `data-theme-vt` is set). Two framer traps forced that shape:
+   - framer applies `whileHover` prop changes one hover session late, so the
+     gate lives in a dynamic variant via `custom`, and `whileHover` stays fixed;
+   - framer's `onHoverEnd` skips sessions that began while `whileHover` was
+     unset, so re-arming uses a native listener, not framer callbacks.
+   The icons also got `pointer-events="none"` so the Sun/Moon swap cannot change
+   the hover hit-target mid-gesture.
 
-See the diffs: `git show a391fcf 2eea164`.
+## How it was verified
 
-## How it was verified (Playwright, live dev server)
+Standalone playwright-core runner (MCP browser gets reaped; see memory
+`env-background-process-reaper`), dev server on :3002 (user's :3000 had died;
+never touch :3000). Per-frame MutationObserver on inline style writes + computed
+transform polling + pixel filmstrips via sharp. All scenarios traced clean:
 
-Verified against the user's own dev server at `http://localhost:3000` (their process,
-PID was 72730). Do NOT kill or restart port 3000 (CLAUDE.md rule). A parallel dev
-server cannot run in this same dir while theirs is up (`.next`/Turbopack conflict) so
-an attempt on 3002 died; observing 3000 read-only + HMR from edits is the workflow.
+- animate-in: unified convergence, stable tail;
+- hover -> full wiggle -> click: monotonic spin, no freeze/teleport, no post-spin
+  writes;
+- click mid-wiggle: smooth ease-back composed with the spin;
+- hover-leave mid-wiggle: 29.8 -> 27.9 -> 21.2 -> 12.3 -> 4.0 -> 0.6 -> 0;
+- re-arm matrix: wiggle on hover 29deg / post-click static 0 / first re-entry
+  after real exit 29deg.
 
-Method: `mcp__playwright__browser_evaluate` sampling the toggle's computed transform
-(decode scale via `hypot(a,b)`, rotate via `atan2(b,a)`), opacity, and
-`getBoundingClientRect` frame-by-frame across a close-then-open of the wallet.
+`npm run lint`: 0 errors (26 pre-existing warnings, none in these files).
 
-Post-fix trace confirmed:
-- opacity/scale/rotate converge together (~341-394ms), zero overshoot.
-- transform strips to `none` exactly at identity; tail dead-flat `(1,1,0)`.
-- Click flow: theme flips both ways, label updates, 360 spin settles flat at 0, no
-  snap; View Transition circular wipe intact.
-- 0 console errors throughout; `npm run lint` = 0 errors (26 pre-existing warnings,
-  none in this file).
+Env quirks hit while testing (headless chromium-1217 only, not real browsers):
+React's delegated synthetic clicks never fire - drive buttons via
+`el[__reactProps$key].onClick()`. Next devtools button also matches
+`button[aria-expanded]`; scope selectors to `header`.
 
-Playwright note: the MCP tools use `target` (not `ref`) for element refs. See memory
-`playwright-mcp-env-fix`.
+## Open items (pre-existing, untouched)
 
-## Open items / watch-outs (pre-existing, NOT introduced here)
-
-- TEMP quest-gate bypass in `DarkModeToggle.js` (~line 46): 
+- TEMP quest-gate bypass in `DarkModeToggle.js` (~line 51):
   `const canToggle = ready || allQuestComp;` with a TODO to restore
-  `ready && allQuestComp` before merge. The toggle is currently unlocked
-  unconditionally. Untouched by this work; flag to the owner.
-- `quest_totals` counts are hand-maintained (see CLAUDE.md). Not affected here.
-
-## If the user says it STILL snaps
-
-Working tree is clean and `HEAD == origin/main` at `2eea164`. Confirm the server on
-3000 actually hot-reloaded the file (re-run the frame sampler above; a clean run
-shows opacity/scale/rotate finishing within one ~50ms window). If numeric trace is
-clean but they still perceive a snap, widen the audit to: the wallet panel
-height `0 -> auto` collapse (`Header.js`), the `animate-fade-in-7` inner CSS fade,
-and the reduced-motion fallback path in `DarkModeToggle.js` (`handleClick` else
-branch). Consider capturing a slowed filmstrip rather than trusting rAF sampling,
-which ran coarse (~30-100ms/frame) on this machine.
-
-## Suggested skills
-
-- `impeccable:impeccable` -- if the animate-in needs further motion polish or a
-  broader UI pass on the wallet.
-- `ui-audit` -- to screenshot the wallet/header flows and check for other drift.
-- `review` -- to review the two commits against repo standards before any follow-up.
+  `ready && allQuestComp`. Still unlocked unconditionally; owner call.
+- `quest_totals` hand-maintained counts (see CLAUDE.md). Unaffected.
