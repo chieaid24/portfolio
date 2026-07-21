@@ -8,7 +8,7 @@ import { useMoney } from "@/lib/money-context";
 
 function SunIcon() {
     return (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" pointerEvents="none" aria-hidden>
             <circle cx="12" cy="12" r="4"/>
             <line x1="12" y1="2" x2="12" y2="4"/>
             <line x1="12" y1="20" x2="12" y2="22"/>
@@ -24,7 +24,7 @@ function SunIcon() {
 
 function MoonIcon() {
     return (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" pointerEvents="none" aria-hidden>
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
     );
@@ -35,6 +35,9 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
     const [denied, setDenied] = useState(false);
     const [clickedAnim, setClickedAnim] = useState(false);
     const [spin, setSpin] = useState(0);
+    // Gates the hover wiggle: the theme View Transition overlay steals hover for
+    // the whole document, so a replayed hover-start fires at VT teardown under a
+    // static pointer. Re-armed only when the pointer has truly left the button.
     const [allowInquiry, setAllowInquiry] = useState(true);
     const buttonRef = useRef(null);
 
@@ -52,6 +55,23 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Re-arm the hover wiggle on genuine pointer exit only. Native listener:
+    // framer's onHoverEnd skips sessions that began while whileHover was unset.
+    useEffect(() => {
+        if (!mounted) return;
+        const el = buttonRef.current;
+        if (!el) return;
+        const onLeave = (e) => {
+            if (document.documentElement.dataset.themeVt) return;
+            const r = el.getBoundingClientRect();
+            const inside = e.clientX >= r.left && e.clientX <= r.right &&
+                e.clientY >= r.top && e.clientY <= r.bottom;
+            if (!inside) setAllowInquiry(true);
+        };
+        el.addEventListener("pointerleave", onLeave);
+        return () => el.removeEventListener("pointerleave", onLeave);
+    }, [mounted]);
 
     // Track last questClicked value to replay the shake hint when the user
     // pokes the locked toggle from elsewhere (the quest progress bars).
@@ -71,7 +91,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
         if (canToggle) {
             setAllowInquiry(false);
             const nextTheme = isDark ? "light" : "dark";
-            if (!shouldReduceMotion) setSpin((s) => s + 360);
+            const startSpin = () => setSpin((s) => s + 360);
 
             if (!shouldReduceMotion && typeof document.startViewTransition === "function") {
                 const rect = buttonRef.current?.getBoundingClientRect();
@@ -91,17 +111,22 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
                     flushSync(() => setTheme(nextTheme));
                 });
 
-                transition.ready.then(() => {
-                    root.animate(
-                        { clipPath: [clipFrom, clipTo] },
-                        {
-                            duration: 280,
-                            easing: "ease-in-out",
-                            fill: "forwards",
-                            pseudoElement: "::view-transition-new(root)",
-                        }
-                    );
-                });
+                // Spin starts after snapshot capture so the VT main-thread stall
+                // can't freeze/teleport it; 0.25s ends before VT teardown at 280ms.
+                transition.ready
+                    .then(() => {
+                        startSpin();
+                        root.animate(
+                            { clipPath: [clipFrom, clipTo] },
+                            {
+                                duration: 280,
+                                easing: "ease-in-out",
+                                fill: "forwards",
+                                pseudoElement: "::view-transition-new(root)",
+                            }
+                        );
+                    })
+                    .catch(startSpin);
 
                 transition.finished.finally(() => {
                     delete root.dataset.themeVt;
@@ -109,6 +134,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
                 });
             } else {
                 // Option A: reduced-motion / no-startViewTransition fallback — instant atomic swap
+                if (!shouldReduceMotion) startSpin();
                 document.documentElement.classList.add("no-transition");
                 setTheme(nextTheme);
                 requestAnimationFrame(() =>
@@ -145,20 +171,43 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
                         scale: 1,
                         transition: { duration: 0.3 },
                     }
-                    : { x: 0, opacity: 1, rotate: spin, scale: 1 }
+                    : {
+                        x: 0,
+                        opacity: 1,
+                        rotate: spin,
+                        scale: 1,
+                        // Click spin (0.25s) must end before VT teardown at 280ms;
+                        // spin === 0 keeps the unified 0.3s animate-in below.
+                        ...(spin ? { transition: { duration: 0.25, ease: "easeOut" } } : {}),
+                    }
             }
             exit={{ opacity: 0, rotate: 90, scale: 0.9, transition: { duration: 0.18 } }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             style={{ lineHeight: 0 }}
             className={`-m-1.5 p-1.5 ${canToggle ? "cursor-pointer" : "cursor-default"} ${canToggle ? "opacity-100" : "opacity-0 md:opacity-50"} ${className}`}
         >
-            <span
-                className={allowInquiry && !shouldReduceMotion ? "dm-icon-hover" : undefined}
-                onMouseLeave={() => setAllowInquiry(true)}
+            {/* Framer hover wiggle (not CSS) so interruptions ease back instead of snapping */}
+            <motion.span
+                variants={{
+                    rest: { rotate: 0, transition: { duration: 0.15, ease: "easeOut" } },
+                    // Dynamic variant: gating via `custom` (not the whileHover prop)
+                    // because framer applies whileHover prop changes one hover late.
+                    inquiry: (armed) =>
+                        armed
+                            ? {
+                                rotate: [null, 30, 26, -5, 2, 0],
+                                transition: { duration: 0.5, ease: "easeOut", times: [0, 0.3, 0.5, 0.72, 0.88, 1] },
+                            }
+                            : { rotate: 0, transition: { duration: 0.15, ease: "easeOut" } },
+                }}
+                custom={allowInquiry && !shouldReduceMotion}
+                initial={false}
+                animate="rest"
+                whileHover="inquiry"
                 style={{ display: "inline-flex" }}
             >
                 {isDark ? <SunIcon /> : <MoonIcon />}
-            </span>
+            </motion.span>
         </motion.button>
     );
 }
