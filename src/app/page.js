@@ -3,25 +3,14 @@
 import { useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import { AsciiGlobe } from "@/components/MissionControl";
 import { useMoney } from "@/lib/money-context";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
 import RewardLink from "@/components/RewardLink";
 import { motion } from "framer-motion";
-import FileDownload from "@/icons/FileDownload";
-import FooterLinkedin from "@/icons/FooterLinkedin";
-import FooterGithub from "@/icons/FooterGithub";
-import FooterEmail from "@/icons/FooterEmail";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
-import ScrambledText from "@/components/ScrambledText";
-// PROTOTYPE — hero shaping behind ?variant=. Remove with the prototype.
-import HeroVariant, {
-  HERO_VARIANTS,
-  useHeroVariant,
-} from "@/components/prototype/HeroVariants";
-import PrototypeSwitcher from "@/components/prototype/PrototypeSwitcher";
+import Hero from "@/components/Hero";
 
 // Loaded lazily so three.js / react-three-fiber (~250KB gzip) stay out of the
 // home page's critical bundle. The placeholder paints the same sky (near-black
@@ -37,7 +26,6 @@ const StarBackground = dynamic(() => import("@/components/StarBackground"), {
 export default function Home() {
   const { highlightHex } = useMoney();
   const accent = highlightHex || "#ff5e5e";
-  const [heroVariant, selectHeroVariant] = useHeroVariant();
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
   // the latest pointer position every frame, so the motion is decoupled from
   // (bursty/sparse) mousemove events and from any CSS transition — that's what
@@ -118,97 +106,14 @@ export default function Home() {
       <main className="">
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
-            {/* PROTOTYPE: ?variant= swaps the hero; "current" = the block below. */}
-            <PrototypeSwitcher
-              variants={HERO_VARIANTS}
-              current={heroVariant}
-              onSelect={selectHeroVariant}
+            <Hero
+              accent={accent}
+              flash={{
+                onEnter: handleFlashEnter,
+                onMove: handleFlashMove,
+                onLeave: handleFlashLeave,
+              }}
             />
-            {heroVariant !== "current" && (
-              <HeroVariant
-                variant={heroVariant}
-                accent={accent}
-                flash={{
-                  onEnter: handleFlashEnter,
-                  onMove: handleFlashMove,
-                  onLeave: handleFlashLeave,
-                }}
-              />
-            )}
-            {heroVariant === "current" && (
-            <>
-            {/* Hero: title full-width, copy + links on the left, globe on the right. */}
-            <motion.div
-              className="flex min-h-screen flex-col items-center justify-center gap-4 text-main-text"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-            >
-              <h1 className="w-full text-2xl font-bold leading-[1.05] text-main-text sm:text-3xl md:text-[38px] lg:text-[46px]">
-                Greetings Earthling, I&apos;m{" "}
-                <ScrambledText text="Aidan" className="gradient-text-header" />
-              </h1>
-              <div className="flex w-full flex-col items-start gap-8 md:flex-row md:items-center md:justify-between md:gap-10">
-                <div className="flex flex-col items-start gap-9">
-                  <p className="text-body-text max-w-[28rem] text-lg font-medium sm:text-xl">
-                    I build automation-first platforms and developer infrastructure for AI.
-                  </p>
-                  <div className="flex items-center gap-5">
-                    <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
-                      <RewardLink
-                        href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
-                        rewardId="resume"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
-                        onMouseEnter={handleFlashEnter}
-                        onMouseMove={handleFlashMove}
-                        onMouseLeave={handleFlashLeave}
-                      >
-                        <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
-                          <span>Resume</span>
-                          <FileDownload className="text-dark-grey-text h-5 w-5" />
-                        </div>
-                      </RewardLink>
-                    </div>
-                    <div className="text-outline-gray flex items-center justify-center gap-x-4">
-                      <RewardLink
-                        href="https://www.linkedin.com/in/aidanchien/"
-                        target="_blank"
-                        rewardId="linkedin"
-                        aria-label="LinkedIn"
-                        className="md:hover:translate-y-[-1px]"
-                      >
-                        <FooterLinkedin className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-                      </RewardLink>
-                      <RewardLink
-                        href="https://github.com/chieaid24"
-                        target="_blank"
-                        rewardId="github"
-                        aria-label="GitHub"
-                        className="md:hover:translate-y-[-1px]"
-                      >
-                        <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-                      </RewardLink>
-                      <RewardLink
-                        href="mailto:aidan.chien@uwaterloo.ca"
-                        target="_blank"
-                        rewardId="email"
-                        aria-label="Email"
-                        className="md:hover:translate-y-[-1px]"
-                      >
-                        <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-                      </RewardLink>
-                    </div>
-                  </div>
-                </div>
-                <div className="hidden shrink-0 flex-col items-end gap-1.5 [&_pre:first-child]:opacity-60 md:flex dark:[&_pre:first-child]:opacity-35">
-                  <AsciiGlobe color={accent} rows={13} fontPx={9} />
-                </div>
-              </div>
-            </motion.div>
-            </>
-            )}
             <section id="experience" className="mb-20 scroll-mt-28">
               <motion.h2
                 className="mb-6 text-xl font-bold tracking-[0.2em] text-main-text sm:text-2xl md:text-3xl"

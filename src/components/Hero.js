@@ -1,25 +1,16 @@
 "use client";
 
-// PROTOTYPE — throwaway. Delete once the hero shaping is settled.
+// Home hero. At md+ the globe, copy, and links read as one centered block, with
+// the copy's left edge aligned along the globe's arc instead of a straight line;
+// below md it falls back to a plain left-aligned stack (the globe is hidden).
 //
-// Question: instead of copy hard-left and the globe hard-right with ~130px of
-// dead space between them, what if the globe + copy + links read as ONE centered
-// block, with the copy's left edge left-aligned *along the globe's arc* rather
-// than along a straight line?
-//
-// Two keys on the real "/" route, gated by ?variant=:
-//   current — today's hero (rendered by page.js), kept for A/B
-//   shaped  — this file
-// Switcher: PrototypeSwitcher (bottom bar, or ←/→). Never in a production build.
-//
-// Constraints this variant honors, per the owner:
-//   - line breaks stay EXACTLY as they fall today (so they're frozen as literals
-//     below, not reflowed) — only each line's horizontal offset changes
-//   - the globe is a FIXED hand-tuned size; nothing measures the copy and resizes
+// Constraints:
+//   - copy line breaks are frozen as literals below (COPY_LINES), never reflowed —
+//     only each line's horizontal offset changes, so the arc can't re-break them
+//   - the globe is a fixed hand-tuned size; nothing measures the copy and resizes
 //     the globe, so there's no reflow loop
-//   - below md the globe is hidden, so md- keeps today's plain left-aligned stack
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import RewardLink from "@/components/RewardLink";
 import ScrambledText from "@/components/ScrambledText";
@@ -28,63 +19,6 @@ import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import FooterEmail from "@/icons/FooterEmail";
 import { AsciiGlobe } from "@/components/MissionControl";
-
-export const HERO_VARIANTS = [
-  { key: "current", name: "Current (copy left, globe right)" },
-  { key: "shaped", name: "Shaped (centered block, globe left, copy on the arc)" },
-  { key: "stacked", name: "Stacked (no globe, title / description / links centered)" },
-  { key: "inline", name: "Inline (no globe, description + links one centered line)" },
-];
-
-// Variant state lives in React + the URL (?variant=), read from window on mount
-// so there's no Suspense boundary to add to the page for this throwaway.
-export function useHeroVariant() {
-  const [variant, setVariant] = useState("current");
-  useEffect(() => {
-    const v = new URLSearchParams(window.location.search).get("variant");
-    if (v && HERO_VARIANTS.some((x) => x.key === v)) setVariant(v);
-  }, []);
-  const select = useCallback((v) => {
-    setVariant(v);
-    const url = new URL(window.location.href);
-    if (v === "current") url.searchParams.delete("variant");
-    else url.searchParams.set("variant", v);
-    window.history.replaceState(null, "", url);
-  }, []);
-  return [variant, select];
-}
-
-// Backdrop treatments behind the globe — it's sparse ASCII on a busy starfield,
-// so it barely reads. Each is a creative way to lift it off the field. Cycled
-// with the bg pill (?globebg=), independent of the hero variant.
-export const GLOBE_BACKDROPS = [
-  { key: "none" },
-  { key: "glow" },
-  { key: "scrim" },
-  { key: "glass" },
-  { key: "orbit" },
-  { key: "reticle" },
-];
-
-export function useGlobeBackdrop() {
-  const [bg, setBg] = useState("none");
-  useEffect(() => {
-    const v = new URLSearchParams(window.location.search).get("globebg");
-    if (v && GLOBE_BACKDROPS.some((x) => x.key === v)) setBg(v);
-  }, []);
-  const select = useCallback((v) => {
-    setBg(v);
-    const url = new URL(window.location.href);
-    if (v === "none") url.searchParams.delete("globebg");
-    else url.searchParams.set("globebg", v);
-    window.history.replaceState(null, "", url);
-  }, []);
-  return [bg, select];
-}
-
-// ---------------------------------------------------------------------------
-// tunables — the whole point of the prototype
-// ---------------------------------------------------------------------------
 
 // Globe size. Fixed by choice: the copy never resizes it. The disc's diameter is
 // (ROWS - 1) * FONT_PX = 126px. ROWS is odd so the disc has a real center row —
@@ -114,19 +48,12 @@ const INK_INSET = [4, 4, 0];
 // than the ink is — without this the block reads a few px right of center.
 const OPTICAL_CENTER = true;
 
-// Center the title over the block. Today's hero has it flush left and full
-// width; "center aligned again" + the old main hero argue for centered. Flip to
-// false to see it flush left against the centered block.
-const CENTER_TITLE = true;
-
-// Frozen line breaks — these are exactly where the live <p> breaks at md+ today
+// Frozen line breaks — these are exactly where the live <p> breaks at md+
 // (max-w-[28rem], text-xl). Edit the copy and you must re-check these by hand.
 const COPY_LINES = [
   "I build automation-first platforms and",
   "developer infrastructure for AI.",
 ];
-
-// ---------------------------------------------------------------------------
 
 function HeroLinks({ flash }) {
   return (
@@ -178,6 +105,18 @@ function HeroLinks({ flash }) {
         </RewardLink>
       </div>
     </>
+  );
+}
+
+// Frosted disc hugging the globe so its sparse ASCII lifts off the starfield.
+// Absolute + pointer-events-none, so it never grows the globe's box or the arc
+// measurement.
+function GlobeGlass() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute -inset-1 rounded-full bg-black/25 backdrop-blur-[3px]"
+    />
   );
 }
 
@@ -306,134 +245,10 @@ function useArcAlign({ groupRef, colRef, globeRef, enabled }) {
   }, [groupRef, colRef, globeRef, enabled]);
 }
 
-// A layer painted behind the globe glyphs to lift them off the starfield.
-//
-// Every treatment hugs the globe via `absolute -inset-*` on the globe's own box
-// — NOT a big fixed circle. There's only ~79px above to the title and ~53px
-// right to the copy, so anything larger clips through them. `-inset-2` (8px) is
-// the ceiling that stays clear of both. pointer-events-none; no <pre>, and being
-// absolute it never grows the globe's box, so the arc measurement is untouched.
-function GlobeBackdrop({ kind, accent }) {
-  switch (kind) {
-    // Additive: a soft accent bloom, like the globe is lit from within.
-    case "glow":
-      return (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -inset-1 rounded-full blur-[6px]"
-          style={{
-            color: accent,
-            background:
-              "radial-gradient(circle, color-mix(in srgb, currentColor 60%, transparent) 0%, transparent 70%)",
-          }}
-        />
-      );
-    // Subtractive: a dark well that mutes the stars right behind the glyphs.
-    case "scrim":
-      return (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -inset-2 rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 48%, transparent 74%)",
-          }}
-        />
-      );
-    // Surface: a frosted plate hugging the globe, field blurred behind it.
-    case "glass":
-      return (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -inset-1 rounded-full bg-black/25 backdrop-blur-[3px]"
-        />
-      );
-    // Structural: concentric accent rings, an orbit the globe sits inside.
-    case "orbit":
-      return (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -inset-1"
-          style={{ color: accent }}
-        >
-          <div
-            className="absolute inset-0 rounded-full border"
-            style={{
-              borderColor: "color-mix(in srgb, currentColor 60%, transparent)",
-            }}
-          />
-          <div
-            className="absolute inset-[14px] rounded-full border"
-            style={{
-              borderColor: "color-mix(in srgb, currentColor 28%, transparent)",
-            }}
-          />
-        </div>
-      );
-    // Technical: a dashed reticle + faint crosshair, HUD scanner framing.
-    case "reticle":
-      return (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -inset-1"
-          style={{ color: accent }}
-        >
-          <div
-            className="absolute inset-0 rounded-full border border-dashed opacity-75"
-            style={{ borderColor: "currentColor" }}
-          />
-          <div
-            className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 opacity-25"
-            style={{ background: "currentColor" }}
-          />
-          <div
-            className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 opacity-25"
-            style={{ background: "currentColor" }}
-          />
-        </div>
-      );
-    default:
-      return null;
-  }
-}
-
-// Buttons-only switcher for the globe backdrop, bottom-left so it clears the
-// centered variant pill. No arrow-key handler on purpose — the variant switcher
-// owns ←/→, and two listeners would both fire.
-function GlobeBackdropSwitcher({ options, current, onSelect }) {
-  if (process.env.NODE_ENV === "production") return null;
-  const index = Math.max(
-    0,
-    options.findIndex((o) => o.key === current),
-  );
-  const cycle = (step) =>
-    onSelect(options[(index + step + options.length) % options.length].key);
-  const btn =
-    "flex h-5 w-5 items-center justify-center rounded-full text-sm leading-none text-black/50 transition-colors hover:bg-black/10 hover:text-black";
-
-  return (
-    <div className="pointer-events-none fixed bottom-4 left-20 z-50">
-      <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/90 px-1 py-0.5 font-mono text-[11px] text-black shadow-md ring-1 ring-black/10 backdrop-blur">
-        <span className="pl-1 pr-0.5 text-black/40">bg</span>
-        <button className={btn} onClick={() => cycle(-1)} aria-label="Previous globe backdrop">
-          ‹
-        </button>
-        <span className="min-w-[3.5rem] text-center font-medium">
-          {options[index].key}
-        </span>
-        <button className={btn} onClick={() => cycle(1)} aria-label="Next globe backdrop">
-          ›
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function ShapedHero({ accent, flash }) {
+export default function Hero({ accent, flash }) {
   const groupRef = useRef(null);
   const colRef = useRef(null);
   const globeRef = useRef(null);
-  const [globeBg, setGlobeBg] = useGlobeBackdrop();
   // md- hides the globe entirely, so there's no arc to align to down there.
   const enabled = useCallback(
     () => window.matchMedia("(min-width: 768px)").matches,
@@ -443,23 +258,18 @@ function ShapedHero({ accent, flash }) {
   useArcAlign({ groupRef, colRef, globeRef, enabled });
 
   return (
-    <>
     <motion.div
       className="flex min-h-screen flex-col items-center justify-center gap-4 text-main-text"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <h1
-        className={`w-full text-2xl font-bold leading-[1.05] text-main-text sm:text-3xl md:text-[38px] lg:text-[46px] ${
-          CENTER_TITLE ? "md:text-center" : ""
-        }`}
-      >
+      <h1 className="w-full text-2xl font-bold leading-[1.05] text-main-text sm:text-3xl md:text-center md:text-[38px] lg:text-[46px]">
         Greetings Earthling, I&apos;m{" "}
         <ScrambledText text="Aidan" className="gradient-text-header" />
       </h1>
 
-      {/* md-: today's plain stack, globe-less and untouched. */}
+      {/* below md: plain left-aligned stack, globe hidden. */}
       <div className="flex w-full flex-col items-start gap-9 md:hidden">
         <p className="text-body-text max-w-[28rem] text-lg font-medium sm:text-xl">
           {COPY_LINES.join(" ")}
@@ -475,13 +285,13 @@ function ShapedHero({ accent, flash }) {
         className="hidden w-full items-center justify-center md:flex"
       >
         <div ref={globeRef} className="relative shrink-0">
-          <GlobeBackdrop kind={globeBg} accent={accent} />
+          <GlobeGlass />
           <div className="relative [&_pre:first-child]:opacity-60 dark:[&_pre:first-child]:opacity-35">
             <AsciiGlobe color={accent} rows={GLOBE_ROWS} fontPx={GLOBE_FONT_PX} />
           </div>
         </div>
         <div ref={colRef} className="flex flex-col items-start">
-          {COPY_LINES.map((line, i) => (
+          {COPY_LINES.map((line) => (
             <div
               key={line}
               className="text-body-text text-xl font-medium whitespace-nowrap"
@@ -495,71 +305,5 @@ function ShapedHero({ accent, flash }) {
         </div>
       </div>
     </motion.div>
-    <GlobeBackdropSwitcher
-      options={GLOBE_BACKDROPS}
-      current={globeBg}
-      onSelect={setGlobeBg}
-    />
-    </>
   );
-}
-
-// Shared centered title for the globe-less variants.
-function CenteredTitle() {
-  return (
-    <h1 className="w-full text-2xl font-bold leading-[1.05] text-main-text sm:text-3xl md:text-[38px] lg:text-[46px]">
-      Greetings Earthling, I&apos;m{" "}
-      <ScrambledText text="Aidan" className="gradient-text-header" />
-    </h1>
-  );
-}
-
-// No globe. Title, description, and links each on their own centered line.
-function StackedHero({ flash }) {
-  return (
-    <motion.div
-      className="flex min-h-screen flex-col items-center justify-center gap-6 text-center text-main-text"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
-      <CenteredTitle />
-      <p className="text-body-text max-w-[34rem] text-lg font-medium sm:text-xl">
-        {COPY_LINES.join(" ")}
-      </p>
-      <div className="flex items-center justify-center gap-5">
-        <HeroLinks flash={flash} />
-      </div>
-    </motion.div>
-  );
-}
-
-// No globe. Description and links share one centered line (wraps below md).
-function InlineHero({ flash }) {
-  return (
-    <motion.div
-      className="flex min-h-screen flex-col items-center justify-center gap-6 text-center text-main-text"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
-      <CenteredTitle />
-      {/* lg+: description (two lines) and links share one centered row; below lg they stack. */}
-      <div className="flex flex-col items-center justify-center gap-4 lg:flex-row lg:gap-6">
-        <p className="text-body-text max-w-[26rem] text-lg font-medium sm:text-xl">
-          {COPY_LINES.join(" ")}
-        </p>
-        <div className="flex items-center gap-5">
-          <HeroLinks flash={flash} />
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-export default function HeroVariant({ variant, accent, flash }) {
-  if (variant === "shaped") return <ShapedHero accent={accent} flash={flash} />;
-  if (variant === "stacked") return <StackedHero flash={flash} />;
-  if (variant === "inline") return <InlineHero flash={flash} />;
-  return null;
 }
