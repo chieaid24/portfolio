@@ -131,9 +131,22 @@ export function maskIsLand(mask, latDeg, lonDeg) {
 }
 
 const GLOBE_ROWS = 15;
-const GLOBE_FONT_PX = 10;
+const GLOBE_FONT_PX = 10.5;
 const LAND_RAMP = ".,:;=+*#%@"; // dark → bright
-const AUTO_SPIN = 0.14; // rad/s
+const AUTO_SPIN = 0.10; // rad/s
+// Pin starts this many degrees west of center, near the left limb, so the spin
+// (rightward) carries it across the whole visible face before it hides on the
+// right — rather than starting dead-center and leaving frame in ~120deg.
+const PIN_START_LON = 50;
+// North tilt of the spin axis (rad). Higher = more 3D tilt but the pin arcs up
+// then down as it crosses; lower flattens that into a straighter, more level
+// sweep (0 = dead-horizontal).
+const SPIN_PITCH = 0.4;
+// How far toward the front the pin must face to be drawn: its forward dot with
+// the camera (1 = dead center, 0 = the limb). Higher hides it sooner as it turns
+// away, so it doesn't cling to the rim looking like it's still there when it's
+// nearly edge-on. 0.3 ≈ within ~72deg of center.
+const PIN_VISIBLE_MIN = 0.5;
 const REDRAW_MS = 110; // grid redraw cadence — ~9fps, calmer than 60fps shimmer
 const DEG = Math.PI / 180;
 
@@ -168,8 +181,12 @@ export function AsciiGlobe({ color, rows: rowsProp, fontPx }) {
   const pinRef = useRef(null);
   const beaconRef = useRef(null);
   const drag = useRef(null); // last pointer pos while dragging, else null
-  // Start with the pin's longitude facing the camera, tilted a bit north.
-  const rot = useRef({ yaw: -LOCATION.lon * DEG, pitch: 0.55 });
+  // Start with the pin near the left limb (PIN_START_LON west of center), tilted
+  // a bit north, so it sweeps the full face before hiding on the right.
+  const rot = useRef({
+    yaw: (-LOCATION.lon - PIN_START_LON) * DEG,
+    pitch: SPIN_PITCH,
+  });
   const running = useRef(false); // did setup get a real box to measure?
   const [shown, setShown] = useState(0); // bumped when we go hidden → visible
 
@@ -293,7 +310,7 @@ export function AsciiGlobe({ color, rows: rowsProp, fontPx }) {
       const pz = pinDir[1] * sp + pz0 * cp;
       const pinRows = new Array(rows).fill(" ".repeat(cols));
       const beaconRows = new Array(rows).fill(" ".repeat(cols));
-      if (pz > 0.05) {
+      if (pz > PIN_VISIBLE_MIN) {
         const pc = Math.round(cCol + (px * radius) / aspect);
         const pr = Math.round(cRow - py * radius);
         const put = (arr, r, c, ch) =>

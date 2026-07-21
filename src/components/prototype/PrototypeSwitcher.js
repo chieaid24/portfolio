@@ -31,18 +31,16 @@ export default function PrototypeSwitcher({ variants, current, onSelect }) {
   if (process.env.NODE_ENV === "production") return null;
 
   const btn =
-    "flex h-8 w-8 items-center justify-center rounded-full text-lg leading-none text-black/70 transition-colors hover:bg-black/10 hover:text-black";
+    "flex h-5 w-5 items-center justify-center rounded-full text-sm leading-none text-black/50 transition-colors hover:bg-black/10 hover:text-black";
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-center">
-      <div className="pointer-events-auto flex items-center gap-2 rounded-full bg-white px-2 py-1.5 font-mono text-xs text-black shadow-[0_6px_24px_rgba(0,0,0,0.35)] ring-1 ring-black/10">
+    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center">
+      <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/90 px-1 py-0.5 font-mono text-[11px] text-black shadow-md ring-1 ring-black/10 backdrop-blur">
         <button className={btn} onClick={() => cycle(-1)} aria-label="Previous variant">
           ‹
         </button>
-        <span className="min-w-[15rem] text-center tabular-nums">
-          <span className="font-bold">{variants[index].key}</span>
-          <span className="mx-1.5 text-black/30">—</span>
-          <span className="text-black/70">{variants[index].name}</span>
+        <span className="min-w-[3.5rem] text-center font-medium tabular-nums">
+          {variants[index].key}
         </span>
         <button className={btn} onClick={() => cycle(1)} aria-label="Next variant">
           ›
