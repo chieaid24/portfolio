@@ -25,9 +25,9 @@ function SunIcon() {
 function MoonIcon() {
     return (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            {/* Crescent translated +0.97,-0.97 so its stroke centroid sits at the
-                viewBox center (12,12) — rotation pivots on the visual center. */}
-            <path d="M21.97 11.82A9 9 0 1 1 12.18 2.03 7 7 0 0 0 21.97 11.82z"/>
+            {/* Outer 9-radius arc centered exactly at (12,12): the silhouette's
+                enclosing circle sits on the rotation pivot, so spins don't wobble. */}
+            <path d="M20.96 12.83A9 9 0 1 1 11.17 3.04 7 7 0 0 0 20.96 12.83z"/>
         </svg>
     );
 }
