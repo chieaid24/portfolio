@@ -120,7 +120,7 @@ export default function Home() {
                 </span>
               </h1>
               <h2 className="mb-8 text-center text-lg font-semibold text-main-text sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[28px]">
-                Platforms and infrastructure, one galaxy at a time. 
+                Infra and platforms, one galaxy at a time. 
               </h2>
               <div className="flex w-80 justify-between md:w-100">
                 <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
