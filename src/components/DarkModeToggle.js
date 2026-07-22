@@ -137,19 +137,18 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
             aria-pressed={!isDark}
             title={canToggle ? undefined : "The progress bars (left) track quest completion"}
             onClick={handleClick}
-            initial={{ opacity: 0, scale: 0.9, transition: { duration: 0.18 } }}
+            initial={{ opacity: 0 }}
             animate={
                 clickedAnim || denied
                     ? {
                         x: [0, -1, 1, -1, 1, -1, 0],
                         opacity: 1,
                         rotate: spin,
-                        scale: 1,
                         transition: { duration: 0.3 },
                     }
-                    : { x: 0, opacity: 1, rotate: spin, scale: 1 }
+                    : { x: 0, opacity: 1, rotate: spin }
             }
-            exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.18 } }}
+            exit={{ opacity: 0, transition: { duration: 0.18 } }}
             transition={{ rotate: { type: "spring", stiffness: 180, damping: 18 }, duration: 0.2 }}
             style={{ lineHeight: 0 }}
             className={`-m-1.5 p-1.5 ${canToggle ? "cursor-pointer" : "cursor-default"} ${canToggle ? "opacity-100" : "opacity-0 md:opacity-50"} ${className}`}
