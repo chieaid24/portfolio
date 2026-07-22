@@ -29,9 +29,9 @@ export default function Footer() {
         </div>
         <div className="text-center text-sm leading-tight">
           <p>
-            © {currentYear} AIDAN CHIEN.
+            © {currentYear} AIDAN CHIEN
             <br />
-            Designed and developed by AIDAN CHIEN.
+            Designed and developed by AIDAN CHIEN
           </p>
         </div>
       </div>

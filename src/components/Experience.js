@@ -128,7 +128,7 @@ export default function Experience() {
                   className={`relative isolate overflow-hidden rounded-xl px-4 py-1.5 text-sm font-semibold text-main-text transition-[color,background-color,box-shadow] duration-200 sm:text-base ${
                     isActive
                       ? "shadow-[0_5px_30px_rgba(255,255,255,0.2)]"
-                      : "cursor-pointer hover:bg-[var(--tab-hover-fill)]"
+                      : "cursor-pointer hover:bg-[var(--tab-hover-fill)]/60"
                   }`}
                 >
                   <AnimatePresence initial={false}>
