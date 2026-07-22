@@ -205,17 +205,15 @@ export default function ProjectCard({
               )}
             </div>
             <div className="flex flex-col">
-              <span
-                className={`mb-1 flex items-center gap-x-1 font-medium text-sm ${clicked ? "text-highlight-color/70" : "text-highlight-color"}`}
-              >
+              <span className="mb-1 flex items-center gap-x-1 font-medium text-sm text-body-text">
                 {clicked ? (
-                  <PlanetRingLine className="h-3.5 w-3.5" />
+                  <PlanetRingLine className="translate-y-[-1px] h-3.5 w-3.5 text-highlight-color" />
                 ) : (
-                  <PlanetRing className="h-3.5 w-3.5" />
+                  <PlanetRing className="translate-y-[-1px] h-3.5 w-3.5 text-highlight-color" />
                 )}
                 {clicked ? <span>Discovered</span> : <span>Undiscovered</span>}
               </span>
-              <h3 className="mb-1.5 text-lg font-semibold sm:text-lg">{title}</h3>
+              <h3 className="mb-1.5 text-base font-semibold sm:text-lg">{title}</h3>
               <div className="text-dark-body-text text-sm">{summary}</div>
             </div>
           </div>
