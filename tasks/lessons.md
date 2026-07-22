@@ -93,3 +93,24 @@ Run it with `LD_LIBRARY_PATH=/home/secur/.cache/playwright-sys-libs node script.
 **Worktree dev-server gotcha.** When validating from inside a worktree, start the dev server with the
 harness's own background mode, **not** `nohup ... &` in a one-shot Bash call — the latter gets reaped when
 the Bash invocation returns, so the server dies before you can hit it.
+
+---
+
+## Rotating an asymmetric SVG reads as a position snap
+
+**Symptom.** Dark mode toggle "rotates and then snaps a couple pixels" on every animation.
+Three animation-level fixes (spring tuning, unified transitions, View Transition timing) all
+failed to kill it and were reverted (`06c7ede`).
+
+**Root cause.** The moon crescent's stroke centroid sat at (11.03, 12.97) in the 24-unit
+viewBox, ~1 unit off the (12, 12) rotation pivot. Any rotation orbits the glyph's visual mass
+around the pivot (~2.2 CSS px measured drift at 18px render), and the final easing degrees read
+as translation, i.e. a snap - regardless of how smooth the animation timing is.
+
+**Fix (`bec6cc7`).** Translate the path so the stroke centroid lands on the viewBox center.
+Compute it by sampling the path's arcs; verify by screenshotting the icon at several rotation
+angles and measuring the luminance-weighted pixel centroid drift (2.23px -> 0.16px).
+
+**Lesson.** When a rotating icon "snaps" or "wobbles", check glyph-centroid-vs-pivot geometry
+before touching animation code. Symmetric glyphs (the sun) never show this; crescents, arrows,
+and letters do.

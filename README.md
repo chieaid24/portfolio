@@ -14,7 +14,7 @@ It’s an interactive personal portfolio, and this README serves to highlight so
 
 | Category       | Tools / Frameworks                                              |
 | -------------- | --------------------------------------------------------------- |
-| **Frontend**   | Next.js 15, TailwindCSS, Framer Motion, Three.js                |
+| **Frontend**   | Next.js 16, TailwindCSS, Framer Motion, Three.js                |
 | **Backend**    | Node.js (Next.js API Routes), MongoDB, Pusher, Vercel Cron Jobs |
 | **Design**     | Figma, Illustrator                                              |
 | **Deployment** | Vercel                                                          |

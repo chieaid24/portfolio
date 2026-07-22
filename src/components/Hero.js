@@ -17,7 +17,6 @@ import ScrambledText from "@/components/ScrambledText";
 import FileDownload from "@/icons/FileDownload";
 import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
-import FooterEmail from "@/icons/FooterEmail";
 import { AsciiGlobe } from "@/components/MissionControl";
 
 // Globe size. Fixed by choice: the copy never resizes it. The disc's diameter is
@@ -93,15 +92,6 @@ function HeroLinks({ flash }) {
           className="md:hover:translate-y-[-1px]"
         >
           <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-        </RewardLink>
-        <RewardLink
-          href="mailto:aidan.chien@uwaterloo.ca"
-          target="_blank"
-          rewardId="email"
-          aria-label="Email"
-          className="md:hover:translate-y-[-1px]"
-        >
-          <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
         </RewardLink>
       </div>
     </>
