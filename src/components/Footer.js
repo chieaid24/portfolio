@@ -1,7 +1,6 @@
 import RewardLink from "@/components/RewardLink";
 import FooterGithub from "@/icons/FooterGithub";
 import FooterLinkedin from "@/icons/FooterLinkedin";
-import FooterEmail from "@/icons/FooterEmail";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -26,15 +25,6 @@ export default function Footer() {
             className="md:hover:translate-y-[-1px]"
           >
             <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-          </RewardLink>
-          <RewardLink
-            href="mailto:aidan.chien@uwaterloo.ca"
-            target="_blank"
-            rewardId="email"
-            aria-label="Email"
-            className="md:hover:translate-y-[-1px]"
-          >
-            <FooterEmail className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
           </RewardLink>
         </div>
         <div className="text-center text-sm leading-tight">
