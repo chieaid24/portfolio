@@ -205,7 +205,7 @@ export default function Home() {
                 <RewardLink
                   href="/projects"
                   scroll
-                  className="text-body-text group flex items-center gap-1 font-medium duration-100 sm:text-base md:hover:text-main-text"
+                  className="text-body-text group flex items-center gap-1 font-medium duration-100 text-sm sm:text-base md:hover:text-main-text"
                   rewardId="projects-page"
                 >
                   <span>View more</span>

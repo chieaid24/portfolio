@@ -32,7 +32,7 @@ function TimelineItem({ item }) {
 
       <div className="flex-1 space-y-2">
         <div className="space-y-0">
-          <h3 className="text-lg leading-tight font-semibold text-main-text sm:text-lg sm:leading-tight">
+          <h3 className="text-base leading-tight font-semibold text-main-text sm:text-lg sm:leading-tight">
             {item.title}
           </h3>
           {/* Side by side once there is room for both. Narrow screens can't fit
@@ -42,10 +42,10 @@ function TimelineItem({ item }) {
           {(item.subtitle || item.period) && (
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between sm:gap-2">
               {item.subtitle && (
-                <p className="text-base font-medium text-dark-body-text">{item.subtitle}</p>
+                <p className="text-sm sm:text-base font-medium text-dark-body-text">{item.subtitle}</p>
               )}
               {item.period && (
-                <p className="tracking-wide text-sm text-dark-body-text sm:ml-auto sm:whitespace-nowrap">
+                <p className="tracking-wide text-xs sm:text-sm text-dark-body-text sm:ml-auto sm:whitespace-nowrap">
                   {item.period}
                 </p>
               )}
@@ -59,7 +59,7 @@ function TimelineItem({ item }) {
               key={`${item.id}-highlight-${index}`}
               className="relative flex items-center gap-x-3 pl-0 sm:gap-x-4"
             >
-              <BulletIcon className="text-highlight-color h-2 w-2 shrink-0" />
+              <BulletIcon className="text-highlight-color hidden h-2 w-2 shrink-0 sm:block" />
               <div className="space-y-0">
                 <p className="text-body-text text-sm leading-tight sm:text-base">
                   {highlight.text}
