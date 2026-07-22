@@ -305,7 +305,7 @@ export default function Hero({ accent, flash }) {
               {line}
             </div>
           ))}
-          <div className="mt-6 flex w-full items-center justify-between">
+          <div className="mt-6 flex w-full gap-5 items-center">
             <HeroLinks flash={flash} />
           </div>
         </div>
