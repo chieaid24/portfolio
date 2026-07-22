@@ -203,6 +203,22 @@ function useArcAlign({ groupRef, colRef, globeRef, enabled }) {
         el.style.transform = `translateX(${edgeX + GAP - colLeft}px)`;
       });
 
+      // The last line is the full-width links row; justify-between pins the
+      // social icons to its right edge. Match that edge to the widest copy line
+      // (the "and" line) rather than letting the row hug the arc on its own, so
+      // the icons finish exactly under the subtitle's end. Resume still rides
+      // the arc at that line's left.
+      if (lines.length > 1) {
+        const links = lines[lines.length - 1];
+        let widest = lines[0];
+        for (let i = 1; i < lines.length - 1; i++) {
+          if (lines[i].getBoundingClientRect().right > widest.getBoundingClientRect().right) {
+            widest = lines[i];
+          }
+        }
+        links.style.transform = widest.style.transform;
+      }
+
       if (OPTICAL_CENTER) {
         // Ink extent, not layout box: the disc's rim .. rightmost shifted line.
         let paintedRight = -Infinity;
@@ -289,7 +305,7 @@ export default function Hero({ accent, flash }) {
               {line}
             </div>
           ))}
-          <div className="mt-6 flex items-center gap-5">
+          <div className="mt-6 flex w-full items-center justify-between">
             <HeroLinks flash={flash} />
           </div>
         </div>
