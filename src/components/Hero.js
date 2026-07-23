@@ -10,17 +10,14 @@
 //   - the globe is a fixed hand-tuned size; nothing measures the copy and resizes
 //     the globe, so there's no reflow loop
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
 import RewardLink from "@/components/RewardLink";
 import ScrambledText from "@/components/ScrambledText";
 import FileDownload from "@/icons/FileDownload";
 import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import { AsciiGlobe } from "@/components/MissionControl";
-import GlobeTreatment from "@/components/GlobeTreatment";
-import GlobeVariantBar from "@/components/GlobeVariantBar";
 
 // Globe size. Fixed by choice: the copy never resizes it. The disc's diameter is
 // (ROWS - 1) * FONT_PX = 126px. ROWS is odd so the disc has a real center row —
@@ -101,14 +98,33 @@ function HeroLinks({ flash }) {
   );
 }
 
-// Frosted disc hugging the globe so its sparse ASCII lifts off the starfield.
+// Deep-space porthole backdrop: an opaque navy disc that lifts the sparse ASCII
+// off the sky in both themes. Land = brightened accent, ocean = cool dots.
+const PORTHOLE_LAND = (accent) => `color-mix(in srgb, ${accent} 88%, #ffffff)`;
+const PORTHOLE_OCEAN = "#93a9d6";
+const PORTHOLE_OCEAN_OPACITY = 0.45;
+
+// The porthole disc hugging the globe so its sparse ASCII lifts off any sky.
+// A true square sized to the globe's real diameter — (rows-1)*fontPx, equal in
+// both axes because the projection's aspect term cancels — NOT `-inset` of the
+// wider-than-tall character box, which rounded-full would trace as an ellipse.
 // Absolute + pointer-events-none, so it never grows the globe's box or the arc
 // measurement.
-function GlobeGlass() {
+function GlobePorthole() {
+  const d = (GLOBE_ROWS - 1) * GLOBE_FONT_PX + 22; // circle diameter + rim
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute -inset-1 rounded-full bg-black/25 backdrop-blur-[3px]"
+      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-1 ring-white/15"
+      style={{
+        width: d,
+        height: d,
+        background:
+          "radial-gradient(circle at 38% 32%, #12224a 0%, #0a1330 62%, #070d22 100%)",
+        // Dark drop shadow to lift the porthole off the sky, plus a faint navy
+        // ambient glow around the rim.
+        boxShadow: "0 8px 22px rgba(6,10,24,0.40), 0 0 18px rgba(12,22,60,0.25)",
+      }}
     />
   );
 }
@@ -266,28 +282,7 @@ export default function Hero({ accent, flash }) {
 
   useArcAlign({ groupRef, colRef, globeRef, enabled });
 
-  // PROTOTYPE — dev-only globe treatment preview (?variant=A|C). null keeps the
-  // production globe. accentPreview overrides the theme accent for comparison;
-  // mode follows the site's own light/dark toggle.
-  const { resolvedTheme } = useTheme();
-  const [variant, setVariant] = useState(null);
-  const [accentPreview, setAccentPreview] = useState(null);
-  useEffect(() => {
-    const v = new URLSearchParams(window.location.search).get("variant");
-    if (v === "A" || v === "C") setVariant(v);
-  }, []);
-  const chooseVariant = useCallback((v) => {
-    setVariant(v);
-    const u = new URL(window.location.href);
-    if (v) u.searchParams.set("variant", v);
-    else u.searchParams.delete("variant");
-    window.history.replaceState(null, "", u);
-  }, []);
-  const globeAccent = accentPreview ?? accent;
-  const globeMode = resolvedTheme === "light" ? "light" : "dark";
-
   return (
-    <>
     <motion.div
       className="flex min-h-screen flex-col items-center justify-center gap-4 text-main-text"
       initial={{ opacity: 0 }}
@@ -315,22 +310,17 @@ export default function Hero({ accent, flash }) {
         className="hidden w-full items-center justify-center md:flex"
       >
         <div ref={globeRef} className="relative shrink-0">
-          {variant ? (
-            <GlobeTreatment
-              variant={variant}
-              mode={globeMode}
-              accent={globeAccent}
+          <GlobePorthole />
+          <div className="relative">
+            <AsciiGlobe
+              color={accent}
+              landColor={PORTHOLE_LAND(accent)}
+              oceanColor={PORTHOLE_OCEAN}
+              oceanOpacity={PORTHOLE_OCEAN_OPACITY}
               rows={GLOBE_ROWS}
               fontPx={GLOBE_FONT_PX}
             />
-          ) : (
-            <>
-              <GlobeGlass />
-              <div className="relative [&_pre:first-child]:opacity-60 dark:[&_pre:first-child]:opacity-35">
-                <AsciiGlobe color={globeAccent} rows={GLOBE_ROWS} fontPx={GLOBE_FONT_PX} />
-              </div>
-            </>
-          )}
+          </div>
         </div>
         <div ref={colRef} className="flex flex-col items-start">
           {COPY_LINES.map((line) => (
@@ -347,14 +337,5 @@ export default function Hero({ accent, flash }) {
         </div>
       </div>
     </motion.div>
-    {process.env.NODE_ENV !== "production" && (
-      <GlobeVariantBar
-        variant={variant}
-        onVariant={chooseVariant}
-        accentPreview={accentPreview}
-        onAccent={setAccentPreview}
-      />
-    )}
-    </>
   );
 }
