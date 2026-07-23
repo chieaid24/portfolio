@@ -173,7 +173,16 @@ const PIN_BEACON = [
 // Stacked <pre> layers — faint dots for ocean, bright ramp chars for land
 // (shaded by a fixed light), a steady gold marker, and a blinking beacon.
 // Auto-rotates; drag to spin (yaw free, pitch clamped).
-export function AsciiGlobe({ color, rows: rowsProp, fontPx }) {
+export function AsciiGlobe({
+  color,
+  // Optional per-layer color/opacity overrides; default to `color` (ocean) and
+  // the built-in ocean opacity class, preserving the original single-color look.
+  landColor,
+  oceanColor,
+  oceanOpacity,
+  rows: rowsProp,
+  fontPx,
+}) {
   const rows = rowsProp ?? GLOBE_ROWS;
   const fontSize = fontPx ?? GLOBE_FONT_PX;
   const oceanRef = useRef(null);
@@ -377,12 +386,21 @@ export function AsciiGlobe({ color, rows: rowsProp, fontPx }) {
       aria-label={`Rotating globe with a pin on ${LOCATION.label}`}
       role="img"
     >
-      <pre aria-hidden="true" ref={oceanRef} className="font-mono opacity-35" style={preStyle} />
+      <pre
+        aria-hidden="true"
+        ref={oceanRef}
+        className="font-mono opacity-35"
+        style={{
+          ...preStyle,
+          color: oceanColor ?? color,
+          ...(oceanOpacity != null ? { opacity: oceanOpacity } : null),
+        }}
+      />
       <pre
         aria-hidden="true"
         ref={landRef}
         className="absolute inset-0 font-mono"
-        style={preStyle}
+        style={{ ...preStyle, color: landColor ?? color }}
       />
       <pre
         aria-hidden="true"

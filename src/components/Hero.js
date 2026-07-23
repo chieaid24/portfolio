@@ -98,14 +98,33 @@ function HeroLinks({ flash }) {
   );
 }
 
-// Frosted disc hugging the globe so its sparse ASCII lifts off the starfield.
+// Deep-space porthole backdrop: an opaque navy disc that lifts the sparse ASCII
+// off the sky in both themes. Land = brightened accent, ocean = cool dots.
+const PORTHOLE_LAND = (accent) => `color-mix(in srgb, ${accent} 88%, #ffffff)`;
+const PORTHOLE_OCEAN = "#93a9d6";
+const PORTHOLE_OCEAN_OPACITY = 0.45;
+
+// The porthole disc hugging the globe so its sparse ASCII lifts off any sky.
+// A true square sized to the globe's real diameter — (rows-1)*fontPx, equal in
+// both axes because the projection's aspect term cancels — NOT `-inset` of the
+// wider-than-tall character box, which rounded-full would trace as an ellipse.
 // Absolute + pointer-events-none, so it never grows the globe's box or the arc
 // measurement.
-function GlobeGlass() {
+function GlobePorthole() {
+  const d = (GLOBE_ROWS - 1) * GLOBE_FONT_PX + 22; // circle diameter + rim
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute -inset-1 rounded-full bg-black/25 backdrop-blur-[3px]"
+      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-1 ring-white/15"
+      style={{
+        width: d,
+        height: d,
+        background:
+          "radial-gradient(circle at 38% 32%, #12224a 0%, #0a1330 62%, #070d22 100%)",
+        // Dark drop shadow to lift the porthole off the sky, plus a faint navy
+        // ambient glow around the rim.
+        boxShadow: "0 8px 22px rgba(6,10,24,0.40), 0 0 18px rgba(12,22,60,0.25)",
+      }}
     />
   );
 }
@@ -291,9 +310,16 @@ export default function Hero({ accent, flash }) {
         className="hidden w-full items-center justify-center md:flex"
       >
         <div ref={globeRef} className="relative shrink-0">
-          <GlobeGlass />
-          <div className="relative [&_pre:first-child]:opacity-60 dark:[&_pre:first-child]:opacity-35">
-            <AsciiGlobe color={accent} rows={GLOBE_ROWS} fontPx={GLOBE_FONT_PX} />
+          <GlobePorthole />
+          <div className="relative">
+            <AsciiGlobe
+              color={accent}
+              landColor={PORTHOLE_LAND(accent)}
+              oceanColor={PORTHOLE_OCEAN}
+              oceanOpacity={PORTHOLE_OCEAN_OPACITY}
+              rows={GLOBE_ROWS}
+              fontPx={GLOBE_FONT_PX}
+            />
           </div>
         </div>
         <div ref={colRef} className="flex flex-col items-start">
