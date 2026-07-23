@@ -25,13 +25,19 @@ const LIGHT = {
   C: { land: (a) => brighten(a, 88), ocean: () => "#93a9d6", oceanOp: 0.45, disc: "space" },
 };
 
-function Disc({ kind }) {
+function Disc({ kind, rows, fontPx }) {
   if (kind === "space") {
+    // A true square centered on the globe, not `-inset` of the (wider-than-tall)
+    // character box — otherwise rounded-full traces an ellipse. The painted
+    // circle's diameter is (rows-1)*fontPx in both axes; +rim for a little margin.
+    const d = (rows - 1) * fontPx + 22;
     return (
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-1 rounded-full ring-1 ring-white/15"
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-1 ring-white/15"
         style={{
+          width: d,
+          height: d,
           background:
             "radial-gradient(circle at 38% 32%, #12224a 0%, #0a1330 62%, #070d22 100%)",
           boxShadow: "0 0 20px rgba(12,22,60,0.35)",
@@ -67,7 +73,7 @@ export default function GlobeTreatment({ variant, accent, mode, rows, fontPx }) 
   const t = LIGHT[variant] ?? LIGHT.A;
   return (
     <div className="relative mx-auto w-fit">
-      <Disc kind={t.disc} />
+      <Disc kind={t.disc} rows={rows} fontPx={fontPx} />
       <div className="relative">
         <AsciiGlobe
           color={accent}
