@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from 'react';
 import { motion, useReducedMotion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useMoney } from "@/lib/money-context";
-import { getToggleVariant, runThemeSwap } from "@/lib/theme-toggle-anim";
 
 function SunIcon() {
     return (
@@ -30,6 +29,89 @@ function MoonIcon() {
             <path d="M20.96 12.83A9 9 0 1 1 11.17 3.04 7 7 0 0 0 20.96 12.83z"/>
         </svg>
     );
+}
+
+// Theme swap animation: a solid disc grows from the toggle button; once it fully
+// covers the screen every component's colors snap at once (no per-component
+// transition) so they change together, then the disc fades out. Uses only
+// transform + opacity, so it runs entirely on the compositor and stays smooth
+// even when the theme re-render janks the main thread on a slow machine. A small
+// disc is pre-rastered and scaled up on the GPU, keeping the layer tiny.
+// Reduced-motion falls back to an instant swap.
+const REVEAL_BASE = 360; // disc raster size (px), scaled up to cover the viewport
+const REVEAL_GROW_MS = 380;
+const REVEAL_FADE_MS = 200;
+const REVEAL_BG = { dark: "#03040c", light: "#e8f1fb" };
+
+function snapTheme(next, setTheme) {
+    const root = document.documentElement;
+    root.classList.add("no-transition");
+    setTheme(next);
+    return root;
+}
+
+function revealTheme(next, setTheme, buttonRef, shouldReduceMotion) {
+    if (shouldReduceMotion || typeof document === "undefined") {
+        const root = snapTheme(next, setTheme);
+        requestAnimationFrame(() =>
+            requestAnimationFrame(() => root.classList.remove("no-transition"))
+        );
+        return;
+    }
+
+    const rect = buttonRef.current?.getBoundingClientRect();
+    const vw = window.visualViewport?.width ?? window.innerWidth;
+    const vh = window.visualViewport?.height ?? window.innerHeight;
+    const cx = rect ? rect.left + rect.width / 2 : vw / 2;
+    const cy = rect ? rect.top + rect.height / 2 : vh / 2;
+    const radius = Math.hypot(Math.max(cx, vw - cx), Math.max(cy, vh - cy));
+    const coverScale = (radius * 2) / REVEAL_BASE;
+
+    const disc = document.createElement("div");
+    Object.assign(disc.style, {
+        position: "fixed",
+        left: `${cx - REVEAL_BASE / 2}px`,
+        top: `${cy - REVEAL_BASE / 2}px`,
+        width: `${REVEAL_BASE}px`,
+        height: `${REVEAL_BASE}px`,
+        borderRadius: "50%",
+        background: REVEAL_BG[next],
+        pointerEvents: "none",
+        zIndex: "2147483646",
+        transform: "scale(0)",
+        transformOrigin: "center",
+        willChange: "transform",
+        contain: "strict",
+    });
+    document.body.appendChild(disc);
+
+    const cleanup = () => {
+        disc.remove();
+        document.documentElement.classList.remove("no-transition");
+    };
+
+    disc
+        .animate(
+            [{ transform: "scale(0)" }, { transform: `scale(${coverScale})` }],
+            { duration: REVEAL_GROW_MS, easing: "ease-in-out", fill: "forwards" }
+        )
+        .finished.then(() => {
+            const root = snapTheme(next, setTheme);
+            // let the theme class + highlight-color vars paint before revealing
+            requestAnimationFrame(() =>
+                requestAnimationFrame(() => {
+                    const fade = disc.animate([{ opacity: 1 }, { opacity: 0 }], {
+                        duration: REVEAL_FADE_MS,
+                        easing: "ease-out",
+                        fill: "forwards",
+                    });
+                    fade.finished.then(() => {
+                        disc.remove();
+                        root.classList.remove("no-transition");
+                    }, cleanup);
+                })
+            );
+        }, cleanup); // interrupted grow (rapid re-toggle / navigation): tidy up
 }
 
 export default function DarkModeToggle({ className = "", onFailedToggle, questClicked }) {
@@ -72,14 +154,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
         if (canToggle) {
             const nextTheme = isDark ? "light" : "dark";
             if (!shouldReduceMotion) setSpin((s) => s + 360);
-            // PROTOTYPE: animation chosen live via ToggleAnimSwitcher.
-            runThemeSwap({
-                variant: getToggleVariant(),
-                next: nextTheme,
-                setTheme,
-                buttonRef,
-                shouldReduceMotion,
-            });
+            revealTheme(nextTheme, setTheme, buttonRef, shouldReduceMotion);
         } else {
             setDenied(true);
             onFailedToggle?.();

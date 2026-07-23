@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ToggleAnimSwitcher from "@/components/ToggleAnimSwitcher"; // PROTOTYPE: dev-only
 
 export default function PageShell({ children }) {
   const pathname = usePathname();
@@ -19,7 +18,6 @@ export default function PageShell({ children }) {
       <Header />
       {children}
       <Footer />
-      {process.env.NODE_ENV !== "production" && <ToggleAnimSwitcher />}
     </main>
   );
 }
