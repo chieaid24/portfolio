@@ -60,16 +60,12 @@ function revealTheme(next, setTheme, originEl, shouldReduceMotion) {
         return;
     }
 
-    // Center the reveal on the toggle. Source the rect from the clicked element
-    // itself (never a stale/null ref); only fall back to viewport center if the
-    // rect is genuinely missing or zero-sized.
+    // Center of the toggle in viewport (visual) CSS px. Source the rect from the
+    // clicked element itself (never a stale/null ref).
     const rect = originEl?.getBoundingClientRect();
-    const vw = window.visualViewport?.width ?? window.innerWidth;
-    const vh = window.visualViewport?.height ?? window.innerHeight;
     const hasRect = rect && rect.width > 0 && rect.height > 0;
-    const btnX = hasRect ? rect.left + rect.width / 2 : vw / 2; // viewport coords
-    const btnY = hasRect ? rect.top + rect.height / 2 : vh / 2;
-    const radius = Math.hypot(Math.max(btnX, vw - btnX), Math.max(btnY, vh - btnY));
+    const btnX = hasRect ? rect.left + rect.width / 2 : null;
+    const btnY = hasRect ? rect.top + rect.height / 2 : null;
 
     const disc = document.createElement("div");
     Object.assign(disc.style, {
@@ -82,14 +78,34 @@ function revealTheme(next, setTheme, originEl, shouldReduceMotion) {
     });
     document.body.appendChild(disc);
 
-    // Convert the viewport button center into the disc's OWN coordinate space.
-    // A transformed/offset ancestor (e.g. a wrapper injected by a browser
-    // extension, or a page-shrinking sidebar) can make this fixed disc's box not
-    // start at viewport (0,0); measuring the disc and subtracting its origin
-    // keeps the circle on the button instead of drifting up/left. No-op at (0,0).
-    const box = disc.getBoundingClientRect();
-    const cx = btnX - box.left;
-    const cy = btnY - box.top;
+    // clip-path px live in the disc's LOCAL space; getBoundingClientRect returns
+    // VISUAL px. An ancestor `zoom`/transform (OS display scaling, extensions —
+    // absent in clean headless) scales one but not the other, drifting the circle
+    // off the button. Measure the local->visual scale with a known-size probe and
+    // map the origin + radius through it. No-op when scale is 1.
+    const PROBE = 100;
+    const probe = document.createElement("div");
+    Object.assign(probe.style, {
+        position: "absolute",
+        left: "0",
+        top: "0",
+        width: `${PROBE}px`,
+        height: `${PROBE}px`,
+        visibility: "hidden",
+        pointerEvents: "none",
+    });
+    disc.appendChild(probe);
+    const discBox = disc.getBoundingClientRect();
+    const probeBox = probe.getBoundingClientRect();
+    probe.remove();
+    const sx = probeBox.width / PROBE || 1;
+    const sy = probeBox.height / PROBE || 1;
+
+    const localW = discBox.width / sx; // viewport in disc-local (clip-path) px
+    const localH = discBox.height / sy;
+    const cx = hasRect ? (btnX - discBox.left) / sx : localW / 2;
+    const cy = hasRect ? (btnY - discBox.top) / sy : localH / 2;
+    const radius = Math.hypot(Math.max(cx, localW - cx), Math.max(cy, localH - cy));
     const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
     const clipTo = `circle(${radius}px at ${cx}px ${cy}px)`;
     disc.style.clipPath = clipFrom;
@@ -135,9 +151,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     const { getAllQuestsComplete, ready } = useMoney();
     const allQuestComp = getAllQuestsComplete();
-    // TEMP(light-mode): toggle unlocked unconditionally for testing.
-    // Restore the quest gate before merging: `const canToggle = ready && allQuestComp;`
-    const canToggle = ready || allQuestComp;
+    const canToggle = ready && allQuestComp;
 
     const isDark = resolvedTheme === "dark";
 
