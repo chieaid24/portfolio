@@ -213,6 +213,16 @@ html {
       -webkit-user-select: none;
     }
   }
+
+  /* Overrides the global thin scrollbar for horizontal scroll strips */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* set dark mode colors*/
