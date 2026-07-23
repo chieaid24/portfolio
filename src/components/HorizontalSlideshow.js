@@ -49,10 +49,33 @@ export default function Carousel() {
     const el = scrollerRef.current;
     if (!el) return;
 
-    // Map horizontal trackpad gestures (and shift+wheel on a mouse) to the
-    // strip's scroll. preventDefault only when we can actually consume the
-    // scroll, so vertical page scroll and edge overscroll stay intact and
-    // native scrolling never double-applies.
+    // Momentum model: everything drives a `target` scroll position, and a rAF
+    // loop eases scrollLeft toward it. That gives trackpad/wheel smoothing and
+    // drift after a drag release, instead of stopping dead.
+    const EASE = 0.16; // per-frame approach toward target (higher = snappier)
+    const DRAG_MOMENTUM = 12; // how far a drag flick coasts on release
+    const maxScroll = () => el.scrollWidth - el.clientWidth;
+    const clamp = (v) => Math.max(0, Math.min(maxScroll(), v));
+
+    let target = el.scrollLeft;
+    let raf = 0;
+    const tick = () => {
+      const diff = target - el.scrollLeft;
+      if (Math.abs(diff) < 0.5) {
+        el.scrollLeft = target;
+        raf = 0;
+        return;
+      }
+      el.scrollLeft += diff * EASE;
+      raf = requestAnimationFrame(tick);
+    };
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+
+    // Horizontal trackpad gestures (and shift+wheel on a mouse) feed the target.
+    // preventDefault only when we can consume the scroll, so vertical page
+    // scroll and edge overscroll stay intact.
     const onWheel = (e) => {
       const delta =
         Math.abs(e.deltaX) > Math.abs(e.deltaY)
@@ -61,33 +84,50 @@ export default function Carousel() {
             ? e.deltaY
             : 0;
       if (!delta) return;
-      const max = el.scrollWidth - el.clientWidth;
-      const atStart = el.scrollLeft <= 0;
-      const atEnd = el.scrollLeft >= max - 0.5;
-      if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
+      const max = maxScroll();
+      const atStart = delta < 0 && target <= 0;
+      const atEnd = delta > 0 && target >= max - 0.5;
+      if (atStart || atEnd) return;
       e.preventDefault();
-      el.scrollLeft += delta;
+      target = clamp(target + delta);
+      kick();
     };
 
-    // Click-drag scrolling for mouse users; touch and trackpad are handled above/natively.
+    // Click-drag scrolling for mouse users: 1:1 while held, then coast on release.
     let dragging = false;
     let startX = 0;
     let startLeft = 0;
+    let prev = 0;
+    let velocity = 0;
     const onPointerDown = (e) => {
       if (e.pointerType === "touch") return;
       dragging = true;
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
       startX = e.clientX;
       startLeft = el.scrollLeft;
+      prev = el.scrollLeft;
+      velocity = 0;
+      target = el.scrollLeft;
       el.setPointerCapture?.(e.pointerId);
       el.style.cursor = "grabbing";
     };
     const onPointerMove = (e) => {
       if (!dragging) return;
-      el.scrollLeft = startLeft - (e.clientX - startX);
+      const next = clamp(startLeft - (e.clientX - startX));
+      velocity = next - prev;
+      prev = next;
+      el.scrollLeft = next;
+      target = next;
     };
     const endDrag = () => {
+      if (!dragging) return;
       dragging = false;
       el.style.cursor = "";
+      target = clamp(el.scrollLeft + velocity * DRAG_MOMENTUM);
+      kick();
     };
 
     el.addEventListener("wheel", onWheel, { passive: false });
@@ -96,6 +136,7 @@ export default function Carousel() {
     el.addEventListener("pointerup", endDrag);
     el.addEventListener("pointercancel", endDrag);
     return () => {
+      if (raf) cancelAnimationFrame(raf);
       el.removeEventListener("wheel", onWheel);
       el.removeEventListener("pointerdown", onPointerDown);
       el.removeEventListener("pointermove", onPointerMove);
