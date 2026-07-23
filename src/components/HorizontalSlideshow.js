@@ -44,24 +44,36 @@ function Slide({ src, alt, priority }) {
 
 export default function Carousel() {
   const scrollerRef = useRef(null);
+  const trackRef = useRef(null);
 
   useEffect(() => {
     const el = scrollerRef.current;
-    if (!el) return;
+    const track = trackRef.current;
+    if (!el || !track) return;
 
-    // Wheel/trackpad drives a `target` that a rAF loop eases toward (smooth
-    // glide). Mouse drag is 1:1 while held, then throws with an exponential
-    // decay tuned to match framer-motion's old dragMomentum feel.
     const EASE = 0.16; // wheel/trackpad glide (higher = snappier)
     const POWER = 0.8; // drag throw distance = POWER * release velocity (framer default)
     const TIME_CONSTANT = 750; // drag coast decay, ms (framer default)
+    const ELASTIC = 0.5; // edge rubber-band give (fraction of the viewport)
+    const SPRING_K = 0.1; // snap-back stiffness
+    const SPRING_D = 0.72; // snap-back damping (velocity kept per frame)
+
     const maxScroll = () => el.scrollWidth - el.clientWidth;
     const clamp = (v) => Math.max(0, Math.min(maxScroll(), v));
 
+    // Rubber-band: resistance that grows the further past the edge you pull,
+    // asymptotically capped so it never runs away.
+    const rubber = (over) => {
+      const give = (el.clientWidth || 1) * ELASTIC;
+      const x = Math.abs(over);
+      return (Math.sign(over) * (give * x)) / (give + x);
+    };
+
+    // ---- in-range scroll (wheel glide + drag throw) ----
     let target = el.scrollLeft;
     let raf = 0;
     let mode = null; // "ease" (wheel) | "inertia" (drag release)
-    const stop = () => {
+    const stopScroll = () => {
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
       mode = null;
@@ -77,6 +89,33 @@ export default function Carousel() {
       }
       el.scrollLeft += diff * EASE;
       raf = requestAnimationFrame(easeTick);
+    };
+
+    // ---- edge overshoot (visual translate on the track) ----
+    let over = 0; // signed px past the edge, pre-rubber
+    let overV = 0; // spring velocity
+    let overRaf = 0;
+    const renderOver = () => {
+      track.style.transform = over
+        ? `translate3d(${-rubber(over)}px, 0, 0)`
+        : "translate3d(0, 0, 0)";
+    };
+    const overSpring = () => {
+      overV = (overV - SPRING_K * over) * SPRING_D;
+      over += overV;
+      if (Math.abs(over) < 0.3 && Math.abs(overV) < 0.3) {
+        over = 0;
+        overV = 0;
+        renderOver();
+        overRaf = 0;
+        return;
+      }
+      renderOver();
+      overRaf = requestAnimationFrame(overSpring);
+    };
+    const startOverSpring = (v0 = 0) => {
+      overV = v0;
+      if (!overRaf) overRaf = requestAnimationFrame(overSpring);
     };
 
     // Horizontal trackpad gestures (and shift+wheel on a mouse) feed the target.
@@ -96,34 +135,37 @@ export default function Carousel() {
       const atEnd = delta > 0 && base >= max - 0.5;
       if (atStart || atEnd) return;
       e.preventDefault();
-      if (mode !== "ease") stop();
+      if (mode !== "ease") stopScroll();
       target = clamp(base + delta);
       mode = "ease";
       if (!raf) raf = requestAnimationFrame(easeTick);
     };
 
     // Drag throw: value(t) = to - amplitude * e^(-t/TIME_CONSTANT), resting at
-    // to = from + POWER * velocity. Same exponential throw framer-motion uses.
+    // to = from + POWER * velocity. A flick that hits an edge hands its leftover
+    // speed to the spring for an elastic bounce.
     const runInertia = (v0) => {
-      stop();
+      stopScroll();
       const from = el.scrollLeft;
       const amplitude = POWER * v0;
       const to = from + amplitude;
       const startTime = performance.now();
+      let prevPos = from;
       mode = "inertia";
       const step = (now) => {
         const d = -amplitude * Math.exp(-(now - startTime) / TIME_CONSTANT);
         const pos = to + d;
         const max = maxScroll();
-        if (pos <= 0 || pos >= max) {
-          el.scrollLeft = clamp(pos);
-          target = el.scrollLeft;
+        if (pos < 0 || pos > max) {
+          el.scrollLeft = pos < 0 ? 0 : max;
           raf = 0;
           mode = null;
+          startOverSpring(pos - prevPos); // leftover per-frame speed -> bounce
           return;
         }
         el.scrollLeft = pos;
         target = pos;
+        prevPos = pos;
         if (Math.abs(d) > 0.5) {
           raf = requestAnimationFrame(step);
         } else {
@@ -134,7 +176,7 @@ export default function Carousel() {
       raf = requestAnimationFrame(step);
     };
 
-    // Click-drag scrolling: 1:1 while held, tracking px/s velocity for the throw.
+    // ---- click-drag ----
     let dragging = false;
     let startX = 0;
     let startLeft = 0;
@@ -143,7 +185,11 @@ export default function Carousel() {
     const onPointerDown = (e) => {
       if (e.pointerType === "touch") return;
       dragging = true;
-      stop();
+      stopScroll();
+      if (overRaf) {
+        cancelAnimationFrame(overRaf);
+        overRaf = 0;
+      }
       startX = e.clientX;
       startLeft = el.scrollLeft;
       lastT = e.timeStamp || performance.now();
@@ -155,7 +201,8 @@ export default function Carousel() {
     const onPointerMove = (e) => {
       if (!dragging) return;
       const now = e.timeStamp || performance.now();
-      const next = clamp(startLeft - (e.clientX - startX));
+      const desired = startLeft - (e.clientX - startX);
+      const next = clamp(desired);
       const dt = now - lastT;
       if (dt > 0) {
         const inst = ((next - el.scrollLeft) / dt) * 1000;
@@ -164,13 +211,19 @@ export default function Carousel() {
       }
       el.scrollLeft = next;
       target = next;
+      over = desired - next; // 0 in range, signed past an edge
+      renderOver();
       lastT = now;
     };
     const endDrag = () => {
       if (!dragging) return;
       dragging = false;
       el.style.cursor = "";
-      runInertia(velocity);
+      if (over !== 0) {
+        startOverSpring(); // snap the rubber-band back to the edge
+      } else {
+        runInertia(velocity);
+      }
     };
 
     el.addEventListener("wheel", onWheel, { passive: false });
@@ -180,6 +233,7 @@ export default function Carousel() {
     el.addEventListener("pointercancel", endDrag);
     return () => {
       if (raf) cancelAnimationFrame(raf);
+      if (overRaf) cancelAnimationFrame(overRaf);
       el.removeEventListener("wheel", onWheel);
       el.removeEventListener("pointerdown", onPointerDown);
       el.removeEventListener("pointermove", onPointerMove);
@@ -219,25 +273,27 @@ export default function Carousel() {
     <div className="border-outline-dark-gray w-full rounded-xl border bg-widget-surface p-3 md:p-5">
       <div
         ref={scrollerRef}
-        className="no-scrollbar flex cursor-grab gap-5 overflow-x-auto overflow-y-hidden overscroll-x-contain rounded-xl select-none"
+        className="no-scrollbar flex cursor-grab overflow-x-auto overflow-y-hidden overscroll-x-contain rounded-xl select-none"
         style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
       >
-        {images.map((item, i) => (
-          <figure
-            key={i}
-            className="flex h-[160px] min-w-[250px] shrink-0 flex-col items-center gap-3 md:h-[200px] md:min-w-[300px]"
-          >
-            <Slide
-              src={item.src}
-              alt={item.caption || `Slide ${i + 1}`}
-              priority={i === 0}
-            />
-            <figcaption className="font-base text-body-text flex items-center gap-2 text-center text-xs sm:text-sm">
-              <BulletIcon className="text-highlight-color h-2 w-2" />
-              {item.caption}
-            </figcaption>
-          </figure>
-        ))}
+        <div ref={trackRef} className="flex w-max gap-5 will-change-transform">
+          {images.map((item, i) => (
+            <figure
+              key={i}
+              className="flex h-[160px] min-w-[250px] shrink-0 flex-col items-center gap-3 md:h-[200px] md:min-w-[300px]"
+            >
+              <Slide
+                src={item.src}
+                alt={item.caption || `Slide ${i + 1}`}
+                priority={i === 0}
+              />
+              <figcaption className="font-base text-body-text flex items-center gap-2 text-center text-xs sm:text-sm">
+                <BulletIcon className="text-highlight-color h-2 w-2" />
+                {item.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
     </div>
   );
