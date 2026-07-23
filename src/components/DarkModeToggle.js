@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { flushSync } from 'react-dom';
 import { motion, useReducedMotion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useMoney } from "@/lib/money-context";
@@ -32,6 +31,114 @@ function MoonIcon() {
     );
 }
 
+// Theme swap animation: a solid circle grows from the toggle button; once it
+// fully covers the screen every component's colors snap at once (no
+// per-component transition) so they change together, then it fades out.
+// The grow uses clip-path: circle(), drawn as a crisp vector at native
+// resolution every frame (no bitmap scaling, so no pixelated edge). It stays
+// smooth because the fill is flat and cheap to re-clip, and the expensive theme
+// re-render is deferred until AFTER the grow (hidden under full cover); the
+// fade-out is opacity-only (compositor), so it can't jank on a slow machine.
+// Reduced-motion falls back to an instant swap.
+const REVEAL_GROW_MS = 380;
+const REVEAL_FADE_MS = 200;
+const REVEAL_BG = { dark: "#03040c", light: "#e8f1fb" };
+
+function snapTheme(next, setTheme) {
+    const root = document.documentElement;
+    root.classList.add("no-transition");
+    setTheme(next);
+    return root;
+}
+
+function revealTheme(next, setTheme, originEl, shouldReduceMotion) {
+    if (shouldReduceMotion || typeof document === "undefined") {
+        const root = snapTheme(next, setTheme);
+        requestAnimationFrame(() =>
+            requestAnimationFrame(() => root.classList.remove("no-transition"))
+        );
+        return;
+    }
+
+    // Center of the toggle in viewport (visual) CSS px. Source the rect from the
+    // clicked element itself (never a stale/null ref).
+    const rect = originEl?.getBoundingClientRect();
+    const hasRect = rect && rect.width > 0 && rect.height > 0;
+    const btnX = hasRect ? rect.left + rect.width / 2 : null;
+    const btnY = hasRect ? rect.top + rect.height / 2 : null;
+
+    const disc = document.createElement("div");
+    Object.assign(disc.style, {
+        position: "fixed",
+        inset: "0",
+        background: REVEAL_BG[next],
+        pointerEvents: "none",
+        zIndex: "2147483646",
+        willChange: "clip-path",
+    });
+    document.body.appendChild(disc);
+
+    // clip-path px live in the disc's LOCAL space; getBoundingClientRect returns
+    // VISUAL px. An ancestor `zoom`/transform (OS display scaling, extensions —
+    // absent in clean headless) scales one but not the other, drifting the circle
+    // off the button. Measure the local->visual scale with a known-size probe and
+    // map the origin + radius through it. No-op when scale is 1.
+    const PROBE = 100;
+    const probe = document.createElement("div");
+    Object.assign(probe.style, {
+        position: "absolute",
+        left: "0",
+        top: "0",
+        width: `${PROBE}px`,
+        height: `${PROBE}px`,
+        visibility: "hidden",
+        pointerEvents: "none",
+    });
+    disc.appendChild(probe);
+    const discBox = disc.getBoundingClientRect();
+    const probeBox = probe.getBoundingClientRect();
+    probe.remove();
+    const sx = probeBox.width / PROBE || 1;
+    const sy = probeBox.height / PROBE || 1;
+
+    const localW = discBox.width / sx; // viewport in disc-local (clip-path) px
+    const localH = discBox.height / sy;
+    const cx = hasRect ? (btnX - discBox.left) / sx : localW / 2;
+    const cy = hasRect ? (btnY - discBox.top) / sy : localH / 2;
+    const radius = Math.hypot(Math.max(cx, localW - cx), Math.max(cy, localH - cy));
+    const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
+    const clipTo = `circle(${radius}px at ${cx}px ${cy}px)`;
+    disc.style.clipPath = clipFrom;
+
+    const cleanup = () => {
+        disc.remove();
+        document.documentElement.classList.remove("no-transition");
+    };
+
+    disc
+        .animate(
+            [{ clipPath: clipFrom }, { clipPath: clipTo }],
+            { duration: REVEAL_GROW_MS, easing: "ease-in-out", fill: "forwards" }
+        )
+        .finished.then(() => {
+            const root = snapTheme(next, setTheme);
+            // let the theme class + highlight-color vars paint before revealing
+            requestAnimationFrame(() =>
+                requestAnimationFrame(() => {
+                    const fade = disc.animate([{ opacity: 1 }, { opacity: 0 }], {
+                        duration: REVEAL_FADE_MS,
+                        easing: "ease-out",
+                        fill: "forwards",
+                    });
+                    fade.finished.then(() => {
+                        disc.remove();
+                        root.classList.remove("no-transition");
+                    }, cleanup);
+                })
+            );
+        }, cleanup); // interrupted grow (rapid re-toggle / navigation): tidy up
+}
+
 export default function DarkModeToggle({ className = "", onFailedToggle, questClicked }) {
     const [mounted, setMounted] = useState(false);
     const [denied, setDenied] = useState(false);
@@ -44,9 +151,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     const { getAllQuestsComplete, ready } = useMoney();
     const allQuestComp = getAllQuestsComplete();
-    // TEMP(light-mode): toggle unlocked unconditionally for testing.
-    // Restore the quest gate before merging: `const canToggle = ready && allQuestComp;`
-    const canToggle = ready || allQuestComp;
+    const canToggle = ready && allQuestComp;
 
     const isDark = resolvedTheme === "dark";
 
@@ -68,55 +173,12 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
         }
     }, [questClicked]);
 
-    const handleClick = () => {
+    const handleClick = (event) => {
         if (canToggle) {
             const nextTheme = isDark ? "light" : "dark";
             if (!shouldReduceMotion) setSpin((s) => s + 360);
-
-            if (!shouldReduceMotion && typeof document.startViewTransition === "function") {
-                const rect = buttonRef.current?.getBoundingClientRect();
-                const vw = window.visualViewport?.width ?? window.innerWidth;
-                const vh = window.visualViewport?.height ?? window.innerHeight;
-                const cx = rect ? rect.left + rect.width / 2 : vw / 2;
-                const cy = rect ? rect.top + rect.height / 2 : vh / 2;
-                const maxRadius = Math.hypot(Math.max(cx, vw - cx), Math.max(cy, vh - cy));
-                const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
-                const clipTo = `circle(${maxRadius}px at ${cx}px ${cy}px)`;
-
-                const root = document.documentElement;
-                root.dataset.themeVt = "active";
-                root.style.setProperty("--theme-vt-clip-from", clipFrom);
-
-                const transition = document.startViewTransition(() => {
-                    flushSync(() => setTheme(nextTheme));
-                });
-
-                transition.ready.then(() => {
-                    root.animate(
-                        { clipPath: [clipFrom, clipTo] },
-                        {
-                            duration: 280,
-                            easing: "ease-in-out",
-                            fill: "forwards",
-                            pseudoElement: "::view-transition-new(root)",
-                        }
-                    );
-                });
-
-                transition.finished.finally(() => {
-                    delete root.dataset.themeVt;
-                    root.style.removeProperty("--theme-vt-clip-from");
-                });
-            } else {
-                // Option A: reduced-motion / no-startViewTransition fallback — instant atomic swap
-                document.documentElement.classList.add("no-transition");
-                setTheme(nextTheme);
-                requestAnimationFrame(() =>
-                    requestAnimationFrame(() =>
-                        document.documentElement.classList.remove("no-transition")
-                    )
-                );
-            }
+            const originEl = event?.currentTarget ?? buttonRef.current;
+            revealTheme(nextTheme, setTheme, originEl, shouldReduceMotion);
         } else {
             setDenied(true);
             onFailedToggle?.();
