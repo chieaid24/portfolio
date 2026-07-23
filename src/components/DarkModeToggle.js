@@ -67,11 +67,9 @@ function revealTheme(next, setTheme, originEl, shouldReduceMotion) {
     const vw = window.visualViewport?.width ?? window.innerWidth;
     const vh = window.visualViewport?.height ?? window.innerHeight;
     const hasRect = rect && rect.width > 0 && rect.height > 0;
-    const cx = hasRect ? rect.left + rect.width / 2 : vw / 2;
-    const cy = hasRect ? rect.top + rect.height / 2 : vh / 2;
-    const radius = Math.hypot(Math.max(cx, vw - cx), Math.max(cy, vh - cy));
-    const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
-    const clipTo = `circle(${radius}px at ${cx}px ${cy}px)`;
+    const btnX = hasRect ? rect.left + rect.width / 2 : vw / 2; // viewport coords
+    const btnY = hasRect ? rect.top + rect.height / 2 : vh / 2;
+    const radius = Math.hypot(Math.max(btnX, vw - btnX), Math.max(btnY, vh - btnY));
 
     const disc = document.createElement("div");
     Object.assign(disc.style, {
@@ -80,10 +78,21 @@ function revealTheme(next, setTheme, originEl, shouldReduceMotion) {
         background: REVEAL_BG[next],
         pointerEvents: "none",
         zIndex: "2147483646",
-        clipPath: clipFrom,
         willChange: "clip-path",
     });
     document.body.appendChild(disc);
+
+    // Convert the viewport button center into the disc's OWN coordinate space.
+    // A transformed/offset ancestor (e.g. a wrapper injected by a browser
+    // extension, or a page-shrinking sidebar) can make this fixed disc's box not
+    // start at viewport (0,0); measuring the disc and subtracting its origin
+    // keeps the circle on the button instead of drifting up/left. No-op at (0,0).
+    const box = disc.getBoundingClientRect();
+    const cx = btnX - box.left;
+    const cy = btnY - box.top;
+    const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
+    const clipTo = `circle(${radius}px at ${cx}px ${cy}px)`;
+    disc.style.clipPath = clipFrom;
 
     const cleanup = () => {
         disc.remove();
