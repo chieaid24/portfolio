@@ -28,7 +28,7 @@ const GLOBE_FONT_PX = 9;
 const GLOBE_RADIUS = ((GLOBE_ROWS - 1) / 2) * GLOBE_FONT_PX;
 
 // Clearance between a line's left edge and the globe's edge.
-const GAP = 75;
+const GAP = 68;
 
 // How a line is judged against the globe's edge.
 //   true  — the closest approach anywhere in the line's ink band. Clearance is
@@ -50,8 +50,8 @@ const OPTICAL_CENTER = true;
 // Frozen line breaks — these are exactly where the live <p> breaks at md+
 // (max-w-[28rem], text-xl). Edit the copy and you must re-check these by hand.
 const COPY_LINES = [
-  "I build automation-first platforms and",
-  "developer infrastructure for AI.",
+  "I build automation-first platforms",
+  "and infra for AI systems.",
 ];
 
 function HeroLinks({ flash }) {

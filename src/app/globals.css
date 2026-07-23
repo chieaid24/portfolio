@@ -111,6 +111,15 @@ html {
   scrollbar-color: rgba(128, 128, 128, 0.45) transparent;
 }
 
+/* Opt out of the global scrollbar for horizontal scroll strips. Unlayered and
+   more specific than the rules above so it actually wins the cascade. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .dark:root {
   color-scheme: dark;
 }
