@@ -47,28 +47,51 @@ export default function Carousel() {
   const trackRef = useRef(null); // the draggable strip
   const x = useMotionValue(0);
 
-  // Trackpad horizontal scroll: nudge the same motion value framer drags, with
-  // a light ease so it glides like the drag (rather than jumping per event).
+  // Trackpad horizontal scroll: nudge the same motion value framer drags, eased
+  // for a light inertia. Pushing past an end rubber-bands and springs back once
+  // the gesture stops, matching the drag's elastic edges.
   useEffect(() => {
     const viewport = viewportRef.current;
     const track = trackRef.current;
     if (!viewport || !track) return;
 
     const EASE = 0.16; // glide toward target (higher = snappier)
-    const minX = () => Math.min(0, viewport.offsetWidth - track.scrollWidth);
+    const ELASTIC = 0.5; // overscroll give as a fraction of the viewport
+    const IDLE_MS = 120; // gesture-end delay before snapping back to the edge
+    const bounds = () => ({
+      min: Math.min(0, viewport.offsetWidth - track.scrollWidth),
+      max: 0,
+    });
+    // Diminishing resistance the further past an edge you push.
+    const rubber = (over) => {
+      const give = viewport.offsetWidth * ELASTIC;
+      return (give * over) / (give + over);
+    };
+    // Displayed position for an unbounded target, rubber-banded past the edges.
+    const display = (t) => {
+      const { min, max } = bounds();
+      if (t > max) return max + rubber(t - max);
+      if (t < min) return min - rubber(min - t);
+      return t;
+    };
 
-    let target = x.get();
+    let target = x.get(); // unbounded; may sit past an edge mid-gesture
     let raf = 0;
+    let idle = 0;
     const ease = () => {
       const cur = x.get();
-      const diff = target - cur;
+      const dest = display(target);
+      const diff = dest - cur;
       if (Math.abs(diff) < 0.5) {
-        x.set(target);
+        x.set(dest);
         raf = 0;
         return;
       }
       x.set(cur + diff * EASE);
       raf = requestAnimationFrame(ease);
+    };
+    const startEase = () => {
+      if (!raf) raf = requestAnimationFrame(ease);
     };
     const stopEase = () => {
       if (raf) cancelAnimationFrame(raf);
@@ -82,24 +105,32 @@ export default function Carousel() {
           : e.shiftKey
             ? e.deltaY
             : 0;
-      if (!delta) return;
-      const min = minX();
-      const base = raf ? target : x.get();
-      const atStart = delta < 0 && base >= 0;
-      const atEnd = delta > 0 && base <= min;
-      if (atStart || atEnd) return; // let the page scroll past the edges
+      if (!delta) return; // vertical intent -> let the page scroll
       e.preventDefault();
-      target = Math.max(min, Math.min(0, base - delta));
-      if (!raf) raf = requestAnimationFrame(ease);
+      const { min, max } = bounds();
+      const cap = viewport.offsetWidth * ELASTIC; // limit the raw overscroll
+      if (!raf) target = x.get();
+      target = Math.max(min - cap, Math.min(max + cap, target - delta));
+      startEase();
+      // Once the gesture (and its momentum) stops, pull back to the edge.
+      clearTimeout(idle);
+      idle = setTimeout(() => {
+        target = Math.max(min, Math.min(max, target));
+        startEase();
+      }, IDLE_MS);
     };
 
     // Framer owns the motion value during a drag; stop the wheel glide so they
     // don't fight, then resume from wherever the drag left off.
-    const onPointerDown = () => stopEase();
+    const onPointerDown = () => {
+      clearTimeout(idle);
+      stopEase();
+    };
 
     viewport.addEventListener("wheel", onWheel, { passive: false });
     track.addEventListener("pointerdown", onPointerDown);
     return () => {
+      clearTimeout(idle);
       stopEase();
       viewport.removeEventListener("wheel", onWheel);
       track.removeEventListener("pointerdown", onPointerDown);
