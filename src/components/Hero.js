@@ -10,14 +10,17 @@
 //   - the globe is a fixed hand-tuned size; nothing measures the copy and resizes
 //     the globe, so there's no reflow loop
 
-import { useCallback, useLayoutEffect, useRef } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import RewardLink from "@/components/RewardLink";
 import ScrambledText from "@/components/ScrambledText";
 import FileDownload from "@/icons/FileDownload";
 import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import { AsciiGlobe } from "@/components/MissionControl";
+import GlobeTreatment from "@/components/GlobeTreatment";
+import GlobeVariantBar from "@/components/GlobeVariantBar";
 
 // Globe size. Fixed by choice: the copy never resizes it. The disc's diameter is
 // (ROWS - 1) * FONT_PX = 126px. ROWS is odd so the disc has a real center row —
@@ -263,7 +266,28 @@ export default function Hero({ accent, flash }) {
 
   useArcAlign({ groupRef, colRef, globeRef, enabled });
 
+  // PROTOTYPE — dev-only globe treatment preview (?variant=A|C). null keeps the
+  // production globe. accentPreview overrides the theme accent for comparison;
+  // mode follows the site's own light/dark toggle.
+  const { resolvedTheme } = useTheme();
+  const [variant, setVariant] = useState(null);
+  const [accentPreview, setAccentPreview] = useState(null);
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("variant");
+    if (v === "A" || v === "C") setVariant(v);
+  }, []);
+  const chooseVariant = useCallback((v) => {
+    setVariant(v);
+    const u = new URL(window.location.href);
+    if (v) u.searchParams.set("variant", v);
+    else u.searchParams.delete("variant");
+    window.history.replaceState(null, "", u);
+  }, []);
+  const globeAccent = accentPreview ?? accent;
+  const globeMode = resolvedTheme === "light" ? "light" : "dark";
+
   return (
+    <>
     <motion.div
       className="flex min-h-screen flex-col items-center justify-center gap-4 text-main-text"
       initial={{ opacity: 0 }}
@@ -291,10 +315,22 @@ export default function Hero({ accent, flash }) {
         className="hidden w-full items-center justify-center md:flex"
       >
         <div ref={globeRef} className="relative shrink-0">
-          <GlobeGlass />
-          <div className="relative [&_pre:first-child]:opacity-60 dark:[&_pre:first-child]:opacity-35">
-            <AsciiGlobe color={accent} rows={GLOBE_ROWS} fontPx={GLOBE_FONT_PX} />
-          </div>
+          {variant ? (
+            <GlobeTreatment
+              variant={variant}
+              mode={globeMode}
+              accent={globeAccent}
+              rows={GLOBE_ROWS}
+              fontPx={GLOBE_FONT_PX}
+            />
+          ) : (
+            <>
+              <GlobeGlass />
+              <div className="relative [&_pre:first-child]:opacity-60 dark:[&_pre:first-child]:opacity-35">
+                <AsciiGlobe color={globeAccent} rows={GLOBE_ROWS} fontPx={GLOBE_FONT_PX} />
+              </div>
+            </>
+          )}
         </div>
         <div ref={colRef} className="flex flex-col items-start">
           {COPY_LINES.map((line) => (
@@ -311,5 +347,14 @@ export default function Hero({ accent, flash }) {
         </div>
       </div>
     </motion.div>
+    {process.env.NODE_ENV !== "production" && (
+      <GlobeVariantBar
+        variant={variant}
+        onVariant={chooseVariant}
+        accentPreview={accentPreview}
+        onAccent={setAccentPreview}
+      />
+    )}
+    </>
   );
 }
