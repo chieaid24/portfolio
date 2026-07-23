@@ -40,7 +40,9 @@ function Disc({ kind, rows, fontPx }) {
           height: d,
           background:
             "radial-gradient(circle at 38% 32%, #12224a 0%, #0a1330 62%, #070d22 100%)",
-          boxShadow: "0 0 20px rgba(12,22,60,0.35)",
+          // Dark drop shadow to lift the porthole off the sky, plus a faint navy
+          // ambient glow around the rim.
+          boxShadow: "0 8px 22px rgba(6,10,24,0.40), 0 0 18px rgba(12,22,60,0.25)",
         }}
       />
     );
