@@ -31,14 +31,15 @@ function MoonIcon() {
     );
 }
 
-// Theme swap animation: a solid disc grows from the toggle button; once it fully
-// covers the screen every component's colors snap at once (no per-component
-// transition) so they change together, then the disc fades out. Uses only
-// transform + opacity, so it runs entirely on the compositor and stays smooth
-// even when the theme re-render janks the main thread on a slow machine. A small
-// disc is pre-rastered and scaled up on the GPU, keeping the layer tiny.
+// Theme swap animation: a solid circle grows from the toggle button; once it
+// fully covers the screen every component's colors snap at once (no
+// per-component transition) so they change together, then it fades out.
+// The grow uses clip-path: circle(), drawn as a crisp vector at native
+// resolution every frame (no bitmap scaling, so no pixelated edge). It stays
+// smooth because the fill is flat and cheap to re-clip, and the expensive theme
+// re-render is deferred until AFTER the grow (hidden under full cover); the
+// fade-out is opacity-only (compositor), so it can't jank on a slow machine.
 // Reduced-motion falls back to an instant swap.
-const REVEAL_BASE = 360; // disc raster size (px), scaled up to cover the viewport
 const REVEAL_GROW_MS = 380;
 const REVEAL_FADE_MS = 200;
 const REVEAL_BG = { dark: "#03040c", light: "#e8f1fb" };
@@ -65,23 +66,18 @@ function revealTheme(next, setTheme, buttonRef, shouldReduceMotion) {
     const cx = rect ? rect.left + rect.width / 2 : vw / 2;
     const cy = rect ? rect.top + rect.height / 2 : vh / 2;
     const radius = Math.hypot(Math.max(cx, vw - cx), Math.max(cy, vh - cy));
-    const coverScale = (radius * 2) / REVEAL_BASE;
+    const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
+    const clipTo = `circle(${radius}px at ${cx}px ${cy}px)`;
 
     const disc = document.createElement("div");
     Object.assign(disc.style, {
         position: "fixed",
-        left: `${cx - REVEAL_BASE / 2}px`,
-        top: `${cy - REVEAL_BASE / 2}px`,
-        width: `${REVEAL_BASE}px`,
-        height: `${REVEAL_BASE}px`,
-        borderRadius: "50%",
+        inset: "0",
         background: REVEAL_BG[next],
         pointerEvents: "none",
         zIndex: "2147483646",
-        transform: "scale(0)",
-        transformOrigin: "center",
-        willChange: "transform",
-        contain: "strict",
+        clipPath: clipFrom,
+        willChange: "clip-path",
     });
     document.body.appendChild(disc);
 
@@ -92,7 +88,7 @@ function revealTheme(next, setTheme, buttonRef, shouldReduceMotion) {
 
     disc
         .animate(
-            [{ transform: "scale(0)" }, { transform: `scale(${coverScale})` }],
+            [{ clipPath: clipFrom }, { clipPath: clipTo }],
             { duration: REVEAL_GROW_MS, easing: "ease-in-out", fill: "forwards" }
         )
         .finished.then(() => {
