@@ -28,7 +28,7 @@ const GLOBE_FONT_PX = 9;
 const GLOBE_RADIUS = ((GLOBE_ROWS - 1) / 2) * GLOBE_FONT_PX;
 
 // Clearance between a line's left edge and the globe's edge.
-const GAP = 68;
+const GAP = 60;
 
 // How a line is judged against the globe's edge.
 //   true  — the closest approach anywhere in the line's ink band. Clearance is
