@@ -1,18 +1,20 @@
 "use client";
 
+// Temporary side-by-side preview of the redesigned hero (globe-arc layout).
+// Identical to app/page.js except the hero block renders <Hero> instead of the
+// inline hero. Delete this route once a winner is picked.
+
 import { useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import { useMoney } from "@/lib/money-context";
 import ProjectCard from "@/components/ProjectCard";
 import { projects, featuredList } from "@/app/data/projects";
 import RewardLink from "@/components/RewardLink";
 import { motion } from "framer-motion";
-import FileDownload from "@/icons/FileDownload";
-import FooterLinkedin from "@/icons/FooterLinkedin";
-import FooterGithub from "@/icons/FooterGithub";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
-import ScrambledText from "@/components/ScrambledText";
+import Hero from "@/components/Hero";
 
 // Loaded lazily so three.js / react-three-fiber (~250KB gzip) stay out of the
 // home page's critical bundle. The placeholder paints the same sky (near-black
@@ -25,7 +27,9 @@ const StarBackground = dynamic(() => import("@/components/StarBackground"), {
   ),
 });
 
-export default function Home() {
+export default function NewHeroPreview() {
+  const { highlightHex } = useMoney();
+  const accent = highlightHex || "#ff5e5e";
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
   // the latest pointer position every frame, so the motion is decoupled from
   // (bursty/sparse) mousemove events and from any CSS transition — that's what
@@ -106,63 +110,15 @@ export default function Home() {
       <main className="">
         <MaxWidthWrapper>
           <section id="hero" className="min-h-screen">
-            <motion.div
-              className="flex min-h-screen flex-col items-center justify-center text-main-text"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-            >
-              <h1 className="mb-4 text-center text-4xl font-bold sm:mb-2 lg:mb-3 lg:text-[42px]">
-                Greetings Earthling, {" "} 
-                <span className="">
-                  <br className="sm:hidden" /> I&apos;m {" "}
-                  <ScrambledText text="Aidan" className="gradient-text-header" />
-                </span>
-              </h1>
-              <h2 className="mb-8 text-center text-lg font-semibold text-main-text sm:mb-6 sm:text-xl md:leading-[36px] lg:text-[28px]">
-                Infra and platforms, one galaxy at a time. 
-              </h2>
-              <div className="flex w-80 justify-between md:w-100">
-                <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
-                  <RewardLink
-                    href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
-                    rewardId="resume"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
-                    onMouseEnter={handleFlashEnter}
-                    onMouseMove={handleFlashMove}
-                    onMouseLeave={handleFlashLeave}
-                  >
-                    <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
-                      <span>Resume</span>
-                      <FileDownload className="text-dark-grey-text h-5 w-5" />
-                    </div>
-                  </RewardLink>
-                </div>
-                <div className="text-outline-gray flex items-center justify-center gap-x-4 transition-colors lg:gap-x-3">
-                  <RewardLink
-                    href="https://www.linkedin.com/in/aidanchien/"
-                    target="_blank"
-                    rewardId="linkedin"
-                    aria-label="LinkedIn"
-                    className="md:hover:translate-y-[-1px]"
-                  >
-                    <FooterLinkedin className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-                  </RewardLink>
-                  <RewardLink
-                    href="https://github.com/chieaid24"
-                    target="_blank"
-                    rewardId="github"
-                    aria-label="GitHub"
-                    className="md:hover:translate-y-[-1px]"
-                  >
-                    <FooterGithub className="h-8 w-8 transition-colors duration-100 md:hover:text-main-text-hover" />
-                  </RewardLink>
-                </div>
-              </div>
-            </motion.div>
-            <section className="mb-20">
+            <Hero
+              accent={accent}
+              flash={{
+                onEnter: handleFlashEnter,
+                onMove: handleFlashMove,
+                onLeave: handleFlashLeave,
+              }}
+            />
+            <section id="experience" className="mb-20 scroll-mt-28">
               <motion.h2
                 className="mb-6 text-xl font-bold tracking-[0.2em] text-main-text sm:text-2xl md:text-3xl"
                 key="experience-header"
@@ -205,7 +161,7 @@ export default function Home() {
                 <RewardLink
                   href="/projects"
                   scroll
-                  className="text-body-text group flex items-center gap-1 font-medium duration-100 text-sm sm:text-base md:hover:text-main-text"
+                  className="text-body-text group flex items-center gap-1 font-medium duration-100 sm:text-base md:hover:text-main-text"
                   rewardId="projects-page"
                 >
                   <span>View more</span>
