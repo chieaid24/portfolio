@@ -75,9 +75,14 @@ export default function Carousel() {
       return t;
     };
 
-    let target = x.get(); // unbounded; may sit past an edge mid-gesture
+    // `target` is the raw (unbounded) scroll position and the single source of
+    // truth for a wheel gesture; `x` is its rubber-banded render. They only sync
+    // at gesture start, never per-event -- syncing mid-gesture would feed the
+    // compressed x back through the rubber and make the edge jitter.
+    let target = x.get();
     let raf = 0;
     let idle = 0;
+    let gesturing = false;
     const ease = () => {
       const cur = x.get();
       const dest = display(target);
@@ -97,6 +102,12 @@ export default function Carousel() {
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
     };
+    const endGesture = () => {
+      gesturing = false;
+      const { min, max } = bounds();
+      target = Math.max(min, Math.min(max, target)); // spring back to the edge
+      startEase();
+    };
 
     const onWheel = (e) => {
       const delta =
@@ -109,20 +120,22 @@ export default function Carousel() {
       e.preventDefault();
       const { min, max } = bounds();
       const cap = viewport.offsetWidth * ELASTIC; // limit the raw overscroll
-      if (!raf) target = x.get();
+      if (!gesturing) {
+        x.stop(); // cancel any framer drag-momentum before taking over
+        target = x.get(); // sync once, from a settled in-range position
+        gesturing = true;
+      }
       target = Math.max(min - cap, Math.min(max + cap, target - delta));
       startEase();
       // Once the gesture (and its momentum) stops, pull back to the edge.
       clearTimeout(idle);
-      idle = setTimeout(() => {
-        target = Math.max(min, Math.min(max, target));
-        startEase();
-      }, IDLE_MS);
+      idle = setTimeout(endGesture, IDLE_MS);
     };
 
     // Framer owns the motion value during a drag; stop the wheel glide so they
     // don't fight, then resume from wherever the drag left off.
     const onPointerDown = () => {
+      gesturing = false;
       clearTimeout(idle);
       stopEase();
     };
