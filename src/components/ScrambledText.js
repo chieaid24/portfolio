@@ -42,6 +42,18 @@ export default function ScrambledText({ text, className }) {
   );
 
   const wrapperRef = useRef(null);
+  const measureRef = useRef(null);
+  const alienMeasureRef = useRef(null);
+  // Lock the box to the resting (Latin) width. The scramble renders wider
+  // Aurebesh glyphs; without this the inline-block grows and the whole word
+  // reflows onto the next title line. Overflow from the wider glyphs spills
+  // past the fixed box (harmless — it's the last word in the title).
+  const [lockW, setLockW] = useState(null);
+  // Stable hitbox width: the text rendered in the Aurebesh font. The hover
+  // region is derived from this fixed value, not the live scramble glyphs —
+  // otherwise the box would grow with the noise (and the exit re-scramble),
+  // re-triggering hover far past the text and feeling sticky.
+  const hitWRef = useRef(0);
   const nearRef = useRef(false);
   const charSpans = useRef(Array(n).fill(null));
   const phase = useRef("idle");
@@ -179,6 +191,21 @@ export default function ScrambledText({ text, className }) {
 
   useEffect(() => clearAll, [clearAll]);
 
+  // Measure the resting Latin width from a hidden copy (always the body font,
+  // never scrambled) and lock the visible box to it. Re-measure once webfonts
+  // load and on resize, since the title font-size is responsive.
+  useEffect(() => {
+    const measure = () => {
+      if (measureRef.current) setLockW(measureRef.current.getBoundingClientRect().width);
+      if (alienMeasureRef.current)
+        hitWRef.current = alienMeasureRef.current.getBoundingClientRect().width;
+    };
+    measure();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [text]);
+
   // intro decrypt on every mount/refresh: the name first shows as static
   // Aurebesh (the initial useState) and fades in with the hero, then after
   // INTRO_DELAY_MS the scramble kicks in and decrypts to readable Latin,
@@ -240,7 +267,13 @@ export default function ScrambledText({ text, className }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // trigger on cursor proximity to the wrapper's box, not just exact hover.
+  // Trigger on cursor proximity to a STABLE box, not on exact hover and not on
+  // the live scramble glyphs. The locked box holds the resting width; the
+  // Aurebesh spills past it, so the hitbox extends right to the (fixed) Aurebesh
+  // width of the text. Using a constant keeps the region from ballooning with
+  // the noise or the exit re-scramble, which made the hover stick far past the
+  // visible text.
+  //
   // The check runs at most once per frame (rAF-coalesced) so a high-frequency
   // mouse doesn't trigger a getBoundingClientRect per event.
   useEffect(() => {
@@ -253,8 +286,12 @@ export default function ScrambledText({ text, className }) {
       const el = wrapperRef.current;
       if (!e || !el) return;
       const r = el.getBoundingClientRect();
-      const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
-      const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+      const left = r.left;
+      const top = r.top;
+      const bottom = r.bottom;
+      const right = r.left + Math.max(r.width, hitWRef.current);
+      const dx = Math.max(left - e.clientX, 0, e.clientX - right);
+      const dy = Math.max(top - e.clientY, 0, e.clientY - bottom);
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist <= PROXIMITY_PX) {
@@ -290,8 +327,36 @@ export default function ScrambledText({ text, className }) {
         display: "inline-block",
         height: "1lh",
         whiteSpace: "nowrap",
+        width: lockW ? `${lockW}px` : undefined,
       }}
     >
+      {/* hidden width references: resting text in the body font (locks the box)
+          and in the Aurebesh font (sets the stable hover region). */}
+      <span
+        ref={measureRef}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          visibility: "hidden",
+          whiteSpace: "nowrap",
+          pointerEvents: "none",
+        }}
+      >
+        {text}
+      </span>
+      <span
+        ref={alienMeasureRef}
+        aria-hidden="true"
+        className={aurebesh.className}
+        style={{
+          position: "absolute",
+          visibility: "hidden",
+          whiteSpace: "nowrap",
+          pointerEvents: "none",
+        }}
+      >
+        {text}
+      </span>
       {display.map((item, i) => (
         <span
           key={i}

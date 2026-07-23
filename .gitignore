@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# worktree dev server log
+dev-server.log
+
 # production
 /build
 
