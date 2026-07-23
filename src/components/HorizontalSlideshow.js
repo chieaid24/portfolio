@@ -49,28 +49,34 @@ export default function Carousel() {
     const el = scrollerRef.current;
     if (!el) return;
 
-    // Momentum model: everything drives a `target` scroll position, and a rAF
-    // loop eases scrollLeft toward it. That gives trackpad/wheel smoothing and
-    // drift after a drag release, instead of stopping dead.
-    const EASE = 0.16; // per-frame approach toward target (higher = snappier)
-    const DRAG_MOMENTUM = 12; // how far a drag flick coasts on release
+    // Wheel/trackpad drives a `target` that a rAF loop eases toward (smooth
+    // glide). Mouse drag is 1:1 while held, then throws with an exponential
+    // decay tuned to match framer-motion's old dragMomentum feel.
+    const EASE = 0.16; // wheel/trackpad glide (higher = snappier)
+    const POWER = 0.8; // drag throw distance = POWER * release velocity (framer default)
+    const TIME_CONSTANT = 750; // drag coast decay, ms (framer default)
     const maxScroll = () => el.scrollWidth - el.clientWidth;
     const clamp = (v) => Math.max(0, Math.min(maxScroll(), v));
 
     let target = el.scrollLeft;
     let raf = 0;
-    const tick = () => {
+    let mode = null; // "ease" (wheel) | "inertia" (drag release)
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      mode = null;
+    };
+
+    const easeTick = () => {
       const diff = target - el.scrollLeft;
       if (Math.abs(diff) < 0.5) {
         el.scrollLeft = target;
         raf = 0;
+        mode = null;
         return;
       }
       el.scrollLeft += diff * EASE;
-      raf = requestAnimationFrame(tick);
-    };
-    const kick = () => {
-      if (!raf) raf = requestAnimationFrame(tick);
+      raf = requestAnimationFrame(easeTick);
     };
 
     // Horizontal trackpad gestures (and shift+wheel on a mouse) feed the target.
@@ -85,30 +91,62 @@ export default function Carousel() {
             : 0;
       if (!delta) return;
       const max = maxScroll();
-      const atStart = delta < 0 && target <= 0;
-      const atEnd = delta > 0 && target >= max - 0.5;
+      const base = mode === "ease" ? target : el.scrollLeft;
+      const atStart = delta < 0 && base <= 0;
+      const atEnd = delta > 0 && base >= max - 0.5;
       if (atStart || atEnd) return;
       e.preventDefault();
-      target = clamp(target + delta);
-      kick();
+      if (mode !== "ease") stop();
+      target = clamp(base + delta);
+      mode = "ease";
+      if (!raf) raf = requestAnimationFrame(easeTick);
     };
 
-    // Click-drag scrolling for mouse users: 1:1 while held, then coast on release.
+    // Drag throw: value(t) = to - amplitude * e^(-t/TIME_CONSTANT), resting at
+    // to = from + POWER * velocity. Same exponential throw framer-motion uses.
+    const runInertia = (v0) => {
+      stop();
+      const from = el.scrollLeft;
+      const amplitude = POWER * v0;
+      const to = from + amplitude;
+      const startTime = performance.now();
+      mode = "inertia";
+      const step = (now) => {
+        const d = -amplitude * Math.exp(-(now - startTime) / TIME_CONSTANT);
+        const pos = to + d;
+        const max = maxScroll();
+        if (pos <= 0 || pos >= max) {
+          el.scrollLeft = clamp(pos);
+          target = el.scrollLeft;
+          raf = 0;
+          mode = null;
+          return;
+        }
+        el.scrollLeft = pos;
+        target = pos;
+        if (Math.abs(d) > 0.5) {
+          raf = requestAnimationFrame(step);
+        } else {
+          raf = 0;
+          mode = null;
+        }
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    // Click-drag scrolling: 1:1 while held, tracking px/s velocity for the throw.
     let dragging = false;
     let startX = 0;
     let startLeft = 0;
-    let prev = 0;
-    let velocity = 0;
+    let lastT = 0;
+    let velocity = 0; // scrollLeft px/s at release
     const onPointerDown = (e) => {
       if (e.pointerType === "touch") return;
       dragging = true;
-      if (raf) {
-        cancelAnimationFrame(raf);
-        raf = 0;
-      }
+      stop();
       startX = e.clientX;
       startLeft = el.scrollLeft;
-      prev = el.scrollLeft;
+      lastT = e.timeStamp || performance.now();
       velocity = 0;
       target = el.scrollLeft;
       el.setPointerCapture?.(e.pointerId);
@@ -116,18 +154,23 @@ export default function Carousel() {
     };
     const onPointerMove = (e) => {
       if (!dragging) return;
+      const now = e.timeStamp || performance.now();
       const next = clamp(startLeft - (e.clientX - startX));
-      velocity = next - prev;
-      prev = next;
+      const dt = now - lastT;
+      if (dt > 0) {
+        const inst = ((next - el.scrollLeft) / dt) * 1000;
+        // light smoothing so one jittery sample doesn't dominate the throw
+        velocity = 0.7 * inst + 0.3 * velocity;
+      }
       el.scrollLeft = next;
       target = next;
+      lastT = now;
     };
     const endDrag = () => {
       if (!dragging) return;
       dragging = false;
       el.style.cursor = "";
-      target = clamp(el.scrollLeft + velocity * DRAG_MOMENTUM);
-      kick();
+      runInertia(velocity);
     };
 
     el.addEventListener("wheel", onWheel, { passive: false });
