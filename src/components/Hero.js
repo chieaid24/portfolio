@@ -50,8 +50,8 @@ const OPTICAL_CENTER = true;
 // Frozen line breaks — these are exactly where the live <p> breaks at md+
 // (max-w-[28rem], text-xl). Edit the copy and you must re-check these by hand.
 const COPY_LINES = [
-  "I build automation-first platforms and",
-  "developer infrastructure for AI.",
+  "I build automation-first platforms",
+  "and infra for AI systems.",
 ];
 
 function HeroLinks({ flash }) {
