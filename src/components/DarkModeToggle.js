@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { flushSync } from 'react-dom';
 import { motion, useReducedMotion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useMoney } from "@/lib/money-context";
+import { getToggleVariant, runThemeSwap } from "@/lib/theme-toggle-anim";
 
 function SunIcon() {
     return (
@@ -72,51 +72,14 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
         if (canToggle) {
             const nextTheme = isDark ? "light" : "dark";
             if (!shouldReduceMotion) setSpin((s) => s + 360);
-
-            if (!shouldReduceMotion && typeof document.startViewTransition === "function") {
-                const rect = buttonRef.current?.getBoundingClientRect();
-                const vw = window.visualViewport?.width ?? window.innerWidth;
-                const vh = window.visualViewport?.height ?? window.innerHeight;
-                const cx = rect ? rect.left + rect.width / 2 : vw / 2;
-                const cy = rect ? rect.top + rect.height / 2 : vh / 2;
-                const maxRadius = Math.hypot(Math.max(cx, vw - cx), Math.max(cy, vh - cy));
-                const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
-                const clipTo = `circle(${maxRadius}px at ${cx}px ${cy}px)`;
-
-                const root = document.documentElement;
-                root.dataset.themeVt = "active";
-                root.style.setProperty("--theme-vt-clip-from", clipFrom);
-
-                const transition = document.startViewTransition(() => {
-                    flushSync(() => setTheme(nextTheme));
-                });
-
-                transition.ready.then(() => {
-                    root.animate(
-                        { clipPath: [clipFrom, clipTo] },
-                        {
-                            duration: 280,
-                            easing: "ease-in-out",
-                            fill: "forwards",
-                            pseudoElement: "::view-transition-new(root)",
-                        }
-                    );
-                });
-
-                transition.finished.finally(() => {
-                    delete root.dataset.themeVt;
-                    root.style.removeProperty("--theme-vt-clip-from");
-                });
-            } else {
-                // Option A: reduced-motion / no-startViewTransition fallback — instant atomic swap
-                document.documentElement.classList.add("no-transition");
-                setTheme(nextTheme);
-                requestAnimationFrame(() =>
-                    requestAnimationFrame(() =>
-                        document.documentElement.classList.remove("no-transition")
-                    )
-                );
-            }
+            // PROTOTYPE: animation chosen live via ToggleAnimSwitcher.
+            runThemeSwap({
+                variant: getToggleVariant(),
+                next: nextTheme,
+                setTheme,
+                buttonRef,
+                shouldReduceMotion,
+            });
         } else {
             setDenied(true);
             onFailedToggle?.();
