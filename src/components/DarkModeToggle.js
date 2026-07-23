@@ -51,7 +51,7 @@ function snapTheme(next, setTheme) {
     return root;
 }
 
-function revealTheme(next, setTheme, buttonRef, shouldReduceMotion) {
+function revealTheme(next, setTheme, originEl, shouldReduceMotion) {
     if (shouldReduceMotion || typeof document === "undefined") {
         const root = snapTheme(next, setTheme);
         requestAnimationFrame(() =>
@@ -60,11 +60,15 @@ function revealTheme(next, setTheme, buttonRef, shouldReduceMotion) {
         return;
     }
 
-    const rect = buttonRef.current?.getBoundingClientRect();
+    // Center the reveal on the toggle. Source the rect from the clicked element
+    // itself (never a stale/null ref); only fall back to viewport center if the
+    // rect is genuinely missing or zero-sized.
+    const rect = originEl?.getBoundingClientRect();
     const vw = window.visualViewport?.width ?? window.innerWidth;
     const vh = window.visualViewport?.height ?? window.innerHeight;
-    const cx = rect ? rect.left + rect.width / 2 : vw / 2;
-    const cy = rect ? rect.top + rect.height / 2 : vh / 2;
+    const hasRect = rect && rect.width > 0 && rect.height > 0;
+    const cx = hasRect ? rect.left + rect.width / 2 : vw / 2;
+    const cy = hasRect ? rect.top + rect.height / 2 : vh / 2;
     const radius = Math.hypot(Math.max(cx, vw - cx), Math.max(cy, vh - cy));
     const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
     const clipTo = `circle(${radius}px at ${cx}px ${cy}px)`;
@@ -146,11 +150,12 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
         }
     }, [questClicked]);
 
-    const handleClick = () => {
+    const handleClick = (event) => {
         if (canToggle) {
             const nextTheme = isDark ? "light" : "dark";
             if (!shouldReduceMotion) setSpin((s) => s + 360);
-            revealTheme(nextTheme, setTheme, buttonRef, shouldReduceMotion);
+            const originEl = event?.currentTarget ?? buttonRef.current;
+            revealTheme(nextTheme, setTheme, originEl, shouldReduceMotion);
         } else {
             setDenied(true);
             onFailedToggle?.();
