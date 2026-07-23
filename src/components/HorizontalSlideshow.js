@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import BulletIcon from "@/icons/BulletIcon";
 
@@ -45,13 +45,37 @@ function Slide({ src, alt, priority }) {
 export default function Carousel() {
   const carouselRef = useRef(null);
   const [width, setWidth] = useState(0);
+  // Shared position for both drag and trackpad wheel so the two stay in sync.
+  const x = useMotionValue(0);
 
   useEffect(() => {
-    if (!carouselRef.current) return;
-    const scrollWidth = carouselRef.current.scrollWidth;
-    const offsetWidth = carouselRef.current.offsetWidth;
-    setWidth(scrollWidth - offsetWidth);
+    const measure = () => {
+      if (!carouselRef.current) return;
+      const scrollWidth = carouselRef.current.scrollWidth;
+      const offsetWidth = carouselRef.current.offsetWidth;
+      setWidth(Math.max(0, scrollWidth - offsetWidth));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    // Translate horizontal trackpad scroll into carousel movement. Only claim
+    // horizontal-intent gestures so vertical scroll still moves the page.
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      const max = el.scrollWidth - el.offsetWidth;
+      const next = Math.min(0, Math.max(-max, x.get() - e.deltaX));
+      x.set(next);
+    };
+    // Non-passive so preventDefault can stop the browser's back-swipe/overscroll.
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [x]);
 
   const images = [
     {
@@ -91,6 +115,7 @@ export default function Carousel() {
           <motion.div
             drag="x"
             dragConstraints={{ left: -width, right: 0 }}
+            style={{ x }}
             className="flex gap-5"
           >
             {images.map((item, i) => (
