@@ -118,7 +118,7 @@ export default function AnimatedBalance({
     const prevStr = format(prev.current);
 
     setDeltaColor("green");
-    setTrio([prevStr, "GIFT", prevStr]);
+    setTrio([prevStr, "GIFT4U!", prevStr]);
     setRtKey((k) => k + 1);
 
     timers.current.push(
