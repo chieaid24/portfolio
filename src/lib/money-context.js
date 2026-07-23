@@ -278,6 +278,7 @@ export function MoneyProvider({ children }) {
   const [overflowTick, setOverflowTick] = useState(0);
   const [underflowTick, setUnderflowTick] = useState(0);
   const [leverPullTick, setLeverPullTick] = useState(0);
+  const [giftTick, setGiftTick] = useState(0);
   const [themeId, setThemeId] = useState(DEFAULT_THEME_ID);
   const [highlightHex, setHighlightHex] = useState(
     getThemeHex(DEFAULT_THEME_ID),
@@ -488,6 +489,13 @@ export function MoneyProvider({ children }) {
       }
 
       if (currentBalance < price) {
+        // all bounties done: gift the unaffordable theme for free (GIFT fx)
+        if (allQuestsComplete) {
+          setOwnedThemes((prev) => ensureOwnedList([...prev, id]));
+          setThemeId(id);
+          setGiftTick((t) => t + 1);
+          return { success: true, gifted: true };
+        }
         setUnderflowTick((t) => t + 1);
         return { success: false, reason: "insufficient" };
       }
@@ -497,7 +505,7 @@ export function MoneyProvider({ children }) {
       setThemeId(id);
       return { success: true, purchased: true };
     },
-    [ownedThemes],
+    [ownedThemes, allQuestsComplete],
   );
 
   const setThemeById = useCallback((id) => {
@@ -643,6 +651,7 @@ export function MoneyProvider({ children }) {
       underflowTick,
       overflowTick,
       leverPullTick,
+      giftTick,
       ready,
 
       // Spend balance specifically for a starflare purchase
@@ -664,6 +673,7 @@ export function MoneyProvider({ children }) {
       overflowTick,
       underflowTick,
       leverPullTick,
+      giftTick,
       getCompletedQuests,
       getAllQuestsComplete,
       getQuestStats,

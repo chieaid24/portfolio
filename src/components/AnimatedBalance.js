@@ -12,11 +12,12 @@ export default function AnimatedBalance({
   className = "",
   snapDelayMs = 10,
 }) {
-  const { overflowTick, underflowTick, leverPullTick } = useMoney();
+  const { overflowTick, underflowTick, leverPullTick, giftTick } = useMoney();
   const lastLeverPullTickRef = useRef(0);
   const lastCallWasLeverPullRef = useRef(false);
   const lastOverTickRef = useRef(0);
   const lastUnderTickRef = useRef(0);
+  const lastGiftTickRef = useRef(0);
   const prev = useRef(Number(value));
   const format = (n) => {
     return Number(n).toFixed(2);
@@ -106,6 +107,34 @@ export default function AnimatedBalance({
     // do NOT update prev here (balance didn't change)
     return () => clearTimers();
   }, [underflowTick, holdMs, rotateMs, snapDelayMs]);
+
+  // gifted theme (all bounties done, couldn't afford): balance is untouched, so
+  // play a GIFT flash in place of the usual -price spend animation.
+  useEffect(() => {
+    if (giftTick === 0 || giftTick === lastGiftTickRef.current) return;
+    lastGiftTickRef.current = giftTick;
+    setLeverAward(false);
+
+    const prevStr = format(prev.current);
+
+    setDeltaColor("green");
+    setTrio([prevStr, "GIFT", prevStr]);
+    setRtKey((k) => k + 1);
+
+    timers.current.push(
+      setTimeout(() => {
+        rtRef.current?.jumpTo(1);
+        timers.current.push(
+          setTimeout(() => {
+            rtRef.current?.jumpTo(2);
+          }, rotateMs + holdMs),
+        );
+      }, snapDelayMs),
+    );
+
+    // do NOT update prev here (balance didn't change)
+    return () => clearTimers();
+  }, [giftTick, holdMs, rotateMs, snapDelayMs]);
 
   // change the timer of the pull, and also make it so there is no black snapping, ie change the trio
   // also change the possible colors
