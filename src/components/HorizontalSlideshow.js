@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import BulletIcon from "@/icons/BulletIcon";
 
@@ -43,16 +43,38 @@ function Slide({ src, alt, priority }) {
 }
 
 export default function Carousel() {
-  const scrollerRef = useRef(null);
+  const viewportRef = useRef(null); // clips the strip and bounds the drag
+  const trackRef = useRef(null); // the draggable strip
+  const x = useMotionValue(0);
 
+  // Trackpad horizontal scroll: nudge the same motion value framer drags, with
+  // a light ease so it glides like the drag (rather than jumping per event).
   useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    if (!viewport || !track) return;
 
-    // Map horizontal trackpad gestures (and shift+wheel on a mouse) to the
-    // strip's scroll. preventDefault only when we can actually consume the
-    // scroll, so vertical page scroll and edge overscroll stay intact and
-    // native scrolling never double-applies.
+    const EASE = 0.16; // glide toward target (higher = snappier)
+    const minX = () => Math.min(0, viewport.offsetWidth - track.scrollWidth);
+
+    let target = x.get();
+    let raf = 0;
+    const ease = () => {
+      const cur = x.get();
+      const diff = target - cur;
+      if (Math.abs(diff) < 0.5) {
+        x.set(target);
+        raf = 0;
+        return;
+      }
+      x.set(cur + diff * EASE);
+      raf = requestAnimationFrame(ease);
+    };
+    const stopEase = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
     const onWheel = (e) => {
       const delta =
         Math.abs(e.deltaX) > Math.abs(e.deltaY)
@@ -61,48 +83,28 @@ export default function Carousel() {
             ? e.deltaY
             : 0;
       if (!delta) return;
-      const max = el.scrollWidth - el.clientWidth;
-      const atStart = el.scrollLeft <= 0;
-      const atEnd = el.scrollLeft >= max - 0.5;
-      if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
+      const min = minX();
+      const base = raf ? target : x.get();
+      const atStart = delta < 0 && base >= 0;
+      const atEnd = delta > 0 && base <= min;
+      if (atStart || atEnd) return; // let the page scroll past the edges
       e.preventDefault();
-      el.scrollLeft += delta;
+      target = Math.max(min, Math.min(0, base - delta));
+      if (!raf) raf = requestAnimationFrame(ease);
     };
 
-    // Click-drag scrolling for mouse users; touch and trackpad are handled above/natively.
-    let dragging = false;
-    let startX = 0;
-    let startLeft = 0;
-    const onPointerDown = (e) => {
-      if (e.pointerType === "touch") return;
-      dragging = true;
-      startX = e.clientX;
-      startLeft = el.scrollLeft;
-      el.setPointerCapture?.(e.pointerId);
-      el.style.cursor = "grabbing";
-    };
-    const onPointerMove = (e) => {
-      if (!dragging) return;
-      el.scrollLeft = startLeft - (e.clientX - startX);
-    };
-    const endDrag = () => {
-      dragging = false;
-      el.style.cursor = "";
-    };
+    // Framer owns the motion value during a drag; stop the wheel glide so they
+    // don't fight, then resume from wherever the drag left off.
+    const onPointerDown = () => stopEase();
 
-    el.addEventListener("wheel", onWheel, { passive: false });
-    el.addEventListener("pointerdown", onPointerDown);
-    el.addEventListener("pointermove", onPointerMove);
-    el.addEventListener("pointerup", endDrag);
-    el.addEventListener("pointercancel", endDrag);
+    viewport.addEventListener("wheel", onWheel, { passive: false });
+    track.addEventListener("pointerdown", onPointerDown);
     return () => {
-      el.removeEventListener("wheel", onWheel);
-      el.removeEventListener("pointerdown", onPointerDown);
-      el.removeEventListener("pointermove", onPointerMove);
-      el.removeEventListener("pointerup", endDrag);
-      el.removeEventListener("pointercancel", endDrag);
+      stopEase();
+      viewport.removeEventListener("wheel", onWheel);
+      track.removeEventListener("pointerdown", onPointerDown);
     };
-  }, []);
+  }, [x]);
 
   const images = [
     {
@@ -133,27 +135,32 @@ export default function Carousel() {
 
   return (
     <div className="border-outline-dark-gray w-full rounded-xl border bg-widget-surface p-3 md:p-5">
-      <div
-        ref={scrollerRef}
-        className="no-scrollbar flex cursor-grab gap-5 overflow-x-auto overflow-y-hidden overscroll-x-contain rounded-xl select-none"
-        style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" }}
-      >
-        {images.map((item, i) => (
-          <figure
-            key={i}
-            className="flex h-[160px] min-w-[250px] shrink-0 flex-col items-center gap-3 md:h-[200px] md:min-w-[300px]"
-          >
-            <Slide
-              src={item.src}
-              alt={item.caption || `Slide ${i + 1}`}
-              priority={i === 0}
-            />
-            <figcaption className="font-base text-body-text flex items-center gap-2 text-center text-xs sm:text-sm">
-              <BulletIcon className="text-highlight-color h-2 w-2" />
-              {item.caption}
-            </figcaption>
-          </figure>
-        ))}
+      <div ref={viewportRef} className="overflow-hidden rounded-xl">
+        <motion.div
+          ref={trackRef}
+          drag="x"
+          dragConstraints={viewportRef}
+          style={{ x }}
+          className="flex w-max cursor-grab gap-5"
+          whileTap={{ cursor: "grabbing" }}
+        >
+          {images.map((item, i) => (
+            <figure
+              key={i}
+              className="flex h-[160px] min-w-[250px] flex-col items-center gap-3 md:h-[200px] md:min-w-[300px]"
+            >
+              <Slide
+                src={item.src}
+                alt={item.caption || `Slide ${i + 1}`}
+                priority={i === 0}
+              />
+              <figcaption className="font-base text-body-text flex items-center gap-2 text-center text-xs sm:text-sm">
+                <BulletIcon className="text-highlight-color h-2 w-2" />
+                {item.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </motion.div>
       </div>
     </div>
   );
