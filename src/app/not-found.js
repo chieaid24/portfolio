@@ -2,7 +2,7 @@ import Link from "next/link";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 
 export const metadata = {
-  title: "PAGE NOT FOUND",
+  title: "NOT FOUND",
 };
 
 export default function NotFound() {
