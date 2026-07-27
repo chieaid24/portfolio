@@ -104,28 +104,36 @@ const PORTHOLE_LAND = (accent) => `color-mix(in srgb, ${accent} 88%, #ffffff)`;
 const PORTHOLE_OCEAN = "#93a9d6";
 const PORTHOLE_OCEAN_OPACITY = 0.45;
 
-// The porthole disc hugging the globe so its sparse ASCII lifts off any sky.
-// A true square sized to the globe's real diameter — (rows-1)*fontPx, equal in
+// The disc hugging the globe so its sparse ASCII lifts off any sky. Both are a
+// true square sized to the globe's real diameter — (rows-1)*fontPx, equal in
 // both axes because the projection's aspect term cancels — NOT `-inset` of the
 // wider-than-tall character box, which rounded-full would trace as an ellipse.
 // Absolute + pointer-events-none, so it never grows the globe's box or the arc
-// measurement.
+// measurement. Light theme = opaque deep-space porthole; dark theme = the
+// original frosted-glass blur, now in that same perfect circle.
 function GlobePorthole() {
   const d = (GLOBE_ROWS - 1) * GLOBE_FONT_PX + 22; // circle diameter + rim
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-1 ring-white/15"
-      style={{
-        width: d,
-        height: d,
-        background:
-          "radial-gradient(circle at 38% 32%, #12224a 0%, #0a1330 62%, #070d22 100%)",
-        // Dark drop shadow to lift the porthole off the sky, plus a faint navy
-        // ambient glow around the rim.
-        boxShadow: "0 8px 22px rgba(6,10,24,0.40), 0 0 18px rgba(12,22,60,0.25)",
-      }}
-    />
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-1 ring-white/15 dark:hidden"
+        style={{
+          width: d,
+          height: d,
+          background:
+            "radial-gradient(circle at 38% 32%, #12224a 0%, #0a1330 62%, #070d22 100%)",
+          // Dark drop shadow to lift the porthole off the sky, plus a faint navy
+          // ambient glow around the rim.
+          boxShadow: "0 8px 22px rgba(6,10,24,0.40), 0 0 18px rgba(12,22,60,0.25)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/25 backdrop-blur-[3px] dark:block"
+        style={{ width: d, height: d }}
+      />
+    </>
   );
 }
 
