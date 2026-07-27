@@ -3,7 +3,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 
 export default function NotFound() {
   return (
-    <div className="bg-background flex min-h-[80vh] items-center">
+    <div className="bg-background flex min-h-screen items-center">
       <MaxWidthWrapper className="text-center">
         <p className="text-main-text mb-3 text-7xl font-bold sm:text-8xl">404</p>
         <h1 className="text-main-text mb-4 text-xl font-bold tracking-[0.2em] sm:text-2xl">
