@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
 
   if (!project || project.github_only) {
     return {
-      title: "Page Not Found",
+      title: "PAGE NOT FOUND",
       robots: { index: false },
     };
   }
