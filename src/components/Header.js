@@ -66,7 +66,7 @@ export default function Header() {
                     {ready ? (
                       <AnimatedBalance
                         value={balance}
-                        className="relative top-1 inline-block transition-colors duration-100"
+                        className="relative top-[3px] inline-block transition-colors duration-100 md:top-1"
                       />
                     ) : (
                       "—"
