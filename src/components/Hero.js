@@ -292,18 +292,19 @@ export default function Hero({ accent, flash }) {
 
   return (
     <motion.div
-      className="flex min-h-screen flex-col items-center justify-center gap-4 text-main-text"
+      className="flex min-h-screen flex-col items-center justify-center gap-6 text-main-text md:gap-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
       <h1 className="w-full text-2xl font-bold leading-[1.05] text-main-text sm:text-3xl md:text-center md:text-[38px] lg:text-[46px]">
-        Greetings Earthling, I&apos;m{" "}
-        <ScrambledText text="Aidan" className="gradient-text-header" />
+        Greetings Earthling,{" "}
+        <br className="md:hidden" />
+        I&apos;m <ScrambledText text="Aidan" className="gradient-text-header" />
       </h1>
 
       {/* below md: plain left-aligned stack, globe hidden. */}
-      <div className="flex w-full flex-col items-start gap-9 md:hidden">
+      <div className="flex w-full flex-col items-start gap-6 md:hidden">
         <p className="text-body-text max-w-[28rem] text-lg font-medium sm:text-xl">
           {COPY_LINES.join(" ")}
         </p>
