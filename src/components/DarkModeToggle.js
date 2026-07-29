@@ -136,7 +136,9 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
 
     const { getAllQuestsComplete, ready } = useMoney();
     const allQuestComp = getAllQuestsComplete();
-    const canToggle = ready && allQuestComp;
+    const canToggle =
+        ready &&
+        (process.env.NODE_ENV === "development" || allQuestComp);
 
     const isDark = resolvedTheme === "dark";
 
