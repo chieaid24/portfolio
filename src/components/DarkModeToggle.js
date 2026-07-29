@@ -174,6 +174,8 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
     };
 
     if (!mounted) return null;
+    // Light mode stays hidden until every quest is complete (dev bypasses).
+    if (!canToggle) return null;
 
     return (
         <motion.button
@@ -182,7 +184,6 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
             type="button"
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
             aria-pressed={!isDark}
-            title={canToggle ? undefined : "The progress bars (left) track quest completion"}
             onClick={handleClick}
             initial={{ opacity: 0 }}
             animate={
@@ -198,7 +199,7 @@ export default function DarkModeToggle({ className = "", onFailedToggle, questCl
             exit={{ opacity: 0, transition: { duration: 0.18 } }}
             transition={{ rotate: { type: "spring", stiffness: 180, damping: 18 }, duration: 0.2 }}
             style={{ lineHeight: 0 }}
-            className={`-m-1.5 p-1.5 ${canToggle ? "cursor-pointer" : "cursor-default"} ${canToggle ? "opacity-100" : "opacity-0 md:opacity-50"} ${className}`}
+            className={`-m-1.5 cursor-pointer p-1.5 opacity-100 ${className}`}
         >
             <span style={{ display: "inline-flex" }}>
                 {isDark ? <SunIcon /> : <MoonIcon />}
