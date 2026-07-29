@@ -82,7 +82,7 @@ function HeroLinks({ flash }) {
         <RewardLink
           href="https://www.linkedin.com/in/aidanchien/"
           target="_blank"
-          rewardId="linkedin"
+          rewardId="footer:linkedin"
           aria-label="LinkedIn"
           className="md:hover:translate-y-[-1px]"
         >
@@ -91,7 +91,7 @@ function HeroLinks({ flash }) {
         <RewardLink
           href="https://github.com/chieaid24"
           target="_blank"
-          rewardId="github"
+          rewardId="footer:github"
           aria-label="GitHub"
           className="md:hover:translate-y-[-1px]"
         >

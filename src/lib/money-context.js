@@ -136,11 +136,18 @@ function addWithCap(balance, amount) {
   return sum > MAX_BAL ? MAX_BAL : normalize2(sum);
 }
 
+const REWARD_ID_MIGRATIONS = {
+  "canopy:github": { id: "project:canopy", kind: "project" },
+  linkedin: { id: "footer:linkedin", kind: "link" },
+  github: { id: "footer:github", kind: "link" },
+};
+
 function migrateAwarded(awarded) {
   const next = { ...(awarded || {}) };
-  if (next["canopy:github"] != null) {
-    next["project:canopy"] = "project";
-    delete next["canopy:github"];
+  for (const [legacyId, replacement] of Object.entries(REWARD_ID_MIGRATIONS)) {
+    if (next[legacyId] == null) continue;
+    next[replacement.id] = replacement.kind;
+    delete next[legacyId];
   }
   return next;
 }

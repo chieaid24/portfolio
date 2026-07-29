@@ -10,8 +10,8 @@ export const quest_totals = {
   // CURR TOTAL: 5
   project: 5,
 
-  // Header: 3 | Footer: 2 | Hero: 2 | Experience: 1 | Project GitHub: 4
+  // Header: 3 | Footer/Hero: 2 | Experience: 1 | Project GitHub: 4
   // Website: each project with a non-empty website_link adds 1 (currently 0 filled in)
-  // CURR TOTAL: 12
-  link: 12,
+  // CURR TOTAL: 10
+  link: 10,
 };
