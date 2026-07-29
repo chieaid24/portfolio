@@ -189,6 +189,18 @@ export default function ScrambledText({ text, className }) {
     timers.current.push(snap);
   }, [chars, clearAll, getOrder]);
 
+  // Tap toggle for touch / no-hover devices: first tap decrypts, a second tap
+  // reverts. Hover devices don't use this — they run the proximity model below.
+  const toggle = useCallback(
+    (e) => {
+      lastX.current = e.clientX;
+      if (phase.current === "idle") handleMouseEnter(e);
+      else if (phase.current === "in" || phase.current === "holding")
+        handleMouseLeave();
+    },
+    [handleMouseEnter, handleMouseLeave],
+  );
+
   useEffect(() => clearAll, [clearAll]);
 
   // Measure the resting Latin width from a hidden copy (always the body font,
@@ -277,6 +289,9 @@ export default function ScrambledText({ text, className }) {
   // The check runs at most once per frame (rAF-coalesced) so a high-frequency
   // mouse doesn't trigger a getBoundingClientRect per event.
   useEffect(() => {
+    // Proximity/hover model — fine-pointer (mouse) devices only. Touch / no-hover
+    // devices use the tap toggle below instead.
+    if (!window.matchMedia?.("(hover: hover)").matches) return;
     let raf = 0;
     let lastEvent = null;
 
@@ -318,6 +333,30 @@ export default function ScrambledText({ text, className }) {
       if (raf) cancelAnimationFrame(raf);
     };
   }, [handleMouseEnter, handleMouseMove, handleMouseLeave]);
+
+  // Touch / no-hover devices: tap the word to toggle the decrypt, tap anywhere
+  // else to dismiss it. The proximity effect above is inert here.
+  useEffect(() => {
+    if (window.matchMedia?.("(hover: hover)").matches) return;
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const onTapText = (e) => {
+      e.stopPropagation();
+      toggle(e);
+    };
+    const onTapOutside = () => {
+      if (phase.current === "in" || phase.current === "holding")
+        handleMouseLeave();
+    };
+
+    el.addEventListener("click", onTapText);
+    document.addEventListener("click", onTapOutside);
+    return () => {
+      el.removeEventListener("click", onTapText);
+      document.removeEventListener("click", onTapOutside);
+    };
+  }, [toggle, handleMouseLeave]);
 
   return (
     <span
