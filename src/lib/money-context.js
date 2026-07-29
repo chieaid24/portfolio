@@ -136,6 +136,15 @@ function addWithCap(balance, amount) {
   return sum > MAX_BAL ? MAX_BAL : normalize2(sum);
 }
 
+function migrateAwarded(awarded) {
+  const next = { ...(awarded || {}) };
+  if (next["canopy:github"] != null) {
+    next["project:canopy"] = "project";
+    delete next["canopy:github"];
+  }
+  return next;
+}
+
 function reducer(state, action) {
   switch (action.type) {
     case "INIT": {
@@ -161,7 +170,7 @@ function reducer(state, action) {
 
       return {
         balance: Math.min(MAX_BAL, normalize2(toAmount(baseBalance))),
-        awarded: s.awarded || {},
+        awarded: migrateAwarded(s.awarded),
         initBalance: init,
       };
     }
