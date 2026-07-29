@@ -27,6 +27,10 @@ const GLOBE_ROWS = 15;
 const GLOBE_FONT_PX = 9;
 const GLOBE_RADIUS = ((GLOBE_ROWS - 1) / 2) * GLOBE_FONT_PX;
 
+// Tiny globe shown below md.
+const MOBILE_GLOBE_ROWS = 11;
+const MOBILE_GLOBE_FONT_PX = 8;
+
 // Clearance between a line's left edge and the globe's edge.
 const GAP = 60;
 
@@ -111,8 +115,12 @@ const PORTHOLE_OCEAN_OPACITY = 0.45;
 // Absolute + pointer-events-none, so it never grows the globe's box or the arc
 // measurement. Light theme = opaque deep-space porthole; dark theme = the
 // original frosted-glass blur, now in that same perfect circle.
-function GlobePorthole() {
-  const d = (GLOBE_ROWS - 1) * GLOBE_FONT_PX + 22; // circle diameter + rim
+function GlobePorthole({
+  rows = GLOBE_ROWS,
+  fontPx = GLOBE_FONT_PX,
+  lightOnly = false,
+}) {
+  const d = (rows - 1) * fontPx + 22; // circle diameter + rim
   return (
     <>
       <div
@@ -128,11 +136,13 @@ function GlobePorthole() {
           boxShadow: "0 8px 22px rgba(6,10,24,0.40), 0 0 18px rgba(12,22,60,0.25)",
         }}
       />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/25 backdrop-blur-[3px] dark:block"
-        style={{ width: d, height: d }}
-      />
+      {!lightOnly && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/25 backdrop-blur-[3px] dark:block"
+          style={{ width: d, height: d }}
+        />
+      )}
     </>
   );
 }
@@ -297,15 +307,37 @@ export default function Hero({ accent, flash }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <h1 className="w-full text-2xl font-bold leading-[1.05] text-main-text sm:text-3xl md:text-center md:text-[38px] lg:text-[46px]">
+      {/* Tiny globe shown below md. */}
+      <div className="w-full md:hidden">
+        <div className="relative w-fit">
+          <GlobePorthole
+            rows={MOBILE_GLOBE_ROWS}
+            fontPx={MOBILE_GLOBE_FONT_PX}
+            lightOnly
+          />
+          <div className="relative">
+            <AsciiGlobe
+              color={accent}
+              landColor={PORTHOLE_LAND(accent)}
+              oceanColor={PORTHOLE_OCEAN}
+              oceanOpacity={PORTHOLE_OCEAN_OPACITY}
+              rows={MOBILE_GLOBE_ROWS}
+              fontPx={MOBILE_GLOBE_FONT_PX}
+            />
+          </div>
+        </div>
+      </div>
+      <h1 className="w-full text-3xl font-bold leading-[1.05] text-main-text md:text-center md:text-[38px] lg:text-[46px]">
         Greetings Earthling,{" "}
-        <br className="md:hidden" />
-        I&apos;m <ScrambledText text="Aidan" className="gradient-text-header" />
+        {/* Keep "I'm Aidan" together. */}
+        <span className="whitespace-nowrap">
+          I&apos;m <ScrambledText text="Aidan" className="gradient-text-header" />
+        </span>
       </h1>
 
       {/* below md: plain left-aligned stack, globe hidden. */}
       <div className="flex w-full flex-col items-start gap-6 md:hidden">
-        <p className="text-body-text max-w-[28rem] text-lg font-medium sm:text-xl">
+        <p className="text-body-text text-lg font-medium sm:text-xl">
           {COPY_LINES.join(" ")}
         </p>
         <div className="flex items-center gap-5">
