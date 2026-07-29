@@ -15,7 +15,10 @@ export default function StarflareInfo() {
         aria-label="Starflare info"
         onMouseEnter={() => setShowInfo(true)}
         onMouseLeave={() => setShowInfo(false)}
-        onClick={() => setToggleShowInfo((v) => !v)}
+        onClick={() => {
+          setShowInfo(false);
+          setToggleShowInfo((v) => !v);
+        }}
         onBlur={() => {
           setShowInfo(false);
           setToggleShowInfo(false);
