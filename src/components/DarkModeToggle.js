@@ -78,36 +78,21 @@ function revealTheme(next, setTheme, originEl, shouldReduceMotion) {
     });
     document.body.appendChild(disc);
 
-    // clip-path px live in the disc's LOCAL space; getBoundingClientRect returns
-    // VISUAL px. An ancestor `zoom`/transform (OS display scaling, extensions —
-    // absent in clean headless) scales one but not the other, drifting the circle
-    // off the button. Measure the local->visual scale with a known-size probe and
-    // map the origin + radius through it. No-op when scale is 1.
-    const PROBE = 100;
-    const probe = document.createElement("div");
-    Object.assign(probe.style, {
-        position: "absolute",
-        left: "0",
-        top: "0",
-        width: `${PROBE}px`,
-        height: `${PROBE}px`,
-        visibility: "hidden",
-        pointerEvents: "none",
-    });
-    disc.appendChild(probe);
     const discBox = disc.getBoundingClientRect();
-    const probeBox = probe.getBoundingClientRect();
-    probe.remove();
-    const sx = probeBox.width / PROBE || 1;
-    const sy = probeBox.height / PROBE || 1;
-
-    const localW = discBox.width / sx; // viewport in disc-local (clip-path) px
-    const localH = discBox.height / sy;
-    const cx = hasRect ? (btnX - discBox.left) / sx : localW / 2;
-    const cy = hasRect ? (btnY - discBox.top) / sy : localH / 2;
-    const radius = Math.hypot(Math.max(cx, localW - cx), Math.max(cy, localH - cy));
-    const clipFrom = `circle(0px at ${cx}px ${cy}px)`;
-    const clipTo = `circle(${radius}px at ${cx}px ${cy}px)`;
+    const discWidth = discBox.width || window.innerWidth || 1;
+    const discHeight = discBox.height || window.innerHeight || 1;
+    const cx = hasRect ? btnX - discBox.left : discWidth / 2;
+    const cy = hasRect ? btnY - discBox.top : discHeight / 2;
+    const xPercent = (cx / discWidth) * 100;
+    const yPercent = (cy / discHeight) * 100;
+    const farthestCorner = Math.hypot(
+        Math.max(cx, discWidth - cx),
+        Math.max(cy, discHeight - cy)
+    );
+    const percentBasis = Math.hypot(discWidth, discHeight) / Math.SQRT2;
+    const radiusPercent = (farthestCorner / percentBasis) * 100;
+    const clipFrom = `circle(0% at ${xPercent}% ${yPercent}%)`;
+    const clipTo = `circle(${radiusPercent}% at ${xPercent}% ${yPercent}%)`;
     disc.style.clipPath = clipFrom;
 
     const cleanup = () => {
