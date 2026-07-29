@@ -17,7 +17,7 @@ const notoSans = Noto_Sans({
 
 const SITE_URL = "https://aidanchien.com";
 const SITE_DESCRIPTION =
-  "Aidan Chien is a software engineer who builds platforms and developer infrastructure for AI.";
+  "Aidan Chien is a software engineer who builds platforms and developer infrastructure for AI systems.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
