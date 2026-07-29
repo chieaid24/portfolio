@@ -302,13 +302,13 @@ export default function Hero({ accent, flash }) {
 
   return (
     <motion.div
-      className="flex min-h-screen flex-col items-center justify-center gap-6 text-main-text md:gap-4"
+      className="flex min-h-screen flex-col items-center justify-center gap-4 text-main-text md:gap-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
       {/* Tiny globe shown below md. */}
-      <div className="w-full md:hidden">
+      <div className="w-full md:hidden mb-2">
         <div className="relative w-fit">
           <GlobePorthole
             rows={MOBILE_GLOBE_ROWS}
