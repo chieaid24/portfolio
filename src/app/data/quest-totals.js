@@ -11,6 +11,7 @@ export const quest_totals = {
   project: 5,
 
   // Header: 3 | Footer/Hero: 2 | Experience: 1 | Project GitHub: 4
+  // projects-page is shared by Header, Home, and project detail navigation
   // Website: each project with a non-empty website_link adds 1 (currently 0 filled in)
   // CURR TOTAL: 10
   link: 10,
