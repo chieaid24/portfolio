@@ -6,12 +6,12 @@ export const quest_totals = {
   // CURR TOTAL: 48
   redtext: 48,
 
-  // OnePerProject: 4
-  // CURR TOTAL: 4
-  project: 4,
+  // OnePerProject: 5
+  // CURR TOTAL: 5
+  project: 5,
 
-  // Header: 3[about, projects, resume] | Footer: 2[linkedin, github] | OnePerProject: 4 | Home/Experience: 1[education-tab] | Website: 0
+  // Header: 3 | Footer: 2 | Hero: 2 | Experience: 1 | OnePerProject: 5
   // Website: each project with a non-empty website_link adds 1 (currently 0 filled in)
-  // CURR TOTAL: 10
-  link: 10,
+  // CURR TOTAL: 13
+  link: 13,
 };
