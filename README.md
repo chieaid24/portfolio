@@ -56,10 +56,3 @@ The backend is handled via **Next.js API routes** (Node.js), calling and caching
 
 - Implemented with a global **React Context Provider** `(MoneyProvider)` that manages **rewards, balances, and quest progression** and persisted via localStorage
 - User can spend money earned by exploring the portfolio on site-wide themes and sending Starflares to increment the global counter.
-
----
-
-## Future Extensions
-
-- AI chatbot using my projects / resume as a RAG database
-- Skills grid showcasing languages and frameworks
