@@ -15,9 +15,9 @@ import { createPayoutGenerator } from "@/lib/payout.js";
 import { defaultMixtureConfig } from "@/lib/payout-default.js";
 import { quest_totals } from "@/app/data/quest-totals.js";
 
-const STORAGE_KEY = "moneyState_v2";
-const THEME_STORAGE_KEY = "themeSelection_v2";
-const STARFLARE_STORAGE_KEY = "localStarflareClickCount_v2";
+const STORAGE_KEY = "moneyState_v3";
+const THEME_STORAGE_KEY = "themeSelection_v3";
+const STARFLARE_STORAGE_KEY = "localStarflareClickCount_v3";
 const MoneyContext = createContext(null);
 // Accent/theme selection lives in its own context so components that only care
 // about the highlight color (e.g. the star background) don't rerender on every
