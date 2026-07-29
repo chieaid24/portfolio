@@ -32,23 +32,14 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "Aidan Chien Portfolio",
+    siteName: "Aidan Chien",
     title: "Aidan's Portfolio",
     description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: "/open_graph/opengraph_image_v1.png",
-        width: 5000,
-        height: 2625,
-        alt: "Aidan Chien portfolio preview",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Aidan's Portfolio",
     description: SITE_DESCRIPTION,
-    images: ["/open_graph/opengraph_image_v1.png"],
   },
 };
 
@@ -62,7 +53,7 @@ const personJsonLd = {
     "https://www.linkedin.com/in/aidanchien",
     "https://github.com/chieaid24",
   ],
-  jobTitle: "Systems Engineer Student",
+  jobTitle: "Software Engineer",
 };
 
 const websiteJsonLd = {
