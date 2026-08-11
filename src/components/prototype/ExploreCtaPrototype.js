@@ -42,19 +42,22 @@ export default function ExploreCtaPrototype({ variant = "A", flash }) {
   const { Icon, size } = VARIANTS[variant] ?? VARIANTS.A;
 
   // Hover: the arrow drops, then floats on a gravity arc until the pointer
-  // leaves. The two easings are the whole feel — the fall accelerates hard into
-  // the bottom, the rise decelerates into a hang at the top. A symmetric
-  // easeInOut reads like a metronome instead. Unhover eases back to rest.
-  const bounce = reduce ? { y: 3 } : { y: [2, 9, 2] };
+  // leaves. Curves are Tailwind's `animate-bounce`, measured off tedawf.com -
+  // the asymmetry is the whole feel, so a symmetric easeInOut reads like a
+  // metronome instead. Stretched for more float: 1.3s vs their 1s, and 30% of
+  // the icon's height of travel vs their 25%.
+  //
+  // Percentages, not px, so both icon sizes float by the same proportion.
+  const bounce = reduce ? { y: "20%" } : { y: ["15%", "45%", "15%"] };
   const bounceTransition = reduce
     ? { duration: 0.15 }
     : {
-        duration: 1.7,
+        duration: 1.3,
         repeat: Infinity,
         times: [0, 0.5, 1],
         ease: [
-          [0.7, 0, 0.84, 0], // fall: slow off the apex, fast at the bottom
-          [0.16, 1, 0.3, 1], // rise: fast off the bottom, hangs at the apex
+          [0.8, 0, 1, 1], // fall: hangs off the apex, then slams into the bottom
+          [0, 0, 0.2, 1], // rise: fast off the bottom, decelerates into the apex
         ],
       };
 
