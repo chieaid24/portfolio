@@ -14,7 +14,7 @@ import { useCallback, useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import RewardLink from "@/components/RewardLink";
 import ScrambledText from "@/components/ScrambledText";
-import FileDownload from "@/icons/FileDownload";
+import Rocket from "@/icons/Rocket";
 import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import { AsciiGlobe } from "@/components/MissionControl";
@@ -63,18 +63,18 @@ function HeroLinks({ flash }) {
     <>
       <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
         <RewardLink
-          href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
-          rewardId="resume"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
+          href="/projects"
+          rewardId="projects-page"
+          scroll
+          transparent={false}
+          className="cursor-follow-btn border-outline-gray group rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
           onMouseEnter={flash.onEnter}
           onMouseMove={flash.onMove}
           onMouseLeave={flash.onLeave}
         >
           <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
-            <span>Resume</span>
-            <FileDownload className="text-dark-grey-text h-5 w-5" />
+            <span>View projects</span>
+            <Rocket className="text-dark-grey-text h-5 w-5 transition-transform duration-100 md:group-hover:translate-x-[1px] md:group-hover:-translate-y-[1px]" />
           </div>
         </RewardLink>
       </div>
@@ -243,7 +243,7 @@ function useArcAlign({ groupRef, colRef, globeRef, enabled }) {
       // The last line is the full-width links row; justify-between pins the
       // social icons to its right edge. Match that edge to the widest copy line
       // (the "and" line) rather than letting the row hug the arc on its own, so
-      // the icons finish exactly under the subtitle's end. Resume still rides
+      // the icons finish exactly under the subtitle's end. The CTA still rides
       // the arc at that line's left.
       if (lines.length > 1) {
         const links = lines[lines.length - 1];
