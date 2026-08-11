@@ -11,6 +11,18 @@ import { motion } from "framer-motion";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 import Hero from "@/components/Hero";
+// PROTOTYPE - Explore CTA icon variants. Delete with the winner folded in.
+import PrototypeSwitcher, {
+  useVariant,
+} from "@/components/prototype/PrototypeSwitcher";
+import {
+  VARIANTS,
+  VARIANT_KEYS,
+} from "@/components/prototype/ExploreCtaPrototype";
+
+const VARIANT_NAMES = Object.fromEntries(
+  VARIANT_KEYS.map((k) => [k, VARIANTS[k].name]),
+);
 
 // Loaded lazily so three.js / react-three-fiber (~250KB gzip) stay out of the
 // home page's critical bundle. The placeholder paints the same sky (near-black
@@ -26,6 +38,7 @@ const StarBackground = dynamic(() => import("@/components/StarBackground"), {
 export default function Home() {
   const { highlightHex } = useMoney();
   const accent = highlightHex || "#ff5e5e";
+  const [variant, setVariant] = useVariant(VARIANT_KEYS);
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
   // the latest pointer position every frame, so the motion is decoupled from
   // (bursty/sparse) mousemove events and from any CSS transition — that's what
@@ -105,6 +118,7 @@ export default function Home() {
           <section id="hero" className="min-h-screen">
             <Hero
               accent={accent}
+              variant={variant}
               flash={{
                 onEnter: handleFlashEnter,
                 onMove: handleFlashMove,
@@ -195,6 +209,12 @@ export default function Home() {
           </section>
         </MaxWidthWrapper>
       </main>
+      <PrototypeSwitcher
+        keys={VARIANT_KEYS}
+        current={variant}
+        names={VARIANT_NAMES}
+        onSelect={setVariant}
+      />
     </>
   );
 }
