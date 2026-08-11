@@ -111,7 +111,8 @@ export default function Home() {
                 onLeave: handleFlashLeave,
               }}
             />
-            <section className="mb-20">
+            {/* scroll-mt clears the fixed header for the hero's Explore CTA */}
+            <section id="experience" className="mb-20 scroll-mt-28 md:scroll-mt-32">
               <motion.h2
                 className="mb-6 text-xl font-bold tracking-[0.2em] text-main-text sm:text-2xl md:text-3xl"
                 key="experience-header"

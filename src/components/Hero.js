@@ -14,7 +14,7 @@ import { useCallback, useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import RewardLink from "@/components/RewardLink";
 import ScrambledText from "@/components/ScrambledText";
-import Rocket from "@/icons/Rocket";
+import Telescope from "@/icons/Telescope";
 import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import { AsciiGlobe } from "@/components/MissionControl";
@@ -58,25 +58,44 @@ const COPY_LINES = [
   "and infra for AI systems.",
 ];
 
+// Scroll target of the hero CTA. The section itself carries the scroll-mt that
+// clears the fixed header.
+const EXPLORE_TARGET_ID = "experience";
+
+// Anchor, not a button: the section is a real destination, so the href stays
+// shareable and middle-clickable. The click is intercepted only to soften the
+// jump — the fixed header's clearance comes from the target's scroll-mt.
+function scrollToExperience(e) {
+  const el = document.getElementById(EXPLORE_TARGET_ID);
+  if (!el) return; // no target: let the browser do the plain hash jump
+  e.preventDefault();
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  // Keep the URL in step with where the click landed, without stacking a
+  // duplicate entry when the CTA is clicked twice.
+  const hash = `#${EXPLORE_TARGET_ID}`;
+  if (window.location.hash !== hash) {
+    window.history.pushState(null, "", hash);
+  }
+}
+
 function HeroLinks({ flash }) {
   return (
     <>
       <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
-        <RewardLink
-          href="/projects"
-          rewardId="projects-page"
-          scroll
-          transparent={false}
+        <a
+          href={`#${EXPLORE_TARGET_ID}`}
+          onClick={scrollToExperience}
           className="cursor-follow-btn border-outline-gray group rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
           onMouseEnter={flash.onEnter}
           onMouseMove={flash.onMove}
           onMouseLeave={flash.onLeave}
         >
           <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
-            <span>View projects</span>
-            <Rocket className="text-dark-grey-text h-5 w-5 transition-transform duration-100 md:group-hover:translate-x-[1px] md:group-hover:-translate-y-[1px]" />
+            <span>Explore</span>
+            <Telescope className="text-dark-grey-text h-6 w-6 transition-transform duration-100 md:group-hover:translate-y-[2px]" />
           </div>
-        </RewardLink>
+        </a>
       </div>
       <div className="text-outline-gray flex items-center justify-center gap-x-4">
         <RewardLink

@@ -11,8 +11,8 @@ export const quest_totals = {
   project: 5,
 
   // Header: 2 | Footer/Hero: 2 | Experience: 1 | Project GitHub: 4
-  // projects-page is shared by Header, Home (hero CTA + "View more"), and
-  // project detail navigation
+  // projects-page is shared by Header, Home, and project detail navigation
+  // (the hero's Explore CTA is an in-page scroll, not a tracked link)
   // Website: each project with a non-empty website_link adds 1 (currently 0 filled in)
   // CURR TOTAL: 9
   link: 9,
