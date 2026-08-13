@@ -87,8 +87,10 @@ function HeroLinks({ flash }) {
 }
 
 // Deep-space porthole backdrop: an opaque navy disc that lifts the sparse ASCII
-// off the sky in both themes. Land = brightened accent, ocean = cool dots.
-const PORTHOLE_LAND = (accent) => `color-mix(in srgb, ${accent} 88%, #ffffff)`;
+// off the sky in both themes. Land = the accent itself, ocean = cool dots.
+// Mixing toward `transparent` is alpha, not a tint — the land reads as exactly
+// the highlight color, just softened against the disc.
+const PORTHOLE_LAND = (accent) => `color-mix(in srgb, ${accent} 80%, transparent)`;
 const PORTHOLE_OCEAN = "#93a9d6";
 const PORTHOLE_OCEAN_OPACITY = 0.45;
 
