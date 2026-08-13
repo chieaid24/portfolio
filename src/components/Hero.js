@@ -87,10 +87,8 @@ function HeroLinks({ flash }) {
 }
 
 // Deep-space porthole backdrop: an opaque navy disc that lifts the sparse ASCII
-// off the sky in both themes. Land = the accent itself, ocean = cool dots.
-// Mixing toward `transparent` is alpha, not a tint — the land reads as exactly
-// the highlight color, just softened against the disc.
-const PORTHOLE_LAND = (accent) => `color-mix(in srgb, ${accent} 80%, transparent)`;
+// off the sky in both themes. Land is left to AsciiGlobe's `color` default so it
+// is exactly --highlight-color, untinted; ocean = cool dots.
 const PORTHOLE_OCEAN = "#93a9d6";
 const PORTHOLE_OCEAN_OPACITY = 0.45;
 
@@ -304,7 +302,6 @@ export default function Hero({ accent, flash }) {
           <div className="relative">
             <AsciiGlobe
               color={accent}
-              landColor={PORTHOLE_LAND(accent)}
               oceanColor={PORTHOLE_OCEAN}
               oceanOpacity={PORTHOLE_OCEAN_OPACITY}
               rows={MOBILE_GLOBE_ROWS}
@@ -341,7 +338,6 @@ export default function Hero({ accent, flash }) {
           <div className="relative">
             <AsciiGlobe
               color={accent}
-              landColor={PORTHOLE_LAND(accent)}
               oceanColor={PORTHOLE_OCEAN}
               oceanOpacity={PORTHOLE_OCEAN_OPACITY}
               rows={GLOBE_ROWS}
