@@ -349,24 +349,26 @@ body {
   --cta-flash-opacity: 0.3;
 }
 
-/* Explore CTA chevron: a slow floaty bob while the chevron itself is hovered.
-   Rest is the TOP of the travel — it only ever dips below its layout position,
-   never above — so starting and stopping the loop never nudges the label's
-   baseline. `translate` (not transform) keeps it on the compositor and off the
-   button's own scale. */
+/* Explore CTA chevron: a tight bob while the chevron itself is hovered. Rest is
+   the TOP of the travel — it only ever dips below its layout position, never
+   above — so starting and stopping the loop never nudges the label's baseline.
+   The easing is near-linear on purpose: symmetric ease-in-out dwells at both
+   ends and reads as floating, this reads as a straight up-and-down.
+   `translate` (not transform) keeps it on the compositor and off the button's
+   own scale. */
 @keyframes chevron-bob {
   0%,
   100% {
     translate: 0 0;
   }
   50% {
-    translate: 0 2px;
+    translate: 0 1px;
   }
 }
 
 @media (min-width: 768px) {
   .chevron-bob:hover {
-    animation: chevron-bob 1.6s ease-in-out infinite;
+    animation: chevron-bob 0.8s cubic-bezier(0.25, 0, 0.75, 1) infinite;
   }
 }
 
