@@ -32,8 +32,8 @@ export default function ExploreCta({ flash }) {
       >
         <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
           <span>Explore</span>
-          {/* nudges down on hover, matching the project card's "Warp here" arrow */}
-          <ArrowDownChevron className="text-dark-grey-text h-3 w-3 transition-transform md:group-hover:translate-y-[1px]" />
+          {/* bobs while the chevron itself is hovered — see .chevron-bob */}
+          <ArrowDownChevron className="chevron-bob text-dark-grey-text h-3 w-3" />
         </div>
       </a>
     </div>
