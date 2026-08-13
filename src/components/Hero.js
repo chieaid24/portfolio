@@ -104,7 +104,10 @@ function GlobePorthole({
   fontPx = GLOBE_FONT_PX,
   lightOnly = false,
 }) {
-  const d = (rows - 1) * fontPx + 22; // circle diameter + rim
+  const d = (rows - 1) * fontPx + 22; // light porthole: circle diameter + rim
+  // The dark blur gets no rim — any margin past the globe's real diameter shows
+  // as a halo edge where the backdrop-blur stops.
+  const blurD = (rows - 1) * fontPx;
   return (
     <>
       <div
@@ -124,7 +127,7 @@ function GlobePorthole({
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/25 backdrop-blur-[3px] dark:block"
-          style={{ width: d, height: d }}
+          style={{ width: blurD, height: blurD }}
         />
       )}
     </>

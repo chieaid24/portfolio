@@ -56,7 +56,7 @@ export default function ExploreCta({ flash }) {
             transition={
               bobbing
                 ? {
-                    duration: 0.8,
+                    duration: 1,
                     repeat: Infinity,
                     times: [0, 0.5, 1],
                     ease: [0.25, 0, 0.75, 1], // near-linear: up and down, not floaty
