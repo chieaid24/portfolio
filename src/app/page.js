@@ -11,21 +11,6 @@ import { motion } from "framer-motion";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 import Hero from "@/components/Hero";
-// PROTOTYPE - Explore CTA chevron weight + hover brightness. Delete with the
-// winners folded in.
-import PrototypeSwitcher, {
-  useVariant,
-} from "@/components/prototype/PrototypeSwitcher";
-import {
-  WEIGHTS,
-  WEIGHT_KEYS,
-} from "@/components/prototype/ExploreChevronWeights";
-import { HOVERS, HOVER_KEYS } from "@/components/prototype/ExploreHoverWeights";
-
-const names = (keys, map) =>
-  Object.fromEntries(keys.map((k) => [k, map[k].name]));
-const WEIGHT_NAMES = names(WEIGHT_KEYS, WEIGHTS);
-const HOVER_NAMES = names(HOVER_KEYS, HOVERS);
 
 // Loaded lazily so three.js / react-three-fiber (~250KB gzip) stay out of the
 // home page's critical bundle. The placeholder paints the same sky (near-black
@@ -41,8 +26,6 @@ const StarBackground = dynamic(() => import("@/components/StarBackground"), {
 export default function Home() {
   const { highlightHex } = useMoney();
   const accent = highlightHex || "#ff5e5e";
-  const [weight, setWeight] = useVariant(WEIGHT_KEYS, "weight");
-  const [hover, setHover] = useVariant(HOVER_KEYS, "bold");
   // Cursor-follow flash. A single rAF "lerp" loop eases the highlight toward
   // the latest pointer position every frame, so the motion is decoupled from
   // (bursty/sparse) mousemove events and from any CSS transition — that's what
@@ -122,8 +105,6 @@ export default function Home() {
           <section id="hero" className="min-h-screen">
             <Hero
               accent={accent}
-              chevronThickness={WEIGHTS[weight]?.thickness}
-              hoverText={HOVERS[hover]?.cls}
               flash={{
                 onEnter: handleFlashEnter,
                 onMove: handleFlashMove,
@@ -214,24 +195,6 @@ export default function Home() {
           </section>
         </MaxWidthWrapper>
       </main>
-      <PrototypeSwitcher
-        label="chevron"
-        keys={WEIGHT_KEYS}
-        current={weight}
-        names={WEIGHT_NAMES}
-        onSelect={setWeight}
-        axis="horizontal"
-        row={0}
-      />
-      <PrototypeSwitcher
-        label="hover"
-        keys={HOVER_KEYS}
-        current={hover}
-        names={HOVER_NAMES}
-        onSelect={setHover}
-        axis="vertical"
-        row={1}
-      />
     </>
   );
 }

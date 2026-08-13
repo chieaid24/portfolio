@@ -58,14 +58,10 @@ const COPY_LINES = [
   "and infra for AI systems.",
 ];
 
-function HeroLinks({ flash, chevronThickness, hoverText }) {
+function HeroLinks({ flash }) {
   return (
     <>
-      <ExploreCta
-        flash={flash}
-        thickness={chevronThickness}
-        hoverText={hoverText}
-      />
+      <ExploreCta flash={flash} />
       <div className="text-outline-gray flex items-center justify-center gap-x-4">
         <RewardLink
           href="https://www.linkedin.com/in/aidanchien/"
@@ -276,7 +272,7 @@ function useArcAlign({ groupRef, colRef, globeRef, enabled }) {
   }, [groupRef, colRef, globeRef, enabled]);
 }
 
-export default function Hero({ accent, flash, chevronThickness, hoverText }) {
+export default function Hero({ accent, flash }) {
   const groupRef = useRef(null);
   const colRef = useRef(null);
   const globeRef = useRef(null);
@@ -329,11 +325,7 @@ export default function Hero({ accent, flash, chevronThickness, hoverText }) {
           {COPY_LINES.join(" ")}
         </p>
         <div className="flex items-center gap-5">
-          <HeroLinks
-            flash={flash}
-            chevronThickness={chevronThickness}
-            hoverText={hoverText}
-          />
+          <HeroLinks flash={flash} />
         </div>
       </div>
 
@@ -365,11 +357,7 @@ export default function Hero({ accent, flash, chevronThickness, hoverText }) {
             </div>
           ))}
           <div className="mt-6 flex w-full gap-5 items-center">
-            <HeroLinks
-            flash={flash}
-            chevronThickness={chevronThickness}
-            hoverText={hoverText}
-          />
+            <HeroLinks flash={flash} />
           </div>
         </div>
       </div>

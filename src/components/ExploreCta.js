@@ -7,10 +7,6 @@ import ArrowDownChevron from "@/icons/ArrowDownChevron";
 
 export const EXPLORE_TARGET_ID = "experience";
 
-// Default hover text color. Any override must be a literal class string so
-// Tailwind's scanner emits it.
-export const HOVER_TEXT = "md:hover:text-main-text/75";
-
 function scrollToExperience(e) {
   const el = document.getElementById(EXPLORE_TARGET_ID);
   if (!el) return;
@@ -23,29 +19,21 @@ function scrollToExperience(e) {
   }
 }
 
-export default function ExploreCta({
-  flash,
-  thickness = 167,
-  hoverText = HOVER_TEXT,
-}) {
+export default function ExploreCta({ flash }) {
   return (
     <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
       <a
         href={`#${EXPLORE_TARGET_ID}`}
         onClick={scrollToExperience}
-        className={`cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 ${hoverText}`}
+        className="cursor-follow-btn border-outline-gray group rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
         onMouseEnter={flash.onEnter}
         onMouseMove={flash.onMove}
         onMouseLeave={flash.onLeave}
       >
         <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
           <span>Explore</span>
-          {/* the chevron's glyph fills its viewBox edge to edge, so it reads
-              heavier than its box size suggests */}
-          <ArrowDownChevron
-            thickness={thickness}
-            className="text-dark-grey-text h-3 w-3"
-          />
+          {/* nudges down on hover, matching the project card's "Warp here" arrow */}
+          <ArrowDownChevron className="text-dark-grey-text h-3 w-3 transition-transform md:group-hover:translate-y-[1px]" />
         </div>
       </a>
     </div>
