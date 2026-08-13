@@ -14,7 +14,7 @@ import { useCallback, useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import RewardLink from "@/components/RewardLink";
 import ScrambledText from "@/components/ScrambledText";
-import FileDownload from "@/icons/FileDownload";
+import ExploreCta from "@/components/ExploreCta";
 import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import { AsciiGlobe } from "@/components/MissionControl";
@@ -61,23 +61,7 @@ const COPY_LINES = [
 function HeroLinks({ flash }) {
   return (
     <>
-      <div className="text-outline-gray flex rounded-xl text-lg font-semibold transition-transform duration-100 md:hover:scale-105">
-        <RewardLink
-          href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
-          rewardId="resume"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="cursor-follow-btn border-outline-gray rounded-lg border-2 transition-colors duration-100 md:hover:border-main-text/75 md:hover:text-main-text/75"
-          onMouseEnter={flash.onEnter}
-          onMouseMove={flash.onMove}
-          onMouseLeave={flash.onLeave}
-        >
-          <div className="inline-flex items-center gap-2 px-2 py-1 md:px-3 md:py-1">
-            <span>Resume</span>
-            <FileDownload className="text-dark-grey-text h-5 w-5" />
-          </div>
-        </RewardLink>
-      </div>
+      <ExploreCta flash={flash} />
       <div className="text-outline-gray flex items-center justify-center gap-x-4">
         <RewardLink
           href="https://www.linkedin.com/in/aidanchien/"
@@ -103,8 +87,8 @@ function HeroLinks({ flash }) {
 }
 
 // Deep-space porthole backdrop: an opaque navy disc that lifts the sparse ASCII
-// off the sky in both themes. Land = brightened accent, ocean = cool dots.
-const PORTHOLE_LAND = (accent) => `color-mix(in srgb, ${accent} 88%, #ffffff)`;
+// off the sky in both themes. Land is left to AsciiGlobe's `color` default so it
+// is exactly --highlight-color, untinted; ocean = cool dots.
 const PORTHOLE_OCEAN = "#93a9d6";
 const PORTHOLE_OCEAN_OPACITY = 0.45;
 
@@ -120,7 +104,10 @@ function GlobePorthole({
   fontPx = GLOBE_FONT_PX,
   lightOnly = false,
 }) {
-  const d = (rows - 1) * fontPx + 22; // circle diameter + rim
+  const d = (rows - 1) * fontPx + 22; // light porthole: circle diameter + rim
+  // The dark blur gets no rim — any margin past the globe's real diameter shows
+  // as a halo edge where the backdrop-blur stops.
+  const blurD = (rows - 1) * fontPx;
   return (
     <>
       <div
@@ -140,7 +127,7 @@ function GlobePorthole({
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/25 backdrop-blur-[3px] dark:block"
-          style={{ width: d, height: d }}
+          style={{ width: blurD, height: blurD }}
         />
       )}
     </>
@@ -243,7 +230,7 @@ function useArcAlign({ groupRef, colRef, globeRef, enabled }) {
       // The last line is the full-width links row; justify-between pins the
       // social icons to its right edge. Match that edge to the widest copy line
       // (the "and" line) rather than letting the row hug the arc on its own, so
-      // the icons finish exactly under the subtitle's end. Resume still rides
+      // the icons finish exactly under the subtitle's end. The CTA still rides
       // the arc at that line's left.
       if (lines.length > 1) {
         const links = lines[lines.length - 1];
@@ -318,7 +305,6 @@ export default function Hero({ accent, flash }) {
           <div className="relative">
             <AsciiGlobe
               color={accent}
-              landColor={PORTHOLE_LAND(accent)}
               oceanColor={PORTHOLE_OCEAN}
               oceanOpacity={PORTHOLE_OCEAN_OPACITY}
               rows={MOBILE_GLOBE_ROWS}
@@ -355,7 +341,6 @@ export default function Hero({ accent, flash }) {
           <div className="relative">
             <AsciiGlobe
               color={accent}
-              landColor={PORTHOLE_LAND(accent)}
               oceanColor={PORTHOLE_OCEAN}
               oceanOpacity={PORTHOLE_OCEAN_OPACITY}
               rows={GLOBE_ROWS}

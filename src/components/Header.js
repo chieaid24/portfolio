@@ -121,16 +121,6 @@ export default function Header() {
                   >
                     projects
                   </RewardLink>
-                  <RewardLink
-                    href="https://drive.google.com/file/d/1YzK4a7QVQ6JAAOIF_WcgJk7MnkVXQfzC/view?usp=sharing"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="md:hover:text-highlight-color py-1.5 transition-colors duration-100"
-                    rewardId="resume"
-                    transparent={false}
-                  >
-                    resume
-                  </RewardLink>
                 </motion.nav>
               ) : (
                 <div className="flex w-full justify-end">
