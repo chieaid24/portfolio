@@ -11,14 +11,14 @@ import { motion } from "framer-motion";
 import Experience from "@/components/Experience";
 import Rocket from "@/icons/Rocket";
 import Hero from "@/components/Hero";
-// PROTOTYPE - Explore CTA icon variants. Delete with the winner folded in.
+// PROTOTYPE - Explore CTA hover-bounce variants. Delete with the winner folded in.
 import PrototypeSwitcher, {
   useVariant,
 } from "@/components/prototype/PrototypeSwitcher";
 import {
   VARIANTS,
   VARIANT_KEYS,
-} from "@/components/prototype/ExploreCtaPrototype";
+} from "@/components/prototype/ExploreMotionVariants";
 
 const VARIANT_NAMES = Object.fromEntries(
   VARIANT_KEYS.map((k) => [k, VARIANTS[k].name]),
@@ -118,7 +118,7 @@ export default function Home() {
           <section id="hero" className="min-h-screen">
             <Hero
               accent={accent}
-              variant={variant}
+              bounce={VARIANTS[variant]?.bounce ?? true}
               flash={{
                 onEnter: handleFlashEnter,
                 onMove: handleFlashMove,

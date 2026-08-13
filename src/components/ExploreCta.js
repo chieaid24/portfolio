@@ -1,28 +1,13 @@
 "use client";
 
-// PROTOTYPE - throwaway. Three icon variants of the hero's Explore CTA,
-// switchable via ?variant= on the real home page. Once one wins, fold it into
-// Hero.js and delete this directory plus the two losing icons.
-//
-// Every variant keeps the full production button logic: cursor-follow flash,
-// hover scale + border/text color, smooth scroll to #experience, hash update.
-// Only the icon differs.
+// Hero's Explore CTA: smooth-scrolls to the Experience section. Shares the
+// cursor-follow flash handlers with the rest of the hero (passed in as `flash`).
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import ArrowDownChevron from "@/icons/ArrowDownChevron";
-import ArrowDownCircleOutline from "@/icons/ArrowDownCircleOutline";
 
 export const EXPLORE_TARGET_ID = "experience";
-
-// Icon box sizes are per-variant: the chevron's glyph fills its viewBox edge to
-// edge, so it reads heavier than the disc at the same class.
-export const VARIANTS = {
-  B: { name: "Bare chevron", Icon: ArrowDownChevron, size: "h-3.5 w-3.5" },
-  C: { name: "Disc, bold arrow", Icon: ArrowDownCircleOutline, size: "h-5 w-5" },
-};
-
-export const VARIANT_KEYS = Object.keys(VARIANTS);
 
 function scrollToExperience(e) {
   const el = document.getElementById(EXPLORE_TARGET_ID);
@@ -36,10 +21,10 @@ function scrollToExperience(e) {
   }
 }
 
-export default function ExploreCtaPrototype({ variant = "A", flash }) {
+export default function ExploreCta({ flash, bounce = true }) {
   const [hovered, setHovered] = useState(false);
   const reduce = useReducedMotion();
-  const { Icon, size } = VARIANTS[variant] ?? VARIANTS.A;
+  const animate = bounce && hovered;
 
   // Hover: the arrow drops, then floats on a gravity arc until the pointer
   // leaves. Curves are Tailwind's `animate-bounce`, measured off tedawf.com -
@@ -47,9 +32,9 @@ export default function ExploreCtaPrototype({ variant = "A", flash }) {
   // metronome instead. Stretched for more float: 1.3s vs their 1s, and 30% of
   // the icon's height of travel vs their 25%.
   //
-  // Percentages, not px, so both icon sizes float by the same proportion.
-  const bounce = reduce ? { y: "20%" } : { y: ["15%", "45%", "15%"] };
-  const bounceTransition = reduce
+  // Percentages, not px, so the float scales with the icon.
+  const float = reduce ? { y: "20%" } : { y: ["15%", "45%", "15%"] };
+  const floatTransition = reduce
     ? { duration: 0.15 }
     : {
         duration: 1.3,
@@ -81,10 +66,12 @@ export default function ExploreCtaPrototype({ variant = "A", flash }) {
           <span>Explore</span>
           <motion.span
             className="inline-flex"
-            animate={hovered ? bounce : { y: 0 }}
-            transition={hovered ? bounceTransition : { duration: 0.18, ease: "easeOut" }}
+            animate={animate ? float : { y: 0 }}
+            transition={animate ? floatTransition : { duration: 0.18, ease: "easeOut" }}
           >
-            <Icon className={`text-dark-grey-text ${size}`} />
+            {/* the chevron's glyph fills its viewBox edge to edge, so it reads
+                heavier than its box size suggests */}
+            <ArrowDownChevron className="text-dark-grey-text h-3 w-3" />
           </motion.span>
         </div>
       </a>

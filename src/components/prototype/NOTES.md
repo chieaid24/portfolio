@@ -1,42 +1,48 @@
-# PROTOTYPE - hero Explore CTA icon
+# PROTOTYPE - hero Explore CTA hover motion
 
-**Question:** which down-arrow icon should the hero's Explore CTA use?
+**Question:** should the Explore CTA's arrow bounce on hover, or stay still?
 
-Two SVGs, switchable on the real home page via `?variant=`:
+Two variants, switchable on the real home page via `?variant=`:
 
-| Key | Icon | Size | Source file |
-| --- | --- | --- | --- |
-| B | bare chevron, no disc | h-3.5 | `down-arrow-svgrepo-com (1).svg` |
-| C | filled disc, bold arrow knocked out | h-5 | `down-arrow-svgrepo-com.svg` |
+| Key | Behavior |
+| --- | --- |
+| `bounce` | arrow drops and floats on a gravity arc while hovered |
+| `still` | arrow never moves; only the border/text color and scale respond |
 
-A third candidate (`down-arrow-circle-svgrepo-com.svg`, a disc with a thinner
-arrow) was cut - it was the same construction as C and read almost identically
-at icon size.
+Both run the same production component (`src/components/ExploreCta.js`) with
+its `bounce` prop flipped - cursor-follow flash, hover scale, border/text color
+transition, smooth scroll to `#experience` with header clearance, and the
+`#experience` hash push are identical either way.
 
-Every variant runs the real button logic - cursor-follow flash, hover scale,
-border/text color transition, smooth scroll to `#experience` with header
-clearance, and the `#experience` hash push.
-
-On hover the arrow floats on a gravity arc: it hangs at the top, accelerates
-hard into the fall, then decelerates back up. The easing pair is Tailwind's
-`animate-bounce`, measured off https://tedawf.com/ rather than copied from the
-docs, then stretched for more float.
+The bounce arc hangs at the top, accelerates hard into the fall, then
+decelerates back up. The easing pair is Tailwind's `animate-bounce`, measured
+off https://tedawf.com/ rather than copied from the docs, then stretched for
+more float.
 
 | | tedawf.com | here |
 | --- | --- | --- |
 | easing (fall / rise) | `cubic-bezier(.8,0,1,1)` / `cubic-bezier(0,0,.2,1)` | same |
 | period | 1000ms | 1300ms |
 | travel | 25% of icon height | ~28% |
-| dwell in top half | 80% | 77% (B) / 79% (C) |
+| dwell in top half | 80% | 77% |
 
-Travel is expressed in percentages so both icon sizes float by the same
-proportion. `prefers-reduced-motion` gets a static 20% drop instead.
+Travel is expressed in percentages so it scales with the icon.
+`prefers-reduced-motion` gets a static 20% drop instead.
 
-Run: `PORT=<port> npm run dev`, then `/?variant=B|C`. Arrow keys or the
+Run: `PORT=<port> npm run dev`, then `/?variant=bounce|still`. Arrow keys or the
 floating bottom bar switch. The bar is hidden in production builds.
 
 **Verdict:** _(unfilled - waiting on the pick)_
 
-When decided: fold the winner's icon into `Hero.js`, delete this directory and
-the losing icon in `src/icons/ArrowDown*.js`, and drop the prototype imports
-from `src/app/page.js`.
+When decided: hard-code the winner as the `bounce` default in
+`src/components/ExploreCta.js`, drop the prop if it's no longer needed, delete
+this directory, and drop the prototype imports from `src/app/page.js`.
+
+---
+
+## Settled: icon (2026-08-13)
+
+**B, the bare chevron, won** over C (filled disc, bold arrow knocked out), and
+was then shrunk from `h-3.5` to `h-3`. It now lives in `ExploreCta.js`;
+`ArrowDownCircleOutline` is deleted. A third candidate (a disc with a thinner
+arrow) was cut earlier - same construction as C, near-identical at icon size.

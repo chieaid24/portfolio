@@ -14,7 +14,7 @@ import { useCallback, useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import RewardLink from "@/components/RewardLink";
 import ScrambledText from "@/components/ScrambledText";
-import ExploreCtaPrototype from "@/components/prototype/ExploreCtaPrototype";
+import ExploreCta from "@/components/ExploreCta";
 import FooterLinkedin from "@/icons/FooterLinkedin";
 import FooterGithub from "@/icons/FooterGithub";
 import { AsciiGlobe } from "@/components/MissionControl";
@@ -58,10 +58,10 @@ const COPY_LINES = [
   "and infra for AI systems.",
 ];
 
-function HeroLinks({ flash, variant }) {
+function HeroLinks({ flash, bounce }) {
   return (
     <>
-      <ExploreCtaPrototype variant={variant} flash={flash} />
+      <ExploreCta flash={flash} bounce={bounce} />
       <div className="text-outline-gray flex items-center justify-center gap-x-4">
         <RewardLink
           href="https://www.linkedin.com/in/aidanchien/"
@@ -272,7 +272,7 @@ function useArcAlign({ groupRef, colRef, globeRef, enabled }) {
   }, [groupRef, colRef, globeRef, enabled]);
 }
 
-export default function Hero({ accent, flash, variant }) {
+export default function Hero({ accent, flash, bounce }) {
   const groupRef = useRef(null);
   const colRef = useRef(null);
   const globeRef = useRef(null);
@@ -325,7 +325,7 @@ export default function Hero({ accent, flash, variant }) {
           {COPY_LINES.join(" ")}
         </p>
         <div className="flex items-center gap-5">
-          <HeroLinks flash={flash} variant={variant} />
+          <HeroLinks flash={flash} bounce={bounce} />
         </div>
       </div>
 
@@ -357,7 +357,7 @@ export default function Hero({ accent, flash, variant }) {
             </div>
           ))}
           <div className="mt-6 flex w-full gap-5 items-center">
-            <HeroLinks flash={flash} variant={variant} />
+            <HeroLinks flash={flash} bounce={bounce} />
           </div>
         </div>
       </div>
