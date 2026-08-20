@@ -17,19 +17,10 @@ const INTRO_NOISE_HOLD_MS = 400; // longer scramble before locking on intro decr
 const UNLOCK_STEP_MS = 60; // delay between each char unlocking on leave
 const NOISE_TAIL_MS = 200; // noise duration after last char unlocks
 const PROXIMITY_PX = 24;   // trigger radius around the text, not just exact hover
-const INTRO_DELAY_MS = 500; // hold static Aurebesh during the hero fade-in,
-                            // then decrypt so it resolves near full opacity
 
 function rchar() {
   return ALPHA[Math.floor(Math.random() * ALPHA.length)];
 }
-
-// Distinguishes a fresh document load (refresh / direct URL / external link) from
-// an in-app SPA navigation. The module evaluates once per real page load, so this
-// stays false on the first mount after a fresh load and becomes true for every
-// client-side navigation that follows — the module (and this flag) survive App
-// Router route changes but reset on a full reload.
-let hadFreshLoad = false;
 
 export default function ScrambledText({ text, className }) {
   const chars = text.split("");
@@ -219,29 +210,16 @@ export default function ScrambledText({ text, className }) {
   }, [text]);
 
   // intro decrypt on every mount/refresh: the name first shows as static
-  // Aurebesh (the initial useState) and fades in with the hero, then after
-  // INTRO_DELAY_MS the scramble kicks in and decrypts to readable Latin,
-  // staggered from the outer edges inward, so the resolve is visible near full
-  // opacity.
+  // Aurebesh (the initial useState), then the scramble kicks in immediately and
+  // decrypts to readable Latin, staggered from the outer edges inward.
   useEffect(() => {
     clearAll();
     phase.current = "intro";
     const cp = chars.map(() => "noise");
     charPhase.current = cp;
 
-    // Fresh load keeps the static hold (masked by load latency anyway); SPA
-    // navigation skips it so the decrypt starts immediately instead of sitting
-    // frozen at full paint.
-    const introDelay = hadFreshLoad ? 0 : INTRO_DELAY_MS;
-    if (!hadFreshLoad) {
-      // Defer the flip so React StrictMode's synchronous dev remount still reads a
-      // fresh load on both passes; the real value latches on the next tick.
-      const markT = setTimeout(() => {
-        hadFreshLoad = true;
-      }, 0);
-      timers.current.push(markT);
-    }
-
+    // Defer one tick so React StrictMode's synchronous dev remount doesn't run
+    // the noise setState inside the effect body; it latches on the next tick.
     const startT = setTimeout(() => {
       setDisplay((prev) => prev.map(() => ({ ch: rchar(), alien: true })));
       noiseRef.current = setInterval(() => {
@@ -271,7 +249,7 @@ export default function ScrambledText({ text, className }) {
           INTRO_NOISE_HOLD_MS);
         timers.current.push(lockT);
       });
-    }, introDelay);
+    }, 0);
     timers.current.push(startT);
 
     return clearAll;
