@@ -99,7 +99,7 @@ export const experiences = {
         "Bachelor of Applied Science (BASc), Systems Design Engineering",
       highlights: [
         {
-          text: <>GPA: 3.95</>,
+          text: <>GPA: 3.96</>,
         },
 
       ],
